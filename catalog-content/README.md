@@ -14,9 +14,11 @@ Ce dossier contient le catalogue de départ lu par l'importeur du serveur (`serv
 | `units.json` | 33 unités : masse, volume, comptage et conditionnements |
 | `storage-zones.json` | 9 zones de rangement (ordre de la « tournée de la maison ») |
 | `categories.json` | 19 rayons de premier niveau, avec leur question porte |
-| `products.json` | 196 produits génériques (alimentaire et non alimentaire), marché FR |
+| `products.json` | 313 produits génériques (alimentaire et non alimentaire), marché FR, avec leurs tags de régime et d'allergènes |
 
-Répartition des produits par rayon : fruits et légumes 32 · boulangerie 7 · crèmerie 14 · fromages 7 · boucherie et volaille 8 · charcuterie et traiteur 7 · poissonnerie 5 · surgelés 7 · épicerie salée 30 · petit-déjeuner 12 · épicerie sucrée 9 · apéritif 4 · eaux, jus et sodas 6 · vins, bières et alcools 6 · hygiène et beauté 13 · entretien 12 · papier et emballages 7 · bébé 5 · animaux 5.
+Répartition des produits par rayon : fruits et légumes 44 · boulangerie 12 · crèmerie 20 · fromages 13 · boucherie et volaille 14 · charcuterie et traiteur 15 · poissonnerie 8 · surgelés 13 · épicerie salée 48 · petit-déjeuner 18 · épicerie sucrée 17 · apéritif 8 · eaux, jus et sodas 9 · vins, bières et alcools 10 · hygiène et beauté 19 · entretien 19 · papier et emballages 9 · bébé 9 · animaux 8.
+
+V0 a ajouté 117 produits aux 196 du Sprint 0 : herbes fraîches et épices, surgelés, petit-déjeuner, spécialités régionales courantes (cassoulet, piment d’Espelette, chicorée, reblochon, pastis, galettes bretonnes et de sarrasin), produits utiles aux foyers halal (merguez, blanc de dinde, saucisses de volaille, agneau) ou végétariens (tofu, falafels, galettes végétales, boisson et desserts au soja, lentilles corail), et consommables du foyer. Aucun slug existant n'a changé.
 
 ## Format
 
@@ -92,6 +94,7 @@ Un pays `planned` n'a pas encore de marché dans `products.json`. L'API répond 
   "cycleClass": "short", "isStaple": true,
   "names": { "fr": {"one": "lait demi-écrémé", "other": "laits demi-écrémés"}, "en": {...} },
   "needPhrase": { "fr": "du lait demi-écrémé", "en": "semi-skimmed milk" },
+  "tags": ["contains-lactose"],
   "markets": { "FR": { "availability": "common", "typicalRepurchaseDays": 6, "householdPenetration": 0.85,
       "isQuestionCandidate": true,
       "unitPolicies": [ {"unit": "bottle", "isDefault": true, "step": "1", "presets": ["1","2","6"], "min": "1", "max": "24"}, ... ],
@@ -108,6 +111,7 @@ Les champs se lisent ainsi :
 
   Le radar des oubliés (F04) cible les produits `long`.
 - **`isStaple`** : produit de base que presque tous les foyers rachètent (lait, œufs, pain, pâtes, papier toilette…).
+- **`tags`** : tags de régime et d'allergènes, voir [Tags](#tags). Le champ est toujours présent, éventuellement vide.
 - **`markets.<PAYS>`** : données propres à un pays.
   - `availability` vaut `common`, `available`, `rare` ou `unavailable`. Un produit `unavailable` est exclu du snapshot du pays. `masa-harina` sert d'exemple.
   - `typicalRepurchaseDays` est la cadence a priori pour un foyer de référence d'environ 2,2 personnes. Le moteur la corrige selon la taille du foyer.
@@ -115,7 +119,7 @@ Les champs se lisent ainsi :
   - `isQuestionCandidate` indique si le produit peut être proposé sans historique du foyer :
     - il vaut `false` pour un produit `rare` ou `unavailable` ;
     - il vaut `false` pour les produits bébé et animaux, que le profil du foyer activera en V1 ;
-    - il vaut `false` pour les achats occasionnels (champagne, magret).
+    - il vaut `false` pour les achats occasionnels (champagne, magret, huîtres, fromage à raclette).
 
 ### Politiques d'unités (`unitPolicies`) et formats (`packages`)
 
@@ -166,18 +170,49 @@ Habitudes d'achat françaises retenues :
   - apostrophe typographique `’` (U+2019), jamais `'` ;
   - espace insécable (U+00A0) avant `?`, `!`, `;` et `:`. Toutes les questions portes françaises se terminent par une espace insécable suivie de « ? ».
 - **Anglais** : `en` suit l'orthographe et le vocabulaire britanniques (aubergine, courgette, washing-up liquid, nappies, crisps). Une future locale `en-US` ne portera que les écarts (zucchini, eggplant, chips…).
-- **Pas de données sensibles** : le seed ne contient aucun tag de régime (porc, alcool, halal…). Ces tags arriveront avec F14, à manipuler selon les règles de l'art. 9 du RGPD.
+- **Pas de données sensibles** : les tags décrivent des **produits**, pas des personnes. Les exclusions d'un foyer (sans porc, sans alcool, végétarien…) peuvent révéler une conviction religieuse ou une donnée de santé (art. 9 du RGPD) : elles restent sur l'appareil par défaut (F14, `member_diet_profile`). Le seed ne contient pas de label `halal` : c'est une certification de marque, pas un attribut d'un produit générique.
+
+## Tags
+
+Liste fermée, identique à `ProductTags.ALL` du contrat. Chaque produit liste ses tags **dans cet ordre** :
+
+| Tag | Sens |
+|---|---|
+| `contains-pork` | Porc ou dérivé du porc : viande, charcuterie, saindoux, **gélatine de porc** (bonbons gélifiés). Implique `contains-meat`. |
+| `contains-alcohol` | Boisson alcoolisée, y compris la bière « sans alcool » (jusqu'à 1,2 % vol. en France). |
+| `contains-gluten` | Blé, seigle, orge ou avoine non certifiée sans gluten (pain, pâtes, semoule, boulgour, bière, levure chimique à l'amidon de blé, sauce soja). |
+| `contains-lactose` | Lait ou dérivé du lait : lait, beurre, crème, yaourts, **tous les fromages** (même affinés), viennoiseries au beurre. |
+| `contains-meat` | Viande ou volaille, ou sous-produit d'abattage (gélatine). Les poissons et fruits de mer n'en font pas partie. |
+| `contains-fish` | Poissons, crustacés et mollusques (crevettes, moules, huîtres, surimi). |
+| `contains-nuts` | Fruits à coque et arachide (amandes, noix, noix de cajou, pistaches, noisettes de la pâte à tartiner, cacahuètes, pignons ou cajou du pesto). |
+| `contains-eggs` | Œufs ou ingrédient à base d'œuf (mayonnaise, pâtes fraîches, viennoiseries dorées à l'œuf, surimi au blanc d'œuf). |
+| `vegan` | Aucun ingrédient d'origine animale, ni miel, ni gélatine, ni colorant carmin. |
+| `baby` | Rayon bébé (`bebe`), et lui seul. |
+| `pet` | Rayon animaux (`animaux`), et lui seul. |
+
+Règles d'attribution :
+
+- Un tag `contains-*` est posé quand **la version française usuelle** du produit générique contient l'ingrédient : la quiche lorraine contient des lardons, le pesto du parmesan et des pignons, les lasagnes surgelées une bolognaise au bœuf. Une variante qui s'en écarte (pesto sans fromage, lasagnes végétariennes) sera un autre produit.
+- `vegan` n'est posé que **si l'on en est sûr** pour toutes les versions courantes : fruits et légumes frais, féculents secs, conserves de légumes nature, huiles, épices, café et thé, eaux, jus et sodas, fruits à coque nature, tofu, falafels, houmous. On ne le pose pas sur le chocolat noir (matière grasse lactique fréquente), les vinaigres et les vins (collage possible aux protéines animales), les sirops (carmin dans la grenadine), la margarine (lactosérum possible) ni le miel.
+- Quand les recettes varient trop pour l'affirmer, le produit n'a **aucun tag plutôt qu'un tag faux** : poêlée de légumes, soupe de légumes, bouillon cube, purée en flocons, galettes de sarrasin, galettes végétales, chips tortilla, chocolat en poudre.
+- Les produits non alimentaires (hygiène et beauté, entretien, papier et emballages) n'ont **aucun tag**.
+- Les produits du rayon bébé portent `baby`, plus leurs allergènes s'ils se mangent (`contains-lactose` pour le lait infantile).
+- Les produits du rayon animaux portent **uniquement** `pet` : le régime du foyer ne s'applique pas à ses animaux, et la pâtée d'un chat ne doit pas disparaître d'une liste végétarienne.
+- `vegan` est incompatible avec `contains-pork`, `contains-meat`, `contains-fish`, `contains-lactose` et `contains-eggs`.
+- Les allergènes réglementaires absents de la liste (soja, sésame, céleri, moutarde, sulfites, lupin) ne sont pas encore tagués.
+
+Répartition (313 produits) : `contains-pork` 13 · `contains-alcohol` 10 · `contains-gluten` 46 · `contains-lactose` 44 · `contains-meat` 29 · `contains-fish` 11 · `contains-nuts` 7 · `contains-eggs` 14 · `vegan` 129 · `baby` 9 · `pet` 8. Aucun tag : les 47 produits non alimentaires et 14 produits alimentaires.
 
 ## Limites connues et suites (V0)
 
-- 196 produits, alors que la checklist du Sprint 0 en vise 300. Il faut aussi ajouter 80 à 150 sous-catégories.
+- 313 produits, sans sous-catégories : il faut encore en ajouter 80 à 150.
 - À ajouter ensuite :
   - alias et synonymes ;
   - genre grammatical ;
   - surcharge de la question par produit ;
   - saisonnalité ;
-  - tags de régime et d'allergènes ;
+  - niveau de certitude des tags (`always`, `typically`, `may`) et allergènes manquants (soja, sésame, céleri, moutarde, sulfites) ;
   - poids moyen à la pièce ;
   - marchés BE et CH.
 - Relecture éditoriale complète (partitifs, pluriels, traductions), puis calibrage des cadences et des taux de pénétration avec la bêta.
-- Le script de validation du Sprint 0 est resté hors du dépôt. En V0, il faudra l'intégrer à la CI, ou s'appuyer sur la validation de l'importeur serveur, qui applique les mêmes invariants.
+- Le script de validation (Sprint 0, étendu en V0 aux tags et à la fourchette de 300 à 320 produits) est resté hors du dépôt. Il faudra l'intégrer à la CI, ou s'appuyer sur la validation de l'importeur serveur, qui applique les mêmes invariants.

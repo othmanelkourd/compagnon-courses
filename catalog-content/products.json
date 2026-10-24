@@ -11,6 +11,7 @@
       "en": {"one": "apple", "other": "apples"}
     },
     "needPhrase": {"fr": "des pommes", "en": "apples"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -51,6 +52,7 @@
       "en": {"one": "banana", "other": "bananas"}
     },
     "needPhrase": {"fr": "des bananes", "en": "bananas"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -91,6 +93,7 @@
       "en": {"one": "orange", "other": "oranges"}
     },
     "needPhrase": {"fr": "des oranges", "en": "oranges"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -142,6 +145,7 @@
       "en": {"one": "clementine", "other": "clementines"}
     },
     "needPhrase": {"fr": "des clémentines", "en": "clementines"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -185,6 +189,7 @@
       "en": {"one": "lemon", "other": "lemons"}
     },
     "needPhrase": {"fr": "des citrons", "en": "lemons"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -227,6 +232,7 @@
       "en": {"one": "pear", "other": "pears"}
     },
     "needPhrase": {"fr": "des poires", "en": "pears"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -267,6 +273,7 @@
       "en": {"one": "grape", "other": "grapes"}
     },
     "needPhrase": {"fr": "du raisin", "en": "grapes"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -309,6 +316,7 @@
       "en": {"one": "strawberry", "other": "strawberries"}
     },
     "needPhrase": {"fr": "des fraises", "en": "strawberries"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -344,6 +352,7 @@
       "en": {"one": "kiwi fruit", "other": "kiwi fruit"}
     },
     "needPhrase": {"fr": "des kiwis", "en": "kiwi fruit"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -376,6 +385,7 @@
       "en": {"one": "avocado", "other": "avocados"}
     },
     "needPhrase": {"fr": "des avocats", "en": "avocados"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -408,6 +418,7 @@
       "en": {"one": "melon", "other": "melons"}
     },
     "needPhrase": {"fr": "du melon", "en": "melon"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -440,6 +451,7 @@
       "en": {"one": "tomato", "other": "tomatoes"}
     },
     "needPhrase": {"fr": "des tomates", "en": "tomatoes"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -480,6 +492,7 @@
       "en": {"one": "cherry tomato", "other": "cherry tomatoes"}
     },
     "needPhrase": {"fr": "des tomates cerises", "en": "cherry tomatoes"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -515,6 +528,7 @@
       "en": {"one": "potato", "other": "potatoes"}
     },
     "needPhrase": {"fr": "des pommes de terre", "en": "potatoes"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -558,6 +572,7 @@
       "en": {"one": "sweet potato", "other": "sweet potatoes"}
     },
     "needPhrase": {"fr": "des patates douces", "en": "sweet potatoes"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "available",
@@ -590,6 +605,7 @@
       "en": {"one": "carrot", "other": "carrots"}
     },
     "needPhrase": {"fr": "des carottes", "en": "carrots"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -632,6 +648,7 @@
       "en": {"one": "onion", "other": "onions"}
     },
     "needPhrase": {"fr": "des oignons", "en": "onions"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -683,6 +700,7 @@
       "en": {"one": "garlic bulb", "other": "garlic bulbs"}
     },
     "needPhrase": {"fr": "de l’ail", "en": "garlic"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -725,6 +743,7 @@
       "en": {"one": "shallot", "other": "shallots"}
     },
     "needPhrase": {"fr": "des échalotes", "en": "shallots"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -767,6 +786,7 @@
       "en": {"one": "courgette", "other": "courgettes"}
     },
     "needPhrase": {"fr": "des courgettes", "en": "courgettes"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -807,6 +827,7 @@
       "en": {"one": "aubergine", "other": "aubergines"}
     },
     "needPhrase": {"fr": "des aubergines", "en": "aubergines"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -839,6 +860,7 @@
       "en": {"one": "bell pepper", "other": "bell peppers"}
     },
     "needPhrase": {"fr": "des poivrons", "en": "bell peppers"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -879,6 +901,7 @@
       "en": {"one": "cucumber", "other": "cucumbers"}
     },
     "needPhrase": {"fr": "du concombre", "en": "cucumber"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -911,6 +934,7 @@
       "en": {"one": "lettuce", "other": "lettuces"}
     },
     "needPhrase": {"fr": "de la salade verte", "en": "lettuce"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -943,6 +967,7 @@
       "en": {"one": "bagged salad", "other": "bagged salads"}
     },
     "needPhrase": {"fr": "de la salade en sachet", "en": "bagged salad"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -978,6 +1003,7 @@
       "en": {"one": "button mushroom", "other": "button mushrooms"}
     },
     "needPhrase": {"fr": "des champignons de Paris", "en": "button mushrooms"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1021,6 +1047,7 @@
       "en": {"one": "broccoli", "other": "broccoli"}
     },
     "needPhrase": {"fr": "du brocoli", "en": "broccoli"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1053,6 +1080,7 @@
       "en": {"one": "green bean", "other": "green beans"}
     },
     "needPhrase": {"fr": "des haricots verts", "en": "green beans"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1085,6 +1113,7 @@
       "en": {"one": "leek", "other": "leeks"}
     },
     "needPhrase": {"fr": "des poireaux", "en": "leeks"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1127,6 +1156,7 @@
       "en": {"one": "parsley", "other": "parsley"}
     },
     "needPhrase": {"fr": "du persil", "en": "parsley"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1161,6 +1191,7 @@
       "en": {"one": "coriander", "other": "coriander"}
     },
     "needPhrase": {"fr": "de la coriandre", "en": "coriander"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "available",
@@ -1195,6 +1226,7 @@
       "en": {"one": "Jerusalem artichoke", "other": "Jerusalem artichokes"}
     },
     "needPhrase": {"fr": "des topinambours", "en": "Jerusalem artichokes"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "rare",
@@ -1227,6 +1259,7 @@
       "en": {"one": "baguette", "other": "baguettes"}
     },
     "needPhrase": {"fr": "des baguettes", "en": "baguettes"},
+    "tags": ["contains-gluten", "vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1259,6 +1292,7 @@
       "en": {"one": "country loaf", "other": "country loaves"}
     },
     "needPhrase": {"fr": "du pain de campagne", "en": "country bread"},
+    "tags": ["contains-gluten", "vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1291,6 +1325,7 @@
       "en": {"one": "sandwich loaf", "other": "sandwich loaves"}
     },
     "needPhrase": {"fr": "du pain de mie", "en": "sliced bread"},
+    "tags": ["contains-gluten"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1325,6 +1360,7 @@
       "en": {"one": "croissant", "other": "croissants"}
     },
     "needPhrase": {"fr": "des croissants", "en": "croissants"},
+    "tags": ["contains-gluten", "contains-lactose", "contains-eggs"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1357,6 +1393,7 @@
       "en": {"one": "pain au chocolat", "other": "pains au chocolat"}
     },
     "needPhrase": {"fr": "des pains au chocolat", "en": "pains au chocolat"},
+    "tags": ["contains-gluten", "contains-lactose", "contains-eggs"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1389,6 +1426,7 @@
       "en": {"one": "sliced brioche", "other": "sliced brioches"}
     },
     "needPhrase": {"fr": "de la brioche tranchée", "en": "sliced brioche"},
+    "tags": ["contains-gluten", "contains-lactose", "contains-eggs"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1423,6 +1461,7 @@
       "en": {"one": "wheat tortilla", "other": "wheat tortillas"}
     },
     "needPhrase": {"fr": "des tortillas de blé", "en": "wheat tortillas"},
+    "tags": ["contains-gluten"],
     "markets": {
       "FR": {
         "availability": "available",
@@ -1457,6 +1496,7 @@
       "en": {"one": "semi-skimmed milk", "other": "semi-skimmed milk"}
     },
     "needPhrase": {"fr": "du lait demi-écrémé", "en": "semi-skimmed milk"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1508,6 +1548,7 @@
       "en": {"one": "whole milk", "other": "whole milk"}
     },
     "needPhrase": {"fr": "du lait entier", "en": "whole milk"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1550,6 +1591,7 @@
       "en": {"one": "oat drink", "other": "oat drinks"}
     },
     "needPhrase": {"fr": "de la boisson à l’avoine", "en": "oat drink"},
+    "tags": ["contains-gluten", "vegan"],
     "markets": {
       "FR": {
         "availability": "available",
@@ -1592,6 +1634,7 @@
       "en": {"one": "unsalted butter", "other": "unsalted butter"}
     },
     "needPhrase": {"fr": "du beurre doux", "en": "unsalted butter"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1626,6 +1669,7 @@
       "en": {"one": "lightly salted butter", "other": "lightly salted butter"}
     },
     "needPhrase": {"fr": "du beurre demi-sel", "en": "lightly salted butter"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1660,6 +1704,7 @@
       "en": {"one": "egg", "other": "eggs"}
     },
     "needPhrase": {"fr": "des œufs", "en": "eggs"},
+    "tags": ["contains-eggs"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1704,6 +1749,7 @@
       "en": {"one": "crème fraîche", "other": "crème fraîche"}
     },
     "needPhrase": {"fr": "de la crème fraîche épaisse", "en": "crème fraîche"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1739,6 +1785,7 @@
       "en": {"one": "single cream", "other": "single cream"}
     },
     "needPhrase": {"fr": "de la crème liquide", "en": "single cream"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1774,6 +1821,7 @@
       "en": {"one": "plain yoghurt", "other": "plain yoghurts"}
     },
     "needPhrase": {"fr": "des yaourts nature", "en": "plain yoghurt"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1818,6 +1866,7 @@
       "en": {"one": "fruit yoghurt", "other": "fruit yoghurts"}
     },
     "needPhrase": {"fr": "des yaourts aux fruits", "en": "fruit yoghurt"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1862,6 +1911,7 @@
       "en": {"one": "fromage frais", "other": "fromage frais"}
     },
     "needPhrase": {"fr": "du fromage blanc", "en": "fromage frais"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1897,6 +1947,7 @@
       "en": {"one": "custard pot", "other": "custard pots"}
     },
     "needPhrase": {"fr": "des crèmes dessert", "en": "custard pots"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1939,6 +1990,7 @@
       "en": {"one": "puff pastry", "other": "puff pastry"}
     },
     "needPhrase": {"fr": "de la pâte feuilletée", "en": "puff pastry"},
+    "tags": ["contains-gluten"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -1973,6 +2025,7 @@
       "en": {"one": "shortcrust pastry", "other": "shortcrust pastry"}
     },
     "needPhrase": {"fr": "de la pâte brisée", "en": "shortcrust pastry"},
+    "tags": ["contains-gluten"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2007,6 +2060,7 @@
       "en": {"one": "grated Emmental", "other": "grated Emmental"}
     },
     "needPhrase": {"fr": "de l’emmental râpé", "en": "grated Emmental"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2042,6 +2096,7 @@
       "en": {"one": "Comté cheese", "other": "Comté cheeses"}
     },
     "needPhrase": {"fr": "du comté", "en": "Comté cheese"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2074,6 +2129,7 @@
       "en": {"one": "Camembert", "other": "Camemberts"}
     },
     "needPhrase": {"fr": "du camembert", "en": "Camembert"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2106,6 +2162,7 @@
       "en": {"one": "mozzarella ball", "other": "mozzarella balls"}
     },
     "needPhrase": {"fr": "de la mozzarella", "en": "mozzarella"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2138,6 +2195,7 @@
       "en": {"one": "goat’s cheese", "other": "goat’s cheeses"}
     },
     "needPhrase": {"fr": "du fromage de chèvre", "en": "goat’s cheese"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2170,6 +2228,7 @@
       "en": {"one": "Parmesan", "other": "Parmesan"}
     },
     "needPhrase": {"fr": "du parmesan", "en": "Parmesan"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2202,6 +2261,7 @@
       "en": {"one": "feta", "other": "feta"}
     },
     "needPhrase": {"fr": "de la feta", "en": "feta"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2236,6 +2296,7 @@
       "en": {"one": "chicken breast fillet", "other": "chicken breast fillets"}
     },
     "needPhrase": {"fr": "des filets de poulet", "en": "chicken breast fillets"},
+    "tags": ["contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2279,6 +2340,7 @@
       "en": {"one": "chicken leg", "other": "chicken legs"}
     },
     "needPhrase": {"fr": "des cuisses de poulet", "en": "chicken legs"},
+    "tags": ["contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2313,6 +2375,7 @@
       "en": {"one": "beef burger", "other": "beef burgers"}
     },
     "needPhrase": {"fr": "des steaks hachés", "en": "beef burgers"},
+    "tags": ["contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2356,6 +2419,7 @@
       "en": {"one": "minced beef", "other": "minced beef"}
     },
     "needPhrase": {"fr": "de la viande hachée", "en": "minced beef"},
+    "tags": ["contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2399,6 +2463,7 @@
       "en": {"one": "turkey escalope", "other": "turkey escalopes"}
     },
     "needPhrase": {"fr": "des escalopes de dinde", "en": "turkey escalopes"},
+    "tags": ["contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2441,6 +2506,7 @@
       "en": {"one": "pork chop", "other": "pork chops"}
     },
     "needPhrase": {"fr": "des côtes de porc", "en": "pork chops"},
+    "tags": ["contains-pork", "contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2473,6 +2539,7 @@
       "en": {"one": "chipolata", "other": "chipolatas"}
     },
     "needPhrase": {"fr": "des chipolatas", "en": "chipolatas"},
+    "tags": ["contains-pork", "contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2515,6 +2582,7 @@
       "en": {"one": "duck breast", "other": "duck breasts"}
     },
     "needPhrase": {"fr": "des magrets de canard", "en": "duck breasts"},
+    "tags": ["contains-meat"],
     "markets": {
       "FR": {
         "availability": "available",
@@ -2547,6 +2615,7 @@
       "en": {"one": "cooked ham", "other": "cooked ham"}
     },
     "needPhrase": {"fr": "du jambon blanc", "en": "cooked ham"},
+    "tags": ["contains-pork", "contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2582,6 +2651,7 @@
       "en": {"one": "cured ham", "other": "cured ham"}
     },
     "needPhrase": {"fr": "du jambon cru", "en": "cured ham"},
+    "tags": ["contains-pork", "contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2617,6 +2687,7 @@
       "en": {"one": "bacon lardon", "other": "bacon lardons"}
     },
     "needPhrase": {"fr": "des lardons", "en": "bacon lardons"},
+    "tags": ["contains-pork", "contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2652,6 +2723,7 @@
       "en": {"one": "dry sausage", "other": "dry sausages"}
     },
     "needPhrase": {"fr": "du saucisson sec", "en": "dry sausage"},
+    "tags": ["contains-pork", "contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2684,6 +2756,7 @@
       "en": {"one": "frankfurter", "other": "frankfurters"}
     },
     "needPhrase": {"fr": "des saucisses de Strasbourg", "en": "frankfurters"},
+    "tags": ["contains-pork", "contains-meat"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2719,6 +2792,7 @@
       "en": {"one": "fresh pasta", "other": "fresh pasta"}
     },
     "needPhrase": {"fr": "des pâtes fraîches", "en": "fresh pasta"},
+    "tags": ["contains-gluten", "contains-eggs"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2754,6 +2828,7 @@
       "en": {"one": "hummus", "other": "hummus"}
     },
     "needPhrase": {"fr": "du houmous", "en": "hummus"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "available",
@@ -2788,6 +2863,7 @@
       "en": {"one": "smoked salmon", "other": "smoked salmon"}
     },
     "needPhrase": {"fr": "du saumon fumé", "en": "smoked salmon"},
+    "tags": ["contains-fish"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2823,6 +2899,7 @@
       "en": {"one": "salmon fillet", "other": "salmon fillets"}
     },
     "needPhrase": {"fr": "des pavés de saumon", "en": "salmon fillets"},
+    "tags": ["contains-fish"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2865,6 +2942,7 @@
       "en": {"one": "cod loin", "other": "cod loins"}
     },
     "needPhrase": {"fr": "du cabillaud", "en": "cod"},
+    "tags": ["contains-fish"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2897,6 +2975,7 @@
       "en": {"one": "cooked prawn", "other": "cooked prawns"}
     },
     "needPhrase": {"fr": "des crevettes cuites", "en": "cooked prawns"},
+    "tags": ["contains-fish"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2932,6 +3011,7 @@
       "en": {"one": "mussel", "other": "mussels"}
     },
     "needPhrase": {"fr": "des moules", "en": "mussels"},
+    "tags": ["contains-fish"],
     "markets": {
       "FR": {
         "availability": "available",
@@ -2964,6 +3044,7 @@
       "en": {"one": "frozen green beans", "other": "frozen green beans"}
     },
     "needPhrase": {"fr": "des haricots verts surgelés", "en": "frozen green beans"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -2998,6 +3079,7 @@
       "en": {"one": "frozen chopped spinach", "other": "frozen chopped spinach"}
     },
     "needPhrase": {"fr": "des épinards hachés surgelés", "en": "frozen spinach"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3033,6 +3115,7 @@
       "en": {"one": "frozen stir-fry vegetables", "other": "frozen stir-fry vegetables"}
     },
     "needPhrase": {"fr": "de la poêlée de légumes", "en": "stir-fry vegetables"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3067,6 +3150,7 @@
       "en": {"one": "frozen chips", "other": "frozen chips"}
     },
     "needPhrase": {"fr": "des frites surgelées", "en": "frozen chips"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3102,6 +3186,7 @@
       "en": {"one": "frozen pizza", "other": "frozen pizzas"}
     },
     "needPhrase": {"fr": "des pizzas surgelées", "en": "frozen pizzas"},
+    "tags": ["contains-gluten", "contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3134,6 +3219,7 @@
       "en": {"one": "fish finger", "other": "fish fingers"}
     },
     "needPhrase": {"fr": "du poisson pané", "en": "fish fingers"},
+    "tags": ["contains-gluten", "contains-fish"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3169,6 +3255,7 @@
       "en": {"one": "vanilla ice cream", "other": "vanilla ice cream"}
     },
     "needPhrase": {"fr": "de la glace à la vanille", "en": "vanilla ice cream"},
+    "tags": ["contains-lactose", "contains-eggs"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3204,6 +3291,7 @@
       "en": {"one": "spaghetti", "other": "spaghetti"}
     },
     "needPhrase": {"fr": "des spaghetti", "en": "spaghetti"},
+    "tags": ["contains-gluten", "vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3239,6 +3327,7 @@
       "en": {"one": "short pasta", "other": "short pasta"}
     },
     "needPhrase": {"fr": "des pâtes courtes", "en": "short pasta"},
+    "tags": ["contains-gluten", "vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3274,6 +3363,7 @@
       "en": {"one": "long-grain rice", "other": "long-grain rice"}
     },
     "needPhrase": {"fr": "du riz long grain", "en": "long-grain rice"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3309,6 +3399,7 @@
       "en": {"one": "basmati rice", "other": "basmati rice"}
     },
     "needPhrase": {"fr": "du riz basmati", "en": "basmati rice"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3344,6 +3435,7 @@
       "en": {"one": "couscous", "other": "couscous"}
     },
     "needPhrase": {"fr": "de la semoule", "en": "couscous"},
+    "tags": ["contains-gluten", "vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3379,6 +3471,7 @@
       "en": {"one": "green lentils", "other": "green lentils"}
     },
     "needPhrase": {"fr": "des lentilles vertes", "en": "green lentils"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3413,6 +3506,7 @@
       "en": {"one": "quinoa", "other": "quinoa"}
     },
     "needPhrase": {"fr": "du quinoa", "en": "quinoa"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "available",
@@ -3447,6 +3541,7 @@
       "en": {"one": "tinned tomatoes", "other": "tinned tomatoes"}
     },
     "needPhrase": {"fr": "des tomates pelées", "en": "tinned tomatoes"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3482,6 +3577,7 @@
       "en": {"one": "passata", "other": "passata"}
     },
     "needPhrase": {"fr": "du coulis de tomate", "en": "passata"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3516,6 +3612,7 @@
       "en": {"one": "tomato purée", "other": "tomato purée"}
     },
     "needPhrase": {"fr": "du concentré de tomate", "en": "tomato purée"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3550,6 +3647,7 @@
       "en": {"one": "sweetcorn", "other": "sweetcorn"}
     },
     "needPhrase": {"fr": "du maïs doux", "en": "sweetcorn"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3585,6 +3683,7 @@
       "en": {"one": "chickpeas", "other": "chickpeas"}
     },
     "needPhrase": {"fr": "des pois chiches", "en": "chickpeas"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3620,6 +3719,7 @@
       "en": {"one": "tinned green beans", "other": "tinned green beans"}
     },
     "needPhrase": {"fr": "des haricots verts en conserve", "en": "tinned green beans"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3655,6 +3755,7 @@
       "en": {"one": "tuna in brine", "other": "tuna in brine"}
     },
     "needPhrase": {"fr": "du thon au naturel", "en": "tinned tuna"},
+    "tags": ["contains-fish"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3698,6 +3799,7 @@
       "en": {"one": "sardines in oil", "other": "sardines in oil"}
     },
     "needPhrase": {"fr": "des sardines à l’huile", "en": "tinned sardines"},
+    "tags": ["contains-fish"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3732,6 +3834,7 @@
       "en": {"one": "coconut milk", "other": "coconut milk"}
     },
     "needPhrase": {"fr": "du lait de coco", "en": "coconut milk"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3766,6 +3869,7 @@
       "en": {"one": "vegetable soup", "other": "vegetable soups"}
     },
     "needPhrase": {"fr": "de la soupe de légumes", "en": "vegetable soup"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3800,6 +3904,7 @@
       "en": {"one": "olive oil", "other": "olive oil"}
     },
     "needPhrase": {"fr": "de l’huile d’olive", "en": "olive oil"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3835,6 +3940,7 @@
       "en": {"one": "sunflower oil", "other": "sunflower oil"}
     },
     "needPhrase": {"fr": "de l’huile de tournesol", "en": "sunflower oil"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3869,6 +3975,7 @@
       "en": {"one": "wine vinegar", "other": "wine vinegar"}
     },
     "needPhrase": {"fr": "du vinaigre de vin", "en": "wine vinegar"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3904,6 +4011,7 @@
       "en": {"one": "mustard", "other": "mustard"}
     },
     "needPhrase": {"fr": "de la moutarde", "en": "mustard"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3939,6 +4047,7 @@
       "en": {"one": "mayonnaise", "other": "mayonnaise"}
     },
     "needPhrase": {"fr": "de la mayonnaise", "en": "mayonnaise"},
+    "tags": ["contains-eggs"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -3974,6 +4083,7 @@
       "en": {"one": "ketchup", "other": "ketchup"}
     },
     "needPhrase": {"fr": "du ketchup", "en": "ketchup"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4008,6 +4118,7 @@
       "en": {"one": "gherkin", "other": "gherkins"}
     },
     "needPhrase": {"fr": "des cornichons", "en": "gherkins"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4042,6 +4153,7 @@
       "en": {"one": "soy sauce", "other": "soy sauce"}
     },
     "needPhrase": {"fr": "de la sauce soja", "en": "soy sauce"},
+    "tags": ["contains-gluten", "vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4076,6 +4188,7 @@
       "en": {"one": "table salt", "other": "table salt"}
     },
     "needPhrase": {"fr": "du sel fin", "en": "table salt"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4110,6 +4223,7 @@
       "en": {"one": "black pepper", "other": "black pepper"}
     },
     "needPhrase": {"fr": "du poivre noir", "en": "black pepper"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4144,6 +4258,7 @@
       "en": {"one": "herbes de Provence", "other": "herbes de Provence"}
     },
     "needPhrase": {"fr": "des herbes de Provence", "en": "herbes de Provence"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4178,6 +4293,7 @@
       "en": {"one": "stock cube", "other": "stock cubes"}
     },
     "needPhrase": {"fr": "des bouillons cubes", "en": "stock cubes"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4212,6 +4328,7 @@
       "en": {"one": "masa harina", "other": "masa harina"}
     },
     "needPhrase": {"fr": "de la masa harina", "en": "masa harina"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "unavailable",
@@ -4246,6 +4363,7 @@
       "en": {"one": "ground coffee", "other": "ground coffee"}
     },
     "needPhrase": {"fr": "du café moulu", "en": "ground coffee"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4281,6 +4399,7 @@
       "en": {"one": "coffee beans", "other": "coffee beans"}
     },
     "needPhrase": {"fr": "du café en grains", "en": "coffee beans"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "available",
@@ -4316,6 +4435,7 @@
       "en": {"one": "coffee capsule", "other": "coffee capsules"}
     },
     "needPhrase": {"fr": "des capsules de café", "en": "coffee capsules"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4351,6 +4471,7 @@
       "en": {"one": "black tea", "other": "black tea"}
     },
     "needPhrase": {"fr": "du thé noir", "en": "black tea"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4386,6 +4507,7 @@
       "en": {"one": "herbal tea", "other": "herbal teas"}
     },
     "needPhrase": {"fr": "de la tisane", "en": "herbal tea"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4420,6 +4542,7 @@
       "en": {"one": "breakfast cereal", "other": "breakfast cereals"}
     },
     "needPhrase": {"fr": "des céréales", "en": "breakfast cereal"},
+    "tags": ["contains-gluten"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4455,6 +4578,7 @@
       "en": {"one": "rolled oats", "other": "rolled oats"}
     },
     "needPhrase": {"fr": "des flocons d’avoine", "en": "rolled oats"},
+    "tags": ["contains-gluten", "vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4489,6 +4613,7 @@
       "en": {"one": "rusk", "other": "rusks"}
     },
     "needPhrase": {"fr": "des biscottes", "en": "rusks"},
+    "tags": ["contains-gluten"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4523,6 +4648,7 @@
       "en": {"one": "strawberry jam", "other": "strawberry jam"}
     },
     "needPhrase": {"fr": "de la confiture de fraises", "en": "strawberry jam"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4557,6 +4683,7 @@
       "en": {"one": "honey", "other": "honey"}
     },
     "needPhrase": {"fr": "du miel", "en": "honey"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4592,6 +4719,7 @@
       "en": {"one": "chocolate hazelnut spread", "other": "chocolate hazelnut spreads"}
     },
     "needPhrase": {"fr": "de la pâte à tartiner", "en": "chocolate spread"},
+    "tags": ["contains-lactose", "contains-nuts"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4627,6 +4755,7 @@
       "en": {"one": "drinking chocolate", "other": "drinking chocolate"}
     },
     "needPhrase": {"fr": "du chocolat en poudre", "en": "drinking chocolate"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4662,6 +4791,7 @@
       "en": {"one": "plain flour", "other": "plain flour"}
     },
     "needPhrase": {"fr": "de la farine de blé", "en": "plain flour"},
+    "tags": ["contains-gluten", "vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4696,6 +4826,7 @@
       "en": {"one": "caster sugar", "other": "caster sugar"}
     },
     "needPhrase": {"fr": "du sucre en poudre", "en": "caster sugar"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4730,6 +4861,7 @@
       "en": {"one": "sugar cubes", "other": "sugar cubes"}
     },
     "needPhrase": {"fr": "du sucre en morceaux", "en": "sugar cubes"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4764,6 +4896,7 @@
       "en": {"one": "baking powder", "other": "baking powder"}
     },
     "needPhrase": {"fr": "de la levure chimique", "en": "baking powder"},
+    "tags": ["contains-gluten", "vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4798,6 +4931,7 @@
       "en": {"one": "dark chocolate", "other": "dark chocolate"}
     },
     "needPhrase": {"fr": "du chocolat noir", "en": "dark chocolate"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4833,6 +4967,7 @@
       "en": {"one": "milk chocolate", "other": "milk chocolate"}
     },
     "needPhrase": {"fr": "du chocolat au lait", "en": "milk chocolate"},
+    "tags": ["contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4867,6 +5002,7 @@
       "en": {"one": "plain biscuit", "other": "plain biscuits"}
     },
     "needPhrase": {"fr": "des biscuits secs", "en": "plain biscuits"},
+    "tags": ["contains-gluten", "contains-lactose"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4901,6 +5037,7 @@
       "en": {"one": "madeleine", "other": "madeleines"}
     },
     "needPhrase": {"fr": "des madeleines", "en": "madeleines"},
+    "tags": ["contains-gluten", "contains-lactose", "contains-eggs"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4935,6 +5072,7 @@
       "en": {"one": "apple sauce pot", "other": "apple sauce pots"}
     },
     "needPhrase": {"fr": "de la compote de pommes", "en": "apple sauce"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -4978,6 +5116,7 @@
       "en": {"one": "crisps", "other": "crisps"}
     },
     "needPhrase": {"fr": "des chips", "en": "crisps"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5013,6 +5152,7 @@
       "en": {"one": "roasted peanut", "other": "roasted peanuts"}
     },
     "needPhrase": {"fr": "des cacahuètes grillées", "en": "roasted peanuts"},
+    "tags": ["contains-nuts", "vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5047,6 +5187,7 @@
       "en": {"one": "green olive", "other": "green olives"}
     },
     "needPhrase": {"fr": "des olives vertes", "en": "green olives"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5081,6 +5222,7 @@
       "en": {"one": "savoury cracker", "other": "savoury crackers"}
     },
     "needPhrase": {"fr": "des biscuits apéritif", "en": "savoury crackers"},
+    "tags": ["contains-gluten"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5115,6 +5257,7 @@
       "en": {"one": "still water", "other": "still water"}
     },
     "needPhrase": {"fr": "de l’eau plate", "en": "still water"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5158,6 +5301,7 @@
       "en": {"one": "sparkling water", "other": "sparkling water"}
     },
     "needPhrase": {"fr": "de l’eau gazeuse", "en": "sparkling water"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5201,6 +5345,7 @@
       "en": {"one": "orange juice", "other": "orange juice"}
     },
     "needPhrase": {"fr": "du jus d’orange", "en": "orange juice"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5235,6 +5380,7 @@
       "en": {"one": "apple juice", "other": "apple juice"}
     },
     "needPhrase": {"fr": "du jus de pomme", "en": "apple juice"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5269,6 +5415,7 @@
       "en": {"one": "cola", "other": "cola"}
     },
     "needPhrase": {"fr": "du cola", "en": "cola"},
+    "tags": ["vegan"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5312,6 +5459,7 @@
       "en": {"one": "cordial", "other": "cordials"}
     },
     "needPhrase": {"fr": "du sirop", "en": "cordial"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5346,6 +5494,7 @@
       "en": {"one": "red wine", "other": "red wine"}
     },
     "needPhrase": {"fr": "du vin rouge", "en": "red wine"},
+    "tags": ["contains-alcohol"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5380,6 +5529,7 @@
       "en": {"one": "white wine", "other": "white wine"}
     },
     "needPhrase": {"fr": "du vin blanc", "en": "white wine"},
+    "tags": ["contains-alcohol"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5414,6 +5564,7 @@
       "en": {"one": "rosé wine", "other": "rosé wine"}
     },
     "needPhrase": {"fr": "du vin rosé", "en": "rosé wine"},
+    "tags": ["contains-alcohol"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5448,6 +5599,7 @@
       "en": {"one": "lager", "other": "lagers"}
     },
     "needPhrase": {"fr": "de la bière blonde", "en": "lager"},
+    "tags": ["contains-alcohol", "contains-gluten"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5492,6 +5644,7 @@
       "en": {"one": "cider", "other": "ciders"}
     },
     "needPhrase": {"fr": "du cidre", "en": "cider"},
+    "tags": ["contains-alcohol"],
     "markets": {
       "FR": {
         "availability": "available",
@@ -5526,6 +5679,7 @@
       "en": {"one": "champagne", "other": "champagne"}
     },
     "needPhrase": {"fr": "du champagne", "en": "champagne"},
+    "tags": ["contains-alcohol"],
     "markets": {
       "FR": {
         "availability": "available",
@@ -5560,6 +5714,7 @@
       "en": {"one": "toothpaste", "other": "toothpastes"}
     },
     "needPhrase": {"fr": "du dentifrice", "en": "toothpaste"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5594,6 +5749,7 @@
       "en": {"one": "toothbrush", "other": "toothbrushes"}
     },
     "needPhrase": {"fr": "des brosses à dents", "en": "toothbrushes"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5636,6 +5792,7 @@
       "en": {"one": "shower gel", "other": "shower gels"}
     },
     "needPhrase": {"fr": "du gel douche", "en": "shower gel"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5671,6 +5828,7 @@
       "en": {"one": "shampoo", "other": "shampoos"}
     },
     "needPhrase": {"fr": "du shampoing", "en": "shampoo"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5706,6 +5864,7 @@
       "en": {"one": "conditioner", "other": "conditioners"}
     },
     "needPhrase": {"fr": "de l’après-shampoing", "en": "conditioner"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5740,6 +5899,7 @@
       "en": {"one": "liquid hand soap", "other": "liquid hand soaps"}
     },
     "needPhrase": {"fr": "du savon liquide", "en": "liquid hand soap"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5774,6 +5934,7 @@
       "en": {"one": "bar of soap", "other": "bars of soap"}
     },
     "needPhrase": {"fr": "du savon", "en": "soap"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5806,6 +5967,7 @@
       "en": {"one": "deodorant", "other": "deodorants"}
     },
     "needPhrase": {"fr": "du déodorant", "en": "deodorant"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5838,6 +6000,7 @@
       "en": {"one": "cotton bud", "other": "cotton buds"}
     },
     "needPhrase": {"fr": "des bâtonnets ouatés", "en": "cotton buds"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5872,6 +6035,7 @@
       "en": {"one": "cotton pad", "other": "cotton pads"}
     },
     "needPhrase": {"fr": "des cotons démaquillants", "en": "cotton pads"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5906,6 +6070,7 @@
       "en": {"one": "tissue", "other": "tissues"}
     },
     "needPhrase": {"fr": "des mouchoirs", "en": "tissues"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5949,6 +6114,7 @@
       "en": {"one": "disposable razor", "other": "disposable razors"}
     },
     "needPhrase": {"fr": "des rasoirs jetables", "en": "disposable razors"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -5983,6 +6149,7 @@
       "en": {"one": "sanitary pad", "other": "sanitary pads"}
     },
     "needPhrase": {"fr": "des serviettes hygiéniques", "en": "sanitary pads"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6017,6 +6184,7 @@
       "en": {"one": "washing-up liquid", "other": "washing-up liquids"}
     },
     "needPhrase": {"fr": "du liquide vaisselle", "en": "washing-up liquid"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6051,6 +6219,7 @@
       "en": {"one": "dishwasher tablet", "other": "dishwasher tablets"}
     },
     "needPhrase": {"fr": "des tablettes lave-vaisselle", "en": "dishwasher tablets"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6086,6 +6255,7 @@
       "en": {"one": "dishwasher salt", "other": "dishwasher salt"}
     },
     "needPhrase": {"fr": "du sel régénérant", "en": "dishwasher salt"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6120,6 +6290,7 @@
       "en": {"one": "rinse aid", "other": "rinse aids"}
     },
     "needPhrase": {"fr": "du liquide de rinçage", "en": "rinse aid"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6154,6 +6325,7 @@
       "en": {"one": "liquid laundry detergent", "other": "liquid laundry detergents"}
     },
     "needPhrase": {"fr": "de la lessive liquide", "en": "laundry detergent"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6189,6 +6361,7 @@
       "en": {"one": "laundry capsule", "other": "laundry capsules"}
     },
     "needPhrase": {"fr": "des capsules de lessive", "en": "laundry capsules"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6223,6 +6396,7 @@
       "en": {"one": "fabric softener", "other": "fabric softeners"}
     },
     "needPhrase": {"fr": "de l’adoucissant", "en": "fabric softener"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6257,6 +6431,7 @@
       "en": {"one": "sponge", "other": "sponges"}
     },
     "needPhrase": {"fr": "des éponges", "en": "sponges"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6299,6 +6474,7 @@
       "en": {"one": "all-purpose cleaner", "other": "all-purpose cleaners"}
     },
     "needPhrase": {"fr": "du nettoyant multi-usages", "en": "all-purpose cleaner"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6333,6 +6509,7 @@
       "en": {"one": "toilet cleaner", "other": "toilet cleaners"}
     },
     "needPhrase": {"fr": "du nettoyant WC", "en": "toilet cleaner"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6367,6 +6544,7 @@
       "en": {"one": "bleach", "other": "bleach"}
     },
     "needPhrase": {"fr": "de l’eau de Javel", "en": "bleach"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6401,6 +6579,7 @@
       "en": {"one": "AA battery", "other": "AA batteries"}
     },
     "needPhrase": {"fr": "des piles AA", "en": "AA batteries"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6436,6 +6615,7 @@
       "en": {"one": "toilet paper", "other": "toilet paper"}
     },
     "needPhrase": {"fr": "du papier toilette", "en": "toilet paper"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6472,6 +6652,7 @@
       "en": {"one": "kitchen roll", "other": "kitchen roll"}
     },
     "needPhrase": {"fr": "de l’essuie-tout", "en": "kitchen roll"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6507,6 +6688,7 @@
       "en": {"one": "bin bag", "other": "bin bags"}
     },
     "needPhrase": {"fr": "des sacs poubelle", "en": "bin bags"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6541,6 +6723,7 @@
       "en": {"one": "aluminium foil", "other": "aluminium foil"}
     },
     "needPhrase": {"fr": "du papier aluminium", "en": "aluminium foil"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6575,6 +6758,7 @@
       "en": {"one": "cling film", "other": "cling film"}
     },
     "needPhrase": {"fr": "du film étirable", "en": "cling film"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6609,6 +6793,7 @@
       "en": {"one": "baking paper", "other": "baking paper"}
     },
     "needPhrase": {"fr": "du papier cuisson", "en": "baking paper"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6643,6 +6828,7 @@
       "en": {"one": "freezer bag", "other": "freezer bags"}
     },
     "needPhrase": {"fr": "des sacs de congélation", "en": "freezer bags"},
+    "tags": [],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6677,6 +6863,7 @@
       "en": {"one": "nappy", "other": "nappies"}
     },
     "needPhrase": {"fr": "des couches", "en": "nappies"},
+    "tags": ["baby"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6711,6 +6898,7 @@
       "en": {"one": "baby wipe", "other": "baby wipes"}
     },
     "needPhrase": {"fr": "des lingettes pour bébé", "en": "baby wipes"},
+    "tags": ["baby"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6745,6 +6933,7 @@
       "en": {"one": "infant formula", "other": "infant formula"}
     },
     "needPhrase": {"fr": "du lait infantile", "en": "infant formula"},
+    "tags": ["contains-lactose", "baby"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6779,6 +6968,7 @@
       "en": {"one": "baby food jar", "other": "baby food jars"}
     },
     "needPhrase": {"fr": "des petits pots", "en": "baby food jars"},
+    "tags": ["baby"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6821,6 +7011,7 @@
       "en": {"one": "saline pod", "other": "saline pods"}
     },
     "needPhrase": {"fr": "du sérum physiologique", "en": "saline solution"},
+    "tags": ["baby"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6855,6 +7046,7 @@
       "en": {"one": "dry cat food", "other": "dry cat food"}
     },
     "needPhrase": {"fr": "des croquettes pour chat", "en": "dry cat food"},
+    "tags": ["pet"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6890,6 +7082,7 @@
       "en": {"one": "wet cat food", "other": "wet cat food"}
     },
     "needPhrase": {"fr": "de la pâtée pour chat", "en": "wet cat food"},
+    "tags": ["pet"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6924,6 +7117,7 @@
       "en": {"one": "cat litter", "other": "cat litter"}
     },
     "needPhrase": {"fr": "de la litière pour chat", "en": "cat litter"},
+    "tags": ["pet"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6958,6 +7152,7 @@
       "en": {"one": "dry dog food", "other": "dry dog food"}
     },
     "needPhrase": {"fr": "des croquettes pour chien", "en": "dry dog food"},
+    "tags": ["pet"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -6993,6 +7188,7 @@
       "en": {"one": "wet dog food", "other": "wet dog food"}
     },
     "needPhrase": {"fr": "de la pâtée pour chien", "en": "wet dog food"},
+    "tags": ["pet"],
     "markets": {
       "FR": {
         "availability": "common",
@@ -7011,6 +7207,4191 @@
         ],
         "packages": [
           {"packageUnit": "can", "contentQty": "400", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "mangues",
+    "category": "fruits-et-legumes",
+    "storageZone": "fruits-legumes",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "mangue", "other": "mangues"},
+      "en": {"one": "mango", "other": "mangoes"}
+    },
+    "needPhrase": {"fr": "des mangues", "en": "mangoes"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "3"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "ananas",
+    "category": "fruits-et-legumes",
+    "storageZone": "fruits-legumes",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "ananas", "other": "ananas"},
+      "en": {"one": "pineapple", "other": "pineapples"}
+    },
+    "needPhrase": {"fr": "de l’ananas", "en": "pineapple"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "4"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "citrons-verts",
+    "category": "fruits-et-legumes",
+    "storageZone": "fruits-legumes",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "citron vert", "other": "citrons verts"},
+      "en": {"one": "lime", "other": "limes"}
+    },
+    "needPhrase": {"fr": "des citrons verts", "en": "limes"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "12"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "chou-fleur",
+    "category": "fruits-et-legumes",
+    "storageZone": "fruits-legumes",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "chou-fleur", "other": "choux-fleurs"},
+      "en": {"one": "cauliflower", "other": "cauliflowers"}
+    },
+    "needPhrase": {"fr": "du chou-fleur", "en": "cauliflower"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "4"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "courge-butternut",
+    "category": "fruits-et-legumes",
+    "storageZone": "fruits-legumes",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "courge butternut", "other": "courges butternut"},
+      "en": {"one": "butternut squash", "other": "butternut squashes"}
+    },
+    "needPhrase": {"fr": "de la courge butternut", "en": "butternut squash"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "4"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "radis",
+    "category": "fruits-et-legumes",
+    "storageZone": "fruits-legumes",
+    "dimension": "mass",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "radis", "other": "radis"},
+      "en": {"one": "radish", "other": "radishes"}
+    },
+    "needPhrase": {"fr": "des radis", "en": "radishes"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 10,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "bunch",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bunch", "contentQty": "250", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "betteraves-cuites",
+    "category": "fruits-et-legumes",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "betterave cuite", "other": "betteraves cuites"},
+      "en": {"one": "cooked beetroot", "other": "cooked beetroot"}
+    },
+    "needPhrase": {"fr": "des betteraves cuites", "en": "cooked beetroot"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "500", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "gingembre",
+    "category": "fruits-et-legumes",
+    "storageZone": "fruits-legumes",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "gingembre", "other": "gingembres"},
+      "en": {"one": "fresh ginger", "other": "fresh ginger"}
+    },
+    "needPhrase": {"fr": "du gingembre", "en": "fresh ginger"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "gram",
+            "isDefault": true,
+            "step": "50",
+            "presets": ["50", "100", "200"],
+            "min": "50",
+            "max": "800"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "basilic",
+    "category": "fruits-et-legumes",
+    "storageZone": "fruits-legumes",
+    "dimension": "mass",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "basilic", "other": "basilics"},
+      "en": {"one": "basil", "other": "basil"}
+    },
+    "needPhrase": {"fr": "du basilic", "en": "basil"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 10,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "bunch",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bunch", "contentQty": "30", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "ciboulette",
+    "category": "fruits-et-legumes",
+    "storageZone": "fruits-legumes",
+    "dimension": "mass",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "ciboulette", "other": "ciboulettes"},
+      "en": {"one": "chives", "other": "chives"}
+    },
+    "needPhrase": {"fr": "de la ciboulette", "en": "chives"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 10,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "bunch",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bunch", "contentQty": "25", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "menthe-fraiche",
+    "category": "fruits-et-legumes",
+    "storageZone": "fruits-legumes",
+    "dimension": "mass",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "menthe fraîche", "other": "menthes fraîches"},
+      "en": {"one": "fresh mint", "other": "fresh mint"}
+    },
+    "needPhrase": {"fr": "de la menthe fraîche", "en": "fresh mint"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 10,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "bunch",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bunch", "contentQty": "50", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "dattes",
+    "category": "fruits-et-legumes",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "datte", "other": "dattes"},
+      "en": {"one": "date", "other": "dates"}
+    },
+    "needPhrase": {"fr": "des dattes", "en": "dates"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "500", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "box", "contentQty": "1", "contentUnit": "kilogram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "pain-complet",
+    "category": "boulangerie",
+    "storageZone": "placard",
+    "dimension": "count",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "pain complet", "other": "pains complets"},
+      "en": {"one": "wholemeal loaf", "other": "wholemeal loaves"}
+    },
+    "needPhrase": {"fr": "du pain complet", "en": "wholemeal bread"},
+    "tags": ["contains-gluten"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 4,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "4"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "pains-au-lait",
+    "category": "boulangerie",
+    "storageZone": "placard",
+    "dimension": "count",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "pain au lait", "other": "pains au lait"},
+      "en": {"one": "milk roll", "other": "milk rolls"}
+    },
+    "needPhrase": {"fr": "des pains au lait", "en": "milk rolls"},
+    "tags": ["contains-gluten", "contains-lactose", "contains-eggs"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 10,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "10", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "pains-a-burger",
+    "category": "boulangerie",
+    "storageZone": "placard",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "pain à burger", "other": "pains à burger"},
+      "en": {"one": "burger bun", "other": "burger buns"}
+    },
+    "needPhrase": {"fr": "des pains à burger", "en": "burger buns"},
+    "tags": ["contains-gluten"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "4", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "packet", "contentQty": "6", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "crepes",
+    "category": "boulangerie",
+    "storageZone": "placard",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "crêpe", "other": "crêpes"},
+      "en": {"one": "crêpe", "other": "crêpes"}
+    },
+    "needPhrase": {"fr": "des crêpes", "en": "crêpes"},
+    "tags": ["contains-gluten", "contains-lactose", "contains-eggs"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "8", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "packet", "contentQty": "12", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "galettes-de-sarrasin",
+    "category": "boulangerie",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "galette de sarrasin", "other": "galettes de sarrasin"},
+      "en": {"one": "buckwheat galette", "other": "buckwheat galettes"}
+    },
+    "needPhrase": {"fr": "des galettes de sarrasin", "en": "buckwheat galettes"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.15,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "6", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "boisson-soja",
+    "category": "cremerie",
+    "storageZone": "frigo",
+    "dimension": "volume",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "boisson au soja", "other": "boissons au soja"},
+      "en": {"one": "soya drink", "other": "soya drinks"}
+    },
+    "needPhrase": {"fr": "de la boisson au soja", "en": "soya drink"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 7,
+        "householdPenetration": 0.1,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "carton",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "16"
+          },
+          {
+            "unit": "liter",
+            "isDefault": false,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "16"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "carton", "contentQty": "1", "contentUnit": "liter", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "desserts-soja",
+    "category": "cremerie",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "dessert au soja", "other": "desserts au soja"},
+      "en": {"one": "soya dessert", "other": "soya desserts"}
+    },
+    "needPhrase": {"fr": "des desserts au soja", "en": "soya desserts"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 10,
+        "householdPenetration": 0.1,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "4",
+            "presets": ["4", "8"],
+            "min": "4",
+            "max": "32"
+          },
+          {
+            "unit": "pack",
+            "isDefault": false,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "pack", "contentQty": "4", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "petits-suisses",
+    "category": "cremerie",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "petit-suisse", "other": "petits-suisses"},
+      "en": {"one": "petit-suisse", "other": "petits-suisses"}
+    },
+    "needPhrase": {"fr": "des petits-suisses", "en": "petits-suisses"},
+    "tags": ["contains-lactose"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 10,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "6",
+            "presets": ["6", "12"],
+            "min": "6",
+            "max": "48"
+          },
+          {
+            "unit": "pack",
+            "isDefault": false,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "pack", "contentQty": "6", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "pack", "contentQty": "12", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "yaourts-a-la-grecque",
+    "category": "cremerie",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "yaourt à la grecque", "other": "yaourts à la grecque"},
+      "en": {"one": "Greek-style yoghurt", "other": "Greek-style yoghurts"}
+    },
+    "needPhrase": {"fr": "des yaourts à la grecque", "en": "Greek-style yoghurt"},
+    "tags": ["contains-lactose"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 10,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "4",
+            "presets": ["4", "8"],
+            "min": "4",
+            "max": "32"
+          },
+          {
+            "unit": "pack",
+            "isDefault": false,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "pack", "contentQty": "4", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "margarine",
+    "category": "cremerie",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "margarine", "other": "margarines"},
+      "en": {"one": "margarine", "other": "margarine"}
+    },
+    "needPhrase": {"fr": "de la margarine", "en": "margarine"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "tray",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tray", "contentQty": "250", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "tray", "contentQty": "500", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "pate-a-pizza",
+    "category": "cremerie",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "pâte à pizza", "other": "pâtes à pizza"},
+      "en": {"one": "pizza dough", "other": "pizza dough"}
+    },
+    "needPhrase": {"fr": "de la pâte à pizza", "en": "pizza dough"},
+    "tags": ["contains-gluten"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "roll",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "roll", "contentQty": "260", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "brie",
+    "category": "fromages",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "brie", "other": "bries"},
+      "en": {"one": "Brie", "other": "Bries"}
+    },
+    "needPhrase": {"fr": "du brie", "en": "Brie"},
+    "tags": ["contains-lactose"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "gram",
+            "isDefault": true,
+            "step": "50",
+            "presets": ["200", "250", "500"],
+            "min": "50",
+            "max": "2000"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "roquefort",
+    "category": "fromages",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "roquefort", "other": "roqueforts"},
+      "en": {"one": "Roquefort", "other": "Roqueforts"}
+    },
+    "needPhrase": {"fr": "du roquefort", "en": "Roquefort"},
+    "tags": ["contains-lactose"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "gram",
+            "isDefault": true,
+            "step": "50",
+            "presets": ["100", "150", "200"],
+            "min": "50",
+            "max": "800"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "reblochon",
+    "category": "fromages",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "reblochon", "other": "reblochons"},
+      "en": {"one": "Reblochon", "other": "Reblochons"}
+    },
+    "needPhrase": {"fr": "du reblochon", "en": "Reblochon"},
+    "tags": ["contains-lactose"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "4"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "fromage-a-raclette",
+    "category": "fromages",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "fromage à raclette", "other": "fromages à raclette"},
+      "en": {"one": "raclette cheese", "other": "raclette cheese"}
+    },
+    "needPhrase": {"fr": "du fromage à raclette", "en": "raclette cheese"},
+    "tags": ["contains-lactose"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": false,
+        "unitPolicies": [
+          {
+            "unit": "tray",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "3"],
+            "min": "1",
+            "max": "12"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tray", "contentQty": "400", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "tray", "contentQty": "800", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "fromage-frais-a-tartiner",
+    "category": "fromages",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "fromage frais à tartiner", "other": "fromages frais à tartiner"},
+      "en": {"one": "cream cheese", "other": "cream cheese"}
+    },
+    "needPhrase": {"fr": "du fromage frais à tartiner", "en": "cream cheese"},
+    "tags": ["contains-lactose"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "150", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "jar", "contentQty": "300", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "fromage-en-tranches",
+    "category": "fromages",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "fromage en tranches", "other": "fromages en tranches"},
+      "en": {"one": "sliced cheese", "other": "sliced cheese"}
+    },
+    "needPhrase": {"fr": "du fromage en tranches", "en": "sliced cheese"},
+    "tags": ["contains-lactose"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "10", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "poulet-entier",
+    "category": "boucherie-volaille",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "poulet entier", "other": "poulets entiers"},
+      "en": {"one": "whole chicken", "other": "whole chickens"}
+    },
+    "needPhrase": {"fr": "du poulet entier", "en": "whole chicken"},
+    "tags": ["contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "4"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "boeuf-a-braiser",
+    "category": "boucherie-volaille",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "bœuf à braiser", "other": "bœufs à braiser"},
+      "en": {"one": "braising beef", "other": "braising beef"}
+    },
+    "needPhrase": {"fr": "du bœuf à braiser", "en": "braising beef"},
+    "tags": ["contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "tray",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          },
+          {
+            "unit": "gram",
+            "isDefault": false,
+            "step": "100",
+            "presets": ["500", "800", "1000"],
+            "min": "100",
+            "max": "4000"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tray", "contentQty": "800", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "roti-de-porc",
+    "category": "boucherie-volaille",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "rôti de porc", "other": "rôtis de porc"},
+      "en": {"one": "pork roast", "other": "pork roasts"}
+    },
+    "needPhrase": {"fr": "du rôti de porc", "en": "pork roast"},
+    "tags": ["contains-pork", "contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "gram",
+            "isDefault": true,
+            "step": "100",
+            "presets": ["600", "800", "1000"],
+            "min": "100",
+            "max": "4000"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "cotelettes-d-agneau",
+    "category": "boucherie-volaille",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "côtelette d’agneau", "other": "côtelettes d’agneau"},
+      "en": {"one": "lamb chop", "other": "lamb chops"}
+    },
+    "needPhrase": {"fr": "des côtelettes d’agneau", "en": "lamb chops"},
+    "tags": ["contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "2",
+            "presets": ["4", "6", "8"],
+            "min": "2",
+            "max": "32"
+          },
+          {
+            "unit": "tray",
+            "isDefault": false,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tray", "contentQty": "4", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "merguez",
+    "category": "boucherie-volaille",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "merguez", "other": "merguez"},
+      "en": {"one": "merguez sausage", "other": "merguez sausages"}
+    },
+    "needPhrase": {"fr": "des merguez", "en": "merguez sausages"},
+    "tags": ["contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "tray",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          },
+          {
+            "unit": "piece",
+            "isDefault": false,
+            "step": "6",
+            "presets": ["6", "12"],
+            "min": "6",
+            "max": "48"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tray", "contentQty": "6", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "tray", "contentQty": "12", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "saucisses-de-volaille",
+    "category": "boucherie-volaille",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "saucisse de volaille", "other": "saucisses de volaille"},
+      "en": {"one": "poultry sausage", "other": "poultry sausages"}
+    },
+    "needPhrase": {"fr": "des saucisses de volaille", "en": "poultry sausages"},
+    "tags": ["contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "tray",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tray", "contentQty": "6", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "blanc-de-dinde",
+    "category": "charcuterie-traiteur",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "blanc de dinde", "other": "blancs de dinde"},
+      "en": {"one": "sliced turkey breast", "other": "sliced turkey breast"}
+    },
+    "needPhrase": {"fr": "du blanc de dinde", "en": "sliced turkey breast"},
+    "tags": ["contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 10,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "3"],
+            "min": "1",
+            "max": "12"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "4", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "packet", "contentQty": "8", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "pate-de-campagne",
+    "category": "charcuterie-traiteur",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "pâté de campagne", "other": "pâtés de campagne"},
+      "en": {"one": "country pâté", "other": "country pâtés"}
+    },
+    "needPhrase": {"fr": "du pâté de campagne", "en": "country pâté"},
+    "tags": ["contains-pork", "contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "tray",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tray", "contentQty": "200", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "chorizo",
+    "category": "charcuterie-traiteur",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "chorizo", "other": "chorizos"},
+      "en": {"one": "chorizo", "other": "chorizos"}
+    },
+    "needPhrase": {"fr": "du chorizo", "en": "chorizo"},
+    "tags": ["contains-pork", "contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "100", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "packet", "contentQty": "225", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "quiche-lorraine",
+    "category": "charcuterie-traiteur",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "quiche lorraine", "other": "quiches lorraines"},
+      "en": {"one": "quiche Lorraine", "other": "quiches Lorraine"}
+    },
+    "needPhrase": {"fr": "de la quiche lorraine", "en": "quiche Lorraine"},
+    "tags": ["contains-pork", "contains-gluten", "contains-lactose", "contains-meat", "contains-eggs"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "4"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "taboule",
+    "category": "charcuterie-traiteur",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "taboulé", "other": "taboulés"},
+      "en": {"one": "tabbouleh", "other": "tabbouleh"}
+    },
+    "needPhrase": {"fr": "du taboulé", "en": "tabbouleh"},
+    "tags": ["contains-gluten"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "tray",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tray", "contentQty": "500", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "tray", "contentQty": "1", "contentUnit": "kilogram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "tofu",
+    "category": "charcuterie-traiteur",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "tofu", "other": "tofus"},
+      "en": {"one": "tofu", "other": "tofu"}
+    },
+    "needPhrase": {"fr": "du tofu", "en": "tofu"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.1,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "200", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "packet", "contentQty": "400", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "galettes-vegetales",
+    "category": "charcuterie-traiteur",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "galette végétale", "other": "galettes végétales"},
+      "en": {"one": "veggie burger", "other": "veggie burgers"}
+    },
+    "needPhrase": {"fr": "des galettes végétales", "en": "veggie burgers"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.1,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "tray",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tray", "contentQty": "2", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "tray", "contentQty": "4", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "falafels",
+    "category": "charcuterie-traiteur",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "falafel", "other": "falafels"},
+      "en": {"one": "falafel", "other": "falafels"}
+    },
+    "needPhrase": {"fr": "des falafels", "en": "falafels"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.1,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "tray",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tray", "contentQty": "200", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "surimi",
+    "category": "poissonnerie",
+    "storageZone": "frigo",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "surimi", "other": "surimis"},
+      "en": {"one": "crab stick", "other": "crab sticks"}
+    },
+    "needPhrase": {"fr": "du surimi", "en": "crab sticks"},
+    "tags": ["contains-gluten", "contains-fish", "contains-eggs"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "250", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "filets-de-colin",
+    "category": "poissonnerie",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "filet de colin", "other": "filets de colin"},
+      "en": {"one": "hake fillet", "other": "hake fillets"}
+    },
+    "needPhrase": {"fr": "des filets de colin", "en": "hake fillets"},
+    "tags": ["contains-fish"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["2", "4"],
+            "min": "1",
+            "max": "12"
+          },
+          {
+            "unit": "tray",
+            "isDefault": false,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tray", "contentQty": "2", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "huitres",
+    "category": "poissonnerie",
+    "storageZone": "frigo",
+    "dimension": "count",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "huître", "other": "huîtres"},
+      "en": {"one": "oyster", "other": "oysters"}
+    },
+    "needPhrase": {"fr": "des huîtres", "en": "oysters"},
+    "tags": ["contains-fish"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": false,
+        "unitPolicies": [
+          {
+            "unit": "dozen",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "16"
+          },
+          {
+            "unit": "piece",
+            "isDefault": false,
+            "step": "6",
+            "presets": ["6", "12", "24"],
+            "min": "6",
+            "max": "96"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "petits-pois-surgeles",
+    "category": "surgeles",
+    "storageZone": "congelateur",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "petits pois surgelés", "other": "petits pois surgelés"},
+      "en": {"one": "frozen peas", "other": "frozen peas"}
+    },
+    "needPhrase": {"fr": "des petits pois surgelés", "en": "frozen peas"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "sachet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "sachet", "contentQty": "1", "contentUnit": "kilogram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "fruits-rouges-surgeles",
+    "category": "surgeles",
+    "storageZone": "congelateur",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "fruits rouges surgelés", "other": "fruits rouges surgelés"},
+      "en": {"one": "frozen mixed berries", "other": "frozen mixed berries"}
+    },
+    "needPhrase": {"fr": "des fruits rouges surgelés", "en": "frozen berries"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 45,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "sachet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "sachet", "contentQty": "500", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "steaks-haches-surgeles",
+    "category": "surgeles",
+    "storageZone": "congelateur",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "steak haché surgelé", "other": "steaks hachés surgelés"},
+      "en": {"one": "frozen beef burger", "other": "frozen beef burgers"}
+    },
+    "needPhrase": {"fr": "des steaks hachés surgelés", "en": "frozen beef burgers"},
+    "tags": ["contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "10", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "box", "contentQty": "20", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "nuggets-de-poulet",
+    "category": "surgeles",
+    "storageZone": "congelateur",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "nuggets de poulet", "other": "nuggets de poulet"},
+      "en": {"one": "chicken nuggets", "other": "chicken nuggets"}
+    },
+    "needPhrase": {"fr": "des nuggets de poulet", "en": "chicken nuggets"},
+    "tags": ["contains-gluten", "contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "500", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "lasagnes-surgelees",
+    "category": "surgeles",
+    "storageZone": "congelateur",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "lasagnes surgelées", "other": "lasagnes surgelées"},
+      "en": {"one": "frozen lasagne", "other": "frozen lasagnes"}
+    },
+    "needPhrase": {"fr": "des lasagnes surgelées", "en": "frozen lasagne"},
+    "tags": ["contains-gluten", "contains-lactose", "contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "1", "contentUnit": "kilogram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "cones-glaces",
+    "category": "surgeles",
+    "storageZone": "congelateur",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "cône glacé", "other": "cônes glacés"},
+      "en": {"one": "ice cream cone", "other": "ice cream cones"}
+    },
+    "needPhrase": {"fr": "des cônes glacés", "en": "ice cream cones"},
+    "tags": ["contains-gluten", "contains-lactose"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "4", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "box", "contentQty": "6", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "cumin",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "cumin moulu", "other": "cumins moulus"},
+      "en": {"one": "ground cumin", "other": "ground cumin"}
+    },
+    "needPhrase": {"fr": "du cumin moulu", "en": "ground cumin"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 120,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "40", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "paprika",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "paprika", "other": "paprikas"},
+      "en": {"one": "paprika", "other": "paprika"}
+    },
+    "needPhrase": {"fr": "du paprika", "en": "paprika"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 120,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "40", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "curry",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "curry en poudre", "other": "currys en poudre"},
+      "en": {"one": "curry powder", "other": "curry powder"}
+    },
+    "needPhrase": {"fr": "du curry en poudre", "en": "curry powder"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 120,
+        "householdPenetration": 0.45,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "40", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "cannelle",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "cannelle moulue", "other": "cannelles moulues"},
+      "en": {"one": "ground cinnamon", "other": "ground cinnamon"}
+    },
+    "needPhrase": {"fr": "de la cannelle moulue", "en": "ground cinnamon"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 120,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "40", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "ras-el-hanout",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "ras el hanout", "other": "ras el hanout"},
+      "en": {"one": "ras el hanout", "other": "ras el hanout"}
+    },
+    "needPhrase": {"fr": "du ras el hanout", "en": "ras el hanout"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 120,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "40", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "piment-d-espelette",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "piment d’Espelette", "other": "piments d’Espelette"},
+      "en": {"one": "Espelette pepper", "other": "Espelette pepper"}
+    },
+    "needPhrase": {"fr": "du piment d’Espelette", "en": "Espelette pepper"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 120,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "40", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "thym-seche",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "thym séché", "other": "thyms séchés"},
+      "en": {"one": "dried thyme", "other": "dried thyme"}
+    },
+    "needPhrase": {"fr": "du thym séché", "en": "dried thyme"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 120,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "20", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "boulgour",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "boulgour", "other": "boulgours"},
+      "en": {"one": "bulgur wheat", "other": "bulgur wheat"}
+    },
+    "needPhrase": {"fr": "du boulgour", "en": "bulgur wheat"},
+    "tags": ["contains-gluten", "vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "500", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "packet", "contentQty": "1", "contentUnit": "kilogram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "lentilles-corail",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "lentilles corail", "other": "lentilles corail"},
+      "en": {"one": "red lentils", "other": "red lentils"}
+    },
+    "needPhrase": {"fr": "des lentilles corail", "en": "red lentils"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "500", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "haricots-rouges",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "haricots rouges", "other": "haricots rouges"},
+      "en": {"one": "red kidney beans", "other": "red kidney beans"}
+    },
+    "needPhrase": {"fr": "des haricots rouges", "en": "kidney beans"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 45,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "can",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "12"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "can", "contentQty": "400", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "can", "contentQty": "800", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "petits-pois-carottes",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "petits pois carottes", "other": "petits pois carottes"},
+      "en": {"one": "peas and carrots", "other": "peas and carrots"}
+    },
+    "needPhrase": {"fr": "des petits pois carottes", "en": "tinned peas and carrots"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "can",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "12"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "can", "contentQty": "400", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "can", "contentQty": "800", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "ratatouille",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "ratatouille", "other": "ratatouilles"},
+      "en": {"one": "ratatouille", "other": "ratatouille"}
+    },
+    "needPhrase": {"fr": "de la ratatouille", "en": "ratatouille"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "can",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "12"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "can", "contentQty": "375", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "can", "contentQty": "750", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "cassoulet",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "cassoulet", "other": "cassoulets"},
+      "en": {"one": "cassoulet", "other": "cassoulets"}
+    },
+    "needPhrase": {"fr": "du cassoulet", "en": "cassoulet"},
+    "tags": ["contains-pork", "contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 45,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "can",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "6"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "can", "contentQty": "840", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "can", "contentQty": "420", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "raviolis-en-conserve",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "raviolis en conserve", "other": "raviolis en conserve"},
+      "en": {"one": "tinned ravioli", "other": "tinned ravioli"}
+    },
+    "needPhrase": {"fr": "des raviolis en conserve", "en": "tinned ravioli"},
+    "tags": ["contains-gluten", "contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "can",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "12"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "can", "contentQty": "800", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "can", "contentQty": "400", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "pesto",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "pesto", "other": "pestos"},
+      "en": {"one": "pesto", "other": "pesto"}
+    },
+    "needPhrase": {"fr": "du pesto", "en": "pesto"},
+    "tags": ["contains-lactose", "contains-nuts"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 45,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "190", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "harissa",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "harissa", "other": "harissas"},
+      "en": {"one": "harissa", "other": "harissa"}
+    },
+    "needPhrase": {"fr": "de la harissa", "en": "harissa"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 90,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "tube",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "tube", "contentQty": "70", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "vinaigre-balsamique",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "volume",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "vinaigre balsamique", "other": "vinaigres balsamiques"},
+      "en": {"one": "balsamic vinegar", "other": "balsamic vinegar"}
+    },
+    "needPhrase": {"fr": "du vinaigre balsamique", "en": "balsamic vinegar"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 90,
+        "householdPenetration": 0.45,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "bottle",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bottle", "contentQty": "50", "contentUnit": "centiliter", "typical": true},
+          {"packageUnit": "bottle", "contentQty": "25", "contentUnit": "centiliter", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "puree-en-flocons",
+    "category": "epicerie-salee",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "purée en flocons", "other": "purées en flocons"},
+      "en": {"one": "instant mashed potato", "other": "instant mashed potato"}
+    },
+    "needPhrase": {"fr": "de la purée en flocons", "en": "instant mash"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 45,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "500", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "cafe-soluble",
+    "category": "petit-dejeuner",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "café soluble", "other": "cafés solubles"},
+      "en": {"one": "instant coffee", "other": "instant coffee"}
+    },
+    "needPhrase": {"fr": "du café soluble", "en": "instant coffee"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 45,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "200", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "jar", "contentQty": "100", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "chicoree",
+    "category": "petit-dejeuner",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "chicorée soluble", "other": "chicorées solubles"},
+      "en": {"one": "instant chicory", "other": "instant chicory"}
+    },
+    "needPhrase": {"fr": "de la chicorée soluble", "en": "instant chicory"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 45,
+        "householdPenetration": 0.15,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "250", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "the-vert",
+    "category": "petit-dejeuner",
+    "storageZone": "placard",
+    "dimension": "count",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "thé vert", "other": "thés verts"},
+      "en": {"one": "green tea", "other": "green tea"}
+    },
+    "needPhrase": {"fr": "du thé vert", "en": "green tea"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 45,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "25", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "muesli",
+    "category": "petit-dejeuner",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "muesli", "other": "mueslis"},
+      "en": {"one": "muesli", "other": "muesli"}
+    },
+    "needPhrase": {"fr": "du muesli", "en": "muesli"},
+    "tags": ["contains-gluten"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "500", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "box", "contentQty": "1", "contentUnit": "kilogram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "barres-de-cereales",
+    "category": "petit-dejeuner",
+    "storageZone": "placard",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "barre de céréales", "other": "barres de céréales"},
+      "en": {"one": "cereal bar", "other": "cereal bars"}
+    },
+    "needPhrase": {"fr": "des barres de céréales", "en": "cereal bars"},
+    "tags": ["contains-gluten"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "6", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "pain-d-epices",
+    "category": "petit-dejeuner",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "pain d’épices", "other": "pains d’épices"},
+      "en": {"one": "spiced honey cake", "other": "spiced honey cakes"}
+    },
+    "needPhrase": {"fr": "du pain d’épices", "en": "spiced honey cake"},
+    "tags": ["contains-gluten"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "300", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "sucre-vanille",
+    "category": "epicerie-sucree",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "sucre vanillé", "other": "sucres vanillés"},
+      "en": {"one": "vanilla sugar", "other": "vanilla sugar"}
+    },
+    "needPhrase": {"fr": "du sucre vanillé", "en": "vanilla sugar"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 90,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "pack",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "pack", "contentQty": "75", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "fecule-de-mais",
+    "category": "epicerie-sucree",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "fécule de maïs", "other": "fécules de maïs"},
+      "en": {"one": "cornflour", "other": "cornflour"}
+    },
+    "needPhrase": {"fr": "de la fécule de maïs", "en": "cornflour"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 120,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "400", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "levure-de-boulanger",
+    "category": "epicerie-sucree",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "levure de boulanger", "other": "levures de boulanger"},
+      "en": {"one": "dried yeast", "other": "dried yeast"}
+    },
+    "needPhrase": {"fr": "de la levure de boulanger", "en": "dried yeast"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 90,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "pack",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "pack", "contentQty": "40", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "poudre-d-amande",
+    "category": "epicerie-sucree",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "poudre d’amande", "other": "poudres d’amande"},
+      "en": {"one": "ground almonds", "other": "ground almonds"}
+    },
+    "needPhrase": {"fr": "de la poudre d’amande", "en": "ground almonds"},
+    "tags": ["contains-nuts", "vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "sachet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "sachet", "contentQty": "125", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "sachet", "contentQty": "250", "contentUnit": "gram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "cerneaux-de-noix",
+    "category": "epicerie-sucree",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "cerneaux de noix", "other": "cerneaux de noix"},
+      "en": {"one": "walnut halves", "other": "walnut halves"}
+    },
+    "needPhrase": {"fr": "des cerneaux de noix", "en": "walnut halves"},
+    "tags": ["contains-nuts", "vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "sachet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "sachet", "contentQty": "200", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "cookies",
+    "category": "epicerie-sucree",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "cookie", "other": "cookies"},
+      "en": {"one": "cookie", "other": "cookies"}
+    },
+    "needPhrase": {"fr": "des cookies", "en": "cookies"},
+    "tags": ["contains-gluten", "contains-lactose", "contains-eggs"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "3"],
+            "min": "1",
+            "max": "12"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "200", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "galettes-bretonnes",
+    "category": "epicerie-sucree",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "galette bretonne", "other": "galettes bretonnes"},
+      "en": {"one": "Breton butter biscuit", "other": "Breton butter biscuits"}
+    },
+    "needPhrase": {"fr": "des galettes bretonnes", "en": "Breton butter biscuits"},
+    "tags": ["contains-gluten", "contains-lactose", "contains-eggs"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "130", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "bonbons-gelifies",
+    "category": "epicerie-sucree",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "bonbons gélifiés", "other": "bonbons gélifiés"},
+      "en": {"one": "jelly sweets", "other": "jelly sweets"}
+    },
+    "needPhrase": {"fr": "des bonbons gélifiés", "en": "jelly sweets"},
+    "tags": ["contains-pork", "contains-meat"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "sachet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "sachet", "contentQty": "250", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "olives-noires",
+    "category": "aperitif",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "olive noire", "other": "olives noires"},
+      "en": {"one": "black olive", "other": "black olives"}
+    },
+    "needPhrase": {"fr": "des olives noires", "en": "black olives"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "200", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "noix-de-cajou",
+    "category": "aperitif",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "noix de cajou", "other": "noix de cajou"},
+      "en": {"one": "cashew nut", "other": "cashew nuts"}
+    },
+    "needPhrase": {"fr": "des noix de cajou", "en": "cashew nuts"},
+    "tags": ["contains-nuts", "vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "sachet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "sachet", "contentQty": "150", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "pistaches",
+    "category": "aperitif",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "pistache", "other": "pistaches"},
+      "en": {"one": "pistachio", "other": "pistachios"}
+    },
+    "needPhrase": {"fr": "des pistaches", "en": "pistachios"},
+    "tags": ["contains-nuts", "vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "sachet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "sachet", "contentQty": "250", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "chips-tortilla",
+    "category": "aperitif",
+    "storageZone": "placard",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "chips tortilla", "other": "chips tortilla"},
+      "en": {"one": "tortilla chips", "other": "tortilla chips"}
+    },
+    "needPhrase": {"fr": "des chips tortilla", "en": "tortilla chips"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "200", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "jus-multifruits",
+    "category": "boissons-sans-alcool",
+    "storageZone": "cave-boissons",
+    "dimension": "volume",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "jus multifruits", "other": "jus multifruits"},
+      "en": {"one": "mixed fruit juice", "other": "mixed fruit juice"}
+    },
+    "needPhrase": {"fr": "du jus multifruits", "en": "mixed fruit juice"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 7,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "carton",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "16"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "carton", "contentQty": "1", "contentUnit": "liter", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "limonade",
+    "category": "boissons-sans-alcool",
+    "storageZone": "cave-boissons",
+    "dimension": "volume",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "limonade", "other": "limonades"},
+      "en": {"one": "lemonade", "other": "lemonade"}
+    },
+    "needPhrase": {"fr": "de la limonade", "en": "lemonade"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 14,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "bottle",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "16"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bottle", "contentQty": "1.5", "contentUnit": "liter", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "the-glace",
+    "category": "boissons-sans-alcool",
+    "storageZone": "cave-boissons",
+    "dimension": "volume",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "thé glacé", "other": "thés glacés"},
+      "en": {"one": "iced tea", "other": "iced tea"}
+    },
+    "needPhrase": {"fr": "du thé glacé", "en": "iced tea"},
+    "tags": ["vegan"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 10,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "bottle",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "16"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bottle", "contentQty": "1.5", "contentUnit": "liter", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "biere-sans-alcool",
+    "category": "boissons-alcoolisees",
+    "storageZone": "cave-boissons",
+    "dimension": "volume",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "bière sans alcool", "other": "bières sans alcool"},
+      "en": {"one": "alcohol-free beer", "other": "alcohol-free beers"}
+    },
+    "needPhrase": {"fr": "de la bière sans alcool", "en": "alcohol-free beer"},
+    "tags": ["contains-alcohol", "contains-gluten"],
+    "markets": {
+      "FR": {
+        "availability": "available",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.15,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "pack",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "6"
+          },
+          {
+            "unit": "bottle",
+            "isDefault": false,
+            "step": "1",
+            "presets": ["1", "2", "6"],
+            "min": "1",
+            "max": "24"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "pack", "contentQty": "150", "contentUnit": "centiliter", "typical": true},
+          {"packageUnit": "bottle", "contentQty": "25", "contentUnit": "centiliter", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "pastis",
+    "category": "boissons-alcoolisees",
+    "storageZone": "cave-boissons",
+    "dimension": "volume",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "pastis", "other": "pastis"},
+      "en": {"one": "pastis", "other": "pastis"}
+    },
+    "needPhrase": {"fr": "du pastis", "en": "pastis"},
+    "tags": ["contains-alcohol"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "bottle",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "6"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bottle", "contentQty": "1", "contentUnit": "liter", "typical": true},
+          {"packageUnit": "bottle", "contentQty": "70", "contentUnit": "centiliter", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "whisky",
+    "category": "boissons-alcoolisees",
+    "storageZone": "cave-boissons",
+    "dimension": "volume",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "whisky", "other": "whiskys"},
+      "en": {"one": "whisky", "other": "whiskies"}
+    },
+    "needPhrase": {"fr": "du whisky", "en": "whisky"},
+    "tags": ["contains-alcohol"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 90,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "bottle",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "6"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bottle", "contentQty": "70", "contentUnit": "centiliter", "typical": true},
+          {"packageUnit": "bottle", "contentQty": "1", "contentUnit": "liter", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "rhum",
+    "category": "boissons-alcoolisees",
+    "storageZone": "cave-boissons",
+    "dimension": "volume",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "rhum", "other": "rhums"},
+      "en": {"one": "rum", "other": "rums"}
+    },
+    "needPhrase": {"fr": "du rhum", "en": "rum"},
+    "tags": ["contains-alcohol"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 120,
+        "householdPenetration": 0.2,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "bottle",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "6"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bottle", "contentQty": "70", "contentUnit": "centiliter", "typical": true},
+          {"packageUnit": "bottle", "contentQty": "1", "contentUnit": "liter", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "fil-dentaire",
+    "category": "hygiene-beaute",
+    "storageZone": "salle-de-bain",
+    "dimension": "count",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "fil dentaire", "other": "fils dentaires"},
+      "en": {"one": "dental floss", "other": "dental floss"}
+    },
+    "needPhrase": {"fr": "du fil dentaire", "en": "dental floss"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "6"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "bain-de-bouche",
+    "category": "hygiene-beaute",
+    "storageZone": "salle-de-bain",
+    "dimension": "volume",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "bain de bouche", "other": "bains de bouche"},
+      "en": {"one": "mouthwash", "other": "mouthwashes"}
+    },
+    "needPhrase": {"fr": "du bain de bouche", "en": "mouthwash"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 45,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "flask",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "flask", "contentQty": "500", "contentUnit": "milliliter", "typical": true},
+          {"packageUnit": "flask", "contentQty": "250", "contentUnit": "milliliter", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "creme-hydratante",
+    "category": "hygiene-beaute",
+    "storageZone": "salle-de-bain",
+    "dimension": "volume",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "crème hydratante", "other": "crèmes hydratantes"},
+      "en": {"one": "moisturiser", "other": "moisturisers"}
+    },
+    "needPhrase": {"fr": "de la crème hydratante", "en": "moisturiser"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.45,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "jar",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "jar", "contentQty": "50", "contentUnit": "milliliter", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "mousse-a-raser",
+    "category": "hygiene-beaute",
+    "storageZone": "salle-de-bain",
+    "dimension": "count",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "mousse à raser", "other": "mousses à raser"},
+      "en": {"one": "shaving foam", "other": "shaving foams"}
+    },
+    "needPhrase": {"fr": "de la mousse à raser", "en": "shaving foam"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.3,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "6"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "tampons",
+    "category": "hygiene-beaute",
+    "storageZone": "salle-de-bain",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "tampon hygiénique", "other": "tampons hygiéniques"},
+      "en": {"one": "tampon", "other": "tampons"}
+    },
+    "needPhrase": {"fr": "des tampons hygiéniques", "en": "tampons"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.25,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "16", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "box", "contentQty": "32", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "pansements",
+    "category": "hygiene-beaute",
+    "storageZone": "salle-de-bain",
+    "dimension": "count",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "pansement", "other": "pansements"},
+      "en": {"one": "plaster", "other": "plasters"}
+    },
+    "needPhrase": {"fr": "des pansements", "en": "plasters"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 120,
+        "householdPenetration": 0.45,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "20", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "vinaigre-menager",
+    "category": "entretien-maison",
+    "storageZone": "entretien",
+    "dimension": "volume",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "vinaigre ménager", "other": "vinaigres ménagers"},
+      "en": {"one": "cleaning vinegar", "other": "cleaning vinegar"}
+    },
+    "needPhrase": {"fr": "du vinaigre ménager", "en": "cleaning vinegar"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "bottle",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bottle", "contentQty": "1", "contentUnit": "liter", "typical": true},
+          {"packageUnit": "bottle", "contentQty": "1.5", "contentUnit": "liter", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "bicarbonate-de-soude",
+    "category": "entretien-maison",
+    "storageZone": "entretien",
+    "dimension": "mass",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "bicarbonate de soude", "other": "bicarbonates de soude"},
+      "en": {"one": "bicarbonate of soda", "other": "bicarbonate of soda"}
+    },
+    "needPhrase": {"fr": "du bicarbonate de soude", "en": "bicarbonate of soda"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 90,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "500", "contentUnit": "gram", "typical": true},
+          {"packageUnit": "box", "contentQty": "1", "contentUnit": "kilogram", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "nettoyant-sols",
+    "category": "entretien-maison",
+    "storageZone": "entretien",
+    "dimension": "volume",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "nettoyant pour sols", "other": "nettoyants pour sols"},
+      "en": {"one": "floor cleaner", "other": "floor cleaners"}
+    },
+    "needPhrase": {"fr": "du nettoyant pour sols", "en": "floor cleaner"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.55,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "flask",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "flask", "contentQty": "1.25", "contentUnit": "liter", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "nettoyant-vitres",
+    "category": "entretien-maison",
+    "storageZone": "entretien",
+    "dimension": "volume",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "nettoyant vitres", "other": "nettoyants vitres"},
+      "en": {"one": "glass cleaner", "other": "glass cleaners"}
+    },
+    "needPhrase": {"fr": "du nettoyant vitres", "en": "glass cleaner"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 90,
+        "householdPenetration": 0.5,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "flask",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "flask", "contentQty": "500", "contentUnit": "milliliter", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "creme-a-recurer",
+    "category": "entretien-maison",
+    "storageZone": "entretien",
+    "dimension": "volume",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "crème à récurer", "other": "crèmes à récurer"},
+      "en": {"one": "cream cleaner", "other": "cream cleaners"}
+    },
+    "needPhrase": {"fr": "de la crème à récurer", "en": "cream cleaner"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 90,
+        "householdPenetration": 0.4,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "flask",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "flask", "contentQty": "750", "contentUnit": "milliliter", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "gants-de-menage",
+    "category": "entretien-maison",
+    "storageZone": "entretien",
+    "dimension": "count",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "paire de gants de ménage", "other": "paires de gants de ménage"},
+      "en": {"one": "pair of rubber gloves", "other": "pairs of rubber gloves"}
+    },
+    "needPhrase": {"fr": "des gants de ménage", "en": "rubber gloves"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.5,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "piece",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "6"
+          }
+        ],
+        "packages": []
+      }
+    }
+  },
+  {
+    "slug": "piles-aaa",
+    "category": "entretien-maison",
+    "storageZone": "entretien",
+    "dimension": "count",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "pile AAA", "other": "piles AAA"},
+      "en": {"one": "AAA battery", "other": "AAA batteries"}
+    },
+    "needPhrase": {"fr": "des piles AAA", "en": "AAA batteries"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 120,
+        "householdPenetration": 0.5,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "pack",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "pack", "contentQty": "4", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "pack", "contentQty": "8", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "serviettes-en-papier",
+    "category": "papier-menager",
+    "storageZone": "placard",
+    "dimension": "count",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "serviette en papier", "other": "serviettes en papier"},
+      "en": {"one": "paper napkin", "other": "paper napkins"}
+    },
+    "needPhrase": {"fr": "des serviettes en papier", "en": "paper napkins"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 45,
+        "householdPenetration": 0.5,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "packet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "packet", "contentQty": "100", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "packet", "contentQty": "50", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "filtres-a-cafe",
+    "category": "papier-menager",
+    "storageZone": "placard",
+    "dimension": "count",
+    "cycleClass": "long",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "filtre à café", "other": "filtres à café"},
+      "en": {"one": "coffee filter", "other": "coffee filters"}
+    },
+    "needPhrase": {"fr": "des filtres à café", "en": "coffee filters"},
+    "tags": [],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 60,
+        "householdPenetration": 0.35,
+        "isQuestionCandidate": true,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "100", "contentUnit": "piece", "typical": true},
+          {"packageUnit": "box", "contentQty": "80", "contentUnit": "piece", "typical": false}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "lait-de-croissance",
+    "category": "bebe",
+    "storageZone": "bebe",
+    "dimension": "volume",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "lait de croissance", "other": "laits de croissance"},
+      "en": {"one": "growing-up milk", "other": "growing-up milk"}
+    },
+    "needPhrase": {"fr": "du lait de croissance", "en": "growing-up milk"},
+    "tags": ["contains-lactose", "baby"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 7,
+        "householdPenetration": 0.06,
+        "isQuestionCandidate": false,
+        "unitPolicies": [
+          {
+            "unit": "bottle",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "16"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "bottle", "contentQty": "1", "contentUnit": "liter", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "cereales-bebe",
+    "category": "bebe",
+    "storageZone": "bebe",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "céréales pour bébé", "other": "céréales pour bébé"},
+      "en": {"one": "baby cereal", "other": "baby cereal"}
+    },
+    "needPhrase": {"fr": "des céréales pour bébé", "en": "baby cereal"},
+    "tags": ["contains-gluten", "baby"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.05,
+        "isQuestionCandidate": false,
+        "unitPolicies": [
+          {
+            "unit": "box",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "box", "contentQty": "400", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "compotes-bebe",
+    "category": "bebe",
+    "storageZone": "bebe",
+    "dimension": "count",
+    "cycleClass": "short",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "compote pour bébé", "other": "compotes pour bébé"},
+      "en": {"one": "baby fruit purée", "other": "baby fruit purées"}
+    },
+    "needPhrase": {"fr": "des compotes pour bébé", "en": "baby fruit purée"},
+    "tags": ["vegan", "baby"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 7,
+        "householdPenetration": 0.06,
+        "isQuestionCandidate": false,
+        "unitPolicies": [
+          {
+            "unit": "pack",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          },
+          {
+            "unit": "piece",
+            "isDefault": false,
+            "step": "4",
+            "presets": ["4", "8"],
+            "min": "4",
+            "max": "32"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "pack", "contentQty": "4", "contentUnit": "piece", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "liniment",
+    "category": "bebe",
+    "storageZone": "bebe",
+    "dimension": "volume",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "liniment oléo-calcaire", "other": "liniments oléo-calcaires"},
+      "en": {"one": "oleo-calcareous liniment", "other": "oleo-calcareous liniments"}
+    },
+    "needPhrase": {"fr": "du liniment oléo-calcaire", "en": "oleo-calcareous liniment"},
+    "tags": ["baby"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.08,
+        "isQuestionCandidate": false,
+        "unitPolicies": [
+          {
+            "unit": "flask",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "flask", "contentQty": "500", "contentUnit": "milliliter", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "friandises-chien",
+    "category": "animaux",
+    "storageZone": "animaux",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "friandises pour chien", "other": "friandises pour chien"},
+      "en": {"one": "dog treats", "other": "dog treats"}
+    },
+    "needPhrase": {"fr": "des friandises pour chien", "en": "dog treats"},
+    "tags": ["pet"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 21,
+        "householdPenetration": 0.12,
+        "isQuestionCandidate": false,
+        "unitPolicies": [
+          {
+            "unit": "sachet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "sachet", "contentQty": "200", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "friandises-chat",
+    "category": "animaux",
+    "storageZone": "animaux",
+    "dimension": "mass",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "friandises pour chat", "other": "friandises pour chat"},
+      "en": {"one": "cat treats", "other": "cat treats"}
+    },
+    "needPhrase": {"fr": "des friandises pour chat", "en": "cat treats"},
+    "tags": ["pet"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.12,
+        "isQuestionCandidate": false,
+        "unitPolicies": [
+          {
+            "unit": "sachet",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2"],
+            "min": "1",
+            "max": "8"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "sachet", "contentQty": "60", "contentUnit": "gram", "typical": true}
+        ]
+      }
+    }
+  },
+  {
+    "slug": "sacs-a-dejections",
+    "category": "animaux",
+    "storageZone": "animaux",
+    "dimension": "count",
+    "cycleClass": "medium",
+    "isStaple": false,
+    "names": {
+      "fr": {"one": "sac à déjections canines", "other": "sacs à déjections canines"},
+      "en": {"one": "dog poo bag", "other": "dog poo bags"}
+    },
+    "needPhrase": {"fr": "des sacs à déjections canines", "en": "dog poo bags"},
+    "tags": ["pet"],
+    "markets": {
+      "FR": {
+        "availability": "common",
+        "typicalRepurchaseDays": 30,
+        "householdPenetration": 0.1,
+        "isQuestionCandidate": false,
+        "unitPolicies": [
+          {
+            "unit": "roll",
+            "isDefault": true,
+            "step": "1",
+            "presets": ["1", "2", "4"],
+            "min": "1",
+            "max": "16"
+          }
+        ],
+        "packages": [
+          {"packageUnit": "roll", "contentQty": "20", "contentUnit": "piece", "typical": true}
         ]
       }
     }
