@@ -1,0 +1,59 @@
+# EditorConfig — https://editorconfig.org
+# Shared by IntelliJ IDEA / Android Studio, Xcode (16+), VS Code and the web tooling.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# Kotlin and Gradle scripts: Kotlin coding conventions (kotlin.code.style=official).
+[*.{kt,kts}]
+max_line_length = 120
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+# No wildcard imports.
+ij_kotlin_name_count_to_use_star_import = 2147483647
+ij_kotlin_name_count_to_use_star_import_for_members = 2147483647
+
+[*.{java,swift}]
+max_line_length = 120
+
+# Web (backoffice), data and configuration files.
+[*.{js,jsx,mjs,cjs,ts,tsx,css,scss,html}]
+indent_size = 2
+
+[*.{json,jsonc,json5,xcstrings}]
+indent_size = 2
+
+[*.{yml,yaml}]
+indent_size = 2
+
+[*.toml]
+indent_size = 4
+
+[*.xml]
+indent_size = 4
+
+# Xcode writes these files itself: keep its formatting.
+[*.{pbxproj,plist,entitlements}]
+indent_style = tab
+
+[*.{xcscheme,xcworkspacedata,xcsettings}]
+indent_size = 3
+
+# Markdown: two trailing spaces are a hard line break.
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+[Makefile]
+indent_style = tab
+
+# Windows scripts (gradlew.bat).
+[*.{bat,cmd}]
+end_of_line = crlf

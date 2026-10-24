@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Default language: French (see res/resources.properties). English lives in values-en. -->
+<resources>
+    <!-- Product name (placeholder until the name is chosen): not translated. -->
+    <string name="app_name" translatable="false">Compagnon</string>
+    <string name="app_title" translatable="false">Compagnon de courses</string>
+
+    <string name="action_refresh">Actualiser</string>
+    <string name="action_retry">Réessayer</string>
+
+    <string name="catalog_loading">Chargement du catalogue…</string>
+    <!-- %1$s: country code (FR), %2$d: catalog version. -->
+    <string name="catalog_title">Catalogue %1$s · v%2$d</string>
+    <!-- %1$s: product count summary, %2$s: category count summary. -->
+    <string name="catalog_counts" translatable="false">%1$s · %2$s</string>
+    <!-- %1$s: localized publication date. -->
+    <string name="catalog_published_on">Publié le %1$s</string>
+    <string name="catalog_error_title">Catalogue indisponible</string>
+
+    <!-- %1$s: count, already formatted for the locale. "many" is used for exact millions ("1 000 000 de produits"). -->
+    <plurals name="catalog_product_count">
+        <item quantity="one">%1$s produit</item>
+        <item quantity="many">%1$s de produits</item>
+        <item quantity="other">%1$s produits</item>
+    </plurals>
+    <plurals name="catalog_category_count">
+        <item quantity="one">%1$s catégorie</item>
+        <item quantity="many">%1$s de catégories</item>
+        <item quantity="other">%1$s catégories</item>
+    </plurals>
+</resources>

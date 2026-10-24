@@ -1,0 +1,268 @@
+# CI of the monorepo (Sprint 0).
+#   jvm        : JVM tests of the contract, the shared modules and the server + debug APK
+#   ios        : Kotlin/Native tests on the iOS simulator + Xcode build (only when shared or iOS code changes)
+#   backoffice : npm ci, typecheck, unit tests (Vitest), build
+#   openapi    : contract/openapi/openapi.json (and the generated TS types, once versioned) must be up to date
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# One run per PR (superseded runs are cancelled); every commit on main keeps its own run.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    # Explicit bash => `-eo pipefail`.
+    shell: bash
+
+env:
+  JAVA_VERSION: "17"
+  JAVA_DISTRIBUTION: temurin
+  NODE_VERSION: "22"
+
+jobs:
+  changes:
+    name: Détection des changements
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      ios: ${{ steps.filter.outputs.ios }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          # Everything that ends up in the "Shared" framework or in the Xcode project.
+          filters: |
+            ios:
+              - 'shared/**'
+              - 'iosApp/**'
+              - 'contract/api-contract/**'
+              - 'build-logic/**'
+              - 'gradle/**'
+              - '*.gradle.kts'
+              - 'gradle.properties'
+              - '.github/workflows/ci.yml'
+
+  jvm:
+    name: JVM (tests + APK debug)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          # Open-source (MIT) provider built on actions/cache; the default "enhanced" provider is proprietary.
+          cache-provider: basic
+      - name: Tests JVM et assemblage Android
+        run: >-
+          ./gradlew --console=plain
+          :contract:api-contract:jvmTest
+          :shared:core:model:jvmTest
+          :shared:engine:jvmTest
+          :shared:core:network:jvmTest
+          :shared:feature:catalog:jvmTest
+          :server:app:test
+          :androidApp:assembleDebug
+      - name: Rapports de tests
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: jvm-test-reports
+          path: |
+            **/build/reports/tests/
+            **/build/test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  ios:
+    name: iOS (tests simulateur + build Xcode)
+    needs: changes
+    if: needs.changes.outputs.ios == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      # Closest to the local toolchain (Xcode 26.1): the macos-26 image has no iOS 26.1 simulator runtime.
+      XCODE_VERSION: "26.2"
+      IOS_SIMULATOR: iPhone 17 Pro
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Sélection de Xcode
+        run: |
+          app="/Applications/Xcode_${XCODE_VERSION}.app"
+          if [ -d "$app" ]; then
+            sudo xcode-select --switch "$app/Contents/Developer"
+          else
+            echo "::warning::Xcode ${XCODE_VERSION} est absent de l'image ; utilisation du Xcode par défaut."
+          fi
+          xcodebuild -version
+      - name: Choix du simulateur
+        id: simulator
+        run: |
+          # Pick a device of the runtime that matches the selected Xcode's simulator SDK.
+          sdk_version="$(xcrun --sdk iphonesimulator --show-sdk-version)"
+          runtime="com.apple.CoreSimulator.SimRuntime.iOS-${sdk_version//./-}"
+          devices="$(xcrun simctl list devices available --json)"
+          pick() {
+            jq -r --arg rt "$1" --arg name "$2" '
+              [ .devices | to_entries[]
+                | select(.key | test("\\.iOS-"))
+                | select($rt == "" or .key == $rt)
+                | .value[]
+                | select(.name | startswith("iPhone"))
+                | select($name == "" or .name == $name) ]
+              | first // empty
+              | "\(.udid) \(.name)"' <<<"$devices"
+          }
+          choice="$(pick "$runtime" "$IOS_SIMULATOR")"
+          if [ -z "$choice" ]; then
+            choice="$(pick "$runtime" "")"
+            [ -n "$choice" ] || choice="$(pick "" "")"
+            if [ -z "$choice" ]; then
+              echo "::error::Aucun simulateur iPhone disponible."
+              exit 1
+            fi
+            echo "::warning::« ${IOS_SIMULATOR} » (iOS ${sdk_version}) indisponible ; repli sur « ${choice#* } »."
+          fi
+          echo "udid=${choice%% *}" >> "$GITHUB_OUTPUT"
+          echo "name=${choice#* }" >> "$GITHUB_OUTPUT"
+          echo "Simulateur : ${choice#* } (${choice%% *}), SDK iOS ${sdk_version}"
+      - uses: actions/setup-java@v6
+        with:
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
+      - name: Version de Kotlin (clé du cache Kotlin/Native)
+        id: kotlin
+        run: echo "version=$(sed -n 's/^kotlin = "\(.*\)"$/\1/p' gradle/libs.versions.toml)" >> "$GITHUB_OUTPUT"
+      - name: Cache Kotlin/Native (~/.konan)
+        uses: actions/cache@v6
+        with:
+          path: ~/.konan
+          key: konan-${{ runner.os }}-${{ runner.arch }}-kotlin-${{ steps.kotlin.outputs.version }}
+          restore-keys: |
+            konan-${{ runner.os }}-${{ runner.arch }}-
+      - name: Tests Kotlin/Native (iosSimulatorArm64)
+        env:
+          SIMULATOR_UDID: ${{ steps.simulator.outputs.udid }}
+        run: ./gradlew --console=plain :shared:feature:catalog:iosSimulatorArm64Test --device "$SIMULATOR_UDID"
+      - name: Build Xcode (iosApp, Debug, simulateur)
+        env:
+          SIMULATOR_UDID: ${{ steps.simulator.outputs.udid }}
+        # A Run Script build phase of the Xcode project calls ./gradlew :shared:umbrella:embedAndSignAppleFrameworkForXcode.
+        run: >-
+          xcodebuild
+          -project iosApp/iosApp.xcodeproj
+          -scheme iosApp
+          -configuration Debug
+          -sdk iphonesimulator
+          -destination "platform=iOS Simulator,id=${SIMULATOR_UDID}"
+          -derivedDataPath build/ios-derived
+          build
+      - name: Rapports de tests
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-test-reports
+          path: |
+            shared/**/build/reports/tests/
+            shared/**/build/test-results/
+            build/ios-derived/Logs/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  backoffice:
+    name: Backoffice (typecheck + build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backoffice
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: backoffice/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run test --if-present
+      - run: npm run build
+
+  openapi:
+    name: Contrat OpenAPI à jour
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
+      - name: Régénération de contract/openapi/openapi.json
+        run: ./gradlew --console=plain :server:app:exportOpenApi
+      - name: Le contrat versionné doit être identique
+        run: |
+          untracked="$(git ls-files --others --exclude-standard -- contract/openapi/)"
+          if ! git diff --exit-code -- contract/openapi/ || [ -n "$untracked" ]; then
+            echo "::error file=contract/openapi/openapi.json::Contrat OpenAPI obsolète : lancez ./gradlew :server:app:exportOpenApi et committez le résultat."
+            git status --short -- contract/openapi/
+            exit 1
+          fi
+      # Generated TypeScript types: checked as soon as backoffice/src/api/schema.d.ts is versioned.
+      - name: Types TypeScript générés versionnés ?
+        id: ts
+        run: |
+          if git ls-files --error-unmatch backoffice/src/api/schema.d.ts >/dev/null 2>&1; then
+            echo "tracked=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "tracked=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v7
+        if: steps.ts.outputs.tracked == 'true'
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: backoffice/package-lock.json
+      - name: Les types TypeScript doivent être identiques
+        if: steps.ts.outputs.tracked == 'true'
+        working-directory: backoffice
+        run: |
+          npm ci
+          npm run gen:api
+          if ! git diff --exit-code -- src/api/schema.d.ts; then
+            echo "::error file=backoffice/src/api/schema.d.ts::Types obsolètes : lancez npm run gen:api dans backoffice/ et committez le résultat."
+            exit 1
+          fi

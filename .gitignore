@@ -1,0 +1,147 @@
+# ---------------------------------------------------------------------------
+# Compagnon de courses — monorepo .gitignore
+# Gradle/Kotlin · Android · Xcode · Node (backoffice) · server · infra
+# ---------------------------------------------------------------------------
+
+# --- OS ---------------------------------------------------------------------
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# --- Gradle -----------------------------------------------------------------
+.gradle
+/build
+build/
+!gradle/wrapper/gradle-wrapper.jar
+# Machine-specific SDK path (sdk.dir=...).
+/local.properties
+local.properties
+
+# --- Kotlin -----------------------------------------------------------------
+# Kotlin 2.x project-level state (daemon sessions, error logs).
+.kotlin/
+*.hprof
+
+# --- IntelliJ IDEA / Android Studio / Fleet ---------------------------------
+*.iml
+*.ipr
+*.iws
+out/
+.fleet/
+# Ignore .idea/ except the shared configuration listed below.
+/.idea/*
+!/.idea/codeStyles/
+!/.idea/inspectionProfiles/
+!/.idea/runConfigurations/
+!/.idea/dictionaries/
+!/.idea/copyright/
+!/.idea/scopes/
+!/.idea/fileTemplates/
+!/.idea/externalDependencies.xml
+!/.idea/vcs.xml
+# Personal or generated files, even inside the shared folders above.
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+/.idea/**/shelf/
+/.idea/**/usage.statistics.xml
+
+# --- Android ----------------------------------------------------------------
+/captures
+.externalNativeBuild
+.cxx
+*.apk
+*.aab
+*.ap_
+*.dex
+*.apks
+# Signing material is never versioned (CI secrets / password manager).
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+# Firebase configuration comes with the FCM work (V0+): provided per environment, not committed.
+google-services.json
+GoogleService-Info.plist
+
+# --- Xcode / iOS ------------------------------------------------------------
+xcuserdata/
+DerivedData/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM
+*.dSYM.zip
+*.xcarchive
+*.mobileprovision
+*.p8
+*.p12
+# Swift Package Manager.
+.build/
+.swiftpm/
+# Note: iosApp.xcodeproj/xcshareddata/ (shared "iosApp" scheme, built by the CI) IS versioned.
+# Local Xcode overrides (e.g. a personal DEVELOPMENT_TEAM).
+*.local.xcconfig
+
+# --- Fastlane (later sprints) -----------------------------------------------
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output/
+
+# --- Node / backoffice ------------------------------------------------------
+node_modules/
+dist/
+dist-ssr/
+*.tsbuildinfo
+.vite/
+.eslintcache
+.stylelintcache
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+# Vite local env overrides (.env.local, .env.development.local, ...).
+*.local
+.env.local
+.env.*.local
+
+# --- Server -----------------------------------------------------------------
+# Embedded PostgreSQL data directory used in dev mode (no DATABASE_URL).
+server/app/build/dev-pg/
+*.log
+logs/
+
+# --- Infra (OpenTofu) -------------------------------------------------------
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+*.auto.tfvars
+*.tfvars
+!*.tfvars.example
+# .terraform.lock.hcl IS versioned.
+
+# --- Local tooling ----------------------------------------------------------
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.claude/settings.local.json
+__pycache__/
+.venv/
+*.swp
+*~

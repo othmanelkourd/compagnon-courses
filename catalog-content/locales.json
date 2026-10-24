@@ -1,0 +1,7 @@
+[
+  {"code": "en", "language": "en", "region": null, "fallback": null},
+  {"code": "fr", "language": "fr", "region": null, "fallback": "en"},
+  {"code": "fr-FR", "language": "fr", "region": "FR", "fallback": "fr"},
+  {"code": "fr-BE", "language": "fr", "region": "BE", "fallback": "fr"},
+  {"code": "fr-CH", "language": "fr", "region": "CH", "fallback": "fr"}
+]

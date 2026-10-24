@@ -1,0 +1,150 @@
+[
+  {
+    "slug": "fruits-et-legumes",
+    "parent": null,
+    "position": 10,
+    "names": {"fr": "Fruits et légumes", "en": "Fruit and vegetables"},
+    "gateQuestion": {
+      "fr": "Besoin de quelque chose en fruits et légumes ?",
+      "en": "Need anything from fruit and vegetables?"
+    }
+  },
+  {
+    "slug": "boulangerie",
+    "parent": null,
+    "position": 20,
+    "names": {"fr": "Boulangerie et viennoiserie", "en": "Bakery"},
+    "gateQuestion": {"fr": "Besoin de pain ou de viennoiseries ?", "en": "Need any bread or pastries?"}
+  },
+  {
+    "slug": "cremerie",
+    "parent": null,
+    "position": 30,
+    "names": {"fr": "Crèmerie", "en": "Dairy and eggs"},
+    "gateQuestion": {
+      "fr": "Besoin de lait, de beurre, d’œufs ou de yaourts ?",
+      "en": "Need any milk, butter, eggs or yoghurt?"
+    }
+  },
+  {
+    "slug": "fromages",
+    "parent": null,
+    "position": 40,
+    "names": {"fr": "Fromages", "en": "Cheese"},
+    "gateQuestion": {"fr": "Besoin de fromage ?", "en": "Need any cheese?"}
+  },
+  {
+    "slug": "boucherie-volaille",
+    "parent": null,
+    "position": 50,
+    "names": {"fr": "Boucherie et volaille", "en": "Meat and poultry"},
+    "gateQuestion": {"fr": "Besoin de viande ou de volaille ?", "en": "Need any meat or poultry?"}
+  },
+  {
+    "slug": "charcuterie-traiteur",
+    "parent": null,
+    "position": 60,
+    "names": {"fr": "Charcuterie et traiteur", "en": "Deli and chilled ready food"},
+    "gateQuestion": {"fr": "Besoin de charcuterie ou de produits traiteur ?", "en": "Need anything from the deli?"}
+  },
+  {
+    "slug": "poissonnerie",
+    "parent": null,
+    "position": 70,
+    "names": {"fr": "Poissonnerie", "en": "Fish and seafood"},
+    "gateQuestion": {"fr": "Besoin de poisson ou de fruits de mer ?", "en": "Need any fish or seafood?"}
+  },
+  {
+    "slug": "surgeles",
+    "parent": null,
+    "position": 80,
+    "names": {"fr": "Surgelés", "en": "Frozen food"},
+    "gateQuestion": {"fr": "Besoin de quelque chose en surgelés ?", "en": "Need anything frozen?"}
+  },
+  {
+    "slug": "epicerie-salee",
+    "parent": null,
+    "position": 90,
+    "names": {"fr": "Épicerie salée", "en": "Savoury groceries"},
+    "gateQuestion": {
+      "fr": "Besoin de pâtes, de riz, de conserves ou de condiments ?",
+      "en": "Need any pasta, rice, tins or condiments?"
+    }
+  },
+  {
+    "slug": "petit-dejeuner",
+    "parent": null,
+    "position": 100,
+    "names": {"fr": "Petit-déjeuner", "en": "Breakfast"},
+    "gateQuestion": {"fr": "Besoin de quelque chose pour le petit-déjeuner ?", "en": "Need anything for breakfast?"}
+  },
+  {
+    "slug": "epicerie-sucree",
+    "parent": null,
+    "position": 110,
+    "names": {"fr": "Épicerie sucrée", "en": "Baking and sweets"},
+    "gateQuestion": {
+      "fr": "Besoin de farine, de sucre, de chocolat ou de biscuits ?",
+      "en": "Need any flour, sugar, chocolate or biscuits?"
+    }
+  },
+  {
+    "slug": "aperitif",
+    "parent": null,
+    "position": 120,
+    "names": {"fr": "Apéritif", "en": "Snacks and nibbles"},
+    "gateQuestion": {"fr": "Besoin de quelque chose pour l’apéritif ?", "en": "Need any snacks or nibbles?"}
+  },
+  {
+    "slug": "boissons-sans-alcool",
+    "parent": null,
+    "position": 130,
+    "names": {"fr": "Eaux, jus et sodas", "en": "Water, juice and soft drinks"},
+    "gateQuestion": {"fr": "Besoin d’eau, de jus ou de sodas ?", "en": "Need any water, juice or soft drinks?"}
+  },
+  {
+    "slug": "boissons-alcoolisees",
+    "parent": null,
+    "position": 140,
+    "names": {"fr": "Vins, bières et alcools", "en": "Wine, beer and spirits"},
+    "gateQuestion": {"fr": "Besoin de vin, de bière ou d’alcool ?", "en": "Need any wine, beer or spirits?"}
+  },
+  {
+    "slug": "hygiene-beaute",
+    "parent": null,
+    "position": 150,
+    "names": {"fr": "Hygiène et beauté", "en": "Toiletries and beauty"},
+    "gateQuestion": {"fr": "Besoin de quelque chose en hygiène et beauté ?", "en": "Need any toiletries?"}
+  },
+  {
+    "slug": "entretien-maison",
+    "parent": null,
+    "position": 160,
+    "names": {"fr": "Entretien de la maison", "en": "Household cleaning"},
+    "gateQuestion": {"fr": "Besoin de produits d’entretien ?", "en": "Need any cleaning products?"}
+  },
+  {
+    "slug": "papier-menager",
+    "parent": null,
+    "position": 170,
+    "names": {"fr": "Papier et emballages", "en": "Paper goods and food wraps"},
+    "gateQuestion": {
+      "fr": "Besoin de papier toilette, d’essuie-tout ou d’emballages ?",
+      "en": "Need any toilet paper, kitchen roll or food wrap?"
+    }
+  },
+  {
+    "slug": "bebe",
+    "parent": null,
+    "position": 180,
+    "names": {"fr": "Bébé", "en": "Baby"},
+    "gateQuestion": {"fr": "Besoin de quelque chose pour bébé ?", "en": "Need anything for the baby?"}
+  },
+  {
+    "slug": "animaux",
+    "parent": null,
+    "position": 190,
+    "names": {"fr": "Animaux", "en": "Pets"},
+    "gateQuestion": {"fr": "Besoin de quelque chose pour vos animaux ?", "en": "Need anything for your pets?"}
+  }
+]

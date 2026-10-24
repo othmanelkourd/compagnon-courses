@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_retry">Try again</string>
+
+    <string name="catalog_loading">Loading the catalog…</string>
+    <string name="catalog_title">Catalog %1$s · v%2$d</string>
+    <string name="catalog_published_on">Published on %1$s</string>
+    <string name="catalog_error_title">Catalog unavailable</string>
+
+    <plurals name="catalog_product_count">
+        <item quantity="one">%1$s product</item>
+        <item quantity="other">%1$s products</item>
+    </plurals>
+    <plurals name="catalog_category_count">
+        <item quantity="one">%1$s category</item>
+        <item quantity="other">%1$s categories</item>
+    </plurals>
+</resources>

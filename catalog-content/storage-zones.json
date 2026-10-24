@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "frigo",
+    "position": 10,
+    "names": {"fr": "Frigo", "en": "Fridge"}
+  },
+  {
+    "slug": "congelateur",
+    "position": 20,
+    "names": {"fr": "Congélateur", "en": "Freezer"}
+  },
+  {
+    "slug": "placard",
+    "position": 30,
+    "names": {"fr": "Placards", "en": "Cupboards"}
+  },
+  {
+    "slug": "fruits-legumes",
+    "position": 40,
+    "names": {"fr": "Fruits et légumes", "en": "Fruit and vegetables"}
+  },
+  {
+    "slug": "salle-de-bain",
+    "position": 50,
+    "names": {"fr": "Salle de bain", "en": "Bathroom"}
+  },
+  {
+    "slug": "entretien",
+    "position": 60,
+    "names": {"fr": "Entretien et buanderie", "en": "Cleaning and laundry"}
+  },
+  {
+    "slug": "animaux",
+    "position": 70,
+    "names": {"fr": "Animaux", "en": "Pets"}
+  },
+  {
+    "slug": "bebe",
+    "position": 80,
+    "names": {"fr": "Bébé", "en": "Baby"}
+  },
+  {
+    "slug": "cave-boissons",
+    "position": 90,
+    "names": {"fr": "Cave et boissons", "en": "Drinks and cellar"}
+  }
+]

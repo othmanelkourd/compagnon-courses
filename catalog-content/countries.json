@@ -1,0 +1,23 @@
+[
+  {
+    "code": "FR",
+    "defaultLocale": "fr-FR",
+    "measurementSystem": "metric",
+    "currency": "EUR",
+    "launchStatus": "beta"
+  },
+  {
+    "code": "BE",
+    "defaultLocale": "fr-BE",
+    "measurementSystem": "metric",
+    "currency": "EUR",
+    "launchStatus": "planned"
+  },
+  {
+    "code": "CH",
+    "defaultLocale": "fr-CH",
+    "measurementSystem": "metric",
+    "currency": "CHF",
+    "launchStatus": "planned"
+  }
+]

@@ -1,0 +1,365 @@
+[
+  {
+    "code": "gram",
+    "dimension": "mass",
+    "system": "metric",
+    "toBase": "1",
+    "symbol": {"fr": "g", "en": "g"},
+    "forms": {
+      "fr": {"one": "gramme", "other": "grammes"},
+      "en": {"one": "gram", "other": "grams"}
+    }
+  },
+  {
+    "code": "kilogram",
+    "dimension": "mass",
+    "system": "metric",
+    "toBase": "1000",
+    "symbol": {"fr": "kg", "en": "kg"},
+    "forms": {
+      "fr": {"one": "kilo", "other": "kilos"},
+      "en": {"one": "kilogram", "other": "kilograms"}
+    }
+  },
+  {
+    "code": "pound",
+    "dimension": "mass",
+    "system": "us",
+    "toBase": "453.59237",
+    "symbol": {"fr": "lb", "en": "lb"},
+    "forms": {
+      "fr": {"one": "livre", "other": "livres"},
+      "en": {"one": "pound", "other": "pounds"}
+    }
+  },
+  {
+    "code": "ounce",
+    "dimension": "mass",
+    "system": "us",
+    "toBase": "28.349523125",
+    "symbol": {"fr": "oz", "en": "oz"},
+    "forms": {
+      "fr": {"one": "once", "other": "onces"},
+      "en": {"one": "ounce", "other": "ounces"}
+    }
+  },
+  {
+    "code": "milliliter",
+    "dimension": "volume",
+    "system": "metric",
+    "toBase": "1",
+    "symbol": {"fr": "mL", "en": "mL"},
+    "forms": {
+      "fr": {"one": "millilitre", "other": "millilitres"},
+      "en": {"one": "milliliter", "other": "milliliters"}
+    }
+  },
+  {
+    "code": "centiliter",
+    "dimension": "volume",
+    "system": "metric",
+    "toBase": "10",
+    "symbol": {"fr": "cL", "en": "cL"},
+    "forms": {
+      "fr": {"one": "centilitre", "other": "centilitres"},
+      "en": {"one": "centiliter", "other": "centiliters"}
+    }
+  },
+  {
+    "code": "liter",
+    "dimension": "volume",
+    "system": "metric",
+    "toBase": "1000",
+    "symbol": {"fr": "L", "en": "L"},
+    "forms": {
+      "fr": {"one": "litre", "other": "litres"},
+      "en": {"one": "liter", "other": "liters"}
+    }
+  },
+  {
+    "code": "fluid-ounce",
+    "dimension": "volume",
+    "system": "us",
+    "toBase": "29.5735295625",
+    "symbol": {"fr": "fl oz", "en": "fl oz"},
+    "forms": {
+      "fr": {"one": "once liquide US", "other": "onces liquides US"},
+      "en": {"one": "fluid ounce", "other": "fluid ounces"}
+    }
+  },
+  {
+    "code": "fluid-ounce-imperial",
+    "dimension": "volume",
+    "system": "imperial",
+    "toBase": "28.4130625",
+    "symbol": {"fr": "fl oz imp.", "en": "imp fl oz"},
+    "forms": {
+      "fr": {"one": "once liquide impériale", "other": "onces liquides impériales"},
+      "en": {"one": "imperial fluid ounce", "other": "imperial fluid ounces"}
+    }
+  },
+  {
+    "code": "pint",
+    "dimension": "volume",
+    "system": "us",
+    "toBase": "473.176473",
+    "symbol": {"fr": "pt US", "en": "pt"},
+    "forms": {
+      "fr": {"one": "pinte US", "other": "pintes US"},
+      "en": {"one": "pint", "other": "pints"}
+    }
+  },
+  {
+    "code": "pint-imperial",
+    "dimension": "volume",
+    "system": "imperial",
+    "toBase": "568.26125",
+    "symbol": {"fr": "pt imp.", "en": "imp pt"},
+    "forms": {
+      "fr": {"one": "pinte impériale", "other": "pintes impériales"},
+      "en": {"one": "imperial pint", "other": "imperial pints"}
+    }
+  },
+  {
+    "code": "gallon",
+    "dimension": "volume",
+    "system": "us",
+    "toBase": "3785.411784",
+    "symbol": {"fr": "gal US", "en": "gal"},
+    "forms": {
+      "fr": {"one": "gallon US", "other": "gallons US"},
+      "en": {"one": "gallon", "other": "gallons"}
+    }
+  },
+  {
+    "code": "gallon-imperial",
+    "dimension": "volume",
+    "system": "imperial",
+    "toBase": "4546.09",
+    "symbol": {"fr": "gal imp.", "en": "imp gal"},
+    "forms": {
+      "fr": {"one": "gallon impérial", "other": "gallons impériaux"},
+      "en": {"one": "imperial gallon", "other": "imperial gallons"}
+    }
+  },
+  {
+    "code": "piece",
+    "dimension": "count",
+    "system": "universal",
+    "toBase": "1",
+    "symbol": {"fr": "pce", "en": "pc"},
+    "forms": {
+      "fr": {"one": "pièce", "other": "pièces"},
+      "en": {"one": "piece", "other": "pieces"}
+    }
+  },
+  {
+    "code": "dozen",
+    "dimension": "count",
+    "system": "universal",
+    "toBase": "12",
+    "symbol": {"fr": "douz.", "en": "doz."},
+    "forms": {
+      "fr": {"one": "douzaine", "other": "douzaines"},
+      "en": {"one": "dozen", "other": "dozens"}
+    }
+  },
+  {
+    "code": "can",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "bte", "en": "can"},
+    "forms": {
+      "fr": {"one": "boîte", "other": "boîtes"},
+      "en": {"one": "can", "other": "cans"}
+    }
+  },
+  {
+    "code": "box",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "bte", "en": "box"},
+    "forms": {
+      "fr": {"one": "boîte", "other": "boîtes"},
+      "en": {"one": "box", "other": "boxes"}
+    }
+  },
+  {
+    "code": "bottle",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "bout.", "en": "btl"},
+    "forms": {
+      "fr": {"one": "bouteille", "other": "bouteilles"},
+      "en": {"one": "bottle", "other": "bottles"}
+    }
+  },
+  {
+    "code": "flask",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "flac.", "en": "btl"},
+    "forms": {
+      "fr": {"one": "flacon", "other": "flacons"},
+      "en": {"one": "bottle", "other": "bottles"}
+    }
+  },
+  {
+    "code": "carton",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "brq.", "en": "ctn"},
+    "forms": {
+      "fr": {"one": "brique", "other": "briques"},
+      "en": {"one": "carton", "other": "cartons"}
+    }
+  },
+  {
+    "code": "pack",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "pack", "en": "pk"},
+    "forms": {
+      "fr": {"one": "pack", "other": "packs"},
+      "en": {"one": "pack", "other": "packs"}
+    }
+  },
+  {
+    "code": "packet",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "paq.", "en": "pkt"},
+    "forms": {
+      "fr": {"one": "paquet", "other": "paquets"},
+      "en": {"one": "packet", "other": "packets"}
+    }
+  },
+  {
+    "code": "bag",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "sac", "en": "bag"},
+    "forms": {
+      "fr": {"one": "sac", "other": "sacs"},
+      "en": {"one": "bag", "other": "bags"}
+    }
+  },
+  {
+    "code": "sachet",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "sach.", "en": "sachet"},
+    "forms": {
+      "fr": {"one": "sachet", "other": "sachets"},
+      "en": {"one": "sachet", "other": "sachets"}
+    }
+  },
+  {
+    "code": "jar",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "pot", "en": "jar"},
+    "forms": {
+      "fr": {"one": "pot", "other": "pots"},
+      "en": {"one": "jar", "other": "jars"}
+    }
+  },
+  {
+    "code": "tub",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "bac", "en": "tub"},
+    "forms": {
+      "fr": {"one": "bac", "other": "bacs"},
+      "en": {"one": "tub", "other": "tubs"}
+    }
+  },
+  {
+    "code": "tray",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "barq.", "en": "tray"},
+    "forms": {
+      "fr": {"one": "barquette", "other": "barquettes"},
+      "en": {"one": "tray", "other": "trays"}
+    }
+  },
+  {
+    "code": "tube",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "tube", "en": "tube"},
+    "forms": {
+      "fr": {"one": "tube", "other": "tubes"},
+      "en": {"one": "tube", "other": "tubes"}
+    }
+  },
+  {
+    "code": "bar",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "tabl.", "en": "bar"},
+    "forms": {
+      "fr": {"one": "tablette", "other": "tablettes"},
+      "en": {"one": "bar", "other": "bars"}
+    }
+  },
+  {
+    "code": "block",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "plaq.", "en": "block"},
+    "forms": {
+      "fr": {"one": "plaquette", "other": "plaquettes"},
+      "en": {"one": "block", "other": "blocks"}
+    }
+  },
+  {
+    "code": "roll",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "rl.", "en": "roll"},
+    "forms": {
+      "fr": {"one": "rouleau", "other": "rouleaux"},
+      "en": {"one": "roll", "other": "rolls"}
+    }
+  },
+  {
+    "code": "bunch",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "botte", "en": "bunch"},
+    "forms": {
+      "fr": {"one": "botte", "other": "bottes"},
+      "en": {"one": "bunch", "other": "bunches"}
+    }
+  },
+  {
+    "code": "net",
+    "dimension": "package",
+    "system": "universal",
+    "toBase": null,
+    "symbol": {"fr": "filet", "en": "net"},
+    "forms": {
+      "fr": {"one": "filet", "other": "filets"},
+      "en": {"one": "net", "other": "nets"}
+    }
+  }
+]
