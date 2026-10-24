@@ -23,11 +23,17 @@ data class ScoredProduct(
  * the same [PlanningInput] (including `now` and `seed`) always yields the same plan, whatever the order of
  * its collections.
  *
- * Budget allocation: meta questions come first, then the T1 screen, then the reserved slots (radar,
- * exploration), then cards and gates. When cards and gates do not fit, the least valuable one is removed
- * until they do: a card is worth p, a gate `1 − Π(1 − pᵢ)` over its products. A removed card with p > 0.6
- * joins the T1 screen unchecked, any other one joins its category gate; products of a removed gate are
- * deferred.
+ * Budget allocation (§6.3 steps 4 and 5), in this order:
+ * 1. meta questions (at most [PlannerConfig.maxMetaQuestions], one unit each);
+ * 2. the T1 screen (one unit): the last list if reused, then the T1 products by decreasing p, capped at
+ *    [PlannerConfig.maxSuggested] items; T1 products beyond the cap fold into their category gate;
+ * 3. the reserved slots: radar, then exploration (off by default);
+ * 4. **cards first**: watched products, then T2 products by decreasing p, on every slot left except the
+ *    gate reserve ([PlannerConfig.gateSlots], at most a quarter of those slots, and only when there are gates
+ *    to ask). The T2 products without a card overflow: with p > [PlannerConfig.overflowToSuggestedAbove] they
+ *    join the T1 screen unchecked while it has room, otherwise they fold into their category gate;
+ * 5. gates (T3 products plus the folded overflow) take the slots left after the cards, by decreasing
+ *    [gate value][gateValue]; the products of the gates that do not fit are deferred.
  */
 class QuestionPlanner(private val config: PlannerConfig = PlannerConfig()) {
     private val scorer = NeedScorer(config.score)
@@ -56,15 +62,16 @@ class QuestionPlanner(private val config: PlannerConfig = PlannerConfig()) {
 
         val watched = scored.filter { it.watch }
         val unwatched = scored.filterNot { it.watch }
-        val t1 = unwatched.filter { it.tier == Tier.T1 }
+        val t1 = unwatched.filter { it.tier == Tier.T1 }.sortedWith(ordering.byPriority)
         var t2 = unwatched.filter { it.tier == Tier.T2 }
         var t3 = unwatched.filter { it.tier == Tier.T3 }
         var t4 = unwatched.filter { it.tier == Tier.T4 }
 
-        val available = budget?.let { it - meta.size }
-        val hasSuggested = t1.isNotEmpty() || lastList.isNotEmpty()
-        val suggestedCost = if (hasSuggested && (available == null || available > 0)) 1 else 0
-        var room = available?.let { it - suggestedCost } ?: Int.MAX_VALUE
+        // Budget units left after the meta questions (null = unlimited).
+        val left = budget?.let { it - meta.size }
+        val screenOpen = (left == null || left > 0) &&
+            (lastList.isNotEmpty() || (t1.isNotEmpty() && config.maxSuggested > 0))
+        var room = left?.let { (it - if (screenOpen) 1 else 0).coerceAtLeast(0) } ?: Int.MAX_VALUE
 
         val radar = t2.filter { it.product.cycleClass == CycleClass.LONG && it.hasHistory }
             .sortedWith(ordering.byPriority)
@@ -76,22 +83,33 @@ class QuestionPlanner(private val config: PlannerConfig = PlannerConfig()) {
             .sortedBy { it.product.id.value }
             .shuffled(Random(input.seed))
             .take(minOf(config.explorationSlots, room))
+        room -= exploration.size
         val explored = exploration.toSet()
         t3 = t3 - explored
         t4 = t4 - explored
 
         val gated = if (context.mode == SessionMode.FULL) t3 + t4 else t3
         val (gatable, ungatable) = gated.partition { ordering.category(it.product.categoryId) != null }
-        val allocation = Allocation(
-            left = available?.let { it - radar.size - exploration.size },
+        val allocator = Allocator(
+            screenOpen = screenOpen,
+            maxSuggested = config.maxSuggested,
             overflowToSuggestedAbove = config.overflowToSuggestedAbove,
             ordering = ordering,
-            suggested = lastList.map { SuggestedEntry(it, preChecked = true, input.lastList[it.product.id]) } +
-                t1.map { SuggestedEntry(it, preChecked = true, lastQuantity = null) },
-            cards = (watched + t2).sortedWith(ordering.byPriority),
-            gates = gatable.groupBy { it.product.categoryId },
+            lastList = lastList.map { SuggestedEntry(it, preChecked = true, input.lastList[it.product.id]) },
+            t1 = t1,
+            pool = (watched + t2).sortedWith(ordering.byPriority),
+            gatable = gatable,
         )
-        allocation.run()
+        val allocation = if (left == null) {
+            allocator.allocate(cardCount = allocator.poolSize).fitGates(Int.MAX_VALUE, ordering)
+        } else {
+            // Cards first: a trial with a card on every slot tells which gates the rest would form.
+            val trial = allocator.allocate(cardCount = minOf(room, allocator.poolSize))
+            val reserve = minOf(config.gateSlots, trial.gates.size, room / GATE_RESERVE_DIVISOR)
+            val cardCount = minOf(allocator.poolSize, maxOf(room - reserve, minOf(watched.size, room)))
+            val final = if (cardCount == trial.cards.size) trial else allocator.allocate(cardCount)
+            final.fitGates(room - final.cards.size, ordering)
+        }
 
         val suggested = allocation.suggested
             .sortedWith(compareBy<SuggestedEntry, Candidate>(ordering.forScreen(context.mode)) { it.candidate })
@@ -202,9 +220,6 @@ internal class Candidate(
     val watch: Boolean get() = stats?.watch == true
     val hasHistory: Boolean get() = (stats?.nPurchases ?: 0) > 0
 
-    /** Value of a card in the budget allocation; watched products are removed last. */
-    val cardValue: Double get() = if (watch) 1.0 else probability
-
     fun weeksSinceLast(input: PlanningInput): Int =
         stats?.lastAt?.let { ((input.now - it).inWholeDays / 7).toInt().coerceAtLeast(0) } ?: 0
 
@@ -216,76 +231,108 @@ private val byDecreasingScore: Comparator<Candidate> =
 
 internal class SuggestedEntry(val candidate: Candidate, val preChecked: Boolean, val lastQuantity: Quantity?)
 
-/** Fits the T1 screen, the cards and the gates into [left] budget units (null = unlimited). */
+/** Where every product of the T1 screen, the cards and the gates ends up, before the gates are fitted. */
 private class Allocation(
-    private val left: Int?,
+    val suggested: List<SuggestedEntry>,
+    val cards: List<Candidate>,
+    val gates: Map<CategoryId, List<Candidate>>,
+    val deferred: List<Candidate>,
+) {
+    /** Keeps the [slots] most valuable gates (by [gateValue]); the products of the others are deferred. */
+    fun fitGates(slots: Int, ordering: Ordering): Allocation {
+        if (gates.size <= slots) return this
+        val ranked = gates.entries.sortedWith(
+            compareByDescending<Map.Entry<CategoryId, List<Candidate>>> { gateValue(it.value) }
+                .thenByDescending { expectedNeeds(it.value) }
+                .thenBy { ordering.categoryRank(it.key) }
+                .thenBy { it.key.value },
+        )
+        val kept = ranked.take(slots.coerceAtLeast(0))
+        val dropped = ranked.drop(slots.coerceAtLeast(0))
+        return Allocation(
+            suggested = suggested,
+            cards = cards,
+            gates = kept.associateTo(LinkedHashMap()) { it.key to it.value },
+            deferred = deferred + dropped.flatMap { it.value },
+        )
+    }
+}
+
+/**
+ * Value of a gate when gates compete for the slots left after the cards: the p of its likeliest product.
+ *
+ * The former value, `1 − Π(1 − pᵢ)`, tends to 1 with the size of the aisle (≈ 0.99 for a big aisle of T3
+ * products): gates always beat cards (p 0.3 to 0.8) and big aisles always beat small ones. Now gates never
+ * compete with cards for a slot (cards are served first, the gate reserve is a fixed count), and among gates
+ * the p of the likeliest member is the chance that a « yes » finds at least the product the household is most
+ * likely to need. It does not grow with the number of unlikely products, and it is bounded by the weakest
+ * card for every gate made of T3 products and T2 overflow (only the T1 products beyond the screen cap can
+ * lift it higher, which rightly puts their gate first). Ties are broken by [expectedNeeds], then store order.
+ */
+private fun gateValue(items: List<Candidate>): Double = items.maxOfOrNull { it.probability } ?: 0.0
+
+/** Expected number of products of the gate the household needs (Σp): a tie-break between gates. */
+private fun expectedNeeds(items: List<Candidate>): Double = items.sumOf { it.probability }
+
+/**
+ * Distributes the T1 screen, the card candidates ([pool], in priority order) and the gates for a given
+ * number of cards. Pure: [allocate] can be called several times.
+ */
+private class Allocator(
+    private val screenOpen: Boolean,
+    private val maxSuggested: Int,
     private val overflowToSuggestedAbove: Double,
     private val ordering: Ordering,
-    suggested: List<SuggestedEntry>,
-    cards: List<Candidate>,
-    gates: Map<CategoryId, List<Candidate>>,
+    private val lastList: List<SuggestedEntry>,
+    private val t1: List<Candidate>,
+    private val pool: List<Candidate>,
+    private val gatable: List<Candidate>,
 ) {
-    val suggested: MutableList<SuggestedEntry> = suggested.toMutableList()
+    val poolSize: Int get() = pool.size
 
-    /** Sorted by decreasing value: the last one is the least valuable. */
-    val cards: MutableList<Candidate> = cards.toMutableList()
-    val gates: MutableMap<CategoryId, MutableList<Candidate>> =
-        gates.mapValuesTo(LinkedHashMap()) { it.value.toMutableList() }
-    val deferred: MutableList<Candidate> = mutableListOf()
+    fun allocate(cardCount: Int): Allocation {
+        val suggested = mutableListOf<SuggestedEntry>()
+        val gates = LinkedHashMap<CategoryId, MutableList<Candidate>>()
+        val deferred = mutableListOf<Candidate>()
+        gatable.forEach { gates.getOrPut(it.product.categoryId) { mutableListOf() } += it }
 
-    private val closedGates = mutableSetOf<CategoryId>()
-    private var suggestedOpen = true
-
-    private val cost: Int get() = (if (suggested.isEmpty()) 0 else 1) + cards.size + gates.size
-
-    fun run() {
-        val budget = left ?: return
-        while (cost > budget) {
-            val lowestCard = cards.lastOrNull()
-            val lowestGate = gates.entries.minWithOrNull(gateComparator)
-            when {
-                lowestCard != null && (lowestGate == null || lowestCard.cardValue < gateValue(lowestGate.value)) -> {
-                    cards.removeAt(cards.lastIndex)
-                    overflow(lowestCard)
-                }
-                lowestGate != null -> {
-                    // Read the entry before removing it: on Kotlin/Native an entry is invalid once its map changes.
-                    val categoryId = lowestGate.key
-                    val items = lowestGate.value
-                    gates.remove(categoryId)
-                    closedGates += categoryId
-                    deferred += items
-                }
-                else -> {
-                    deferred += suggested.map { it.candidate }
-                    suggested.clear()
-                    suggestedOpen = false
-                }
+        fun fold(candidate: Candidate) {
+            val categoryId = candidate.product.categoryId
+            if (ordering.category(categoryId) != null) {
+                gates.getOrPut(categoryId) { mutableListOf() } += candidate
+            } else {
+                deferred += candidate
             }
         }
-    }
 
-    private fun overflow(card: Candidate) {
-        val categoryId = card.product.categoryId
-        when {
-            suggestedOpen && card.probability > overflowToSuggestedAbove ->
-                suggested += SuggestedEntry(card, preChecked = false, lastQuantity = null)
-            categoryId !in closedGates && ordering.category(categoryId) != null ->
-                gates.getOrPut(categoryId) { mutableListOf() } += card
-            else -> deferred += card
+        if (screenOpen) {
+            // The reused last list is shown whole; the T1 products fill the screen up to its cap.
+            suggested += lastList
+            t1.forEach { candidate ->
+                if (suggested.size < maxSuggested) {
+                    suggested += SuggestedEntry(candidate, preChecked = true, lastQuantity = null)
+                } else {
+                    fold(candidate)
+                }
+            }
+        } else {
+            deferred += lastList.map { it.candidate } + t1
         }
+
+        val cards = pool.take(cardCount.coerceIn(0, pool.size))
+        pool.drop(cards.size).forEach { candidate ->
+            if (screenOpen && candidate.probability > overflowToSuggestedAbove && suggested.size < maxSuggested) {
+                suggested += SuggestedEntry(candidate, preChecked = false, lastQuantity = null)
+            } else {
+                fold(candidate)
+            }
+        }
+        return Allocation(suggested, cards, gates, deferred)
     }
-
-    /** Lowest value first; on a tie, the category that comes later in the store goes first. */
-    private val gateComparator: Comparator<Map.Entry<CategoryId, List<Candidate>>> =
-        compareBy<Map.Entry<CategoryId, List<Candidate>>> { gateValue(it.value) }
-            .thenByDescending { ordering.categoryRank(it.key) }
-            .thenByDescending { it.key.value }
-
-    /** Probability that at least one product of the gate is needed. */
-    private fun gateValue(items: List<Candidate>): Double =
-        1.0 - items.fold(1.0) { acc, item -> acc * (1.0 - item.probability) }
 }
+
+/** The gate reserve takes at most one slot in this many (cards keep at least three slots out of four). */
+private const val GATE_RESERVE_DIVISOR = 4
 
 /** A question with its sort keys. */
 private class Slot(

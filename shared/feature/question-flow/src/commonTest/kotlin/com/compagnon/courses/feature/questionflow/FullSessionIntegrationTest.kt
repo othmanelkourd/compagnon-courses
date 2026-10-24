@@ -37,7 +37,7 @@ class FullSessionIntegrationTest {
     fun aQuickSessionOnTheSeedFillsTheList() = runTest(main) {
         val device = TestDevice(StandardTestDispatcher(testScheduler))
         device.sync()
-        // « Il en reste un peu » last time: these are always cards (cold start alone has none, see TestDevice.watch).
+        // « Il en reste un peu » last time: these are always cards, asked before the T2 cards.
         device.watch("lait-demi-ecreme", "pommes", "cafe-moulu")
         val viewModel = device.newViewModel(seed = 2026)
         advanceUntilIdle()
@@ -83,9 +83,13 @@ class FullSessionIntegrationTest {
         assertEquals(3, seen.count { it is QuestionUiState.Meta })
         assertTrue(review.items.isNotEmpty())
         assertTrue(review.items.any { it.origin == ItemOrigin.SUGGESTED })
-        assertEquals(3, seen.count { it is QuestionUiState.Card })
-        assertTrue(seen.filterIsInstance<QuestionUiState.Card>().all { it.card.kind == ProductCardKind.WATCH })
-        assertTrue(seen.any { it is QuestionUiState.Gate })
+        // 12 − 3 meta − T1 screen = 8 slots: cards first (the 3 watched products, then the likeliest T2
+        // products), 2 slots reserved for the gates. (Before cards came first, gates took every slot.)
+        val cards = seen.filterIsInstance<QuestionUiState.Card>()
+        assertEquals(6, cards.size)
+        assertEquals(3, cards.count { it.card.kind == ProductCardKind.WATCH })
+        assertEquals(3, cards.count { it.card.kind == ProductCardKind.STANDARD })
+        assertEquals(2, seen.count { it is QuestionUiState.Gate })
 
         viewModel.onEvent(QuestionEvent.Confirm)
         advanceUntilIdle()

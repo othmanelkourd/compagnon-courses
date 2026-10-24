@@ -85,8 +85,8 @@ class QuestionPlannerTest {
         val b2 = product("b2", penetration = 0.4, category = DRINKS)
         val plan = planner.plan(input(listOf(milk, a1, a2, b1, b2), context = context(budget = 3)))
 
-        // 1 + 4 cards = 5 > 3: b2 falls into the drinks gate, which is then the least valuable unit and goes;
-        // b1 (p > 0.6) joins the T1 screen, unchecked.
+        // T1 screen + 2 cards = 3: a1 and a2 get the cards; b1 (p > 0.6) joins the T1 screen, unchecked; b2 falls
+        // into the drinks gate, which has no slot left (and no reserve: a quarter of 2 slots is 0).
         assertEquals(listOf("lait", "b1"), plan.suggested.slugs)
         assertEquals(listOf(true, false), plan.suggested.map { it.preChecked })
         assertEquals(listOf("a1", "a2"), plan.questions.map { it.label })
@@ -94,17 +94,102 @@ class QuestionPlannerTest {
         assertEquals(3, plan.cost)
     }
 
+    // Replaces gatesAbsorbTheLeastLikelyCards: the cleaning gate (1 − Π(1 − p) ≈ 0.75) used to beat the b1 card
+    // (p = 0.35) and swallow it. Cards now come first (§6.3 step 5): gates only get the slots the cards leave.
     @Test
-    fun gatesAbsorbTheLeastLikelyCards() {
+    fun cardsComeBeforeGates() {
         val a1 = product("a1", penetration = 0.7)
         val a2 = product("a2", penetration = 0.5)
         val b1 = product("b1", penetration = 0.35, category = CLEANING)
         val b3 = listOf(0.28, 0.25, 0.2).mapIndexed { i, p -> product("b-t3-$i", penetration = p, category = CLEANING) }
-        val plan = planner.plan(input(listOf(a1, a2, b1) + b3, context = context(budget = 3)))
+        val products = listOf(a1, a2, b1) + b3
 
-        assertEquals(listOf("a1", "a2", "gate:entretien"), plan.questions.map { it.label })
-        assertEquals(listOf("b1", "b-t3-0", "b-t3-1", "b-t3-2"), plan.gates().single().items.slugs)
-        assertTrue(plan.suggested.isEmpty())
+        val three = planner.plan(input(products, context = context(budget = 3)))
+        assertEquals(listOf("a1", "a2", "b1"), three.questions.map { it.label })
+        assertEquals(b3.map { it.id }, three.deferred)
+        assertTrue(three.suggested.isEmpty())
+
+        // One more slot: the reserve (a quarter of 4) gives it to the cleaning gate, after the three cards.
+        val four = planner.plan(input(products, context = context(budget = 4)))
+        assertEquals(listOf("a1", "a2", "b1", "gate:entretien"), four.questions.map { it.label })
+        assertEquals(listOf("b-t3-0", "b-t3-1", "b-t3-2"), four.gates().single().items.slugs)
+    }
+
+    @Test
+    fun theGateReserveTakesTheLeastLikelyCards() {
+        val cards = (1..10).map { product("c$it", penetration = 0.79 - it * 0.04) }
+        val bleach = product("javel", penetration = 0.25, category = CLEANING, zone = CUPBOARD)
+        val water = product("eau", penetration = 0.2, category = DRINKS)
+        val plan = planner.plan(input(cards + bleach + water, context = context(budget = 8)))
+
+        // 8 slots, no T1 screen: 2 reserved for the gates (a quarter), 6 for the likeliest cards.
+        assertEquals((1..6).map { "c$it" }, plan.cards().map { it.item.product.slug })
+        assertEquals(listOf("gate:cremerie", "gate:entretien"), plan.gates().map { it.label })
+        // The 4 cards without a slot fold into the dairy gate, the likeliest one (max p 0.51 > 0.25 > 0.2).
+        val dairy = plan.gates().single { it.category == DAIRY }
+        assertEquals((7..10).map { "c$it" }, dairy.items.slugs)
+        assertEquals(listOf("javel"), plan.gates().single { it.category == CLEANING }.items.slugs)
+        assertEquals(listOf(water.id), plan.deferred)
+        assertEquals(8, plan.cost)
+
+        // Without a reserve, gates only get what the cards leave: here nothing.
+        val strict = QuestionPlanner(PlannerConfig(gateSlots = 0))
+            .plan(input(cards + bleach + water, context = context(budget = 8)))
+        assertEquals(8, strict.cards().size)
+        assertTrue(strict.gates().isEmpty())
+    }
+
+    @Test
+    fun watchedCardsAreNeverGivenUpForTheGateReserve() {
+        val watched = (1..4).map { product("w$it", penetration = 0.5) }
+        val bleach = product("javel", penetration = 0.25, category = CLEANING, zone = CUPBOARD)
+        val plan = planner.plan(
+            input(
+                products = watched + bleach,
+                stats = watched.associateWith { ProductStats(watch = true) },
+                context = context(budget = 4),
+            ),
+        )
+        assertEquals(4, plan.cards().size)
+        assertTrue(plan.cards().all { it.kind == CardKind.WATCH })
+        assertTrue(plan.gates().isEmpty())
+    }
+
+    @Test
+    fun aGateIsWorthItsLikeliestProductNotItsSize() {
+        // A big aisle of unlikely products against a small one with a likely product: 1 − Π(1 − p) preferred
+        // the big aisle (≈ 0.9 against 0.29); the max p prefers the small one.
+        val cleaning = (1..20).map { product("menage-$it", penetration = 0.11, category = CLEANING, zone = CUPBOARD) }
+        val drink = product("jus", penetration = 0.29, category = DRINKS)
+        val plan = planner.plan(input(cleaning + drink, context = context(budget = 1)))
+        assertEquals(listOf("gate:boissons"), plan.questions.map { it.label })
+        assertEquals(20, plan.deferred.size)
+    }
+
+    @Test
+    fun theT1ScreenIsCapped() {
+        val staples = (1..20).map { product("s$it", penetration = 0.99 - it * 0.005) }
+        val overflow = product("presque", penetration = 0.7, category = DRINKS)
+        val plan = planner.plan(input(staples + overflow, context = context(budget = 3)))
+
+        assertEquals(staples.take(15).map { it.id }.toSet(), plan.suggested.map { it.productId }.toSet())
+        assertTrue(plan.suggested.all { it.preChecked })
+        // The 5 least likely staples fold into the dairy gate, which gets the slot the card leaves.
+        assertEquals(listOf("presque", "gate:cremerie"), plan.questions.map { it.label })
+        assertEquals((16..20).map { "s$it" }, plan.gates().single().items.slugs)
+        assertTrue(plan.deferred.isEmpty())
+
+        // The screen alone: the T2 overflow (p > 0.6) finds it full and is deferred with the dairy gate.
+        val tight = planner.plan(input(staples + overflow, context = context(budget = 1)))
+        assertEquals(15, tight.suggested.size)
+        assertTrue(tight.questions.isEmpty())
+        assertEquals(staples.drop(15).map { it.id } + overflow.id, tight.deferred)
+
+        // With room on the screen, the overflow joins it unchecked.
+        val roomy = QuestionPlanner(PlannerConfig(maxSuggested = 30))
+            .plan(input(staples + overflow, context = context(budget = 1)))
+        assertEquals(21, roomy.suggested.size)
+        assertEquals(listOf(overflow.id), roomy.suggested.filterNot { it.preChecked }.map { it.productId })
     }
 
     @Test

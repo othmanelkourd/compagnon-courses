@@ -57,16 +57,28 @@ data class ScoreConfig(
  * Planner settings (steps 4 to 6). Budgets count questions: one per meta question, one for the T1 screen,
  * one per card and one per category gate.
  *
+ * @property maxSuggested cap of the T1 screen (« Probablement nécessaire »): the T1 products by decreasing p,
+ *   then the T2 overflow, up to this many items (a reused last list is always shown whole). Fifteen items is
+ *   about two phone screens, still checkable at a glance; the T1 products beyond it fold into their category
+ *   gate (or stay reachable through search). On the Sprint 0 seed a cold start has 19 T1 products, and the
+ *   uncapped screen used to reach 37 items with the overflow.
  * @property radarSlots reserved for long-cycle products already bought before (« radar des oubliés », F04).
  * @property explorationSlots reserved for never-bought products picked with the session seed (V2 territory,
  *   off by default).
+ * @property gateSlots reserved for category gates, taken from the slots left after the T1 screen and the
+ *   other reserved slots, but never more than a quarter of them and only when there are gates to ask; the
+ *   cards get every other slot first. Gates are the only way a budgeted session offers the T3 long tail
+ *   (131 of the 182 cold-start candidates of the seed): without a reserve, a household with as many T2
+ *   products as slots would never see one. 0 gives gates only what the cards leave.
  */
 data class PlannerConfig(
     val defaultBudget: Int = 15,
     val quickBudget: Int = 12,
     val maxMetaQuestions: Int = 3,
+    val maxSuggested: Int = 15,
     val radarSlots: Int = 2,
     val explorationSlots: Int = 0,
+    val gateSlots: Int = 2,
     val suggestedAbove: Double = 0.8,
     val cardAbove: Double = 0.3,
     val gateAbove: Double = 0.1,
@@ -75,7 +87,10 @@ data class PlannerConfig(
 ) {
     init {
         require(defaultBudget >= 0 && quickBudget >= 0) { "Budgets cannot be negative" }
-        require(maxMetaQuestions >= 0 && radarSlots >= 0 && explorationSlots >= 0) { "Slots cannot be negative" }
+        require(maxMetaQuestions >= 0 && radarSlots >= 0 && explorationSlots >= 0 && gateSlots >= 0) {
+            "Slots cannot be negative"
+        }
+        require(maxSuggested >= 0) { "The T1 screen cap cannot be negative" }
         require(gateAbove <= cardAbove && cardAbove <= suggestedAbove) { "Tier thresholds must be increasing" }
     }
 

@@ -161,6 +161,8 @@ internal object Worlds {
             quickBudget = Arb.int(0..20).bind(),
             radarSlots = Arb.int(0..3).bind(),
             explorationSlots = Arb.int(0..2).bind(),
+            maxSuggested = Arb.int(0..20).bind(),
+            gateSlots = Arb.int(0..3).bind(),
         )
         World(
             config = config,

@@ -62,8 +62,8 @@ internal suspend fun TestDevice.product(id: String): Product {
 }
 
 /**
- * Marks products « il en reste un peu »: watched products are always asked as cards. On a cold start with the
- * real seed the quick budget goes to the T1 screen and the category gates, so tests that need cards use this.
+ * Marks products « il en reste un peu »: watched products are always asked as cards, before the T2 cards, so
+ * tests that need a given product as a card use this.
  */
 internal fun TestDevice.watch(vararg slugs: String) {
     slugs.forEach { slug ->
