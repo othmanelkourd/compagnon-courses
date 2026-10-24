@@ -1,6 +1,6 @@
 package com.compagnon.courses.feature.catalog
 
-/** State of the catalog status screen (walking skeleton of Sprint 0). */
+/** The catalog published by the server for the country (`/v1/catalog/version`). See also [CatalogSyncUiState]. */
 sealed interface CatalogStatusUiState {
 
     data object Loading : CatalogStatusUiState
@@ -30,6 +30,6 @@ sealed interface CatalogStatusUiState {
 }
 
 sealed interface CatalogStatusEvent {
-    /** Reloads the catalog version. Ignored while a load is already in progress. */
+    /** Syncs the local catalog again (and reloads the server version). Ignored while a sync is in progress. */
     data object Refresh : CatalogStatusEvent
 }

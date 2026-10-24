@@ -1,7 +1,10 @@
 package com.compagnon.courses.feature.catalog
 
 import app.cash.turbine.ReceiveTurbine
+import com.compagnon.courses.core.data.CatalogRepository
+import com.compagnon.courses.core.database.createDatabase
 import com.compagnon.courses.core.network.CatalogApi
+import com.compagnon.courses.core.testing.createInMemoryDriver
 import com.compagnon.courses.core.network.createHttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
@@ -48,13 +51,21 @@ internal fun MockRequestHandleScope.respondJson(body: String, status: HttpStatus
 internal fun MockRequestHandleScope.respondProblem(body: String, status: HttpStatusCode): HttpResponseData =
     respond(body, status, headersOf(HttpHeaders.ContentType, ContentType.Application.ProblemJson.toString()))
 
-/** A [CatalogApi] over a [MockEngine], with the production client configuration. */
+/**
+ * A [CatalogRepository] over an in-memory database and a [CatalogApi] backed by a [MockEngine], with the
+ * production client configuration.
+ */
 internal fun mockCatalogApi(
     handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData,
-): Pair<CatalogApi, MockEngine> {
+): Pair<CatalogRepository, MockEngine> {
     val engine = MockEngine(handler)
-    return CatalogApi(createHttpClient(platform = "test", appVersion = "0.0.0", engine = engine), "http://api.test") to engine
+    val api = CatalogApi(createHttpClient(platform = "test", appVersion = "0.0.0", engine = engine), "http://api.test")
+    return CatalogRepository(createDatabase(createInMemoryDriver()), api) to engine
 }
+
+/** The `/v1/catalog/version` requests received by [this] engine. */
+internal val MockEngine.versionRequests: Int
+    get() = requestHistory.count { it.url.encodedPath == "/v1/catalog/version" }
 
 /** Skips [CatalogStatusUiState.Loading] items and returns the first settled state. */
 internal suspend fun ReceiveTurbine<CatalogStatusUiState>.awaitSettled(): CatalogStatusUiState {

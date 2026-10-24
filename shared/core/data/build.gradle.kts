@@ -1,8 +1,16 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
 plugins {
     alias(libs.plugins.compagnon.kmp.library)
 }
 
 kotlin {
+    // iOS ships SQLite: the native binaries (test executables) link it. The app links it in Xcode (-lsqlite3),
+    // since the static Shared framework does not carry linker options.
+    targets.withType<KotlinNativeTarget>().configureEach {
+        binaries.all { linkerOpts("-lsqlite3") }
+    }
+
     sourceSets {
         commonMain.dependencies {
             api(projects.shared.core.database)

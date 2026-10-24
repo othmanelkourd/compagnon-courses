@@ -41,20 +41,20 @@ class CatalogStatusViewModelTest {
     fun loadsTheCatalogVersionOnCreation() = runTest {
         val (api, engine) = mockCatalogApi { respondJson(VERSION_JSON) }
 
-        val viewModel = CatalogStatusViewModel(api, country = "FR")
+        val viewModel = CatalogStatusViewModel(api, country = "FR", locale = "fr-FR")
 
         viewModel.state.test {
             assertEquals(CatalogStatusUiState.Loading, awaitItem())
             assertEquals(loadedVersion1, awaitItem())
         }
-        assertEquals("FR", engine.requestHistory.single().url.parameters["country"])
+        assertEquals("FR", engine.requestHistory.first().url.parameters["country"])
     }
 
     @Test
     fun unavailableCountryIsAFinalError() = runTest {
         val (api, _) = mockCatalogApi { respondProblem(COUNTRY_PROBLEM_JSON, HttpStatusCode.NotFound) }
 
-        CatalogStatusViewModel(api, country = "ZZ").state.test {
+        CatalogStatusViewModel(api, country = "ZZ", locale = "fr-FR").state.test {
             assertEquals(
                 CatalogStatusUiState.Error(CatalogStatusMessages.COUNTRY_NOT_AVAILABLE, retryable = false),
                 awaitSettled(),
@@ -66,7 +66,7 @@ class CatalogStatusViewModelTest {
     fun serverErrorIsRetryable() = runTest {
         val (api, _) = mockCatalogApi { respond("upstream down", HttpStatusCode.ServiceUnavailable) }
 
-        CatalogStatusViewModel(api, country = "FR").state.test {
+        CatalogStatusViewModel(api, country = "FR", locale = "fr-FR").state.test {
             assertEquals(
                 CatalogStatusUiState.Error(CatalogStatusMessages.SERVER_UNAVAILABLE, retryable = true),
                 awaitSettled(),
@@ -78,7 +78,7 @@ class CatalogStatusViewModelTest {
     fun clientErrorWithoutProblemShowsTheStatus() = runTest {
         val (api, _) = mockCatalogApi { respond("", HttpStatusCode.BadRequest) }
 
-        CatalogStatusViewModel(api, country = "FR").state.test {
+        CatalogStatusViewModel(api, country = "FR", locale = "fr-FR").state.test {
             assertEquals(CatalogStatusUiState.Error(CatalogStatusMessages.httpError(400), retryable = false), awaitSettled())
         }
     }
@@ -87,7 +87,7 @@ class CatalogStatusViewModelTest {
     fun connectivityFailureIsRetryable() = runTest {
         val (api, _) = mockCatalogApi { throw IOException("Network is unreachable") }
 
-        CatalogStatusViewModel(api, country = "FR").state.test {
+        CatalogStatusViewModel(api, country = "FR", locale = "fr-FR").state.test {
             assertEquals(CatalogStatusUiState.Error(CatalogStatusMessages.CONNECTIVITY, retryable = true), awaitSettled())
         }
     }
@@ -96,7 +96,7 @@ class CatalogStatusViewModelTest {
     fun malformedResponseIsNotRetryable() = runTest {
         val (api, _) = mockCatalogApi { respondJson("""{ "country": "FR" }""") }
 
-        CatalogStatusViewModel(api, country = "FR").state.test {
+        CatalogStatusViewModel(api, country = "FR", locale = "fr-FR").state.test {
             assertEquals(CatalogStatusUiState.Error(CatalogStatusMessages.UNEXPECTED_RESPONSE, retryable = false), awaitSettled())
         }
     }
@@ -107,7 +107,7 @@ class CatalogStatusViewModelTest {
         val (api, engine) = mockCatalogApi {
             if (calls++ == 0) respond("", HttpStatusCode.ServiceUnavailable) else respondJson(VERSION_JSON)
         }
-        val viewModel = CatalogStatusViewModel(api, country = "FR")
+        val viewModel = CatalogStatusViewModel(api, country = "FR", locale = "fr-FR")
 
         viewModel.state.test {
             assertEquals(CatalogStatusUiState.Error(CatalogStatusMessages.SERVER_UNAVAILABLE, retryable = true), awaitSettled())
@@ -117,7 +117,7 @@ class CatalogStatusViewModelTest {
             assertEquals(CatalogStatusUiState.Loading, awaitItem())
             assertEquals(loadedVersion1, awaitItem())
         }
-        assertEquals(2, engine.requestHistory.size)
+        assertEquals(2, engine.versionRequests)
     }
 
     @Test
@@ -127,7 +127,7 @@ class CatalogStatusViewModelTest {
             release.await()
             respondJson(VERSION_JSON)
         }
-        val viewModel = CatalogStatusViewModel(api, country = "FR")
+        val viewModel = CatalogStatusViewModel(api, country = "FR", locale = "fr-FR")
 
         viewModel.state.test {
             assertEquals(CatalogStatusUiState.Loading, awaitItem())
@@ -137,7 +137,7 @@ class CatalogStatusViewModelTest {
             assertEquals(loadedVersion1, awaitItem())
             expectNoEvents()
         }
-        assertEquals(1, engine.requestHistory.size)
+        assertEquals(1, engine.versionRequests)
     }
 
     @Test
@@ -156,7 +156,7 @@ class CatalogStatusViewModelTest {
         val store = ViewModelStore()
         val viewModel = ViewModelProvider.create(
             store,
-            viewModelFactory { initializer { CatalogStatusViewModel(api, country = "FR") } },
+            viewModelFactory { initializer { CatalogStatusViewModel(api, country = "FR", locale = "fr-FR") } },
         )[CatalogStatusViewModel::class]
 
         viewModel.state.test {
