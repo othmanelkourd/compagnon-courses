@@ -50,6 +50,8 @@ data class HouseholdProfile(
  * @property watch « il en reste un peu »: ask again first at the next session.
  * @property userCadenceDays cadence set by the user (F03), overriding the estimate.
  * @property usualQty last answered quantity, in the unit it was answered in.
+ * @property nextDueAt after a « no »: when the product is expected to be needed (informational in V0).
+ * @property lastNoAt the last « no » answer.
  */
 data class ProductStats(
     val nPurchases: Int = 0,
@@ -63,6 +65,8 @@ data class ProductStats(
     val neverAsk: Boolean = false,
     val userCadenceDays: Int? = null,
     val usualQty: Quantity? = null,
+    val nextDueAt: Instant? = null,
+    val lastNoAt: Instant? = null,
 ) {
     init {
         require(nPurchases >= 0) { "nPurchases cannot be negative: $nPurchases" }

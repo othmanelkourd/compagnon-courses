@@ -1,0 +1,115 @@
+-- Question sessions (data-model §5.2 « Questionnaire et historique »). Times are epoch milliseconds (UTC).
+-- mode: quick | home_tour | zone | full. planned_at and seed are the `now` and `seed` of the planning input:
+-- with the events below they let a session be rebuilt exactly after process death.
+CREATE TABLE question_session (
+    id TEXT NOT NULL PRIMARY KEY,
+    mode TEXT NOT NULL,
+    list_id TEXT,
+    country TEXT NOT NULL,
+    locale TEXT NOT NULL,
+    catalog_version INTEGER NOT NULL,
+    seed INTEGER NOT NULL,
+    planned_at INTEGER NOT NULL,
+    horizon_days INTEGER NOT NULL,
+    persons INTEGER NOT NULL,
+    guests INTEGER NOT NULL,
+    started_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    completed_at INTEGER,
+    abandoned_at INTEGER,
+    asked INTEGER NOT NULL DEFAULT 0,
+    answered INTEGER NOT NULL DEFAULT 0,
+    items_added INTEGER NOT NULL DEFAULT 0
+);
+
+-- Every event sent to the session reducer, in order (event sourcing of the session transitions).
+-- subject: key of the state the event was applied to, checked on replay.
+CREATE TABLE question_session_event (
+    session_id TEXT NOT NULL,
+    idx INTEGER NOT NULL,
+    subject TEXT NOT NULL,
+    event TEXT NOT NULL,
+    recorded_at INTEGER NOT NULL,
+    PRIMARY KEY (session_id, idx)
+);
+
+-- Answers are immutable: an undone answer gets a compensation row (compensates = 1, same seq).
+-- subject_kind: meta | product | category. answer: meta | yes | no | little_left | have_enough | later |
+-- not_this_time | never | gate_yes | gate_no. value: meta value or snooze days.
+CREATE TABLE question_answer (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL,
+    seq INTEGER NOT NULL,
+    subject_kind TEXT NOT NULL,
+    subject_id TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    value INTEGER,
+    quantity_milli INTEGER,
+    unit TEXT,
+    score REAL,
+    reason TEXT,
+    compensates INTEGER NOT NULL DEFAULT 0,
+    answered_at INTEGER NOT NULL
+);
+
+CREATE INDEX question_answer_session ON question_answer (session_id, seq);
+
+-- Sessions
+
+insertSession:
+INSERT INTO question_session (
+    id, mode, list_id, country, locale, catalog_version, seed, planned_at, horizon_days, persons, guests,
+    started_at, updated_at
+) VALUES (
+    :id, :mode, :listId, :country, :locale, :catalogVersion, :seed, :plannedAt, :horizonDays, :persons, :guests,
+    :startedAt, :startedAt
+);
+
+selectSession:
+SELECT * FROM question_session WHERE id = :id;
+
+selectOpenSession:
+SELECT * FROM question_session
+WHERE completed_at IS NULL AND abandoned_at IS NULL
+ORDER BY started_at DESC, id DESC
+LIMIT 1;
+
+touchSession:
+UPDATE question_session SET updated_at = :updatedAt WHERE id = :id;
+
+completeSession:
+UPDATE question_session
+SET completed_at = :completedAt, updated_at = :completedAt, list_id = :listId,
+    asked = :asked, answered = :answered, items_added = :itemsAdded
+WHERE id = :id;
+
+abandonSession:
+UPDATE question_session
+SET abandoned_at = :abandonedAt, updated_at = :abandonedAt, asked = :asked, answered = :answered, items_added = 0
+WHERE id = :id;
+
+-- Events
+
+insertEvent:
+INSERT INTO question_session_event (session_id, idx, subject, event, recorded_at)
+VALUES (:sessionId, :idx, :subject, :event, :recordedAt);
+
+selectEvents:
+SELECT * FROM question_session_event WHERE session_id = :sessionId ORDER BY idx;
+
+nextEventIndex:
+SELECT coalesce(max(idx), 0) + 1 FROM question_session_event WHERE session_id = :sessionId;
+
+-- Answers
+
+insertAnswer:
+INSERT INTO question_answer (
+    session_id, seq, subject_kind, subject_id, answer, value, quantity_milli, unit, score, reason, compensates,
+    answered_at
+) VALUES (
+    :sessionId, :seq, :subjectKind, :subjectId, :answer, :value, :quantityMilli, :unit, :score, :reason,
+    :compensates, :answeredAt
+);
+
+selectAnswers:
+SELECT * FROM question_answer WHERE session_id = :sessionId ORDER BY id;
