@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.compagnon.courses.android.catalog.CatalogStatusScreen
+import com.compagnon.courses.android.navigation.CompagnonApp
 import com.compagnon.courses.android.ui.theme.CompagnonTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CompagnonTheme {
-                CatalogStatusScreen()
+                CompagnonApp()
             }
         }
     }
