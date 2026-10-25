@@ -1,5 +1,6 @@
 package com.compagnon.courses.core.data
 
+import com.compagnon.courses.core.model.TagId
 import com.compagnon.courses.engine.PlannedQuestion
 import com.compagnon.courses.engine.QuestionPlan
 import com.compagnon.courses.engine.QuestionPlanner
@@ -13,7 +14,7 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 
 /**
- * The budget allocation on the real Sprint 0 seed (195 products, FR), cold start, default household
+ * The budget allocation on the real seed (312 products, FR), cold start, default household
  * (2 adults, no history): `docs/question-engine.md` §6.3 steps 4 and 5. Cards come before gates, so a
  * quick session asks about products and not only about aisles.
  */
@@ -56,6 +57,22 @@ class SeedPlanningTest {
         println("seed quick, meta known: ${known.describe()}")
         assertTrue(known.cards.size > plan.cards.size || known.gates.size > plan.gates.size)
         assertTrue(known.cost <= budget)
+    }
+
+    @Test
+    fun seedTagsReachTheEngineAndExcludePorkForAHalalHousehold() = runTest {
+        val data = TestData(StandardTestDispatcher(testScheduler))
+        data.syncSeed()
+        val setup = assertNotNull(data.questions.planningSetup(SessionMode.QUICK, data.clock.now, seed = 42))
+        val pork = TagId("contains-pork")
+        val porkProducts = setup.input.products.filter { pork in it.tags }
+        assertTrue(porkProducts.size >= 5, "the seed tags pork products: ${porkProducts.map { it.slug }}")
+        assertTrue(setup.input.products.first { it.slug == "jambon-blanc" }.tags.contains(pork))
+
+        val halal = setup.input.household.copy(excludedTags = setOf(pork, TagId("contains-alcohol")))
+        val plan = planner.plan(setup.input.copy(household = halal))
+        val proposed = plan.askedProducts + plan.gates.flatMap { it.items }
+        assertTrue(proposed.none { pork in it.product.tags || TagId("contains-alcohol") in it.product.tags })
     }
 
     @Test

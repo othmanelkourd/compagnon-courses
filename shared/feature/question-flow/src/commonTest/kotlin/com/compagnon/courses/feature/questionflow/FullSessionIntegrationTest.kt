@@ -19,7 +19,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 
 /**
- * A whole quick session on the real Sprint 0 seed (195 products, FR), from the meta questions to the list:
+ * A whole quick session on the real seed (312 products, FR), from the meta questions to the list:
  * the budget holds, every proposed quantity is valid for its product, and the list receives exactly the
  * reviewed items with their quantities, the answers and the statistics.
  */

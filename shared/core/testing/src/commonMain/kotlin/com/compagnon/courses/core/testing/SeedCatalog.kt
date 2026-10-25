@@ -4,7 +4,7 @@ import com.compagnon.courses.contract.CatalogSnapshotDto
 import com.compagnon.courses.contract.CatalogVersionDto
 import com.compagnon.courses.contract.ContractJson
 
-/** The real Sprint 0 seed (FR, fr-FR, release 1): 19 categories, 9 zones, 33 units, 195 products. */
+/** The real seed (FR, fr-FR, release 1): 19 categories, 9 zones, 33 units, 312 products. */
 object SeedCatalog {
     val json: String get() = SEED_SNAPSHOT_JSON
 

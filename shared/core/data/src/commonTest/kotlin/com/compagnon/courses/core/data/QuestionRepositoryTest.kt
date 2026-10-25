@@ -35,7 +35,7 @@ class QuestionRepositoryTest {
 
         val setup = assertNotNull(data.questions.planningSetup(SessionMode.QUICK, data.clock.now, seed = 42))
 
-        assertEquals(195, setup.input.products.size)
+        assertEquals(312, setup.input.products.size)
         assertEquals(2, setup.input.context.persons)
         assertEquals(7, setup.input.context.horizonDays)
         assertEquals(42, setup.input.seed)

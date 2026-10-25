@@ -238,9 +238,7 @@ internal class CatalogStore(private val database: CompagnonDatabase) {
         fun searchTextOf(dto: ProductDto): String =
             normalizeForSearch((listOf(dto.name) + dto.forms.values).distinct().joinToString(" "))
 
-        // TODO(merge v0/catalog): return dto.tags once ProductDto carries them (§1 of the V0 spec).
-        @Suppress("UNUSED_PARAMETER")
-        fun tagsOf(dto: ProductDto): List<String> = emptyList()
+        fun tagsOf(dto: ProductDto): List<String> = dto.tags
 
         inline fun <reified E : Enum<E>> enumOrNull(name: String): E? = enumValues<E>().firstOrNull { it.name == name }
     }

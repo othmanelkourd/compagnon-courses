@@ -29,7 +29,7 @@ class CatalogRepositoryTest {
         assertNull(updated.fromVersion)
         assertEquals(1, updated.toVersion)
         val catalog = assertNotNull(data.catalog.catalog())
-        assertEquals(195, catalog.products.size)
+        assertEquals(312, catalog.products.size)
         assertEquals(19, catalog.categories.size)
         assertEquals(9, catalog.storageZones.size)
         assertEquals(33, catalog.units.units.size)
@@ -75,7 +75,7 @@ class CatalogRepositoryTest {
         assertEquals(SyncResult.Updated(1, 2, SyncMethod.DELTA, assertNotNull(result.remote)), result)
         val catalog = assertNotNull(data.catalog.catalog())
         assertEquals(2, catalog.version)
-        assertEquals(194, catalog.products.size)
+        assertEquals(311, catalog.products.size)
         assertEquals("pomme bio", catalog.products.first { it.slug == "pommes" }.name.text)
         assertTrue(catalog.products.none { it.slug == "bananes" })
         assertTrue(catalog.categories.any { it.id == CategoryId("cat-new") })
@@ -94,7 +94,7 @@ class CatalogRepositoryTest {
 
         assertEquals(SyncMethod.DELTA, result.method)
         assertEquals(3, result.toVersion)
-        assertEquals(193, assertNotNull(data.catalog.catalog()).products.size)
+        assertEquals(310, assertNotNull(data.catalog.catalog()).products.size)
         assertTrue(data.server.requests.any { it.startsWith("/v1/catalog/changes?since=2") })
     }
 
@@ -111,7 +111,7 @@ class CatalogRepositoryTest {
         assertEquals(SyncMethod.SNAPSHOT, result.method)
         assertEquals(1, result.fromVersion)
         assertEquals(5, result.toVersion)
-        assertEquals(190, assertNotNull(data.catalog.catalog()).products.size)
+        assertEquals(307, assertNotNull(data.catalog.catalog()).products.size)
         assertTrue(data.server.requests.any { it.startsWith("/v1/catalog/changes?since=1") })
     }
 
@@ -138,7 +138,7 @@ class CatalogRepositoryTest {
         assertEquals(SyncFailure.CONNECTIVITY, result.failure)
         assertTrue(result.retryable)
         assertNull(result.remote)
-        assertEquals(195, assertNotNull(data.catalog.catalog()).products.size)
+        assertEquals(312, assertNotNull(data.catalog.catalog()).products.size)
     }
 
     @Test

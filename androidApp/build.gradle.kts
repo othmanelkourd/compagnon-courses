@@ -64,9 +64,7 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     // ViewModels scoped to a Navigation 3 entry (cleared when the entry leaves the back stack).
-    // TODO(merge): move to gradle/libs.versions.toml (`androidx-lifecycle-viewmodelNavigation3`); declared here
-    // with the catalog's lifecycle version because this track only owns androidApp/.
-    implementation("androidx.lifecycle:lifecycle-viewmodel-navigation3:${libs.versions.androidx.lifecycle.get()}")
+    implementation(libs.androidx.lifecycle.viewmodelNavigation3)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
