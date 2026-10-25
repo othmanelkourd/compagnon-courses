@@ -34,7 +34,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
-import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -176,11 +175,19 @@ private fun ProductCardBody(card: ProductCardUi, onEvent: (QuestionEvent) -> Uni
             if (card.isSameAsLastTime || reason != null) {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     if (card.isSameAsLastTime) {
-                        SuggestionChip(
-                            onClick = {},
-                            enabled = false,
-                            label = { Text(stringResource(R.string.card_same_as_last_time)) },
-                        )
+                        // A label, not an action: the proposed quantity is the previous answer.
+                        Surface(
+                            color = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            shape = MaterialTheme.shapes.small,
+                            modifier = Modifier.padding(vertical = 8.dp),
+                        ) {
+                            Text(
+                                text = stringResource(R.string.card_same_as_last_time),
+                                style = MaterialTheme.typography.labelLarge,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                            )
+                        }
                     }
                     if (reason != null) {
                         AssistChip(
