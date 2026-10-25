@@ -24,6 +24,24 @@ class PlannerPropertiesTest {
     }
 
     @Test
+    fun theT1ScreenIsCappedAndCardsComeFirst() = runTest {
+        checkAll(ITERATIONS, Worlds.world) { world ->
+            val plan = QuestionPlanner(world.config).plan(world.input)
+            val reused = plan.suggested.filter { it.reasons.firstOrNull() == ReasonCode.LastList }
+            val cap = maxOf(world.config.maxSuggested, reused.size)
+            assertTrue(plan.suggested.size <= cap, "${plan.suggested.size} items on the screen")
+            // A T2 product without its own card (on the screen unchecked, or behind a gate) is never likelier
+            // than a standard card: cards are served first, by decreasing p.
+            val weakest = plan.questions.filterIsInstance<PlannedQuestion.Card>()
+                .filter { it.kind == CardKind.STANDARD }
+                .minOfOrNull { it.item.score } ?: return@checkAll
+            val gated = plan.questions.filterIsInstance<PlannedQuestion.Gate>().flatMap { it.items }
+            val uncarded = (plan.suggested - reused.toSet() + gated).filter { it.tier == Tier.T2 }
+            uncarded.forEach { assertTrue(it.score <= weakest, "${it.product.slug} (${it.score}) > card $weakest") }
+        }
+    }
+
+    @Test
     fun noExcludedProductIsEverAsked() = runTest {
         checkAll(ITERATIONS, Worlds.world) { world ->
             val input = world.input

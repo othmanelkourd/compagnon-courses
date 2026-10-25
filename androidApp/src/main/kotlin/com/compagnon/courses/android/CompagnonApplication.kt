@@ -1,8 +1,10 @@
 package com.compagnon.courses.android
 
 import android.app.Application
+import com.compagnon.courses.core.data.CatalogScope
 import com.compagnon.courses.core.network.NetworkConfig
 import com.compagnon.courses.shared.sharedModules
+import java.util.Locale
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -23,6 +25,8 @@ class CompagnonApplication : Application() {
                         appVersion = BuildConfig.VERSION_NAME,
                         enableLogging = BuildConfig.DEBUG,
                     ),
+                    // French devices get the regional French catalog, every other language the English one.
+                    CatalogScope.forDevice(Locale.getDefault().toLanguageTag()),
                 ),
             )
         }

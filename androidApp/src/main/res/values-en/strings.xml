@@ -1,19 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_refresh">Refresh</string>
+    <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_more">More actions</string>
     <string name="action_retry">Try again</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_validate">Confirm</string>
+    <string name="quantity_decrease">Decrease the quantity of %1$s</string>
+    <string name="quantity_increase">Increase the quantity of %1$s</string>
+    <string name="search_clear">Clear search</string>
+    <string name="search_no_result">No product for “%1$s”</string>
 
-    <string name="catalog_loading">Loading the catalog…</string>
-    <string name="catalog_title">Catalog %1$s · v%2$d</string>
-    <string name="catalog_published_on">Published on %1$s</string>
-    <string name="catalog_error_title">Catalog unavailable</string>
+    <string name="home_headline">Ready to shop?</string>
+    <string name="home_intro">A few quick questions, and your list is ready.</string>
+    <string name="home_start_session">Take stock</string>
+    <string name="home_my_list">My list</string>
+    <string name="home_list_empty">Your list is empty</string>
+    <plurals name="home_list_count">
+        <item quantity="one">%1$d item, %2$d to buy</item>
+        <item quantity="other">%1$d items, %2$d to buy</item>
+    </plurals>
+    <plurals name="home_list_all_checked">
+        <item quantity="one">%1$d item, all bought</item>
+        <item quantity="other">%1$d items, all bought</item>
+    </plurals>
 
+    <string name="catalog_card_title">Catalog</string>
+    <string name="catalog_sync_now">Update the catalog</string>
+    <string name="catalog_syncing">Updating the catalog…</string>
+    <string name="catalog_local_summary">%1$s on this device · v%2$d</string>
+    <string name="catalog_local_none">No catalog on this device yet</string>
+    <string name="catalog_last_sync">Last updated: %1$s</string>
+    <string name="catalog_server_version">Published version: v%1$d of %2$s</string>
+    <string name="catalog_outcome_up_to_date">The catalog is up to date.</string>
+    <string name="catalog_outcome_updated">The catalog changes were downloaded.</string>
+    <string name="catalog_outcome_downloaded">The catalog was downloaded.</string>
+    <string name="catalog_outcome_offline_kept">Offline: using the catalog on this device.</string>
+    <string name="catalog_outcome_offline_none">Offline: connect to download the catalog.</string>
+    <string name="catalog_outcome_storage_failed">The catalog could not be saved on this device.</string>
     <plurals name="catalog_product_count">
         <item quantity="one">%1$s product</item>
         <item quantity="other">%1$s products</item>
     </plurals>
-    <plurals name="catalog_category_count">
-        <item quantity="one">%1$s category</item>
-        <item quantity="other">%1$s categories</item>
+
+    <string name="question_title">Take stock</string>
+    <string name="question_close">Close the questions</string>
+    <string name="question_undo">Undo the last answer</string>
+    <string name="question_progress_spoken">Question %1$d of %2$d</string>
+    <string name="question_end_questions">Skip to the summary</string>
+    <string name="question_abandon">Abandon the session</string>
+    <string name="question_abandon_title">Abandon the session?</string>
+    <string name="question_abandon_text">Nothing will be added to your list. Your answers still help us know you better.</string>
+    <string name="question_abandon_confirm">Abandon</string>
+    <string name="question_loading">Preparing the questions…</string>
+    <string name="question_committing">Saving your list…</string>
+    <string name="question_error_title">Cannot continue</string>
+    <string name="question_error_no_catalog">The catalog is not on this device yet. Connect to the internet, then try again.</string>
+    <string name="question_error_planning">The questions could not be prepared.</string>
+    <string name="question_error_storage">The session could not be saved on this device.</string>
+    <string name="question_start_over">Start a new session</string>
+
+    <string name="meta_horizon_title">Shopping for how many days?</string>
+    <string name="meta_persons_title">How many people at home?</string>
+    <string name="meta_guests_title">Any guests?</string>
+    <string name="meta_guests_none">None</string>
+    <string name="meta_decrease">Fewer</string>
+    <string name="meta_increase">More</string>
+    <plurals name="meta_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
     </plurals>
+    <plurals name="meta_persons">
+        <item quantity="one">%d person</item>
+        <item quantity="other">%d people</item>
+    </plurals>
+    <plurals name="meta_guests">
+        <item quantity="one">%d guest</item>
+        <item quantity="other">%d guests</item>
+    </plurals>
+
+    <string name="suggested_title">Probably needed</string>
+    <string name="suggested_subtitle">Uncheck what you do not need, adjust the quantities.</string>
+    <string name="checklist_continue_without">Continue without adding anything</string>
+    <plurals name="checklist_add">
+        <item quantity="one">Add %d item</item>
+        <item quantity="other">Add %d items</item>
+    </plurals>
+    <string name="gate_overline">Aisle</string>
+    <string name="gate_question_fallback">Need anything from %1$s?</string>
+    <plurals name="gate_product_count">
+        <item quantity="one">%d product in this aisle</item>
+        <item quantity="other">%d products in this aisle</item>
+    </plurals>
+    <string name="gate_items_subtitle">Check what you need.</string>
+    <string name="gate_items_none">None of these</string>
+
+    <string name="card_question">Do you need %1$s?</string>
+    <string name="answer_yes">Yes</string>
+    <string name="answer_no">No</string>
+    <string name="answer_yes_with_quantity">Yes · %1$s</string>
+    <string name="card_more_options">More options</string>
+    <string name="card_same_as_last_time">Same as last time</string>
+    <string name="card_why">Why this question?</string>
+    <string name="card_badge_watch">Running low last time</string>
+    <string name="card_badge_radar">Forgotten items radar</string>
+    <string name="card_badge_exploration">Something new</string>
+    <string name="nuanced_little_left">There is a little left</string>
+    <string name="nuanced_little_left_hint">We will ask about it first next time.</string>
+    <string name="nuanced_enough_week">I have enough for ~1 week</string>
+    <string name="nuanced_enough_week_hint">No question about it for a week.</string>
+    <string name="nuanced_enough_month">I have enough for ~1 month</string>
+    <string name="nuanced_enough_month_hint">No question about it for a month.</string>
+    <string name="nuanced_later">Later</string>
+    <string name="nuanced_later_hint">Asked again at the end of the session.</string>
+    <string name="nuanced_not_this_time">Not this time</string>
+    <string name="nuanced_not_this_time_hint">No effect on the next sessions.</string>
+    <string name="nuanced_never">I don’t buy it anymore</string>
+    <string name="nuanced_never_hint">This product will not be suggested again.</string>
+
+    <string name="reason_due">It is probably time to buy more.</string>
+    <plurals name="reason_due_last">
+        <item quantity="one">Last bought %d day ago.</item>
+        <item quantity="other">Last bought %d days ago.</item>
+    </plurals>
+    <plurals name="reason_due_interval">
+        <item quantity="one">You buy it about every day.</item>
+        <item quantity="other">You buy it about every %d days.</item>
+    </plurals>
+    <string name="reason_due_usual">Usually: %1$s.</string>
+    <string name="reason_staple">A staple of most households.</string>
+    <string name="reason_seasonal">It is in season.</string>
+    <string name="reason_event">For the upcoming event.</string>
+    <string name="reason_radar">You have not bought it for a while.</string>
+    <plurals name="reason_radar_weeks">
+        <item quantity="one">Last bought %d week ago.</item>
+        <item quantity="other">Last bought %d weeks ago.</item>
+    </plurals>
+    <string name="reason_prior">Often bought by households like yours.</string>
+    <plurals name="reason_prior_household">
+        <item quantity="one">Often bought by single-person households.</item>
+        <item quantity="other">Often bought by %d-person households.</item>
+    </plurals>
+    <string name="reason_exploration">A suggestion, to discover something new.</string>
+    <string name="reason_little_left">There was a little left last time.</string>
+    <string name="reason_last_list">It was on your last list.</string>
+
+    <string name="review_title">Summary</string>
+    <string name="review_empty">Nothing to add so far.</string>
+    <plurals name="review_summary">
+        <item quantity="one">%d item will be added to your list.</item>
+        <item quantity="other">%d items will be added to your list.</item>
+    </plurals>
+    <string name="review_other_title">Anything else?</string>
+    <string name="review_search_placeholder">Search for a product</string>
+    <string name="review_add_result">Add %1$s</string>
+    <plurals name="review_confirm">
+        <item quantity="one">Add %d item to my list</item>
+        <item quantity="other">Add %d items to my list</item>
+    </plurals>
+    <string name="review_finish_empty">Finish without adding anything</string>
+    <string name="origin_suggested">Probably needed</string>
+    <string name="origin_card">Question</string>
+    <string name="origin_gate">Aisle</string>
+    <string name="origin_other">Added by hand</string>
+    <plurals name="done_items_added">
+        <item quantity="one">%d item added to your list</item>
+        <item quantity="other">%d items added to your list</item>
+    </plurals>
+    <string name="done_items_text">Happy shopping! Check items off as you go.</string>
+    <string name="done_nothing_title">Nothing to add this time</string>
+    <string name="done_nothing_text">Your answers are saved for the next sessions.</string>
+    <string name="done_abandoned_title">Session abandoned</string>
+    <string name="done_abandoned_text">Nothing was added to your list.</string>
+    <string name="done_open_list">See my list</string>
+    <string name="done_back_home">Back to home</string>
+
+    <string name="list_title">My list</string>
+    <string name="list_loading">Loading the list…</string>
+    <plurals name="list_remaining">
+        <item quantity="one">%1$d of %2$d to buy</item>
+        <item quantity="other">%1$d of %2$d to buy</item>
+    </plurals>
+    <string name="list_add_placeholder">Add a product…</string>
+    <string name="list_add_product">Add %1$s to the list</string>
+    <string name="list_other_title">Anything else?</string>
+    <string name="list_add_free_text">Add “%1$s”</string>
+    <string name="list_section_other">Other</string>
+    <string name="list_delete_item">Delete %1$s</string>
+    <string name="list_item_deleted">“%1$s” deleted</string>
+    <string name="list_empty_title">Your list is empty</string>
+    <string name="list_empty_text">Take stock with a few questions, or add a product above.</string>
+    <string name="list_complete">Shopping done</string>
+    <string name="list_complete_title">Shopping done?</string>
+    <string name="list_complete_text">Checked items are saved as bought. The others stay on your next list.</string>
+    <string name="list_complete_confirm">Finish</string>
+    <string name="list_error_action">The change could not be saved.</string>
+    <string name="list_error_storage">The list could not be read on this device.</string>
 </resources>

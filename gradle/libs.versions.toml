@@ -23,6 +23,8 @@ kotlinx-datetime = "0.8.0"
 ktor = "3.6.0"
 koin = "4.2.2"
 kermit = "2.2.0"
+# SQLDelight (local database of the apps). 2.4.1 is built with Kotlin 2.3.10, read fine by Kotlin 2.4.20.
+sqldelight = "2.4.1"
 
 # AndroidX
 androidx-lifecycle = "2.11.0"
@@ -66,6 +68,13 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+
+# --- SQLDelight ---
+sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
+sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
+sqldelight-androidDriver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-nativeDriver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
+sqldelight-sqliteDriver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 
 # --- Ktor client ---
 ktor-bom = { module = "io.ktor:ktor-bom", version.ref = "ktor" }
@@ -158,6 +167,7 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 skie = { id = "co.touchlab.skie", version.ref = "skie" }
 mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 
 # Convention plugins from build-logic (no version: they come from the included build)
 compagnon-kmp-library = { id = "compagnon.kmp.library" }

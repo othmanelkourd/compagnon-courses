@@ -1,0 +1,160 @@
+-- The published catalog projected onto (country, locale), as served by /v1/catalog/snapshot and kept up to
+-- date by /v1/catalog/changes. Ids are the server UUIDs. Enumerations use the contract wire names.
+
+CREATE TABLE catalog_category (
+    id TEXT NOT NULL PRIMARY KEY,
+    slug TEXT NOT NULL,
+    parent_id TEXT,
+    position INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    gate_question TEXT
+);
+
+CREATE TABLE catalog_storage_zone (
+    id TEXT NOT NULL PRIMARY KEY,
+    slug TEXT NOT NULL,
+    position INTEGER NOT NULL,
+    name TEXT NOT NULL
+);
+
+-- forms: JSON object, CLDR plural category -> localized form.
+CREATE TABLE catalog_unit (
+    code TEXT NOT NULL PRIMARY KEY,
+    dimension TEXT NOT NULL,
+    system TEXT NOT NULL,
+    to_base TEXT,
+    symbol TEXT NOT NULL,
+    forms TEXT NOT NULL
+);
+
+-- forms: JSON object; unit_policies and packages: JSON arrays of the contract UnitPolicyDto / PackageDto.
+-- search_text: normalized name and plural forms (lower case, no diacritics), for the local search.
+CREATE TABLE catalog_product (
+    id TEXT NOT NULL PRIMARY KEY,
+    slug TEXT NOT NULL,
+    category_id TEXT NOT NULL,
+    storage_zone_id TEXT NOT NULL,
+    dimension TEXT NOT NULL,
+    name TEXT NOT NULL,
+    forms TEXT NOT NULL,
+    need_phrase TEXT,
+    cycle_class TEXT NOT NULL,
+    is_staple INTEGER NOT NULL,
+    typical_repurchase_days INTEGER,
+    household_penetration REAL,
+    is_question_candidate INTEGER NOT NULL,
+    unit_policies TEXT NOT NULL,
+    packages TEXT NOT NULL,
+    search_text TEXT NOT NULL
+);
+
+CREATE INDEX catalog_product_category ON catalog_product (category_id);
+
+-- Diet and allergen tags of a product (contains-pork, vegan…). Empty until the contract carries them.
+CREATE TABLE catalog_product_tag (
+    product_id TEXT NOT NULL,
+    tag TEXT NOT NULL,
+    PRIMARY KEY (product_id, tag)
+);
+
+-- Categories
+
+upsertCategory:
+INSERT OR REPLACE INTO catalog_category (id, slug, parent_id, position, name, gate_question)
+VALUES (:id, :slug, :parentId, :position, :name, :gateQuestion);
+
+deleteCategory:
+DELETE FROM catalog_category WHERE id = :id;
+
+deleteAllCategories:
+DELETE FROM catalog_category;
+
+selectAllCategories:
+SELECT * FROM catalog_category ORDER BY position, id;
+
+countCategories:
+SELECT count(*) FROM catalog_category;
+
+-- Storage zones
+
+upsertStorageZone:
+INSERT OR REPLACE INTO catalog_storage_zone (id, slug, position, name)
+VALUES (:id, :slug, :position, :name);
+
+deleteStorageZone:
+DELETE FROM catalog_storage_zone WHERE id = :id;
+
+deleteAllStorageZones:
+DELETE FROM catalog_storage_zone;
+
+selectAllStorageZones:
+SELECT * FROM catalog_storage_zone ORDER BY position, id;
+
+-- Units
+
+upsertUnit:
+INSERT OR REPLACE INTO catalog_unit (code, dimension, system, to_base, symbol, forms)
+VALUES (:code, :dimension, :system, :toBase, :symbol, :forms);
+
+deleteUnit:
+DELETE FROM catalog_unit WHERE code = :code;
+
+deleteAllUnits:
+DELETE FROM catalog_unit;
+
+selectAllUnits:
+SELECT * FROM catalog_unit ORDER BY code;
+
+-- Products
+
+upsertProduct:
+INSERT OR REPLACE INTO catalog_product (
+    id, slug, category_id, storage_zone_id, dimension, name, forms, need_phrase, cycle_class, is_staple,
+    typical_repurchase_days, household_penetration, is_question_candidate, unit_policies, packages, search_text
+) VALUES (
+    :id, :slug, :categoryId, :storageZoneId, :dimension, :name, :forms, :needPhrase, :cycleClass, :isStaple,
+    :typicalRepurchaseDays, :householdPenetration, :isQuestionCandidate, :unitPolicies, :packages, :searchText
+);
+
+deleteProduct:
+DELETE FROM catalog_product WHERE id = :id;
+
+deleteAllProducts:
+DELETE FROM catalog_product;
+
+selectAllProducts:
+SELECT * FROM catalog_product ORDER BY id;
+
+selectProduct:
+SELECT * FROM catalog_product WHERE id = :id;
+
+countProducts:
+SELECT count(*) FROM catalog_product;
+
+-- Prefix matches of a word first, then any substring match; then by name.
+searchProducts:
+SELECT * FROM catalog_product
+WHERE search_text LIKE '%' || :pattern || '%' ESCAPE '\'
+ORDER BY
+    CASE
+        WHEN search_text LIKE :pattern || '%' ESCAPE '\' THEN 0
+        WHEN search_text LIKE '% ' || :pattern || '%' ESCAPE '\' THEN 1
+        ELSE 2
+    END,
+    length(name),
+    name
+LIMIT :limit;
+
+-- Tags
+
+insertTag:
+INSERT OR IGNORE INTO catalog_product_tag (product_id, tag) VALUES (:productId, :tag);
+
+deleteTagsOf:
+DELETE FROM catalog_product_tag WHERE product_id = :productId;
+
+deleteAllTags:
+DELETE FROM catalog_product_tag;
+
+selectAllTags:
+SELECT * FROM catalog_product_tag;

@@ -1,0 +1,111 @@
+-- The household profile (single row until accounts and households exist).
+-- children: JSON array of age bands (BABY, CHILD, TEEN); store_category_order: JSON array of category ids,
+-- first in the store first; excluded_tags: JSON array of tag slugs never asked about (stays on the device).
+CREATE TABLE household_profile (
+    id INTEGER NOT NULL PRIMARY KEY CHECK (id = 1),
+    adults INTEGER NOT NULL,
+    children TEXT NOT NULL,
+    country TEXT NOT NULL,
+    measurement_system TEXT NOT NULL,
+    usual_horizon_days INTEGER NOT NULL,
+    store_category_order TEXT NOT NULL,
+    excluded_tags TEXT NOT NULL,
+    updated_at INTEGER NOT NULL
+);
+
+-- Purchase statistics per product (data-model household_product_stats). EWMA values are statistical estimates.
+-- *_qty_base are in the base unit of the product dimension (g, mL, piece).
+CREATE TABLE household_product_stats (
+    product_id TEXT NOT NULL PRIMARY KEY,
+    n_purchases INTEGER NOT NULL DEFAULT 0,
+    last_at INTEGER,
+    ewma_interval_days REAL,
+    ewma_qty_base REAL,
+    last_qty_base REAL,
+    next_due_at INTEGER,
+    consecutive_no REAL NOT NULL DEFAULT 0,
+    last_no_at INTEGER
+);
+
+-- Preferences per product (data-model household_product_pref, subset). usual_*: last answered quantity.
+CREATE TABLE household_product_pref (
+    product_id TEXT NOT NULL PRIMARY KEY,
+    usual_qty_milli INTEGER,
+    usual_unit TEXT,
+    never_ask INTEGER NOT NULL DEFAULT 0,
+    snooze_until INTEGER,
+    watch INTEGER NOT NULL DEFAULT 0,
+    ask_every_days INTEGER
+);
+
+-- A confirmed (list_checked) or implicit purchase. source: list_checked | implicit | manual.
+CREATE TABLE purchase_event (
+    id TEXT NOT NULL PRIMARY KEY,
+    product_id TEXT NOT NULL,
+    quantity_milli INTEGER NOT NULL,
+    unit TEXT NOT NULL,
+    qty_base REAL,
+    list_id TEXT,
+    occurred_at INTEGER NOT NULL,
+    source TEXT NOT NULL
+);
+
+CREATE INDEX purchase_event_product ON purchase_event (product_id, occurred_at);
+
+-- Profile
+
+selectProfile:
+SELECT * FROM household_profile WHERE id = 1;
+
+upsertProfile:
+INSERT OR REPLACE INTO household_profile (
+    id, adults, children, country, measurement_system, usual_horizon_days, store_category_order, excluded_tags,
+    updated_at
+) VALUES (
+    1, :adults, :children, :country, :measurementSystem, :usualHorizonDays, :storeCategoryOrder, :excludedTags,
+    :updatedAt
+);
+
+-- Stats
+
+selectAllStats:
+SELECT * FROM household_product_stats;
+
+selectStats:
+SELECT * FROM household_product_stats WHERE product_id = :productId;
+
+upsertStats:
+INSERT OR REPLACE INTO household_product_stats (
+    product_id, n_purchases, last_at, ewma_interval_days, ewma_qty_base, last_qty_base, next_due_at,
+    consecutive_no, last_no_at
+) VALUES (
+    :productId, :nPurchases, :lastAt, :ewmaIntervalDays, :ewmaQtyBase, :lastQtyBase, :nextDueAt,
+    :consecutiveNo, :lastNoAt
+);
+
+-- Preferences
+
+selectAllPrefs:
+SELECT * FROM household_product_pref;
+
+selectPref:
+SELECT * FROM household_product_pref WHERE product_id = :productId;
+
+upsertPref:
+INSERT OR REPLACE INTO household_product_pref (
+    product_id, usual_qty_milli, usual_unit, never_ask, snooze_until, watch, ask_every_days
+) VALUES (
+    :productId, :usualQtyMilli, :usualUnit, :neverAsk, :snoozeUntil, :watch, :askEveryDays
+);
+
+-- Purchases
+
+insertPurchase:
+INSERT INTO purchase_event (id, product_id, quantity_milli, unit, qty_base, list_id, occurred_at, source)
+VALUES (:id, :productId, :quantityMilli, :unit, :qtyBase, :listId, :occurredAt, :source);
+
+selectPurchases:
+SELECT * FROM purchase_event WHERE product_id = :productId ORDER BY occurred_at;
+
+countPurchases:
+SELECT count(*) FROM purchase_event;

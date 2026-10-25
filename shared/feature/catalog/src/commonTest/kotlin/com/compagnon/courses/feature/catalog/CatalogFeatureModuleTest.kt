@@ -1,7 +1,10 @@
 package com.compagnon.courses.feature.catalog
 
 import app.cash.turbine.test
+import app.cash.sqldelight.db.SqlDriver
+import com.compagnon.courses.core.data.dataModule
 import com.compagnon.courses.core.network.NetworkConfig
+import com.compagnon.courses.core.testing.createInMemoryDriver
 import com.compagnon.courses.core.network.createHttpClient
 import com.compagnon.courses.core.network.networkModule
 import io.ktor.client.HttpClient
@@ -41,8 +44,12 @@ class CatalogFeatureModuleTest {
         val app = koinApplication {
             modules(
                 networkModule(config),
+                dataModule(),
                 catalogFeatureModule,
-                module { single<HttpClient> { createHttpClient(config.platform, config.appVersion, engine) } },
+                module {
+                    single<HttpClient> { createHttpClient(config.platform, config.appVersion, engine) }
+                    single<SqlDriver> { createInMemoryDriver() }
+                },
             )
         }
 
@@ -51,7 +58,7 @@ class CatalogFeatureModuleTest {
         viewModel.state.test {
             assertEquals(loadedVersion1, awaitSettled())
         }
-        assertEquals("FR", engine.requestHistory.single().url.parameters["country"])
+        assertEquals("FR", engine.requestHistory.first().url.parameters["country"])
         // ViewModel definitions are not singletons: each screen gets its own instance.
         assertNotSame(viewModel, app.koin.get<CatalogStatusViewModel> { parametersOf("FR") })
         app.close()

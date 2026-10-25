@@ -22,6 +22,20 @@ internal fun formatPublishedAt(publishedAt: String, locale: Locale, zone: ZoneId
         publishedAt
     }
 
+/**
+ * Formats the RFC 3339 time of the last catalog sync as a medium date and a short time in [zone]
+ * (`24 oct. 2026, 10:30` in French). An unparsable value is returned unchanged.
+ */
+internal fun formatSyncedAt(syncedAt: String, locale: Locale, zone: ZoneId): String =
+    try {
+        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT)
+            .withLocale(locale)
+            .withZone(zone)
+            .format(OffsetDateTime.parse(syncedAt))
+    } catch (_: DateTimeParseException) {
+        syncedAt
+    }
+
 /** Formats a count with the locale's digit grouping (`1 234` in French, `1,234` in English). */
 internal fun formatCount(count: Int, locale: Locale): String =
     NumberFormat.getIntegerInstance(locale).format(count)

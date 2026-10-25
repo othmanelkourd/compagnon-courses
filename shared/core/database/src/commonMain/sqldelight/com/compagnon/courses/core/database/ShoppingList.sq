@@ -1,0 +1,97 @@
+-- Shopping lists of the household (data-model §5.2 « Listes »). Ids are client-generated UUIDv7 strings.
+-- status: active | completed | archived. Times are epoch milliseconds (UTC).
+CREATE TABLE shopping_list (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT,
+    status TEXT NOT NULL,
+    created_at INTEGER NOT NULL,
+    completed_at INTEGER,
+    version INTEGER NOT NULL DEFAULT 1,
+    deleted_at INTEGER
+);
+
+-- A product (quantity in one of its policy units) or a free text. added_via: question_flow | manual.
+-- Soft deleted (deleted_at) so that a deletion can be undone, and later synced as a tombstone.
+CREATE TABLE list_item (
+    id TEXT NOT NULL PRIMARY KEY,
+    list_id TEXT NOT NULL REFERENCES shopping_list (id),
+    product_id TEXT,
+    free_text TEXT,
+    quantity_milli INTEGER,
+    unit TEXT,
+    position INTEGER NOT NULL,
+    added_via TEXT NOT NULL,
+    added_at INTEGER NOT NULL,
+    checked_at INTEGER,
+    deleted_at INTEGER,
+    version INTEGER NOT NULL DEFAULT 1,
+    CHECK ((product_id IS NULL) <> (free_text IS NULL)),
+    CHECK ((quantity_milli IS NULL) = (unit IS NULL))
+);
+
+-- At most one live, unchecked line per product: adding the same product again merges into it.
+CREATE UNIQUE INDEX list_item_active_product_uq ON list_item (list_id, product_id)
+WHERE deleted_at IS NULL AND checked_at IS NULL AND product_id IS NOT NULL;
+
+CREATE INDEX list_item_list ON list_item (list_id);
+
+-- Lists
+
+insertList:
+INSERT INTO shopping_list (id, name, status, created_at) VALUES (:id, :name, 'active', :createdAt);
+
+selectActiveList:
+SELECT * FROM shopping_list
+WHERE status = 'active' AND deleted_at IS NULL
+ORDER BY created_at DESC, id DESC
+LIMIT 1;
+
+selectList:
+SELECT * FROM shopping_list WHERE id = :id;
+
+selectLastCompletedList:
+SELECT * FROM shopping_list
+WHERE status = 'completed' AND deleted_at IS NULL
+ORDER BY completed_at DESC, id DESC
+LIMIT 1;
+
+completeList:
+UPDATE shopping_list SET status = 'completed', completed_at = :completedAt, version = version + 1 WHERE id = :id;
+
+-- Items
+
+insertItem:
+INSERT INTO list_item (id, list_id, product_id, free_text, quantity_milli, unit, position, added_via, added_at)
+VALUES (:id, :listId, :productId, :freeText, :quantityMilli, :unit, :position, :addedVia, :addedAt);
+
+selectItem:
+SELECT * FROM list_item WHERE id = :id;
+
+-- Live items (not deleted) of a list, in insertion order.
+selectItems:
+SELECT * FROM list_item WHERE list_id = :listId AND deleted_at IS NULL ORDER BY position, id;
+
+selectOpenProductItem:
+SELECT * FROM list_item
+WHERE list_id = :listId AND product_id = :productId AND deleted_at IS NULL AND checked_at IS NULL;
+
+nextPosition:
+SELECT coalesce(max(position), 0) + 1 FROM list_item WHERE list_id = :listId;
+
+updateQuantity:
+UPDATE list_item SET quantity_milli = :quantityMilli, unit = :unit, version = version + 1 WHERE id = :id;
+
+setChecked:
+UPDATE list_item SET checked_at = :checkedAt, version = version + 1 WHERE id = :id;
+
+softDelete:
+UPDATE list_item SET deleted_at = :deletedAt, version = version + 1 WHERE id = :id;
+
+restore:
+UPDATE list_item SET deleted_at = NULL, version = version + 1 WHERE id = :id;
+
+moveItem:
+UPDATE list_item SET list_id = :listId, position = :position, version = version + 1 WHERE id = :id;
+
+countOpenItems:
+SELECT count(*) FROM list_item WHERE list_id = :listId AND deleted_at IS NULL AND checked_at IS NULL;
