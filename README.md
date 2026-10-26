@@ -42,8 +42,8 @@ courses/
 │  ├─ engine/                   # :shared:engine           moteur de questions v0, Kotlin pur
 │  ├─ feature/catalog/          # :shared:feature:catalog  CatalogStatusViewModel
 │  └─ umbrella/                 # :shared:umbrella         graphe Koin, framework iOS « Shared » (SKIE appliqué ici seulement)
-├─ androidApp/                  # :androidApp              app Compose (com.compagnon.courses)
-├─ iosApp/                      # iosApp.xcodeproj         app SwiftUI (com.compagnon.courses)
+├─ androidApp/                  # :androidApp              app Compose (com.monbasilic.courses)
+├─ iosApp/                      # iosApp.xcodeproj         app SwiftUI (com.monbasilic.courses)
 ├─ server/app/                  # :server:app              serveur Ktor, Flyway, Exposed, import du seed
 ├─ backoffice/                  # Vite + React + TypeScript + react-admin (npm)
 ├─ catalog-content/             # seed éditorial du catalogue (JSON)
@@ -54,7 +54,7 @@ courses/
 └─ docs/                        # plan, ADR, API, modèle de données, moteur de questions
 ```
 
-Le package de base `com.compagnon.courses` (et l'identifiant d'app du même nom) est provisoire, en attendant le choix du nom et du domaine.
+L'app s'appelle **Basilic** (domaine prévu : monbasilic.com, .fr et .app). Ses identifiants sur les stores sont `com.monbasilic.courses` (`applicationId` Android et bundle id iOS) ; ils ne pourront plus changer après la première publication. Le package Kotlin `com.compagnon.courses` reste un nom interne, invisible des utilisateurs. L'icône et sa géométrie sont dans `design/brand/`.
 
 ## Prérequis
 
@@ -157,7 +157,7 @@ xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug 
 xcrun simctl boot "iPhone 17 Pro" 2>/dev/null || true
 open -a Simulator
 xcrun simctl install booted "$(find build/ios-derived/Build/Products/Debug-iphonesimulator -maxdepth 1 -name '*.app' | head -n 1)"
-xcrun simctl launch booted com.compagnon.courses
+xcrun simctl launch booted com.monbasilic.courses
 ```
 
 ## Lancer le backoffice

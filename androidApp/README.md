@@ -1,6 +1,6 @@
 # androidApp
 
-Application Android (Jetpack Compose, Material 3) de « Compagnon de courses ». Toute la logique vient du code partagé (`:shared:umbrella`) : l'app ne fait qu'afficher les états des ViewModels KMP et leur renvoyer des événements.
+Application Android (Jetpack Compose, Material 3) de « Basilic » (identifiant `com.monbasilic.courses`). Toute la logique vient du code partagé (`:shared:umbrella`) : l'app ne fait qu'afficher les états des ViewModels KMP et leur renvoyer des événements.
 
 ## Écrans
 
