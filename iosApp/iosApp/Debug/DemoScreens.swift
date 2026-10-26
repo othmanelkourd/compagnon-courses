@@ -72,8 +72,8 @@
             ],
             quantity: QuantityStepper(selected: quantity(500, "kilogram", "0,5\u{00A0}kg"), canDecrement: false, canIncrement: true),
             units: [
-                UnitOptionUi(unit: "kilogram", label: "kg", selected: true),
-                UnitOptionUi(unit: "piece", label: "tomates de saison", selected: false),
+                UnitOptionUi(unit: "kilogram", label: "Au poids", selected: true),
+                UnitOptionUi(unit: "piece", label: "À la pièce", selected: false),
             ],
             isSameAsLastTime: false,
             reason: reason(.staple)

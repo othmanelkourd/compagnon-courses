@@ -151,7 +151,7 @@ class CardStepTest {
     fun anotherUnitCanBeSelected() {
         setCard()
 
-        composeRule.onNodeWithText("Pack").performClick()
+        composeRule.onNodeWithText("En packs").performClick()
 
         composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.SelectUnit("pack")), events) }
     }

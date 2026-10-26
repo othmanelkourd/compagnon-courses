@@ -81,6 +81,23 @@ class QuantityFormatterTest {
     }
 
     @Test
+    fun buyingLabelsNameTheWayAProductIsBought() {
+        val french = QuantityFormatter(units("fr"), "fr-FR")
+        assertEquals("Au poids", french.buyingLabel(UnitCode.KILOGRAM))
+        assertEquals("Au litre", french.buyingLabel(UnitCode.LITER))
+        assertEquals("À la pièce", french.buyingLabel(UnitCode.PIECE))
+        assertEquals("En bouteilles", french.buyingLabel(bottle))
+
+        val english = QuantityFormatter(units("en"), "en")
+        assertEquals("By weight", english.buyingLabel(UnitCode.KILOGRAM))
+        assertEquals("By the liter", english.buyingLabel(UnitCode.LITER))
+        assertEquals("By the piece", english.buyingLabel(UnitCode.PIECE))
+        assertEquals("In bottles", english.buyingLabel(bottle))
+
+        assertEquals("jar", QuantityFormatter(UnitCatalog.EMPTY, "fr").buyingLabel(UnitCode("jar")))
+    }
+
+    @Test
     fun unknownUnitsFallBackToTheirCode() {
         val formatter = QuantityFormatter(UnitCatalog.EMPTY, "fr")
         assertEquals("2${nbsp}jar", formatter.format(Quantity.of(2, UnitCode("jar"))))

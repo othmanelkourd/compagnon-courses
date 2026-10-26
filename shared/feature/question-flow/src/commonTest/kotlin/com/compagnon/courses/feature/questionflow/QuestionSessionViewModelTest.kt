@@ -134,6 +134,11 @@ class QuestionSessionViewModelTest {
             assertTrue(assertNotNull(product.policyFor(quantity.unit)).isAllowed(quantity), "$quantity for ${product.slug}")
         }
         assertEquals(1, card.units.count { it.selected })
+        // « Au poids », « À la pièce », « En packs »: the way of buying, never the product name.
+        card.units.forEach { option ->
+            assertTrue(option.label.startsWith("Au ") || option.label.startsWith("À ") || option.label.startsWith("En "), option.label)
+        }
+        assertEquals(card.units.size, card.units.map { it.label }.toSet().size)
 
         viewModel.onEvent(QuestionEvent.StepQuantity(increment = true))
         val stepped = assertIs<QuestionUiState.Card>(viewModel.state.value).card

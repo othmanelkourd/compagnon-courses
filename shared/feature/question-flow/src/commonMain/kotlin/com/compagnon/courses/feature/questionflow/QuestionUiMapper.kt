@@ -172,7 +172,7 @@ internal class QuestionUiMapper(private val session: SessionData, locale: String
                 product.unitPolicies.map { candidate ->
                     UnitOptionUi(
                         unit = candidate.unit.value,
-                        label = formatter.unitLabel(Quantity.of(2, candidate.unit), product),
+                        label = formatter.buyingLabel(candidate.unit),
                         selected = candidate.unit == policy.unit,
                     )
                 }

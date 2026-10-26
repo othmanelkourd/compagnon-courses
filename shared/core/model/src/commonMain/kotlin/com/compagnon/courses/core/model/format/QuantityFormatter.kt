@@ -58,7 +58,30 @@ class QuantityFormatter(private val units: UnitCatalog, locale: String) {
     fun format(quantity: Quantity, product: Product? = null): String =
         formatNumber(quantity) + NO_BREAK_SPACE + unitLabel(quantity, product)
 
+    /**
+     * How a product is bought in [unit], for the unit selector of a card: « Au poids » (masses), « Au litre »,
+     * « À la pièce », « À la douzaine », else « En barquettes », « En packs »… from the unit's plural form.
+     * English: « By weight », « By the liter », « By the piece », « By the dozen », « In trays ». Other languages
+     * use English until they get their own phrases.
+     */
+    fun buyingLabel(unit: UnitCode): String {
+        val french = language == "fr"
+        val definition = units[unit] ?: return unit.value
+        return when {
+            definition.dimension == Dimension.MASS -> if (french) "Au poids" else "By weight"
+            unit == UnitCode.LITER -> if (french) "Au litre" else "By the liter"
+            unit == UnitCode.PIECE -> if (french) "À la pièce" else "By the piece"
+            unit == DOZEN -> if (french) "À la douzaine" else "By the dozen"
+            else -> {
+                val plural = definition.forms[LocalizedName.PLURAL_OTHER] ?: definition.symbol
+                (if (french) "En " else "In ") + plural
+            }
+        }
+    }
+
     companion object {
+        private val DOZEN = UnitCode("dozen")
+
         const val NO_BREAK_SPACE: Char = ' '
     }
 }

@@ -28,8 +28,8 @@ internal object QuestionFixtures {
         presets = listOf(bottles(2), bottles(4), bottles(6)),
         quantity = QuantityStepper(bottles(2), canDecrement = false, canIncrement = true),
         units = listOf(
-            UnitOptionUi(unit = "bottle", label = "Bouteille", selected = true),
-            UnitOptionUi(unit = "pack", label = "Pack", selected = false),
+            UnitOptionUi(unit = "bottle", label = "En bouteilles", selected = true),
+            UnitOptionUi(unit = "pack", label = "En packs", selected = false),
         ),
         isSameAsLastTime = true,
         reason = ReasonUi(kind = ReasonKind.DUE, daysSinceLast = 9, intervalDays = 8, usualQuantity = "2 bouteilles"),
