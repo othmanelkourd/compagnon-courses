@@ -27,6 +27,8 @@ struct SwipeableCard<Content: View>: View {
     @Binding var command: SwipeCommand?
     /// Whether the drag is recognized (off when the content scrolls, at accessibility text sizes).
     var dragEnabled = true
+    /// The stamp is white on the dark aisle card, Basilic or Tomate on a white card (as on Android).
+    var onDark = false
     let onSwipe: (SwipeDirection) -> Void
     @ViewBuilder let content: Content
 
@@ -94,23 +96,25 @@ struct SwipeableCard<Content: View>: View {
         }
     }
 
-    /// « OUI » / « NON », fading in with the drag.
+    /// « Oui » / « Non », fading in with the drag (same stamp as Android).
     @ViewBuilder
     private var stamp: some View {
         let progress = min(abs(offset) / threshold, 1)
         if offset != 0 && !leaving {
             let isYes = offset > 0
-            Text(isYes ? "OUI" : "NON")
-                .font(.largeTitle.weight(.heavy))
-                .foregroundStyle(isYes ? Color.green : Color.red)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 6)
+            let color = onDark ? Palette.surface : (isYes ? Palette.basil : Palette.tomatoText)
+            Text(isYes ? "Oui" : "Non")
+                .textStyle(.sheetTitle)
+                .foregroundStyle(color)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 4)
+                .background(onDark ? Palette.darkCard : Palette.surface, in: .rect(cornerRadius: 8))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 10).strokeBorder(isYes ? Color.green : Color.red, lineWidth: 4)
+                    RoundedRectangle(cornerRadius: 8).strokeBorder(color, lineWidth: 2)
                 }
                 .rotationEffect(.degrees(isYes ? -12 : 12))
                 .frame(maxWidth: .infinity, alignment: isYes ? .leading : .trailing)
-                .padding(24)
+                .padding(20)
                 .opacity(progress)
                 .accessibilityHidden(true)
         }

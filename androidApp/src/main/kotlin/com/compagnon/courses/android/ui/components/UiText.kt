@@ -16,6 +16,7 @@ internal sealed interface UiText {
     /** Text that is already localized (catalog content). */
     data class Raw(val text: String) : UiText
 
+    /** [args] fill the placeholders; an argument that is itself a [UiText] is resolved first. */
     data class Res(@param:StringRes val id: Int, val args: List<Any> = emptyList()) : UiText
 
     /** [count] selects the plural form; [args] fill the placeholders (usually the count itself). */
@@ -26,11 +27,6 @@ internal sealed interface UiText {
 @ReadOnlyComposable
 internal fun UiText.resolve(): String = when (this) {
     is UiText.Raw -> text
-    is UiText.Res -> stringResource(id, *args.toTypedArray())
+    is UiText.Res -> stringResource(id, *args.map { if (it is UiText) it.resolve() else it }.toTypedArray())
     is UiText.Plural -> pluralStringResource(id, count, *args.toTypedArray())
 }
-
-/** Resolves and joins [texts] with a space (sentences of one explanation). */
-@Composable
-@ReadOnlyComposable
-internal fun resolveAll(texts: List<UiText>): String = texts.map { it.resolve() }.joinToString(" ")

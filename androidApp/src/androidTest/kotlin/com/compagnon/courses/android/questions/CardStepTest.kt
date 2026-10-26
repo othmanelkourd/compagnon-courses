@@ -12,6 +12,7 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
@@ -20,6 +21,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.compagnon.courses.android.R
 import com.compagnon.courses.android.questions.QuestionFixtures.bottles
 import com.compagnon.courses.android.questions.QuestionFixtures.milkCard
+import com.compagnon.courses.android.testing.overline
 import com.compagnon.courses.android.testing.string
 import com.compagnon.courses.android.ui.theme.CompagnonTheme
 import com.compagnon.courses.feature.questionflow.NuancedAnswer
@@ -27,6 +29,7 @@ import com.compagnon.courses.feature.questionflow.QuestionEvent
 import com.compagnon.courses.feature.questionflow.QuestionProgress
 import com.compagnon.courses.feature.questionflow.QuestionUiState
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,7 +45,7 @@ class CardStepTest {
 
     private fun setCard(state: QuestionUiState.Card = QuestionUiState.Card(milkCard, QuestionProgress(7, 12), canUndo = true)) {
         composeRule.setContent {
-            CompagnonTheme(dynamicColor = false) {
+            CompagnonTheme {
                 QuestionnaireContent(state = state, onEvent = { events += it }, onClose = {}, onOpenList = {})
             }
         }
@@ -55,8 +58,10 @@ class CardStepTest {
         composeRule.onNodeWithText(composeRule.string(R.string.card_question, "du lait demi-écrémé")).assertIsDisplayed()
         composeRule.onNodeWithText(composeRule.string(R.string.question_progress, 8, 12)).assertIsDisplayed()
         composeRule.onNodeWithContentDescription(composeRule.string(R.string.question_progress_spoken, 8, 12)).assertExists()
-        composeRule.onNodeWithText("Crèmerie").assertIsDisplayed()
-        composeRule.onNodeWithText(composeRule.string(R.string.card_same_as_last_time)).assertIsDisplayed()
+        composeRule.onNodeWithText("Lait demi-écrémé").assertIsDisplayed()
+        composeRule.onNodeWithText(composeRule.overline("Crèmerie")).assertIsDisplayed()
+        // The selected quick quantity is the one of last time.
+        composeRule.onNodeWithText(composeRule.string(R.string.card_usual)).assertIsDisplayed()
     }
 
     @Test
@@ -152,14 +157,17 @@ class CardStepTest {
     }
 
     @Test
-    fun whyThisQuestionRevealsTheReason() {
+    fun theReasonIsShownAsAHint() {
         setCard()
-        val reason = composeRule.activity.resources.getQuantityString(R.plurals.reason_due_last, 9, 9)
-        composeRule.onNodeWithText(reason, substring = true).assertDoesNotExist()
+        val resources = composeRule.activity.resources
+        // « Tous les 8 jours environ · dernier il y a 9 jours »: one line, without a final period.
+        val reason = resources.getString(
+            R.string.reason_due_both,
+            resources.getQuantityString(R.plurals.reason_due_every, 8, 8),
+            resources.getQuantityString(R.plurals.reason_due_last_short, 9, 9),
+        )
 
-        composeRule.onNodeWithText(composeRule.string(R.string.card_why)).performClick()
-
-        composeRule.onNodeWithText(reason, substring = true).assertIsDisplayed()
+        composeRule.onNodeWithText(reason).assertIsDisplayed()
     }
 
     @Test
@@ -178,10 +186,15 @@ class CardStepTest {
     }
 
     @Test
-    fun undoIsAlwaysInTheTopBar() {
+    fun undoIsAtTheBottomLeft() {
         setCard()
 
-        composeRule.onNodeWithContentDescription(composeRule.string(R.string.question_undo)).performClick()
+        val undo = composeRule.onNodeWithContentDescription(composeRule.string(R.string.question_undo))
+        val bounds = undo.fetchSemanticsNode().boundsInRoot
+        val root = composeRule.onRoot().fetchSemanticsNode().boundsInRoot
+        assertTrue("undo on the left", bounds.right < root.center.x)
+        assertTrue("undo at the bottom", bounds.top > root.center.y)
+        undo.performClick()
 
         composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.Undo), events) }
     }
@@ -202,6 +215,16 @@ class CardStepTest {
         composeRule.onNodeWithText(composeRule.string(R.string.question_end_questions)).performClick()
 
         composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.EndQuestions), events) }
+    }
+
+    @Test
+    fun theMenuStartsOver() {
+        setCard()
+
+        composeRule.onNodeWithContentDescription(composeRule.string(R.string.action_more)).performClick()
+        composeRule.onNodeWithText(composeRule.string(R.string.question_start_over)).performClick()
+
+        composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.StartOver), events) }
     }
 
     @Test

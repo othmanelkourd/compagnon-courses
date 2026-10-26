@@ -1,53 +1,79 @@
 import Shared
 import SwiftUI
 
-/// The T1 screen « Probablement nécessaire » (pre-checked) and the products behind a gate (unchecked): check,
-/// adjust the quantities, then validate everything in one tap.
+/// The T1 screen « Probablement nécessaire » (pre-checked) and the products behind a gate (unchecked), mockup
+/// `Suggested`: check, adjust the quantities, then validate everything in one tap.
 struct ItemChecklistView: View {
     let title: Text
     let subtitle: Text
     let items: [SuggestedItemUi]
     let checkedCount: Int
+    let canUndo: Bool
     let send: (any QuestionEvent) -> Void
 
     var body: some View {
-        List {
-            // The title is a clear row rather than a section header, which would dim and shrink it.
-            VStack(alignment: .leading, spacing: 6) {
-                title
-                    .font(.largeTitle.bold())
-                    .accessibilityAddTraits(.isHeader)
-                subtitle
-                    .font(.body)
-                    .foregroundStyle(.secondary)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 8) {
+                    title
+                        .textStyle(.screenTitle)
+                        .foregroundStyle(Palette.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
+                    subtitle
+                        .textStyle(.bodyCompact)
+                        .foregroundStyle(Palette.inkSoft)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.horizontal, Spacing.screen)
+                .padding(.top, 24)
+                .padding(.bottom, 16)
+
+                ListBlock(data: items, id: \.productId) { item in
+                    SuggestionRow(item: item, send: send)
+                }
+                .padding(.horizontal, Spacing.block)
             }
-            .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets(top: 8, leading: 4, bottom: 0, trailing: 4))
-            Section {
-                ForEach(items, id: \.productId) { item in
-                    ChecklistRow(item: item, send: send)
+            .padding(.bottom, 16)
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(spacing: 12) {
+                Button {
+                    send(QuestionEventConfirmItems.shared)
+                } label: {
+                    if checkedCount == 0 {
+                        Text("Aucun article coché")
+                    } else {
+                        Text("Ajouter \(checkedCount) articles")
+                    }
+                }
+                .buttonStyle(.primary)
+                .disabled(checkedCount == 0)
+
+                QuestionFooter(canUndo: canUndo, onUndo: { send(QuestionEventUndo.shared) }) {
+                    Button("Rien de tout ça", action: confirmNothing)
+                        .buttonStyle(.text)
+                        .accessibilityHint("N'ajoute aucun de ces articles")
                 }
             }
+            .padding(.horizontal, Spacing.screen)
+            .padding(.top, 20)
+            .padding(.bottom, 4)
+            .background { BottomFade() }
         }
-        .listStyle(.insetGrouped)
-        .safeAreaInset(edge: .bottom) {
-            Button {
-                send(QuestionEventConfirmItems.shared)
-            } label: {
-                if checkedCount == 0 {
-                    Text("Rien de tout ça")
-                } else {
-                    Text("Ajouter \(checkedCount) articles")
-                }
-            }
-            .buttonStyle(.big(checkedCount == 0 ? .secondary : .primary))
-            .padding()
-            .background(.bar)
+    }
+
+    /// Unchecks every line, then validates: nothing is added.
+    private func confirmNothing() {
+        for item in items where item.checked {
+            send(QuestionEventToggleItem(productId: item.productId))
         }
+        send(QuestionEventConfirmItems.shared)
     }
 }
 
-private struct ChecklistRow: View {
+/// Ligne suggestion: round checkbox, name (Encre discrète when unchecked), reason, compact stepper.
+private struct SuggestionRow: View {
     let item: SuggestedItemUi
     let send: (any QuestionEvent) -> Void
 
@@ -57,43 +83,44 @@ private struct ChecklistRow: View {
         // At accessibility text sizes the stepper goes under the name.
         let layout = dynamicTypeSize.isAccessibilitySize
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
-            : AnyLayout(HStackLayout(spacing: 12))
+            : AnyLayout(HStackLayout(spacing: 6))
         layout {
             Button {
                 send(QuestionEventToggleItem(productId: item.productId))
             } label: {
-                HStack(spacing: 12) {
-                    Image(systemName: item.checked ? "checkmark.circle.fill" : "circle")
-                        .font(.title2)
-                        .foregroundStyle(item.checked ? Color.accentColor : Color.secondary)
-                        .contentTransition(.symbolEffect(.replace))
+                HStack(spacing: 6) {
+                    Checkbox(checked: item.checked, shape: .round)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(verbatim: item.name)
-                            .font(.body.weight(.medium))
-                            .foregroundStyle(.primary)
+                            .textStyle(.listRow)
+                            .foregroundStyle(item.checked ? Palette.ink : Palette.inkMuted)
                         if let reason = item.reason {
-                            ReasonText.text(for: reason)
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
+                            ReasonText.text(for: reason, compact: true)
+                                .textStyle(.caption)
+                                .foregroundStyle(Palette.inkSoft)
                         }
                     }
                     .multilineTextAlignment(.leading)
                     Spacer(minLength: 0)
                 }
-                .frame(minHeight: 44)
+                .frame(minHeight: Target.checkbox)
                 .contentShape(.rect)
             }
             .buttonStyle(.plain)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Text(verbatim: item.name))
             .accessibilityValue(item.checked ? Text("Coché, \(item.quantity.selected.label)") : Text("Non coché"))
-            .accessibilityHint(item.reason.map { ReasonText.text(for: $0) } ?? Text(verbatim: ""))
+            .accessibilityHint(item.reason.map { ReasonText.text(for: $0, compact: true) } ?? Text(verbatim: ""))
             .accessibilityAddTraits(item.checked ? [.isButton, .isSelected] : .isButton)
 
-            QuantityStepperView(stepper: item.quantity, compact: true) { increment in
+            CompactStepper(stepper: item.quantity, dimmed: !item.checked) { increment in
                 send(QuestionEventStepItem(productId: item.productId, increment: increment))
             }
-            .opacity(item.checked ? 1 : 0.45)
+            // Its natural width first (the quantity is capped): the name wraps before a quantity does.
+            .layoutPriority(1)
         }
+        .padding(.vertical, 8)
+        .padding(.leading, 4)
+        .padding(.trailing, 10)
     }
 }

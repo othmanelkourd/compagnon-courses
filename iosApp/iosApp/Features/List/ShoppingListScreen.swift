@@ -1,7 +1,8 @@
 import Shared
 import SwiftUI
 
-/// « Liste »: sections in store order, check, swipe to delete with « Annuler », add by search or free text.
+/// « Ma liste » (mockup `List`): sections in store order, check, swipe to delete with « Annuler », add by search
+/// or free text, share, and « Courses terminées ».
 struct ShoppingListScreen: View {
     let model: ShoppingListModel
     let onStartSession: () -> Void
@@ -19,52 +20,236 @@ struct ShoppingListContent: View {
 
     @State private var query = ""
     @State private var confirmsCompletion = false
+    @FocusState private var fieldFocused: Bool
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        content
-            .navigationTitle("Ma liste")
-            .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: Text("Ajouter un produit"))
-            .autocorrectionDisabled()
-            .onSubmit(of: .search, addFromQuery)
-            .onChange(of: query) { _, newValue in
-                send(ShoppingListEventSearch(query: newValue))
+        VStack(spacing: 0) {
+            topBar
+                .padding(.horizontal, Spacing.screen)
+                .padding(.top, Spacing.top)
+            content
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .background(Palette.canvas)
+        .toolbar(.hidden, for: .navigationBar)
+        .onChange(of: query) { _, newValue in
+            send(ShoppingListEventSearch(query: newValue))
+        }
+        .alert("Courses terminées\u{00A0}?", isPresented: $confirmsCompletion) {
+            Button(role: .cancel) {} label: { Text(LocalizedStringResource("dialog.cancel", defaultValue: "Annuler", comment: "Dismisses a confirmation; « Annuler » elsewhere undoes.")) }
+            Button("Terminer") {
+                send(ShoppingListEventCompleteList.shared)
             }
-            .toolbar {
-                if let loaded = state as? ShoppingListUiStateLoaded, !loaded.isEmpty {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Courses terminées", systemImage: "checkmark.seal") {
-                            confirmsCompletion = true
-                        }
-                    }
+        } message: {
+            Text("Les articles cochés sont enregistrés comme achetés. Les autres restent sur votre prochaine liste.")
+        }
+    }
+
+    /// [‹] back to « Accueil » and [partager].
+    private var topBar: some View {
+        HStack {
+            IconButton(icon: .chevronLeft, label: Text("Retour à l'accueil")) { dismiss() }
+            Spacer()
+            // Only what is left to buy is shared: nothing to share once everything is checked (as on Android).
+            if let loaded = state as? ShoppingListUiStateLoaded, loaded.remainingCount > 0 {
+                ShareLink(item: ShoppingListShareText.text(for: loaded)) {
+                    IconView(.share, size: 20)
                 }
+                .buttonStyle(IconButtonStyle())
+                .accessibilityLabel("Partager la liste")
             }
-            .confirmationDialog("Courses terminées\u{00A0}?", isPresented: $confirmsCompletion, titleVisibility: .visible) {
-                Button("Terminer les courses") {
-                    send(ShoppingListEventCompleteList.shared)
-                }
-            } message: {
-                Text("Les articles cochés sont comptés comme achetés. Les autres restent sur la liste suivante.")
-            }
+        }
     }
 
     @ViewBuilder
     private var content: some View {
         switch onEnum(of: state) {
         case .loading:
-            ProgressView("Chargement de la liste…")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            VStack(spacing: 16) {
+                ProgressView()
+                    .controlSize(.large)
+                    .tint(Palette.basil)
+                Text("Chargement de la liste…")
+                    .textStyle(.body)
+                    .foregroundStyle(Palette.inkSoft)
+            }
         case .error:
-            ContentUnavailableView {
-                Label("Liste indisponible", systemImage: "exclamationmark.triangle")
-            } description: {
-                Text("La liste n'a pas pu être lue sur l'appareil.")
-            } actions: {
+            ListMessageView(
+                icon: .info,
+                title: Text("Liste indisponible"),
+                message: Text("La liste n'a pas pu être lue sur l'appareil.")
+            ) {
                 Button("Réessayer") { send(ShoppingListEventRetry.shared) }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.primary)
             }
         case .loaded(let loaded):
-            LoadedListView(loaded: loaded, query: query, send: send, onAddFreeText: addFreeText, onAddProduct: addProduct, onStartSession: onStartSession)
+            loadedList(loaded)
         }
+    }
+
+    private func loadedList(_ loaded: ShoppingListUiStateLoaded) -> some View {
+        let showsResults = !trimmedQuery.isEmpty
+        return List {
+            header(loaded)
+                .plainListRow(top: 16)
+            if loaded.error != nil {
+                Text("La modification n'a pas pu être enregistrée")
+                    .textStyle(.help)
+                    .foregroundStyle(Palette.tomatoText)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Palette.tomatoLight, in: .rect(cornerRadius: Radius.hint))
+                    .plainListRow(top: 14, horizontal: Spacing.block)
+            }
+            if showsResults {
+                searchResults(loaded)
+            } else if loaded.isEmpty {
+                ListMessageView(
+                    icon: .basket,
+                    title: Text("Votre liste est vide"),
+                    message: Text("Répondez à quelques questions, ou ajoutez un article ci-dessus.")
+                ) {
+                    Button("Faire le point", action: onStartSession)
+                        .buttonStyle(.primary)
+                }
+                .padding(.top, 48)
+                .plainListRow()
+            } else {
+                ForEach(loaded.sections, id: \.categoryId) { section in
+                    Overline(text: section.title.map { Text(verbatim: $0) } ?? Text("Autres"))
+                        .padding(.horizontal, 6)
+                        .padding(.bottom, 6)
+                        .plainListRow(top: Spacing.betweenBlocks, horizontal: Spacing.block)
+                    ForEach(Array(section.items.enumerated()), id: \.element.id) { index, item in
+                        ListItemRow(item: item, send: send)
+                            .blockListRow(index: index, count: section.items.count)
+                    }
+                }
+            }
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .environment(\.defaultMinListRowHeight, 0)
+        .scrollDismissesKeyboard(.interactively)
+        .animation(.snappy, value: loaded.sections)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            bottomBar(loaded)
+        }
+    }
+
+    /// « Ma liste », « n sur N restants », the progress bar and the add field.
+    private func header(_ loaded: ShoppingListUiStateLoaded) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .lastTextBaseline) {
+                    title
+                    Spacer(minLength: 8)
+                    remaining(loaded)
+                }
+                VStack(alignment: .leading, spacing: 4) {
+                    title
+                    remaining(loaded)
+                }
+            }
+            if loaded.itemCount > 0 {
+                ProgressBar(fraction: Double(loaded.itemCount - loaded.remainingCount) / Double(loaded.itemCount))
+                    .padding(.top, 10)
+                    .accessibilityHidden(true)
+            }
+            InputField(
+                icon: .plus,
+                iconColor: Palette.basil,
+                placeholder: Text("Ajouter un article"),
+                text: $query,
+                submitLabel: .done,
+                focus: $fieldFocused,
+                onSubmit: addFromQuery
+            )
+            .padding(.top, 16)
+        }
+        .padding(.horizontal, Spacing.screen)
+    }
+
+    private var title: some View {
+        Text("Ma liste")
+            .textStyle(.screenTitleLarge)
+            .foregroundStyle(Palette.ink)
+            .accessibilityAddTraits(.isHeader)
+    }
+
+    @ViewBuilder
+    private func remaining(_ loaded: ShoppingListUiStateLoaded) -> some View {
+        Group {
+            if loaded.isEmpty {
+                EmptyView()
+            } else if loaded.remainingCount == 0 {
+                Text("Tout est coché")
+            } else {
+                Text("\(Int(loaded.remainingCount)) sur \(Int(loaded.itemCount)) restants")
+            }
+        }
+        .textStyle(.secondaryStrong)
+        .foregroundStyle(Palette.inkSoft)
+    }
+
+    @ViewBuilder
+    private func searchResults(_ loaded: ShoppingListUiStateLoaded) -> some View {
+        let rows = loaded.searchResults.map { SearchRow.product($0) } + [SearchRow.freeText(trimmedQuery)]
+        Color.clear
+            .frame(height: 16)
+            .plainListRow()
+        ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
+            Group {
+                switch row {
+                case .product(let result):
+                    Button {
+                        addProduct(result.productId)
+                    } label: {
+                        AddRowLabel(title: Text(verbatim: result.name), detail: Text(verbatim: result.quantityLabel))
+                    }
+                    .accessibilityLabel(Text("Ajouter \(result.name)"))
+                    .accessibilityValue(Text(verbatim: result.quantityLabel))
+                case .freeText(let text):
+                    Button(action: addFreeText) {
+                        AddRowLabel(title: Text("Ajouter «\u{00A0}\(text)\u{00A0}»"), detail: nil)
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+            .blockListRow(index: index, count: rows.count)
+        }
+    }
+
+    /// The snackbar (after a delete only) over « Courses terminées ».
+    private func bottomBar(_ loaded: ShoppingListUiStateLoaded) -> some View {
+        VStack(spacing: 12) {
+            if let undo = loaded.undo, undo.kind == .deleted {
+                DeletedSnackbar(
+                    undo: undo,
+                    onUndo: { send(ShoppingListEventUndo.shared) },
+                    onDismiss: { send(ShoppingListEventDismissUndo.shared) }
+                )
+                .padding(.horizontal, Spacing.block - Spacing.screen)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+            if !loaded.isEmpty {
+                Button("Courses terminées") {
+                    confirmsCompletion = true
+                }
+                .buttonStyle(.secondary(basil: true))
+            }
+        }
+        .padding(.horizontal, Spacing.screen)
+        .padding(.top, 16)
+        .padding(.bottom, 4)
+        .background { BottomFade() }
+        .animation(.snappy, value: loaded.undo)
+    }
+
+    private var trimmedQuery: String {
+        query.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func addProduct(_ productId: String) {
@@ -73,13 +258,13 @@ struct ShoppingListContent: View {
     }
 
     private func addFreeText() {
-        let text = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let text = trimmedQuery
         guard !text.isEmpty else { return }
         send(ShoppingListEventAddFreeText(text: text))
         query = ""
     }
 
-    /// Return in the search field: the first product found, otherwise the text itself.
+    /// Return in the field: the first product found, otherwise the text itself.
     private func addFromQuery() {
         if let first = (state as? ShoppingListUiStateLoaded)?.searchResults.first {
             addProduct(first.productId)
@@ -89,137 +274,45 @@ struct ShoppingListContent: View {
     }
 }
 
-private struct LoadedListView: View {
-    let loaded: ShoppingListUiStateLoaded
-    let query: String
-    let send: (any ShoppingListEvent) -> Void
-    let onAddFreeText: () -> Void
-    let onAddProduct: (String) -> Void
-    let onStartSession: () -> Void
+private enum SearchRow {
+    case product(ProductSuggestionUi)
+    case freeText(String)
 
-    @Environment(\.isSearching) private var isSearching
-
-    private var trimmedQuery: String {
-        query.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
-    var body: some View {
-        Group {
-            if !trimmedQuery.isEmpty {
-                searchResults
-            } else if loaded.isEmpty {
-                ContentUnavailableView {
-                    Label("Votre liste est vide", systemImage: "cart")
-                } description: {
-                    Text("Répondez à quelques questions, ou ajoutez un produit avec la recherche.")
-                } actions: {
-                    Button("Faire le point", action: onStartSession)
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
-                }
-            } else {
-                sections
-            }
+    var id: String {
+        switch self {
+        case .product(let result): "product-\(result.productId)"
+        case .freeText: "free-text"
         }
-        .overlay(alignment: .bottom) {
-            if let undo = loaded.undo {
-                UndoBanner(undo: undo, onUndo: { send(ShoppingListEventUndo.shared) }, onDismiss: { send(ShoppingListEventDismissUndo.shared) })
-                    .padding()
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-        }
-        .animation(.snappy, value: loaded.undo)
-    }
-
-    private var sections: some View {
-        List {
-            if loaded.error != nil {
-                Label("La dernière action n'a pas pu être enregistrée.", systemImage: "exclamationmark.triangle.fill")
-                    .foregroundStyle(.orange)
-            }
-            Section {
-                EmptyView()
-            } header: {
-                remainingHeader
-            }
-            ForEach(loaded.sections, id: \.categoryId) { section in
-                Section {
-                    ForEach(section.items, id: \.id) { item in
-                        ListItemRow(item: item, send: send)
-                    }
-                } header: {
-                    if let title = section.title {
-                        Text(verbatim: title)
-                    } else {
-                        Text("Autres")
-                    }
-                }
-            }
-            // Room for the undo banner over the last rows.
-            Color.clear.frame(height: 72).listRowBackground(Color.clear)
-        }
-        .listStyle(.insetGrouped)
-        .animation(.snappy, value: loaded.sections)
-    }
-
-    private var remainingHeader: some View {
-        Group {
-            if loaded.remainingCount == 0 {
-                Text("Tout est coché. Bonnes courses\u{00A0}!")
-            } else {
-                Text("\(Int(loaded.remainingCount)) articles à acheter sur \(Int(loaded.itemCount))")
-            }
-        }
-        .font(.subheadline)
-        .textCase(nil)
-    }
-
-    private var searchResults: some View {
-        List {
-            if !loaded.searchResults.isEmpty {
-                Section("Produits") {
-                    ForEach(loaded.searchResults, id: \.productId) { result in
-                        Button {
-                            onAddProduct(result.productId)
-                        } label: {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                    .font(.title3)
-                                    .foregroundStyle(.tint)
-                                    .accessibilityHidden(true)
-                                Text(verbatim: result.name)
-                                    .foregroundStyle(.primary)
-                                Spacer(minLength: 8)
-                                Text(verbatim: result.quantityLabel)
-                                    .foregroundStyle(.secondary)
-                            }
-                            .frame(minHeight: 44)
-                            .contentShape(.rect)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(Text("Ajouter \(result.name), \(result.quantityLabel)"))
-                    }
-                }
-            }
-            Section("Autre chose\u{00A0}?") {
-                Button(action: onAddFreeText) {
-                    Label {
-                        Text("Ajouter «\u{00A0}\(trimmedQuery)\u{00A0}»")
-                            .foregroundStyle(.primary)
-                    } icon: {
-                        Image(systemName: "text.badge.plus")
-                            .foregroundStyle(.tint)
-                    }
-                    .frame(minHeight: 44)
-                    .contentShape(.rect)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .listStyle(.insetGrouped)
     }
 }
 
+/// A search result or the free text: « + » in Basilic, name, quantity.
+private struct AddRowLabel: View {
+    let title: Text
+    let detail: Text?
+
+    var body: some View {
+        HStack(spacing: 12) {
+            IconView(.plus, size: 20, weight: .bold)
+                .foregroundStyle(Palette.basil)
+            title
+                .textStyle(.listRow)
+                .foregroundStyle(Palette.ink)
+                .multilineTextAlignment(.leading)
+            Spacer(minLength: 8)
+            if let detail {
+                detail
+                    .textStyle(.secondary)
+                    .foregroundStyle(Palette.inkSoft)
+            }
+        }
+        .padding(.horizontal, 16)
+        .frame(minHeight: 56)
+        .contentShape(.rect)
+    }
+}
+
+/// Ligne produit: square checkbox, name (struck through in Encre discrète when checked), quantity.
 private struct ListItemRow: View {
     let item: ListItemUi
     let send: (any ShoppingListEvent) -> Void
@@ -228,36 +321,37 @@ private struct ListItemRow: View {
         Button {
             send(ShoppingListEventToggleChecked(itemId: item.id))
         } label: {
-            HStack(spacing: 12) {
-                Image(systemName: item.checked ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
-                    .foregroundStyle(item.checked ? Color.accentColor : Color.secondary)
-                    .contentTransition(.symbolEffect(.replace))
+            HStack(spacing: 10) {
+                Checkbox(checked: item.checked, shape: .square)
                 Text(verbatim: item.name)
-                    .strikethrough(item.checked)
-                    .foregroundStyle(item.checked ? .secondary : .primary)
+                    .textStyle(.listRow)
+                    .strikethrough(item.checked, color: Palette.inkMuted)
+                    .foregroundStyle(item.checked ? Palette.inkMuted : Palette.ink)
                     .multilineTextAlignment(.leading)
                 Spacer(minLength: 8)
                 if let quantity = item.quantityLabel {
                     Text(verbatim: quantity)
-                        .foregroundStyle(.secondary)
+                        .textStyle(.secondary)
+                        .foregroundStyle(Palette.inkSoft)
                         .monospacedDigit()
                 }
             }
-            .frame(minHeight: 44)
+            .padding(.vertical, 4)
+            .padding(.leading, 4)
+            .padding(.trailing, 16)
             .contentShape(.rect)
         }
         .buttonStyle(.plain)
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-            Button("Supprimer", systemImage: "trash", role: .destructive) {
+            Button("Supprimer", role: .destructive) {
                 send(ShoppingListEventDelete(itemId: item.id))
             }
         }
+        // Either way deletes, as on Android (« Annuler » in the snackbar brings the line back).
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
-            Button(item.checked ? "Décocher" : "Cocher", systemImage: item.checked ? "circle" : "checkmark.circle") {
-                send(ShoppingListEventToggleChecked(itemId: item.id))
+            Button("Supprimer", role: .destructive) {
+                send(ShoppingListEventDelete(itemId: item.id))
             }
-            .tint(.accentColor)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityLabel)
@@ -276,9 +370,9 @@ private struct ListItemRow: View {
     }
 }
 
-/// The snackbar of the last check or delete, with « Annuler ». It goes away after a few seconds, except with
-/// VoiceOver on (the user decides when).
-struct UndoBanner: View {
+/// The snackbar after a delete, with « Annuler ». It goes away after a few seconds, except with VoiceOver on (the
+/// user decides when). Checking or unchecking shows none (charter § 4).
+private struct DeletedSnackbar: View {
     let undo: UndoUi
     let onUndo: () -> Void
     let onDismiss: () -> Void
@@ -286,38 +380,131 @@ struct UndoBanner: View {
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
 
     var body: some View {
-        HStack(spacing: 12) {
-            message
-                .font(.subheadline.weight(.medium))
-                .lineLimit(2)
-            Spacer(minLength: 8)
-            Button("Annuler", action: onUndo)
-                .font(.subheadline.weight(.bold))
-                .frame(minHeight: 44)
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 6)
-        .background(.regularMaterial, in: .rect(cornerRadius: 14))
-        .shadow(color: .black.opacity(0.15), radius: 10, y: 4)
-        .accessibilityElement(children: .combine)
-        .task(id: undo) {
-            // A check already reads its new value; a delete makes the row vanish, so it is announced.
-            if undo.kind == .deleted {
+        Snackbar(message: Text("«\u{00A0}\(undo.itemName)\u{00A0}» supprimé"), actionTitle: Text("Annuler"), action: onUndo)
+            .accessibilityElement(children: .combine)
+            .task(id: undo) {
+                // The row vanishes, so the delete is announced.
                 AccessibilityNotification.Announcement(String(localized: "«\u{00A0}\(undo.itemName)\u{00A0}» supprimé")).post()
+                guard !voiceOverEnabled else { return }
+                try? await Task.sleep(for: .seconds(8))
+                guard !Task.isCancelled else { return }
+                onDismiss()
             }
-            guard !voiceOverEnabled else { return }
-            try? await Task.sleep(for: .seconds(8))
-            guard !Task.isCancelled else { return }
-            onDismiss()
+    }
+}
+
+/// An empty or failed list: icon, Bricolage title, message and an action.
+private struct ListMessageView<Action: View>: View {
+    let icon: Icon
+    let title: Text
+    let message: Text
+    @ViewBuilder let action: Action
+
+    var body: some View {
+        VStack(spacing: 0) {
+            IconView(icon, size: 36, weight: .medium)
+                .foregroundStyle(icon == .info ? Palette.tomatoText : Palette.basil)
+                .frame(width: 80, height: 80)
+                .background(icon == .info ? Palette.tomatoLight : Palette.basilLight, in: .circle)
+            title
+                .textStyle(.screenTitle)
+                .foregroundStyle(Palette.ink)
+                .multilineTextAlignment(.center)
+                .accessibilityAddTraits(.isHeader)
+                .padding(.top, 20)
+            message
+                .textStyle(.body)
+                .foregroundStyle(Palette.inkSoft)
+                .multilineTextAlignment(.center)
+                .padding(.top, 8)
+            action
+                .padding(.top, 24)
+        }
+        .padding(.horizontal, Spacing.screen)
+    }
+}
+
+/// The plain text shared by [partager]: the items left to buy, by section.
+enum ShoppingListShareText {
+    static func text(for loaded: ShoppingListUiStateLoaded) -> String {
+        var lines = [String(localized: "Ma liste")]
+        for section in loaded.sections {
+            let items = section.items.filter { !$0.checked }
+            guard !items.isEmpty else { continue }
+            lines.append("")
+            lines.append(section.title ?? String(localized: "Autres"))
+            for item in items {
+                if let quantity = item.quantityLabel {
+                    lines.append("• \(item.name) (\(quantity))")
+                } else {
+                    lines.append("• \(item.name)")
+                }
+            }
+        }
+        return lines.joined(separator: "\n")
+    }
+}
+
+// MARK: - List rows drawn as the charter's blocks
+
+private enum BlockPosition {
+    case single, first, middle, last
+
+    init(index: Int, count: Int) {
+        switch (index, count) {
+        case (_, 1): self = .single
+        case (0, _): self = .first
+        case (count - 1, _): self = .last
+        default: self = .middle
         }
     }
 
-    private var message: Text {
-        switch undo.kind {
-        case .deleted: Text("«\u{00A0}\(undo.itemName)\u{00A0}» supprimé")
-        case .checked: Text("«\u{00A0}\(undo.itemName)\u{00A0}» coché")
-        case .unchecked: Text("«\u{00A0}\(undo.itemName)\u{00A0}» décoché")
-        }
+    var roundsTop: Bool { self == .single || self == .first }
+    var roundsBottom: Bool { self == .single || self == .last }
+}
+
+/// One row's share of a list block: Surface, Trait border, radius 20 on the block's outer corners, and a Trait léger
+/// separator under every row but the last. The border of the hidden edges is pushed outside and clipped.
+private struct BlockRowBackground: View {
+    let position: BlockPosition
+
+    var body: some View {
+        let radius = Radius.block
+        let shape = UnevenRoundedRectangle(
+            topLeadingRadius: position.roundsTop ? radius : 0,
+            bottomLeadingRadius: position.roundsBottom ? radius : 0,
+            bottomTrailingRadius: position.roundsBottom ? radius : 0,
+            topTrailingRadius: position.roundsTop ? radius : 0
+        )
+        shape
+            .fill(Palette.surface)
+            .overlay { shape.strokeBorder(Palette.line, lineWidth: 1) }
+            .padding(.top, position.roundsTop ? 0 : -2)
+            .padding(.bottom, position.roundsBottom ? 0 : -2)
+            .overlay(alignment: .bottom) {
+                if !position.roundsBottom {
+                    Rectangle().fill(Palette.lineLight).frame(height: 1).padding(.horizontal, 1)
+                }
+            }
+            .clipped()
+    }
+}
+
+private extension View {
+    /// A row without background or separator, `horizontal` points from the screen edges.
+    func plainListRow(top: CGFloat = 0, horizontal: CGFloat = 0) -> some View {
+        listRowInsets(EdgeInsets(top: top, leading: horizontal, bottom: 0, trailing: horizontal))
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
     }
 
+    /// A row of a list block, 16 points from the screen edges.
+    func blockListRow(index: Int, count: Int) -> some View {
+        listRowInsets(EdgeInsets(top: 0, leading: Spacing.block, bottom: 0, trailing: Spacing.block))
+            .listRowSeparator(.hidden)
+            .listRowBackground(
+                BlockRowBackground(position: BlockPosition(index: index, count: count))
+                    .padding(.horizontal, Spacing.block)
+            )
+    }
 }

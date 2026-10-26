@@ -38,8 +38,10 @@ xcrun simctl launch booted com.compagnon.courses -API_BASE_URL http://localhost:
 ```
 
 **Debug demo screens**: `-DemoScreen <name>` shows one screen with a fake state, without Koin, a server or a session
-(`meta`, `suggested`, `card`, `gate`, `gateItems`, `review`, `done`, `list`, `listEmpty`; see `Debug/DemoScreens.swift`,
-which also holds the SwiftUI previews). Handy for screenshots in dark mode, English or large text sizes.
+(`home`, `meta`, `suggested`, `card`, `options`, `gate`, `gateItems`, `review`, `done`, `list`, `listEmpty`; see
+`Debug/DemoScreens.swift`, which also holds the SwiftUI previews and follows the data of the mockups). Handy for
+screenshots in English (`-AppleLanguages "(en)"`) or at large text sizes
+(`xcrun simctl ui booted content_size extra-extra-large`).
 
 `NSAppTransportSecurity › NSAllowsLocalNetworking` allows plain HTTP to local hosts only (localhost, `.local` names,
 IP literals). Signing is automatic without a team, which is enough for the simulator; set your own
@@ -51,18 +53,27 @@ The `iosApp/` source folder is a synchronized folder (Xcode 16+ project format):
 without editing `project.pbxproj`. `Info.plist` is excluded from the target membership because it is the
 `INFOPLIST_FILE`, merged with the generated keys.
 
-- `App/`: `@main` entry point (`doInitKoin` in `init`, with the device language), `AppConfiguration`, and `RootView`
-  (`NavigationStack` with the three screens; the catalog and list models live as long as the app).
-- `Features/Home/`: « Accueil » (start a session, « Ma liste » with its count, catalog card).
-- `Features/Catalog/`: `CatalogStatusModel` (server status and local sync) and `CatalogStatusCard`.
+- `App/`: `@main` entry point (`doInitKoin` in `init`, with the device language; checks the embedded fonts in Debug),
+  `AppConfiguration`, `RootView` (`NavigationStack` with the three screens; the catalog and list models live as long
+  as the app), and `SwipeBackGesture` (the screens hide the navigation bar, so the edge swipe back is re-enabled).
+- `DesignSystem/`: the common charter (`design/CHARTE.md`, mockups in `design/maquette/`), shared with Android:
+  `Palette` (colors, light only), `Typography` (type scale with `Font.custom(_:size:relativeTo:)`, so it follows
+  Dynamic Type), `Metrics` (spacing, radii, shadows), `Icons` (the SF Symbols of the charter and three mockup
+  strokes), `Buttons` (primary, secondary, text, icon) and `Components` (top bar with « n / 12 », choice tiles,
+  chips, checkboxes, the three steppers, hint, field, list blocks, snackbar).
+- `Features/Home/`: « Accueil » (« Faire le point », « Ma liste » with its counts, catalog line at the bottom).
+- `Features/Catalog/`: `CatalogStatusModel` (server status and local sync) and `CatalogStatusFooter`.
 - `Features/Questionnaire/`: `QuestionSessionModel` (one per screen) and the stateless `QuestionContent`, which
   renders each `QuestionUiState` (meta questions, T1 list, product cards, gates, gate products, review, done, error).
   `SwipeableCard`: right = « Oui », left = « Non », duplicated by buttons and VoiceOver actions.
-- `Features/List/`: `ShoppingListModel` and the « Liste » screen (sections, check, swipe to delete, undo banner,
-  search and « Autre chose ? » free text).
+- `Features/List/`: `ShoppingListModel` and the « Ma liste » screen (sections as blocks, check, swipe to delete with
+  a snackbar, add by search or free text, share, « Courses terminées »).
 - `Debug/`: fake states for previews and demo screens (Debug only).
-- `Resources/`: asset catalog (green accent with a dark variant) and `Localizable.xcstrings` (French source, English
-  translation, plural variations).
+- `Resources/`: asset catalog (Basilic accent), `Localizable.xcstrings` (French source, English translation, plural
+  variations) and `Fonts/` (Figtree and Bricolage Grotesque, static TTFs registered with `UIAppFonts` in Info.plist,
+  with their OFL licenses).
+
+The app stays in light mode (`.preferredColorScheme(.light)` at the root) until the charter has a dark palette.
 
 Each model wraps one shared ViewModel: it is resolved from Koin on the first `observe()` (from `.task`), owned by a
 `ViewModelOwner` and cleared in `isolated deinit`. States are switched with SKIE's `onEnum(of:)`.

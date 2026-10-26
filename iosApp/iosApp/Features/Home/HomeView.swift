@@ -1,7 +1,8 @@
 import Shared
 import SwiftUI
 
-/// « Accueil »: start a question session, open the list, and the catalog status.
+/// « Accueil » (mockup `Main`): start a question session, open the list, and the catalog status at the bottom.
+/// Only data that exists is shown: no first name, no planned shopping day, no statistics tiles.
 struct HomeView: View {
     let catalog: CatalogStatusModel
     let list: ShoppingListModel
@@ -9,64 +10,131 @@ struct HomeView: View {
     let onOpenList: () -> Void
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                StartSessionCard(action: onStartSession)
-                MyListCard(state: list.state, action: onOpenList)
-                CatalogStatusCard(state: catalog.state, sync: catalog.sync)
-            }
-            .padding()
-        }
-        .background(Color(uiColor: .systemGroupedBackground))
-        .navigationTitle("Compagnon de courses")
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button("Synchroniser le catalogue", systemImage: "arrow.clockwise") {
-                    catalog.refresh()
-                }
-                .disabled(catalog.isBusy)
-            }
-        }
+        HomeContent(
+            listState: list.state,
+            catalogSync: catalog.sync,
+            catalogBusy: catalog.isBusy,
+            onStartSession: onStartSession,
+            onOpenList: onOpenList,
+            onRefreshCatalog: catalog.refresh
+        )
         .refreshable {
             await catalog.refreshAndWait()
         }
     }
 }
 
-/// The main action: a big, tinted card.
+/// Stateless rendering of the home screen (previews and Debug demo screens use fake states).
+struct HomeContent: View {
+    let listState: any ShoppingListUiState
+    let catalogSync: CatalogSyncUiState
+    var catalogBusy = false
+    let onStartSession: () -> Void
+    let onOpenList: () -> Void
+    var onRefreshCatalog: () -> Void = {}
+
+    var body: some View {
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    header
+                    StartSessionCard(action: onStartSession)
+                    MyListCard(state: listState, action: onOpenList)
+                    Spacer(minLength: 12)
+                    CatalogStatusFooter(sync: catalogSync, busy: catalogBusy, onRefresh: onRefreshCatalog)
+                }
+                .padding(.horizontal, Spacing.screen)
+                .padding(.top, Spacing.top + 8)
+                .padding(.bottom, 12)
+                .frame(minHeight: proxy.size.height, alignment: .top)
+            }
+        }
+        .background(Palette.canvas)
+        .toolbar(.hidden, for: .navigationBar)
+    }
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(verbatim: Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)).capitalizedFirstLetter)
+                .font(.custom(FontName.figtreeMedium, size: 15, relativeTo: .subheadline))
+                .foregroundStyle(Palette.inkSoft)
+            Text("Prêt pour les courses\u{00A0}?")
+                .textStyle(.screenTitleLarge)
+                .foregroundStyle(Palette.ink)
+                .accessibilityAddTraits(.isHeader)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+extension String {
+    /// « dimanche 25 octobre » → « Dimanche 25 octobre ».
+    var capitalizedFirstLetter: String {
+        prefix(1).uppercased(with: .current) + dropFirst()
+    }
+}
+
+/// The main action: a large Basilic card « Faire le point ».
 private struct StartSessionCard: View {
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 16) {
-                Image(systemName: "checklist")
-                    .font(.largeTitle)
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Faire le point")
-                        .font(.title2.bold())
+            VStack(alignment: .leading, spacing: 18) {
+                // The arrow sits on the title row, as on Android.
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(alignment: .center, spacing: 12) {
+                        Text("Faire le point")
+                            .textStyle(.screenTitle)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        IconView(.arrowRight, size: 26)
+                    }
                     Text("Quelques questions, et votre liste est prête.")
-                        .font(.subheadline)
-                        .opacity(0.9)
+                        .textStyle(.body)
+                        .opacity(0.88)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                .multilineTextAlignment(.leading)
-                Spacer(minLength: 0)
-                Image(systemName: "chevron.right")
-                    .font(.headline)
-                    .accessibilityHidden(true)
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: 16) { facts }
+                    VStack(alignment: .leading, spacing: 6) { facts }
+                }
+                .textStyle(.secondaryStrong)
             }
-            .foregroundStyle(.white)
-            .padding(20)
-            .frame(maxWidth: .infinity, minHeight: 96)
-            .background(Color.accentColor.gradient, in: .rect(cornerRadius: 20))
-            .contentShape(.rect(cornerRadius: 20))
+            .multilineTextAlignment(.leading)
+            .foregroundStyle(Palette.surface)
+            .padding(24)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .cardBackground(Palette.basil, radius: Radius.card, elevation: .accentCard)
+            .contentShape(.rect(cornerRadius: Radius.card))
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressScaleStyle())
+        .accessibilityElement(children: .combine)
         .accessibilityHint("Démarre une série de questions pour préparer la liste")
+    }
+
+    @ViewBuilder
+    private var facts: some View {
+        HStack(spacing: 6) {
+            IconView(.clock, size: 18)
+            Text("≈ 2 min")
+        }
+        HStack(spacing: 6) {
+            IconView(.list, size: 18)
+            Text("12 questions")
+        }
     }
 }
 
+/// A slight press feedback for the large cards.
+private struct PressScaleStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.98 : 1)
+            .animation(.snappy(duration: 0.15), value: configuration.isPressed)
+    }
+}
+
+/// « Ma liste »: item count, checked count and a progress bar.
 private struct MyListCard: View {
     let state: any ShoppingListUiState
     let action: () -> Void
@@ -74,41 +142,50 @@ private struct MyListCard: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 16) {
-                Image(systemName: "cart")
-                    .font(.title2)
-                    .foregroundStyle(.tint)
-                    .frame(width: 36)
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 2) {
+                IconView(.basket, size: 26, weight: .medium)
+                    .foregroundStyle(Palette.basil)
+                    .frame(width: 52, height: 52)
+                    .background(Palette.basilLight, in: .rect(cornerRadius: 16))
+                VStack(alignment: .leading, spacing: 6) {
                     Text("Ma liste")
-                        .font(.headline)
+                        .textStyle(.cardTitle)
+                        .foregroundStyle(Palette.ink)
                     summary
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .textStyle(.secondary)
+                        .foregroundStyle(Palette.inkSoft)
+                    if let loaded, loaded.itemCount > 0 {
+                        ProgressBar(fraction: Double(loaded.itemCount - loaded.remainingCount) / Double(loaded.itemCount))
+                            .accessibilityHidden(true)
+                    }
                 }
-                Spacer(minLength: 0)
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(.tertiary)
-                    .accessibilityHidden(true)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                IconView(.chevronRight, size: 20)
+                    .foregroundStyle(Palette.inkMuted)
             }
-            .padding()
-            .frame(maxWidth: .infinity, minHeight: 72)
-            .background(Color(uiColor: .secondarySystemGroupedBackground), in: .rect(cornerRadius: 16))
-            .contentShape(.rect(cornerRadius: 16))
+            .padding(20)
+            .background(Palette.surface, in: .rect(cornerRadius: Radius.homeListCard))
+            .overlay { RoundedRectangle(cornerRadius: Radius.homeListCard).strokeBorder(Palette.line, lineWidth: 1) }
+            .contentShape(.rect(cornerRadius: Radius.homeListCard))
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressScaleStyle())
         .accessibilityElement(children: .combine)
+    }
+
+    private var loaded: ShoppingListUiStateLoaded? {
+        state as? ShoppingListUiStateLoaded
     }
 
     @ViewBuilder
     private var summary: some View {
-        if let loaded = state as? ShoppingListUiStateLoaded {
+        if let loaded {
             if loaded.itemCount == 0 {
-                Text("Vide pour l'instant")
-            } else if loaded.remainingCount == 0 {
-                Text("\(Int(loaded.itemCount)) articles, tous cochés")
+                Text("Votre liste est vide")
             } else {
-                Text("\(Int(loaded.remainingCount)) articles à acheter")
+                let checked = Int(loaded.itemCount - loaded.remainingCount)
+                let items = String(localized: "\(Int(loaded.itemCount)) articles")
+                let checkedText = String(localized: "\(checked) cochés")
+                Text(verbatim: "\(items) · \(checkedText)")
             }
         } else if state is ShoppingListUiStateError {
             Text("Liste indisponible")

@@ -12,20 +12,26 @@ struct CompagnonApp: App {
             appVersion: configuration.appVersion,
             deviceLanguage: Locale.current.identifier
         )
+        FontName.verifyRegistered()
     }
 
     var body: some Scene {
         WindowGroup {
-            #if DEBUG
-                // `-DemoScreen card` (etc.) shows one screen with a fake state, for screenshots and design checks.
-                if let demo = DemoScreen.fromLaunchArguments() {
-                    DemoScreenView(screen: demo)
-                } else {
+            Group {
+                #if DEBUG
+                    // `-DemoScreen card` (etc.) shows one screen with a fake state, for screenshots and design checks.
+                    if let demo = DemoScreen.fromLaunchArguments() {
+                        DemoScreenView(screen: demo)
+                    } else {
+                        RootView()
+                    }
+                #else
                     RootView()
-                }
-            #else
-                RootView()
-            #endif
+                #endif
+            }
+            // The charter has no dark palette yet (CHARTE.md § 1): the app stays light.
+            .preferredColorScheme(.light)
+            .tint(Palette.basil)
         }
     }
 }

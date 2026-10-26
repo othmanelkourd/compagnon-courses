@@ -3,9 +3,10 @@
     import SwiftUI
 
     /// Fake states for previews and for the Debug demo screens (`-DemoScreen <name>` launch argument), which
-    /// render one screen without Koin, a server or a session: handy for screenshots and design checks.
+    /// render one screen without Koin, a server or a session: handy for screenshots and design checks. The data
+    /// follows the mockups of `design/maquette/`.
     enum DemoScreen: String, CaseIterable {
-        case meta, suggested, card, gate, gateItems, review, done, list, listEmpty
+        case home, meta, suggested, card, options, gate, gateItems, review, done, list, listEmpty
 
         static func fromLaunchArguments(_ defaults: UserDefaults = .standard) -> DemoScreen? {
             defaults.string(forKey: "DemoScreen").flatMap(DemoScreen.init(rawValue:))
@@ -18,10 +19,19 @@
         var body: some View {
             NavigationStack {
                 switch screen {
+                case .home:
+                    HomeContent(
+                        listState: DemoData.homeList,
+                        catalogSync: DemoData.catalogSync,
+                        onStartSession: {},
+                        onOpenList: {}
+                    )
                 case .list:
                     ShoppingListContent(state: DemoData.list, send: { _ in })
                 case .listEmpty:
                     ShoppingListContent(state: DemoData.emptyList, send: { _ in })
+                case .options:
+                    QuestionContent(state: DemoData.question(.card), send: { _ in }, showsCardOptions: true)
                 default:
                     QuestionContent(state: DemoData.question(screen), send: { _ in })
                 }
@@ -30,8 +40,6 @@
     }
 
     enum DemoData {
-        static let progress = QuestionProgress(answered: 8, total: 12)
-
         static func quantity(_ milli: Int64, _ unit: String, _ label: String) -> QuantityChoice {
             QuantityChoice(value: QuantityValue(milli: milli, unit: unit), label: label)
         }
@@ -40,65 +48,76 @@
             QuantityStepper(selected: choice, canDecrement: true, canIncrement: true)
         }
 
-        static let milkCard = ProductCardUi(
-            productId: "milk",
-            name: "Lait demi-écrémé",
-            needPhrase: "du lait demi-écrémé",
-            categoryName: "Crèmerie",
-            kind: .standard,
-            presets: [
-                quantity(1000, "bottle", "1 bouteille"),
-                quantity(2000, "bottle", "2 bouteilles"),
-                quantity(4000, "bottle", "4 bouteilles"),
-                quantity(6000, "bottle", "6 bouteilles"),
-            ],
-            quantity: stepper(quantity(2000, "bottle", "2 bouteilles")),
-            units: [
-                UnitOptionUi(unit: "bottle", label: "Bouteille", selected: true),
-                UnitOptionUi(unit: "pack", label: "Pack de 6", selected: false),
-            ],
-            isSameAsLastTime: true,
-            reason: ReasonUi(
-                kind: .due, daysSinceLast: KotlinInt(value: 9), intervalDays: KotlinInt(value: 7),
-                usualQuantity: "2 bouteilles", weeksSinceLast: nil, householdSize: nil
-            )
-        )
-
-        static func suggestedItem(_ id: String, _ name: String, _ label: String, checked: Bool, reason: ReasonKind?) -> SuggestedItemUi {
-            SuggestedItemUi(
-                productId: id,
-                name: name,
-                checked: checked,
-                quantity: stepper(quantity(1000, "piece", label)),
-                reason: reason.map {
-                    ReasonUi(kind: $0, daysSinceLast: nil, intervalDays: nil, usualQuantity: nil, weeksSinceLast: nil, householdSize: nil)
-                }
+        static func reason(_ kind: ReasonKind, daysSinceLast: Int32? = nil, intervalDays: Int32? = nil) -> ReasonUi {
+            ReasonUi(
+                kind: kind,
+                daysSinceLast: daysSinceLast.map { KotlinInt(value: $0) },
+                intervalDays: intervalDays.map { KotlinInt(value: $0) },
+                usualQuantity: nil, weeksSinceLast: nil, householdSize: nil
             )
         }
 
-        static let suggestedItems = [
-            suggestedItem("bread", "Baguette", "2 baguettes", checked: true, reason: .staple),
-            suggestedItem("eggs", "Œufs", "6 œufs", checked: true, reason: .lastList),
-            suggestedItem("bananas", "Bananes", "1 kg", checked: true, reason: .staple),
-            suggestedItem("butter", "Beurre doux", "250 g", checked: false, reason: .littleLeft),
-            suggestedItem("yogurt", "Yaourts nature", "8 pots", checked: true, reason: nil),
+        // The data mirrors a real session against the local server (same catalog as the Android screenshots), so
+        // that `docs/images/design-{android,ios}-*.png` can be compared pair by pair.
+        static let tomatoesCard = ProductCardUi(
+            productId: "tomate-de-saison",
+            name: "Tomate de saison",
+            needPhrase: "des tomates de saison",
+            categoryName: "Fruits et légumes",
+            kind: .standard,
+            presets: [
+                quantity(500, "kilogram", "0,5\u{00A0}kg"),
+                quantity(1000, "kilogram", "1\u{00A0}kg"),
+                quantity(1500, "kilogram", "1,5\u{00A0}kg"),
+            ],
+            quantity: QuantityStepper(selected: quantity(500, "kilogram", "0,5\u{00A0}kg"), canDecrement: false, canIncrement: true),
+            units: [
+                UnitOptionUi(unit: "kilogram", label: "kg", selected: true),
+                UnitOptionUi(unit: "piece", label: "tomates de saison", selected: false),
+            ],
+            isSameAsLastTime: false,
+            reason: reason(.staple)
+        )
+
+        static func suggestedItem(
+            _ id: String, _ name: String, _ label: String, checked: Bool, reason: ReasonUi?, canDecrement: Bool = true
+        ) -> SuggestedItemUi {
+            let quantity = QuantityStepper(selected: quantity(1000, "piece", label), canDecrement: canDecrement, canIncrement: true)
+            return SuggestedItemUi(productId: id, name: name, checked: checked, quantity: quantity, reason: reason)
+        }
+
+        /// « Probablement nécessaire »: the staples of the catalog, « Banane » unchecked.
+        static let staples: [(String, String)] = [
+            ("Oignon", "0,5\u{00A0}kg"), ("Banane", "4\u{00A0}bananes"), ("Œuf", "6\u{00A0}œufs"),
+            ("Beurre doux", "1\u{00A0}plaquette"), ("Sel fin", "1\u{00A0}paquet"), ("Poivre noir", "1\u{00A0}pot"),
+            ("Pâtes courtes", "1\u{00A0}paquet"), ("Moutarde", "1\u{00A0}pot"), ("Dentifrice", "1\u{00A0}tube"),
+            ("Déodorant", "1\u{00A0}déodorant"), ("Liquide vaisselle", "1\u{00A0}flacon"), ("Éponge", "1\u{00A0}pack"),
+            ("Papier toilette", "1\u{00A0}pack"), ("Sac poubelle", "1\u{00A0}rouleau"), ("Essuie-tout", "1\u{00A0}pack"),
         ]
 
-        static let gate = CategoryGateUi(categoryId: "cleaning", name: "Entretien", question: nil, productCount: 14)
+        static let suggestedItems = staples.map { name, label in
+            // As in the real session, only « Banane » and « Œuf » are above their smallest quantity.
+            suggestedItem(name, name, label, checked: name != "Banane", reason: reason(.staple), canDecrement: ["Banane", "Œuf"].contains(name))
+        }
+
+        static let gate = CategoryGateUi(
+            categoryId: "fruits-legumes", name: "Fruits et légumes",
+            question: "Besoin de quelque chose en fruits et légumes\u{00A0}?", productCount: 38
+        )
 
         static func question(_ screen: DemoScreen) -> any QuestionUiState {
             switch screen {
             case .meta:
                 QuestionUiStateMeta(
                     question: MetaQuestionUi(
-                        kind: .persons, value: 2, min: 1, max: 12,
-                        choices: [1, 2, 3, 4].map { KotlinInt(value: $0) }
+                        kind: .horizonDays, value: 7, min: 1, max: 31,
+                        choices: [3, 7, 14].map { KotlinInt(value: $0) }
                     ),
-                    progress: QuestionProgress(answered: 1, total: 12),
-                    canUndo: true
+                    progress: QuestionProgress(answered: 0, total: 12),
+                    canUndo: false
                 )
             case .suggested:
-                QuestionUiStateSuggested(items: suggestedItems, checkedCount: 4, progress: QuestionProgress(answered: 3, total: 12), canUndo: true)
+                QuestionUiStateSuggested(items: suggestedItems, checkedCount: 14, progress: QuestionProgress(answered: 3, total: 12), canUndo: true)
             case .gate:
                 QuestionUiStateGate(gate: gate, progress: QuestionProgress(answered: 10, total: 12), canUndo: true)
             case .gateItems:
@@ -108,6 +127,7 @@
                         suggestedItem("sponges", "Éponges", "1 paquet", checked: false, reason: nil),
                         suggestedItem("dish", "Liquide vaisselle", "1 flacon", checked: true, reason: nil),
                         suggestedItem("bags", "Sacs poubelle", "1 rouleau", checked: false, reason: nil),
+                        suggestedItem("tablets", "Pastilles lave-vaisselle", "30 pastilles lave-vaisselle", checked: false, reason: nil),
                     ],
                     checkedCount: 1,
                     progress: QuestionProgress(answered: 11, total: 12),
@@ -115,10 +135,10 @@
                 )
             case .review:
                 QuestionUiStateReview(
-                    items: [
-                        ReviewItemUi(productId: "bread", name: "Baguette", quantity: quantity(2000, "piece", "2 baguettes"), origin: .suggested),
-                        ReviewItemUi(productId: "milk", name: "Lait demi-écrémé", quantity: quantity(2000, "bottle", "2 bouteilles"), origin: .card),
-                        ReviewItemUi(productId: "dish", name: "Liquide vaisselle", quantity: quantity(1000, "piece", "1 flacon"), origin: .gate),
+                    items: staples.filter { $0.0 != "Banane" }.map { name, label in
+                        ReviewItemUi(productId: name, name: name, quantity: quantity(1000, "piece", label), origin: .suggested)
+                    } + [
+                        ReviewItemUi(productId: "tomate-de-saison", name: "Tomate de saison", quantity: quantity(1000, "kilogram", "1\u{00A0}kg"), origin: .card),
                     ],
                     searchQuery: "",
                     searchResults: [],
@@ -126,9 +146,9 @@
                     canUndo: true
                 )
             case .done:
-                QuestionUiStateDone(itemsAdded: 7, abandoned: false)
+                QuestionUiStateDone(itemsAdded: 15, abandoned: false)
             default:
-                QuestionUiStateCard(card: milkCard, progress: progress, canUndo: true)
+                QuestionUiStateCard(card: tomatoesCard, progress: QuestionProgress(answered: 4, total: 12), canUndo: true)
             }
         }
 
@@ -138,30 +158,65 @@
 
         static let list = ShoppingListUiStateLoaded(
             sections: [
-                ListSectionUi(categoryId: "fruits", title: "Fruits et légumes", items: [
-                    item("bananas", "Bananes", "1 kg"),
-                    item("tomatoes", "Tomates", "500 g"),
-                    item("apples", "Pommes", "6 pommes", checked: true),
+                ListSectionUi(categoryId: "fruits-legumes", title: "Fruits et légumes", items: [
+                    item("oignon", "Oignon", "0,5\u{00A0}kg"),
+                    item("tomate", "Tomate de saison", "1\u{00A0}kg"),
                 ]),
-                ListSectionUi(categoryId: "dairy", title: "Crèmerie", items: [
-                    item("milk", "Lait demi-écrémé", "2 bouteilles"),
-                    item("eggs", "Œufs", "6 œufs"),
+                ListSectionUi(categoryId: "cremerie", title: "Crèmerie", items: [
+                    item("beurre", "Beurre doux", "1\u{00A0}plaquette"),
+                    item("oeuf", "Œuf", "6\u{00A0}œufs", checked: true),
                 ]),
-                ListSectionUi(categoryId: nil, title: nil, items: [
-                    item("gift", "Cadeau pour Léa", nil),
+                ListSectionUi(categoryId: "epicerie-salee", title: "Épicerie salée", items: [
+                    item("sel", "Sel fin", "1\u{00A0}paquet"),
+                    item("poivre", "Poivre noir", "1\u{00A0}pot"),
+                    item("pates", "Pâtes courtes", "1\u{00A0}paquet"),
+                ]),
+                ListSectionUi(categoryId: "hygiene", title: "Hygiène et beauté", items: [
+                    item("dentifrice", "Dentifrice", "1\u{00A0}tube"),
+                    item("deodorant", "Déodorant", "1\u{00A0}déodorant"),
+                ]),
+                ListSectionUi(categoryId: "entretien", title: "Entretien de la maison", items: [
+                    item("vaisselle", "Liquide vaisselle", "1\u{00A0}flacon"),
+                    item("eponge", "Éponge", "1\u{00A0}pack"),
+                ]),
+                ListSectionUi(categoryId: "papier", title: "Papier et emballages", items: [
+                    item("papier", "Papier toilette", "1\u{00A0}pack"),
+                    item("sacs", "Sac poubelle", "1\u{00A0}rouleau"),
+                    item("essuie", "Essuie-tout", "1\u{00A0}pack"),
                 ]),
             ],
-            itemCount: 6,
-            remainingCount: 5,
+            itemCount: 14,
+            remainingCount: 13,
             searchQuery: "",
             searchResults: [],
-            undo: UndoUi(kind: .checked, itemName: "Pommes"),
+            undo: UndoUi(kind: .deleted, itemName: "Moutarde"),
             error: nil
         )
 
         static let emptyList = ShoppingListUiStateLoaded(
             sections: [], itemCount: 0, remainingCount: 0, searchQuery: "", searchResults: [], undo: nil, error: nil
         )
+
+        static let homeList = ShoppingListUiStateLoaded(
+            sections: [], itemCount: 14, remainingCount: 13, searchQuery: "", searchResults: [], undo: nil, error: nil
+        )
+
+        static let catalogSync = CatalogSyncUiState(
+            syncing: false, localVersion: KotlinLong(value: 3), lastSyncedAt: "2026-10-24T08:30:00Z",
+            productCount: 312, categoryCount: 18, lastOutcome: .upToDate
+        )
+    }
+
+    #Preview("Accueil") {
+        DemoScreenView(screen: .home)
+    }
+
+    #Preview("Question méta") {
+        DemoScreenView(screen: .meta)
+    }
+
+    #Preview("Probablement nécessaire") {
+        DemoScreenView(screen: .suggested)
     }
 
     #Preview("Carte produit") {
@@ -173,21 +228,16 @@
             .dynamicTypeSize(.accessibility2)
     }
 
-    #Preview("Carte produit, sombre") {
-        DemoScreenView(screen: .card)
-            .preferredColorScheme(.dark)
-    }
-
-    #Preview("Probablement nécessaire") {
-        DemoScreenView(screen: .suggested)
+    #Preview("Plus d'options") {
+        DemoScreenView(screen: .options)
     }
 
     #Preview("Porte de rayon") {
         DemoScreenView(screen: .gate)
     }
 
-    #Preview("Question méta") {
-        DemoScreenView(screen: .meta)
+    #Preview("Produits du rayon") {
+        DemoScreenView(screen: .gateItems)
     }
 
     #Preview("Récapitulatif") {

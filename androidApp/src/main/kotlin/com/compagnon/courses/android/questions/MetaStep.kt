@@ -2,23 +2,21 @@ package com.compagnon.courses.android.questions
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -26,70 +24,129 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.compagnon.courses.android.R
-import com.compagnon.courses.android.ui.components.QuantityStepperControl
+import com.compagnon.courses.android.ui.components.BottomLinks
+import com.compagnon.courses.android.ui.components.BoxedStepper
+import com.compagnon.courses.android.ui.components.Overline
+import com.compagnon.courses.android.ui.components.PrimaryButton
+import com.compagnon.courses.android.ui.components.QuantityChoiceTile
+import com.compagnon.courses.android.ui.components.TextActionButton
 import com.compagnon.courses.android.ui.components.resolve
+import com.compagnon.courses.android.ui.theme.CompagnonColors
+import com.compagnon.courses.android.ui.theme.CompagnonSpacing
+import com.compagnon.courses.android.ui.theme.CompagnonType
+import com.compagnon.courses.feature.questionflow.MetaQuestionKind
 import com.compagnon.courses.feature.questionflow.QuestionEvent
 import com.compagnon.courses.feature.questionflow.QuestionUiState
 
 /**
- * « Courses pour combien de jours ? », « Combien de personnes ? », « Des invités ? »: a quick answer is one tap;
- * the stepper and « Valider » give any other value.
+ * Large choices per row: up to four on one row, otherwise balanced rows of three (four for seven or eight choices).
+ * Same rule on iOS.
  */
-@OptIn(ExperimentalLayoutApi::class)
+internal fun metaColumns(count: Int): Int = when {
+    count <= 4 -> count.coerceAtLeast(1)
+    count == 7 || count == 8 -> 4
+    else -> 3
+}
+
+/**
+ * « Courses pour combien de jours ? », « Combien de personnes ? », « Des invités ? »: a large choice is one tap;
+ * the boxed stepper and « Continuer avec 7 jours » give any other value; « Passer » keeps the pre-filled value.
+ */
 @Composable
 internal fun MetaStep(state: QuestionUiState.Meta, onEvent: (QuestionEvent) -> Unit) {
     val question = state.question
     var value by rememberSaveable(question.kind) { mutableIntStateOf(question.value.coerceIn(question.min, question.max)) }
-    val title = stringResource(QuestionTexts.metaTitle(question.kind))
+    val valueText = QuestionTexts.metaValue(question.kind, value).resolve()
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .padding(horizontal = CompagnonSpacing.Screen)
+            .padding(bottom = CompagnonSpacing.Bottom),
+    ) {
         Column(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
+                .padding(top = 40.dp, bottom = 16.dp),
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.semantics { heading() },
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Overline(text = stringResource(R.string.meta_overline), color = CompagnonColors.Basil, heading = false)
+                Text(
+                    text = stringResource(QuestionTexts.metaTitle(question.kind)),
+                    style = CompagnonType.ScreenTitleLarge,
+                    color = CompagnonColors.Ink,
+                    modifier = Modifier.semantics { heading() },
+                )
+                Text(
+                    text = stringResource(QuestionTexts.metaSubtitle(question.kind)),
+                    style = CompagnonType.Body,
+                    color = CompagnonColors.InkSoft,
+                )
+            }
             if (question.choices.isNotEmpty()) {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    question.choices.forEach { choice ->
-                        FilledTonalButton(
-                            onClick = { onEvent(QuestionEvent.AnswerMeta(choice)) },
-                            modifier = Modifier.heightIn(min = 56.dp),
-                        ) {
-                            Text(
-                                text = QuestionTexts.metaValue(question.kind, choice).resolve(),
-                                style = MaterialTheme.typography.titleMedium,
-                            )
+                Spacer(Modifier.height(32.dp))
+                val columns = metaColumns(question.choices.size)
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    question.choices.chunked(columns).forEach { row ->
+                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            row.forEach { choice ->
+                                val texts = QuestionTexts.metaChoice(question.kind, choice)
+                                QuantityChoiceTile(
+                                    value = texts.value.resolve(),
+                                    subline = texts.unit?.resolve(),
+                                    selected = choice == value,
+                                    large = true,
+                                    contentDescription = QuestionTexts.metaValue(question.kind, choice).resolve(),
+                                    onClick = { onEvent(QuestionEvent.AnswerMeta(choice)) },
+                                    modifier = Modifier.weight(1f),
+                                )
+                            }
+                            repeat(columns - row.size) { Spacer(Modifier.weight(1f)) }
                         }
                     }
                 }
             }
-            QuantityStepperControl(
-                label = QuestionTexts.metaValue(question.kind, value).resolve(),
-                itemName = title,
+            Spacer(Modifier.height(16.dp))
+            BoxedStepper(
+                label = stringResource(QuestionTexts.metaOther(question.kind), valueText),
                 canDecrement = value > question.min,
                 canIncrement = value < question.max,
                 onStep = { increment -> value = (value + if (increment) 1 else -1).coerceIn(question.min, question.max) },
-                buttonSize = 56.dp,
-                labelMinWidth = 140.dp,
-                labelStyle = MaterialTheme.typography.headlineSmall,
                 decreaseDescription = stringResource(R.string.meta_decrease),
                 increaseDescription = stringResource(R.string.meta_increase),
             )
         }
-        BottomAction(text = stringResource(R.string.action_validate), onClick = { onEvent(QuestionEvent.AnswerMeta(value)) })
+
+        Text(
+            text = stringResource(R.string.meta_one_tap),
+            style = CompagnonType.Help,
+            color = CompagnonColors.InkSoft,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 14.dp),
+        )
+        PrimaryButton(
+            text = if (question.kind == MetaQuestionKind.GUESTS && value == 0) {
+                stringResource(R.string.meta_continue_no_guests)
+            } else {
+                stringResource(R.string.meta_continue, valueText)
+            },
+            onClick = { onEvent(QuestionEvent.AnswerMeta(value)) },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        BottomLinks(
+            modifier = Modifier.padding(top = 12.dp),
+            start = { UndoAnswerButton(canUndo = state.canUndo, onEvent = onEvent) },
+            end = {
+                TextActionButton(
+                    text = stringResource(R.string.meta_skip),
+                    onClick = { onEvent(QuestionEvent.AnswerMeta(question.value)) },
+                )
+            },
+        )
     }
 }

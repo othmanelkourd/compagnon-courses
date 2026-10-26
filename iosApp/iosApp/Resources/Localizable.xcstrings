@@ -1,6 +1,46 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+    "%lld articles" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld item"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld items"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld article"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld articles"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld articles ajoutés à votre liste" : {
       "localizations" : {
         "en" : {
@@ -41,7 +81,7 @@
         }
       }
     },
-    "%lld articles à acheter" : {
+    "%lld articles à ajouter" : {
       "localizations" : {
         "en" : {
           "variations" : {
@@ -49,13 +89,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld item to buy"
+                  "value" : "%lld item to add"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld items to buy"
+                  "value" : "%lld items to add"
                 }
               }
             }
@@ -67,13 +107,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld article à acheter"
+                  "value" : "%lld article à ajouter"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld articles à acheter"
+                  "value" : "%lld articles à ajouter"
                 }
               }
             }
@@ -81,107 +121,7 @@
         }
       }
     },
-    "%lld articles à acheter sur %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%#@left@ of %#@total@ left to buy"
-          },
-          "substitutions" : {
-            "left" : {
-              "argNum" : 1,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg"
-                    }
-                  }
-                }
-              }
-            },
-            "total" : {
-              "argNum" : 2,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg item"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg items"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%#@left@ sur %#@total@"
-          },
-          "substitutions" : {
-            "left" : {
-              "argNum" : 1,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg article à acheter"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg articles à acheter"
-                    }
-                  }
-                }
-              }
-            },
-            "total" : {
-              "argNum" : 2,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "%lld articles à ajouter à votre liste" : {
+    "%lld cochés" : {
       "localizations" : {
         "en" : {
           "variations" : {
@@ -189,13 +129,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld item to add to your list"
+                  "value" : "%lld checked"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld items to add to your list"
+                  "value" : "%lld checked"
                 }
               }
             }
@@ -207,53 +147,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld article à ajouter à votre liste"
+                  "value" : "%lld coché"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld articles à ajouter à votre liste"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "%lld articles, tous cochés" : {
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld item, checked"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld items, all checked"
-                }
-              }
-            }
-          }
-        },
-        "fr" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld article, coché"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld articles, tous cochés"
+                  "value" : "%lld cochés"
                 }
               }
             }
@@ -381,7 +281,7 @@
         }
       }
     },
-    "%lld produits dans ce rayon" : {
+    "%lld questions" : {
       "localizations" : {
         "en" : {
           "variations" : {
@@ -389,13 +289,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld product in this aisle"
+                  "value" : "%lld question"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld products in this aisle"
+                  "value" : "%lld questions"
                 }
               }
             }
@@ -407,13 +307,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld produit dans ce rayon"
+                  "value" : "%lld question"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld produits dans ce rayon"
+                  "value" : "%lld questions"
                 }
               }
             }
@@ -421,116 +321,15 @@
         }
       }
     },
-    "%lld produits · %lld catégories" : {
-      "comment" : "Card line: number of products, then number of categories.",
+    "%lld sur %lld restants" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%#@products@ · %#@categories@"
+            "value" : "%#@left@ of %#@total@"
           },
           "substitutions" : {
-            "categories" : {
-              "argNum" : 2,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg category"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg categories"
-                    }
-                  }
-                }
-              }
-            },
-            "products" : {
-              "argNum" : 1,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg product"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg products"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%#@products@ · %#@categories@"
-          },
-          "substitutions" : {
-            "categories" : {
-              "argNum" : 2,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg catégorie"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg catégories"
-                    }
-                  }
-                }
-              }
-            },
-            "products" : {
-              "argNum" : 1,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg produit"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg produits"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "%lld questions sur %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%#@answered@ of %#@total@"
-          },
-          "substitutions" : {
-            "answered" : {
+            "left" : {
               "argNum" : 1,
               "formatSpecifier" : "lld",
               "variations" : {
@@ -558,13 +357,13 @@
                   "one" : {
                     "stringUnit" : {
                       "state" : "translated",
-                      "value" : "%arg question"
+                      "value" : "%arg left"
                     }
                   },
                   "other" : {
                     "stringUnit" : {
                       "state" : "translated",
-                      "value" : "%arg questions"
+                      "value" : "%arg left"
                     }
                   }
                 }
@@ -575,10 +374,10 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%#@answered@ sur %#@total@"
+            "value" : "%#@left@ sur %#@total@"
           },
           "substitutions" : {
-            "answered" : {
+            "left" : {
               "argNum" : 1,
               "formatSpecifier" : "lld",
               "variations" : {
@@ -586,13 +385,13 @@
                   "one" : {
                     "stringUnit" : {
                       "state" : "translated",
-                      "value" : "%arg question"
+                      "value" : "%arg"
                     }
                   },
                   "other" : {
                     "stringUnit" : {
                       "state" : "translated",
-                      "value" : "%arg questions"
+                      "value" : "%arg"
                     }
                   }
                 }
@@ -606,18 +405,28 @@
                   "one" : {
                     "stringUnit" : {
                       "state" : "translated",
-                      "value" : "%arg"
+                      "value" : "%arg restant"
                     }
                   },
                   "other" : {
                     "stringUnit" : {
                       "state" : "translated",
-                      "value" : "%arg"
+                      "value" : "%arg restants"
                     }
                   }
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "12 questions" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "12 questions"
           }
         }
       }
@@ -652,7 +461,7 @@
         }
       }
     },
-    "Acheté il y a %lld jours" : {
+    "Acheté tous les %lld jours environ" : {
       "localizations" : {
         "en" : {
           "variations" : {
@@ -660,13 +469,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Bought %lld day ago"
+                  "value" : "Bought about every day"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Bought %lld days ago"
+                  "value" : "Bought about every %lld days"
                 }
               }
             }
@@ -678,113 +487,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Acheté il y a %lld jour"
+                  "value" : "Acheté tous les jours environ"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Acheté il y a %lld jours"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "Acheté il y a %lld jours, d'habitude tous les %lld jours" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bought %#@days@ ago, usually every %#@interval@"
-          },
-          "substitutions" : {
-            "days" : {
-              "argNum" : 1,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg day"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg days"
-                    }
-                  }
-                }
-              }
-            },
-            "interval" : {
-              "argNum" : 2,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "day"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg days"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acheté il y a %#@days@, d'habitude tous les %#@interval@"
-          },
-          "substitutions" : {
-            "days" : {
-              "argNum" : 1,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg jour"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg jours"
-                    }
-                  }
-                }
-              }
-            },
-            "interval" : {
-              "argNum" : 2,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "jours"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "%arg jours"
-                    }
-                  }
+                  "value" : "Acheté tous les %lld jours environ"
                 }
               }
             }
@@ -812,12 +521,12 @@
         }
       }
     },
-    "Ajouter %@, %@" : {
+    "Ajouter %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add %1$@, %2$@"
+            "value" : "Add %@"
           }
         }
       }
@@ -862,12 +571,12 @@
         }
       }
     },
-    "Ajouter un produit" : {
+    "Ajouter un article" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add a product"
+            "value" : "Add an item"
           }
         }
       }
@@ -892,12 +601,32 @@
         }
       }
     },
+    "Ajouté à la main" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added by hand"
+          }
+        }
+      }
+    },
     "Annuler" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Undo"
+          }
+        }
+      }
+    },
+    "Annuler la dernière réponse" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Undo the last answer"
           }
         }
       }
@@ -912,22 +641,32 @@
         }
       }
     },
-    "Aucun article pour l'instant." : {
+    "Aucun article coché" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No items yet."
+            "value" : "No items checked"
           }
         }
       }
     },
-    "Aucun produit trouvé. Vous pourrez l'ajouter en texte libre dans la liste." : {
+    "Aucun produit pour « %@ »" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No product found. You can add it as free text in the list."
+            "value" : "No product for “%@”"
+          }
+        }
+      }
+    },
+    "Augmenter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Increase"
           }
         }
       }
@@ -938,6 +677,56 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anything else?"
+          }
+        }
+      }
+    },
+    "Autre chose ? Ex. : piles, persil…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anything else? E.g. batteries, parsley…"
+          }
+        }
+      }
+    },
+    "Autre durée : %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other length: %@"
+          }
+        }
+      }
+    },
+    "Autre nombre : %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other number: %@"
+          }
+        }
+      }
+    },
+    "Autre quantité" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other quantity"
+          }
+        }
+      }
+    },
+    "Autre quantité : %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other quantity: %@"
           }
         }
       }
@@ -977,17 +766,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "It's in season"
-          }
-        }
-      }
-    },
-    "Catalogue" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Catalog"
+            "value" : "In season"
           }
         }
       }
@@ -999,6 +778,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Catalog unavailable"
+          }
+        }
+      }
+    },
+    "Catalogue à jour · %lld produits" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Catalog up to date · %lld product"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Catalog up to date · %lld products"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Catalogue à jour · %lld produit"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Catalogue à jour · %lld produits"
+                }
+              }
+            }
           }
         }
       }
@@ -1019,16 +838,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loading…"
-          }
-        }
-      }
-    },
-    "Cocher" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Check"
           }
         }
       }
@@ -1073,33 +882,32 @@
         }
       }
     },
-    "Combien de personnes cette semaine ?" : {
+    "Combien de personnes à la maison ?" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "How many people this week?"
+            "value" : "How many people at home?"
           }
         }
       }
     },
-    "Comme la dernière fois" : {
+    "Continuer avec %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Same as last time"
+            "value" : "Continue with %@"
           }
         }
       }
     },
-    "Compagnon de courses" : {
-      "comment" : "Navigation title: the product name (provisional), never translated.",
+    "Continuer sans invités" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Shopping Companion"
+            "value" : "Continue without guests"
           }
         }
       }
@@ -1134,6 +942,46 @@
         }
       }
     },
+    "Dernier achat il y a %lld jours" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Last bought %lld day ago"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Last bought %lld days ago"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dernier achat il y a %lld jour"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dernier achat il y a %lld jours"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Des invités ?" : {
       "localizations" : {
         "en" : {
@@ -1144,22 +992,29 @@
         }
       }
     },
-    "Décocher" : {
+    "dialog.cancel" : {
+      "comment" : "Dismisses a confirmation; « Annuler » elsewhere undoes.",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uncheck"
+            "value" : "Cancel"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
           }
         }
       }
     },
-    "Décochez ce dont vous n'avez pas besoin cette fois." : {
+    "Diminuer" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uncheck what you don't need this time."
+            "value" : "Decrease"
           }
         }
       }
@@ -1184,16 +1039,6 @@
         }
       }
     },
-    "En plus du foyer, cette semaine." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "On top of the household, this week."
-          }
-        }
-      }
-    },
     "Enregistrement impossible" : {
       "localizations" : {
         "en" : {
@@ -1204,12 +1049,12 @@
         }
       }
     },
-    "Erreur" : {
+    "Essentiel" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Error"
+            "value" : "Staple"
           }
         }
       }
@@ -1219,7 +1064,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Check what I need"
+            "value" : "Take stock"
           }
         }
       }
@@ -1234,22 +1079,102 @@
         }
       }
     },
-    "Hors ligne" : {
+    "Fermer le questionnaire" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Offline"
+            "value" : "Close the questions"
           }
         }
       }
     },
-    "Il en restait un peu" : {
+    "Garde la valeur proposée" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A little was left"
+            "value" : "Keeps the suggested value"
+          }
+        }
+      }
+    },
+    "glisser : non" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "swipe: no"
+          }
+        }
+      }
+    },
+    "glisser : oui" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "swipe: yes"
+          }
+        }
+      }
+    },
+    "habituel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "usual"
+          }
+        }
+      }
+    },
+    "Hors ligne · %lld produits sur l'appareil" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Offline · %lld product on this device"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Offline · %lld products on this device"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hors ligne · %lld produit sur l'appareil"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hors ligne · %lld produits sur l'appareil"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Hors ligne : connectez-vous pour télécharger le catalogue" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline: connect to download the catalog"
           }
         }
       }
@@ -1274,6 +1199,16 @@
         }
       }
     },
+    "Il m'en reste" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I still have some"
+          }
+        }
+      }
+    },
     "Il vous faut %@ ?" : {
       "localizations" : {
         "en" : {
@@ -1284,32 +1219,22 @@
         }
       }
     },
-    "J'en ai encore pour ~1 mois" : {
+    "J'en ai pour un mois" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "I have enough for ~1 month"
+            "value" : "Enough for a month"
           }
         }
       }
     },
-    "J'en ai encore pour ~1 semaine" : {
+    "J'en ai pour une semaine" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "I have enough for ~1 week"
-          }
-        }
-      }
-    },
-    "Je le reposerai en priorité la prochaine fois" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "It will be asked first next time"
+            "value" : "Enough for a week"
           }
         }
       }
@@ -1319,47 +1244,17 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "I don't buy this anymore"
+            "value" : "I don't buy it anymore"
           }
         }
       }
     },
-    "Je ne poserai plus la question" : {
+    "Jusqu'à vos prochaines courses. On ajuste les quantités en conséquence." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "It won't be asked again"
-          }
-        }
-      }
-    },
-    "Je reposerai la question à la fin" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "It will be asked again at the end"
-          }
-        }
-      }
-    },
-    "Jusqu'aux prochaines courses." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Until your next shopping trip."
-          }
-        }
-      }
-    },
-    "La dernière action n'a pas pu être enregistrée." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The last action could not be saved."
+            "value" : "Until your next shopping trip. We adjust the quantities to match."
           }
         }
       }
@@ -1374,6 +1269,16 @@
         }
       }
     },
+    "La modification n'a pas pu être enregistrée" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The change could not be saved"
+          }
+        }
+      }
+    },
     "La séance n'a pas pu être enregistrée sur l'appareil." : {
       "localizations" : {
         "en" : {
@@ -1384,12 +1289,12 @@
         }
       }
     },
-    "Le catalogue n'a pas pu être enregistré sur l'appareil." : {
+    "Le catalogue n'a pas pu être enregistré sur l'appareil" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The catalog could not be saved on this device."
+            "value" : "The catalog could not be saved on this device"
           }
         }
       }
@@ -1404,12 +1309,12 @@
         }
       }
     },
-    "Les articles cochés sont comptés comme achetés. Les autres restent sur la liste suivante." : {
+    "Les articles cochés sont enregistrés comme achetés. Les autres restent sur votre prochaine liste." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Checked items count as bought. The others stay on the next list."
+            "value" : "Checked items are saved as bought. The others stay on your next list."
           }
         }
       }
@@ -1444,6 +1349,26 @@
         }
       }
     },
+    "Mettre à jour le catalogue" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update the catalog"
+          }
+        }
+      }
+    },
+    "Mise à jour du catalogue…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updating the catalog…"
+          }
+        }
+      }
+    },
     "Moins" : {
       "localizations" : {
         "en" : {
@@ -1464,12 +1389,22 @@
         }
       }
     },
-    "NON" : {
+    "N'ajoute aucun de ces articles" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "NO"
+            "value" : "Adds none of these items"
+          }
+        }
+      }
+    },
+    "Ne plus jamais demander" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never ask again"
           }
         }
       }
@@ -1494,22 +1429,32 @@
         }
       }
     },
-    "OUI" : {
+    "On ne demande plus avant 30 jours" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "YES"
+            "value" : "We won't ask again for 30 days"
           }
         }
       }
     },
-    "Options" : {
+    "On ne demande plus avant 7 jours" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Options"
+            "value" : "We won't ask again for 7 days"
+          }
+        }
+      }
+    },
+    "On vous la repose la prochaine fois" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We'll ask again next time"
           }
         }
       }
@@ -1524,12 +1469,42 @@
         }
       }
     },
+    "Oui · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes · %@"
+          }
+        }
+      }
+    },
     "Oui, %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yes, %@"
+          }
+        }
+      }
+    },
+    "Oui, voir le rayon" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes, show the aisle"
+          }
+        }
+      }
+    },
+    "Partager la liste" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share the list"
           }
         }
       }
@@ -1604,22 +1579,22 @@
         }
       }
     },
+    "Pas maintenant" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not now"
+          }
+        }
+      }
+    },
     "Passe au produit suivant" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Goes to the next product"
-          }
-        }
-      }
-    },
-    "Passe ce rayon" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Skips this aisle"
           }
         }
       }
@@ -1634,12 +1609,42 @@
         }
       }
     },
+    "Passe tout le rayon" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skips the whole aisle"
+          }
+        }
+      }
+    },
+    "Passer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip"
+          }
+        }
+      }
+    },
     "Plus" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "More"
+          }
+        }
+      }
+    },
+    "Plus d'actions" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More actions"
           }
         }
       }
@@ -1664,12 +1669,32 @@
         }
       }
     },
-    "Pour vos invités" : {
+    "Pour bien doser" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "For your guests"
+            "value" : "To get quantities right"
+          }
+        }
+      }
+    },
+    "Pour l'événement qui approche" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For the upcoming event"
+          }
+        }
+      }
+    },
+    "Pour prévoir un peu plus cette fois." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To plan a little more this time."
           }
         }
       }
@@ -1694,32 +1719,22 @@
         }
       }
     },
-    "Produits" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Products"
-          }
-        }
-      }
-    },
-    "Progression" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Progress"
-          }
-        }
-      }
-    },
     "Préparation des questions…" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparing the questions…"
+          }
+        }
+      }
+    },
+    "Prêt pour les courses ?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ready to shop?"
           }
         }
       }
@@ -1744,6 +1759,32 @@
         }
       }
     },
+    "Question" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Question"
+          }
+        }
+      }
+    },
+    "Question %lld sur %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Question %1$lld of %2$lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Question %1$lld sur %2$lld"
+          }
+        }
+      }
+    },
     "Questions indisponibles" : {
       "localizations" : {
         "en" : {
@@ -1754,12 +1795,32 @@
         }
       }
     },
-    "Rechercher un produit" : {
+    "Quitte le questionnaire, qui reprendra au même endroit" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Search for a product"
+            "value" : "Leaves the questions; they resume where you left off"
+          }
+        }
+      }
+    },
+    "Radar" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radar"
+          }
+        }
+      }
+    },
+    "Rayon" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aisle"
           }
         }
       }
@@ -1774,12 +1835,32 @@
         }
       }
     },
+    "Reposée à la fin du questionnaire" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asked again at the end of the questions"
+          }
+        }
+      }
+    },
     "Retour à l'accueil" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Back to home"
+          }
+        }
+      }
+    },
+    "Revenir aux questions" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back to the questions"
           }
         }
       }
@@ -1794,12 +1875,32 @@
         }
       }
     },
+    "Rien" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing"
+          }
+        }
+      }
+    },
     "Rien de tout ça" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "None of these"
+          }
+        }
+      }
+    },
+    "Rien n'a été ajouté à votre liste." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing was added to your list."
           }
         }
       }
@@ -1824,12 +1925,12 @@
         }
       }
     },
-    "Récapitulatif" : {
+    "Rien à ajouter pour l'instant" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Summary"
+            "value" : "Nothing to add so far"
           }
         }
       }
@@ -1845,32 +1946,22 @@
         }
       }
     },
-    "Répondez à quelques questions, ou ajoutez un produit avec la recherche." : {
+    "Répondez à quelques questions, ou ajoutez un article ci-dessus." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Answer a few questions, or add a product with the search."
+            "value" : "Answer a few questions, or add an item above."
           }
         }
       }
     },
-    "Serveur injoignable. Le catalogue sera téléchargé dès que possible." : {
+    "Sans changer vos habitudes" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Server unreachable. The catalog will be downloaded as soon as possible."
-          }
-        }
-      }
-    },
-    "Serveur injoignable : le catalogue de l'appareil est utilisé." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Server unreachable: using the catalog on this device."
+            "value" : "Without changing your habits"
           }
         }
       }
@@ -1893,13 +1984,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Often bought by households of %lld person"
+                  "value" : "Often bought by %lld-person households"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Often bought by households of %lld people"
+                  "value" : "Often bought by %lld-person households"
                 }
               }
             }
@@ -1925,16 +2016,6 @@
         }
       }
     },
-    "Suggestion" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suggestion"
-          }
-        }
-      }
-    },
     "Supprimer" : {
       "localizations" : {
         "en" : {
@@ -1951,26 +2032,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "On your last list"
-          }
-        }
-      }
-    },
-    "Synchronisation en cours" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Syncing"
-          }
-        }
-      }
-    },
-    "Synchroniser le catalogue" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sync the catalog"
           }
         }
       }
@@ -1995,16 +2056,6 @@
         }
       }
     },
-    "Terminer les courses" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finish shopping"
-          }
-        }
-      }
-    },
     "Terminer sans rien ajouter" : {
       "localizations" : {
         "en" : {
@@ -2015,22 +2066,122 @@
         }
       }
     },
-    "Tout est coché. Bonnes courses !" : {
+    "Tous les %lld jours environ · dernier il y a %lld jours" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Everything is checked. Happy shopping!"
+            "value" : "%#@interval@ · %#@days@"
+          },
+          "substitutions" : {
+            "interval" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "About every day"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "About every %arg days"
+                    }
+                  }
+                }
+              }
+            },
+            "days" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "last %arg day ago"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "last %arg days ago"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@interval@ · %#@days@"
+          },
+          "substitutions" : {
+            "interval" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "Tous les jours environ"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "Tous les %arg jours environ"
+                    }
+                  }
+                }
+              }
+            },
+            "days" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "dernier il y a %arg jour"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "dernier il y a %arg jours"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "Téléchargement du catalogue…" : {
+    "Tout est coché" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Downloading the catalog…"
+            "value" : "All checked"
+          }
+        }
+      }
+    },
+    "Tout un rayon" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A whole aisle"
           }
         }
       }
@@ -2045,6 +2196,16 @@
         }
       }
     },
+    "Un toucher suffit : la question suivante arrive." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One tap is enough: the next question comes up."
+          }
+        }
+      }
+    },
     "Une idée à essayer" : {
       "localizations" : {
         "en" : {
@@ -2055,12 +2216,52 @@
         }
       }
     },
-    "Une nouvelle version du catalogue est disponible." : {
+    "Une réponse plus précise nous aide à mieux viser." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A new version of the catalog is available."
+            "value" : "A more precise answer helps us aim better."
+          }
+        }
+      }
+    },
+    "Une seule question pour %lld produits. Si c'est non, on passe tout le rayon." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Just one question for %lld product. If it's no, we skip the whole aisle."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Just one question for %lld products. If it's no, we skip the whole aisle."
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Une seule question pour %lld produit. Si c'est non, on passe tout le rayon."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Une seule question pour %lld produits. Si c'est non, on passe tout le rayon."
+                }
+              }
+            }
           }
         }
       }
@@ -2075,32 +2276,32 @@
         }
       }
     },
-    "Valider" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Confirm"
-          }
-        }
-      }
-    },
-    "Vide pour l'instant" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empty for now"
-          }
-        }
-      }
-    },
     "Voir ma liste" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "See my list"
+          }
+        }
+      }
+    },
+    "Vos essentiels, à vos quantités habituelles. Décochez ce qui ne sert pas cette fois." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your staples, in your usual quantities. Uncheck what you don't need this time."
+          }
+        }
+      }
+    },
+    "Vos réponses sont enregistrées pour les prochaines séances." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your answers are saved for the next sessions."
           }
         }
       }
@@ -2115,52 +2316,12 @@
         }
       }
     },
-    "Vous compris, à la maison." : {
+    "Vous compris. On ajuste les quantités en conséquence." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Including you, at home."
-          }
-        }
-      }
-    },
-    "v%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "v%@"
-          }
-        }
-      }
-    },
-    "v%@ · synchronisé %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "v%1$@ · synced %2$@"
-          }
-        }
-      }
-    },
-    "« %@ » coché" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "“%@” checked"
-          }
-        }
-      }
-    },
-    "« %@ » décoché" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "“%@” unchecked"
+            "value" : "Including you. We adjust the quantities to match."
           }
         }
       }
@@ -2175,22 +2336,32 @@
         }
       }
     },
-    "À jour" : {
+    "À découvrir" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Up to date"
+            "value" : "Something new"
           }
         }
       }
     },
-    "Ça fait un moment" : {
+    "À surveiller" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "It's been a while"
+            "value" : "Running low"
+          }
+        }
+      }
+    },
+    "≈ 2 min" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "≈ 2 min"
           }
         }
       }

@@ -16,6 +16,16 @@ Navigation 3 (`navigation/CompagnonApp.kt`), pile sauvegardée, ViewModels ratta
 - Accessibilité : Oui/Non et Supprimer sont aussi des actions TalkBack ; cibles d'au moins 48 dp.
 - Textes : français par défaut (`values/`), anglais dans `values-en/`.
 
+## Design
+
+L'app applique la charte commune Android / iOS (`design/CHARTE.md`, maquette dans `design/maquette/`) :
+
+- `ui/theme/` : seule source du thème. `CompagnonColors` (jetons de la charte) et le `lightColorScheme` Material qui en découle, `CompagnonType` (échelle typographique en `sp`), `CompagnonShapes` et `CompagnonSpacing`. Mode clair seulement, même si le système est en sombre ; pas de couleurs dynamiques.
+- `ui/components/` : boutons (principal, secondaire, texte, icône), segments de progression, choix de quantité, puce, cases à cocher, les trois pas-à-pas, lignes (suggestion, produit, récapitulatif), blocs de liste, indice, option de réponse, champ de saisie, snackbar. Icônes au trait (`AppIcons`), reprises des tracés SVG de la maquette ; aucune autre famille d'icônes.
+- Polices embarquées dans `res/font/` : Figtree (400, 500, 600, 700) et Bricolage Grotesque (500, 700), instances statiques sous licence SIL Open Font License 1.1. Les licences sont livrées dans `src/main/assets/licenses/`.
+
+Captures : `docs/images/design-android-*.png`.
+
 ## Lancer contre le serveur local
 
 ```sh

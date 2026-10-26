@@ -7,6 +7,10 @@ import com.compagnon.courses.feature.questionflow.ItemOrigin
 import com.compagnon.courses.feature.questionflow.MetaQuestionKind
 import com.compagnon.courses.feature.questionflow.NuancedAnswer
 import com.compagnon.courses.feature.questionflow.ProductCardKind
+import com.compagnon.courses.feature.questionflow.ProductCardUi
+import com.compagnon.courses.feature.questionflow.QuantityChoice
+import com.compagnon.courses.feature.questionflow.QuantityStepper
+import com.compagnon.courses.feature.questionflow.QuantityValue
 import com.compagnon.courses.feature.questionflow.QuestionErrorKind
 import com.compagnon.courses.feature.questionflow.ReasonKind
 import com.compagnon.courses.feature.questionflow.ReasonUi
@@ -18,45 +22,50 @@ import org.junit.Test
 class QuestionTextsTest {
 
     @Test
-    fun dueReasonSaysWhenAndHowOftenAndHowMuch() {
-        val texts = QuestionTexts.reason(
-            ReasonUi(kind = ReasonKind.DUE, daysSinceLast = 9, intervalDays = 8, usualQuantity = "2 L"),
-        )
+    fun aDueReasonIsOneLineWithTheCycleAndTheLastPurchaseOnTheCard() {
+        val due = ReasonUi(kind = ReasonKind.DUE, daysSinceLast = 9, intervalDays = 8, usualQuantity = "2 L")
 
+        // « Tous les 8 jours environ · dernier il y a 9 jours » (mockup `Card`).
         assertEquals(
-            listOf(
-                UiText.Plural(R.plurals.reason_due_last, 9),
-                UiText.Plural(R.plurals.reason_due_interval, 8),
-                UiText.Res(R.string.reason_due_usual, listOf("2 L")),
+            UiText.Res(
+                R.string.reason_due_both,
+                listOf(UiText.Plural(R.plurals.reason_due_every, 8), UiText.Plural(R.plurals.reason_due_last_short, 9)),
             ),
-            texts,
+            QuestionTexts.reason(due),
+        )
+        // A suggestion row keeps the last purchase: « Dernier achat il y a 9 jours » (mockup `Suggested`).
+        assertEquals(UiText.Plural(R.plurals.reason_due_last, 9), QuestionTexts.reason(due, compact = true))
+        // Only the cycle known: « Acheté tous les 8 jours environ ».
+        assertEquals(
+            UiText.Plural(R.plurals.reason_due_interval, 8),
+            QuestionTexts.reason(due.copy(daysSinceLast = null)),
         )
     }
 
     @Test
-    fun dueReasonWithoutHistoryFallsBackToAGenericSentence() {
-        assertEquals(listOf(UiText.Res(R.string.reason_due)), QuestionTexts.reason(ReasonUi(ReasonKind.DUE)))
+    fun dueReasonWithoutHistoryFallsBackToAGenericLine() {
+        assertEquals(UiText.Res(R.string.reason_due), QuestionTexts.reason(ReasonUi(ReasonKind.DUE)))
     }
 
     @Test
     fun radarAndPriorUseTheirCountsWhenKnown() {
         assertEquals(
-            listOf(UiText.Plural(R.plurals.reason_radar_weeks, 7)),
+            UiText.Plural(R.plurals.reason_radar_weeks, 7),
             QuestionTexts.reason(ReasonUi(ReasonKind.RADAR, weeksSinceLast = 7)),
         )
-        assertEquals(listOf(UiText.Res(R.string.reason_radar)), QuestionTexts.reason(ReasonUi(ReasonKind.RADAR)))
+        assertEquals(UiText.Res(R.string.reason_radar), QuestionTexts.reason(ReasonUi(ReasonKind.RADAR)))
         assertEquals(
-            listOf(UiText.Plural(R.plurals.reason_prior_household, 4)),
+            UiText.Plural(R.plurals.reason_prior_household, 4),
             QuestionTexts.reason(ReasonUi(ReasonKind.PRIOR, householdSize = 4)),
         )
-        assertEquals(listOf(UiText.Res(R.string.reason_prior)), QuestionTexts.reason(ReasonUi(ReasonKind.PRIOR)))
+        assertEquals(UiText.Res(R.string.reason_prior), QuestionTexts.reason(ReasonUi(ReasonKind.PRIOR)))
     }
 
     @Test
-    fun everyReasonKindHasAText() {
-        ReasonKind.entries.forEach { kind ->
-            assertTrue(kind.name, QuestionTexts.reason(ReasonUi(kind)).isNotEmpty())
-        }
+    fun everyReasonKindHasItsOwnText() {
+        val texts = ReasonKind.entries.map { QuestionTexts.reason(ReasonUi(it)) }
+
+        assertEquals(ReasonKind.entries.size, texts.toSet().size)
     }
 
     @Test
@@ -83,11 +92,60 @@ class QuestionTextsTest {
     }
 
     @Test
-    fun onlyNonStandardCardsHaveABadge() {
-        assertNull(QuestionTexts.cardBadge(ProductCardKind.STANDARD))
-        assertEquals(R.string.card_badge_watch, QuestionTexts.cardBadge(ProductCardKind.WATCH))
-        assertEquals(R.string.card_badge_radar, QuestionTexts.cardBadge(ProductCardKind.RADAR))
-        assertEquals(R.string.card_badge_exploration, QuestionTexts.cardBadge(ProductCardKind.EXPLORATION))
+    fun theCardChipFollowsTheKindAndStaplesAreEssential() {
+        val twoBottles = QuantityChoice(QuantityValue(2_000, "bottle"), "2 bouteilles")
+        val card = ProductCardUi(
+            productId = "lait",
+            name = "Lait",
+            needPhrase = "du lait",
+            categoryName = "Crèmerie",
+            kind = ProductCardKind.STANDARD,
+            presets = listOf(twoBottles),
+            quantity = QuantityStepper(twoBottles, canDecrement = true, canIncrement = true),
+            units = emptyList(),
+            isSameAsLastTime = false,
+            reason = ReasonUi(ReasonKind.DUE),
+        )
+
+        assertNull(QuestionTexts.cardBadge(card))
+        assertEquals(
+            CardBadge(R.string.card_badge_staple, watch = false),
+            QuestionTexts.cardBadge(card.copy(reason = ReasonUi(ReasonKind.STAPLE))),
+        )
+        assertEquals(CardBadge(R.string.card_badge_watch, watch = true), QuestionTexts.cardBadge(card.copy(kind = ProductCardKind.WATCH)))
+        assertEquals(CardBadge(R.string.card_badge_radar, watch = false), QuestionTexts.cardBadge(card.copy(kind = ProductCardKind.RADAR)))
+        assertEquals(
+            CardBadge(R.string.card_badge_exploration, watch = false),
+            QuestionTexts.cardBadge(card.copy(kind = ProductCardKind.EXPLORATION)),
+        )
+    }
+
+    @Test
+    fun aLargeMetaChoiceShowsTheNumberAboveItsUnit() {
+        assertEquals(
+            MetaChoiceTexts(UiText.Raw("7"), UiText.Plural(R.plurals.meta_days_unit, 7, args = emptyList())),
+            QuestionTexts.metaChoice(MetaQuestionKind.HORIZON_DAYS, 7),
+        )
+        assertEquals(
+            MetaChoiceTexts(UiText.Raw("2"), UiText.Plural(R.plurals.meta_persons_unit, 2, args = emptyList())),
+            QuestionTexts.metaChoice(MetaQuestionKind.PERSONS, 2),
+        )
+        // No guest is said in words, without a unit.
+        assertEquals(MetaChoiceTexts(UiText.Res(R.string.meta_guests_none), unit = null), QuestionTexts.metaChoice(MetaQuestionKind.GUESTS, 0))
+        assertEquals(R.string.meta_other_days, QuestionTexts.metaOther(MetaQuestionKind.HORIZON_DAYS))
+        assertEquals(R.string.meta_other_count, QuestionTexts.metaOther(MetaQuestionKind.GUESTS))
+        assertEquals(
+            MetaQuestionKind.entries.size,
+            MetaQuestionKind.entries.map(QuestionTexts::metaSubtitle).toSet().size,
+        )
+    }
+
+    @Test
+    fun choicesAreLaidOutInTheSameRowsAsOnIos() {
+        // Meta: up to four on one row, else rows of three (four for seven or eight).
+        assertEquals(listOf(1, 3, 4, 3, 3, 4, 4, 3), listOf(1, 3, 4, 5, 6, 7, 8, 9).map(::metaColumns))
+        // Card presets: three on one row, four on two rows.
+        assertEquals(listOf(1, 2, 3, 2, 3), listOf(1, 2, 3, 4, 5).map(::presetColumns))
     }
 
     @Test
@@ -96,6 +154,9 @@ class QuestionTextsTest {
         assertEquals(NuancedAnswer.entries.size, QuestionTexts.nuancedAnswers.size)
         assertEquals(NuancedAnswer.entries.size, NuancedAnswer.entries.map(QuestionTexts::nuancedLabel).toSet().size)
         assertEquals(NuancedAnswer.entries.size, NuancedAnswer.entries.map(QuestionTexts::nuancedHint).toSet().size)
+        // Two groups: « Il m'en reste » then « Pas maintenant ».
+        assertEquals(QuestionTexts.stockAnswers + QuestionTexts.notNowAnswers, QuestionTexts.nuancedAnswers)
+        assertTrue(QuestionTexts.stockAnswers.intersect(QuestionTexts.notNowAnswers.toSet()).isEmpty())
     }
 
     @Test
@@ -104,6 +165,10 @@ class QuestionTextsTest {
         assertEquals(
             QuestionErrorKind.entries.size,
             QuestionErrorKind.entries.map(QuestionTexts::errorMessage).toSet().size,
+        )
+        assertEquals(
+            QuestionErrorKind.entries.size,
+            QuestionErrorKind.entries.map(QuestionTexts::errorTitle).toSet().size,
         )
     }
 }

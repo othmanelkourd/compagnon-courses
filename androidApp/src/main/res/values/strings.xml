@@ -1,59 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Default language: French (see res/resources.properties). English lives in values-en. -->
+<!--
+  Default language: French (see res/resources.properties). English lives in values-en.
+  The canonical copy of both apps is design/TEXTES.md: change it there first, then here and in the iOS catalog.
+-->
 <resources>
     <!-- Product name (placeholder until the name is chosen): not translated. -->
     <string name="app_name" translatable="false">Compagnon</string>
-    <string name="app_title" translatable="false">Compagnon de courses</string>
 
     <!-- Common actions -->
-    <string name="action_back">Retour</string>
+    <!-- Dismisses a dialog. -->
     <string name="action_cancel">Annuler</string>
+    <!-- Undoes the last answer (bottom left) or a delete (snackbar). -->
+    <string name="action_undo">Annuler</string>
     <string name="action_more">Plus d\'actions</string>
     <string name="action_retry">Réessayer</string>
-    <string name="action_undo">Annuler</string>
-    <string name="action_validate">Valider</string>
+    <string name="action_close">Fermer</string>
     <!-- %1$s: product name, read by TalkBack. -->
     <string name="quantity_decrease">Diminuer la quantité de %1$s</string>
     <string name="quantity_increase">Augmenter la quantité de %1$s</string>
-    <string name="search_clear">Effacer la recherche</string>
+    <string name="search_clear">Effacer</string>
     <!-- %1$s: what the user typed. -->
-    <string name="search_no_result">Aucun produit pour «\u00A0%1$s\u00A0»</string>
+    <string name="search_no_result">Aucun produit pour « %1$s »</string>
 
     <!-- Home -->
-    <string name="home_headline">Prêt pour les courses\u00A0?</string>
-    <string name="home_intro">Quelques questions rapides, et votre liste est prête.</string>
+    <!-- java.time pattern of the date above the headline: « Dimanche 25 octobre ». -->
+    <string name="home_date_pattern">EEEE d MMMM</string>
+    <string name="home_headline">Prêt pour les courses ?</string>
+    <string name="home_intro">Quelques questions, et votre liste est prête.</string>
     <string name="home_start_session">Faire le point</string>
     <string name="home_my_list">Ma liste</string>
     <string name="home_list_empty">Votre liste est vide</string>
-    <!-- %1$d: items on the list, %2$d: items still to buy. -->
-    <plurals name="home_list_count">
-        <item quantity="one">%1$d article, %2$d à acheter</item>
-        <item quantity="many">%1$d d\'articles, %2$d à acheter</item>
-        <item quantity="other">%1$d articles, %2$d à acheter</item>
+    <string name="home_list_loading">Chargement…</string>
+    <string name="home_list_error">Liste indisponible</string>
+    <plurals name="home_list_items">
+        <item quantity="one">%d article</item>
+        <item quantity="many">%d d\'articles</item>
+        <item quantity="other">%d articles</item>
     </plurals>
-    <plurals name="home_list_all_checked">
-        <item quantity="one">%1$d article, tout est acheté</item>
-        <item quantity="many">%1$d d\'articles, tout est acheté</item>
-        <item quantity="other">%1$d articles, tout est acheté</item>
+    <plurals name="home_list_checked">
+        <item quantity="one">%d coché</item>
+        <item quantity="many">%d cochés</item>
+        <item quantity="other">%d cochés</item>
     </plurals>
+    <!-- « 16 articles · 4 cochés » -->
+    <string name="home_list_summary" translatable="false">%1$s · %2$s</string>
+    <!-- Fixed copy of the « Faire le point » card: a quick session takes about 2 minutes and asks 12 questions at most. -->
+    <string name="home_duration">≈ 2 min</string>
+    <string name="home_questions">12 questions</string>
 
-    <!-- Catalog card -->
-    <string name="catalog_card_title">Catalogue</string>
+    <!-- Catalog footer of the home screen -->
+    <!-- TalkBack action of the footer (tap = sync again). -->
     <string name="catalog_sync_now">Mettre à jour le catalogue</string>
     <string name="catalog_syncing">Mise à jour du catalogue…</string>
-    <!-- %1$s: product count summary, %2$d: local catalog version. -->
-    <string name="catalog_local_summary">%1$s sur l\'appareil · v%2$d</string>
+    <!-- %1$s: product count summary (catalog_product_count). -->
+    <string name="catalog_footer_ready">Catalogue à jour · %1$s</string>
+    <string name="catalog_footer_offline">Hors ligne · %1$s sur l\'appareil</string>
     <string name="catalog_local_none">Pas encore de catalogue sur l\'appareil</string>
-    <!-- %1$s: localized date and time. -->
-    <string name="catalog_last_sync">Dernière mise à jour\u00A0: %1$s</string>
-    <!-- %1$d: published version, %2$s: localized publication date. -->
-    <string name="catalog_server_version">Version publiée\u00A0: v%1$d du %2$s</string>
-    <string name="catalog_outcome_up_to_date">Le catalogue est à jour.</string>
-    <string name="catalog_outcome_updated">Les nouveautés du catalogue ont été téléchargées.</string>
-    <string name="catalog_outcome_downloaded">Le catalogue a été téléchargé.</string>
-    <string name="catalog_outcome_offline_kept">Hors ligne\u00A0: le catalogue de l\'appareil est utilisé.</string>
-    <string name="catalog_outcome_offline_none">Hors ligne\u00A0: connectez-vous pour télécharger le catalogue.</string>
-    <string name="catalog_outcome_storage_failed">Le catalogue n\'a pas pu être enregistré sur l\'appareil.</string>
+    <string name="catalog_outcome_offline_none">Hors ligne : connectez-vous pour télécharger le catalogue</string>
+    <string name="catalog_outcome_storage_failed">Le catalogue n\'a pas pu être enregistré sur l\'appareil</string>
     <!-- %1$s: count, already formatted for the locale. "many" is used for exact millions ("1 000 000 de produits"). -->
     <plurals name="catalog_product_count">
         <item quantity="one">%1$s produit</item>
@@ -62,29 +66,58 @@
     </plurals>
 
     <!-- Questionnaire: frame -->
-    <string name="question_title">Faire le point</string>
     <string name="question_close">Fermer le questionnaire</string>
+    <!-- TalkBack label of « Annuler » at the bottom left. -->
     <string name="question_undo">Annuler la dernière réponse</string>
     <!-- « 8 / 12 »: %1$d current question, %2$d total. -->
     <string name="question_progress" translatable="false">%1$d / %2$d</string>
     <string name="question_progress_spoken">Question %1$d sur %2$d</string>
-    <string name="question_end_questions">Passer au récapitulatif</string>
+    <string name="question_end_questions">Terminer</string>
+    <string name="question_start_over">Recommencer</string>
     <string name="question_abandon">Abandonner la séance</string>
-    <string name="question_abandon_title">Abandonner la séance\u00A0?</string>
-    <string name="question_abandon_text">Rien ne sera ajouté à votre liste. Vos réponses servent quand même à mieux vous connaître.</string>
+    <string name="question_abandon_title">Abandonner la séance ?</string>
+    <string name="question_abandon_text">Rien ne sera ajouté à votre liste. Les réponses déjà données sont gardées.</string>
     <string name="question_abandon_confirm">Abandonner</string>
     <string name="question_loading">Préparation des questions…</string>
-    <string name="question_committing">Enregistrement de votre liste…</string>
-    <string name="question_error_title">Impossible de continuer</string>
-    <string name="question_error_no_catalog">Le catalogue n\'est pas encore sur l\'appareil. Connectez-vous à internet, puis réessayez.</string>
+    <string name="question_committing">Ajout à votre liste…</string>
+    <string name="question_error_no_catalog_title">Catalogue indisponible</string>
+    <string name="question_error_no_catalog">Le catalogue n\'est pas encore sur l\'appareil. Connectez-vous à internet pour le télécharger.</string>
+    <string name="question_error_planning_title">Questions indisponibles</string>
     <string name="question_error_planning">Les questions n\'ont pas pu être préparées.</string>
+    <string name="question_error_storage_title">Enregistrement impossible</string>
     <string name="question_error_storage">La séance n\'a pas pu être enregistrée sur l\'appareil.</string>
-    <string name="question_start_over">Recommencer une séance</string>
 
     <!-- Questionnaire: meta questions -->
-    <string name="meta_horizon_title">Courses pour combien de jours\u00A0?</string>
-    <string name="meta_persons_title">Combien de personnes à la maison\u00A0?</string>
-    <string name="meta_guests_title">Des invités\u00A0?</string>
+    <string name="meta_overline">Pour bien doser</string>
+    <string name="meta_horizon_title">Courses pour combien de jours ?</string>
+    <string name="meta_horizon_subtitle">Jusqu\'à vos prochaines courses. On ajuste les quantités en conséquence.</string>
+    <string name="meta_persons_title">Combien de personnes à la maison ?</string>
+    <string name="meta_persons_subtitle">Vous compris. On ajuste les quantités en conséquence.</string>
+    <string name="meta_guests_title">Des invités ?</string>
+    <string name="meta_guests_subtitle">Pour prévoir un peu plus cette fois.</string>
+    <!-- %1$s: the value, e.g. « 7 jours ». -->
+    <string name="meta_other_days">Autre durée : %1$s</string>
+    <string name="meta_other_count">Autre nombre : %1$s</string>
+    <string name="meta_continue">Continuer avec %1$s</string>
+    <string name="meta_continue_no_guests">Continuer sans invités</string>
+    <string name="meta_skip">Passer</string>
+    <string name="meta_one_tap">Un toucher suffit : la question suivante arrive.</string>
+    <!-- The unit under a large choice: « 7 » / « jours ». -->
+    <plurals name="meta_days_unit">
+        <item quantity="one">jour</item>
+        <item quantity="many">jours</item>
+        <item quantity="other">jours</item>
+    </plurals>
+    <plurals name="meta_persons_unit">
+        <item quantity="one">personne</item>
+        <item quantity="many">personnes</item>
+        <item quantity="other">personnes</item>
+    </plurals>
+    <plurals name="meta_guests_unit">
+        <item quantity="one">invité</item>
+        <item quantity="many">invités</item>
+        <item quantity="other">invités</item>
+    </plurals>
     <string name="meta_guests_none">Aucun</string>
     <string name="meta_decrease">Moins</string>
     <string name="meta_increase">Plus</string>
@@ -104,103 +137,128 @@
         <item quantity="other">%d invités</item>
     </plurals>
 
-    <!-- Questionnaire: T1 « Probablement nécessaire » and category gates -->
+    <!-- Questionnaire: T1 « Probablement nécessaire » and the products of a category gate -->
     <string name="suggested_title">Probablement nécessaire</string>
-    <string name="suggested_subtitle">Décochez ce dont vous n\'avez pas besoin, ajustez les quantités.</string>
-    <string name="checklist_continue_without">Continuer sans rien ajouter</string>
+    <string name="suggested_subtitle">Vos essentiels, à vos quantités habituelles. Décochez ce qui ne sert pas cette fois.</string>
+    <!-- The disabled main button when no line is checked. -->
+    <string name="checklist_none_checked">Aucun article coché</string>
     <plurals name="checklist_add">
         <item quantity="one">Ajouter %d article</item>
         <item quantity="many">Ajouter %d d\'articles</item>
         <item quantity="other">Ajouter %d articles</item>
     </plurals>
-    <string name="gate_overline">Rayon</string>
-    <!-- Used when the catalog has no question for the category. %1$s: category name. -->
-    <string name="gate_question_fallback">Besoin de quelque chose en %1$s\u00A0?</string>
-    <plurals name="gate_product_count">
-        <item quantity="one">%d produit dans ce rayon</item>
-        <item quantity="many">%d de produits dans ce rayon</item>
-        <item quantity="other">%d produits dans ce rayon</item>
-    </plurals>
     <string name="gate_items_subtitle">Cochez ce qu\'il vous faut.</string>
     <string name="gate_items_none">Rien de tout ça</string>
 
+    <!-- Questionnaire: category gate -->
+    <string name="gate_overline">Tout un rayon</string>
+    <!-- Used when the catalog has no question for the category. %1$s: category name. -->
+    <string name="gate_question_fallback">Besoin de quelque chose en %1$s ?</string>
+    <plurals name="gate_product_count">
+        <item quantity="one">Une seule question pour %d produit. Si c\'est non, on passe tout le rayon.</item>
+        <item quantity="many">Une seule question pour %d de produits. Si c\'est non, on passe tout le rayon.</item>
+        <item quantity="other">Une seule question pour %d produits. Si c\'est non, on passe tout le rayon.</item>
+    </plurals>
+    <string name="gate_no">Rien</string>
+    <string name="gate_yes">Oui, voir le rayon</string>
+
     <!-- Questionnaire: product card -->
     <!-- %1$s: the product with its partitive, e.g. « du lait demi-écrémé », « des œufs ». -->
-    <string name="card_question">Il vous faut %1$s\u00A0?</string>
+    <string name="card_question">Il vous faut %1$s ?</string>
     <string name="answer_yes">Oui</string>
     <string name="answer_no">Non</string>
     <!-- %1$s: quantity, e.g. « 2 bouteilles ». -->
     <string name="answer_yes_with_quantity">Oui · %1$s</string>
     <string name="card_more_options">Plus d\'options</string>
-    <string name="card_same_as_last_time">Comme la dernière fois</string>
-    <string name="card_why">Pourquoi cette question\u00A0?</string>
-    <string name="card_badge_watch">Il en restait un peu</string>
-    <string name="card_badge_radar">Radar des oubliés</string>
+    <!-- Followed by the quantity in bold: « Autre quantité : 1 kg ». -->
+    <string name="card_other_quantity">Autre quantité :</string>
+    <!-- Under the selected quantity when it is the one of last time. -->
+    <string name="card_usual">habituel</string>
+    <string name="card_swipe_no">glisser : non</string>
+    <string name="card_swipe_yes">glisser : oui</string>
+    <string name="card_badge_staple">Essentiel</string>
+    <string name="card_badge_watch">À surveiller</string>
+    <string name="card_badge_radar">Radar</string>
     <string name="card_badge_exploration">À découvrir</string>
-    <string name="nuanced_little_left">Il en reste un peu</string>
-    <string name="nuanced_little_left_hint">On vous le redemandera en premier la prochaine fois.</string>
-    <string name="nuanced_enough_week">J\'en ai encore pour ~1 semaine</string>
-    <string name="nuanced_enough_week_hint">Plus de question sur ce produit pendant une semaine.</string>
-    <string name="nuanced_enough_month">J\'en ai encore pour ~1 mois</string>
-    <string name="nuanced_enough_month_hint">Plus de question sur ce produit pendant un mois.</string>
-    <string name="nuanced_later">Plus tard</string>
-    <string name="nuanced_later_hint">Reposée à la fin de la séance.</string>
-    <string name="nuanced_not_this_time">Pas cette fois</string>
-    <string name="nuanced_not_this_time_hint">Sans effet sur les prochaines séances.</string>
-    <string name="nuanced_never">Je n\'en achète plus</string>
-    <string name="nuanced_never_hint">Ce produit ne vous sera plus proposé.</string>
 
-    <!-- « Pourquoi cette question ? » -->
-    <string name="reason_due">Il est sans doute temps d\'en racheter.</string>
+    <!-- Questionnaire: « Plus d'options » sheet -->
+    <string name="options_hint">Une réponse plus précise nous aide à mieux viser.</string>
+    <string name="options_group_stock">Il m\'en reste</string>
+    <string name="options_group_not_now">Pas maintenant</string>
+    <string name="nuanced_little_left">Il en reste un peu</string>
+    <string name="nuanced_little_left_hint">On vous la repose la prochaine fois</string>
+    <string name="nuanced_enough_week">J\'en ai pour une semaine</string>
+    <string name="nuanced_enough_week_hint">On ne demande plus avant 7 jours</string>
+    <string name="nuanced_enough_month">J\'en ai pour un mois</string>
+    <string name="nuanced_enough_month_hint">On ne demande plus avant 30 jours</string>
+    <string name="nuanced_later">Plus tard</string>
+    <string name="nuanced_later_hint">Reposée à la fin du questionnaire</string>
+    <string name="nuanced_not_this_time">Pas cette fois</string>
+    <string name="nuanced_not_this_time_hint">Sans changer vos habitudes</string>
+    <string name="nuanced_never">Je n\'en achète plus</string>
+    <string name="nuanced_never_hint">Ne plus jamais demander</string>
+
+    <!-- « Pourquoi cette question ? »: one line, without a final period. -->
+    <string name="reason_due">Bientôt le moment d\'en racheter</string>
     <plurals name="reason_due_last">
-        <item quantity="one">Dernier achat il y a %d jour.</item>
-        <item quantity="many">Dernier achat il y a %d de jours.</item>
-        <item quantity="other">Dernier achat il y a %d jours.</item>
+        <item quantity="one">Dernier achat il y a %d jour</item>
+        <item quantity="many">Dernier achat il y a %d de jours</item>
+        <item quantity="other">Dernier achat il y a %d jours</item>
     </plurals>
     <plurals name="reason_due_interval">
-        <item quantity="one">Vous en achetez environ tous les jours.</item>
-        <item quantity="many">Vous en achetez environ tous les %d de jours.</item>
-        <item quantity="other">Vous en achetez environ tous les %d jours.</item>
+        <item quantity="one">Acheté tous les jours environ</item>
+        <item quantity="many">Acheté tous les %d de jours environ</item>
+        <item quantity="other">Acheté tous les %d jours environ</item>
     </plurals>
-    <!-- %1$s: usual quantity, e.g. « 2 L ». -->
-    <string name="reason_due_usual">D\'habitude\u00A0: %1$s.</string>
-    <string name="reason_staple">Un incontournable de la plupart des foyers.</string>
-    <string name="reason_seasonal">C\'est la saison.</string>
-    <string name="reason_event">Pour l\'événement qui approche.</string>
-    <string name="reason_radar">Vous n\'en avez pas acheté depuis un moment.</string>
+    <!-- Card only, when both are known: « Tous les 8 jours environ · dernier il y a 9 jours ». -->
+    <string name="reason_due_both" translatable="false">%1$s · %2$s</string>
+    <plurals name="reason_due_every">
+        <item quantity="one">Tous les jours environ</item>
+        <item quantity="many">Tous les %d de jours environ</item>
+        <item quantity="other">Tous les %d jours environ</item>
+    </plurals>
+    <plurals name="reason_due_last_short">
+        <item quantity="one">dernier il y a %d jour</item>
+        <item quantity="many">dernier il y a %d de jours</item>
+        <item quantity="other">dernier il y a %d jours</item>
+    </plurals>
+    <string name="reason_staple">Un essentiel que vous achetez souvent</string>
+    <string name="reason_seasonal">C\'est la saison</string>
+    <string name="reason_event">Pour l\'événement qui approche</string>
+    <string name="reason_radar">Pas acheté depuis un moment</string>
     <plurals name="reason_radar_weeks">
-        <item quantity="one">Dernier achat il y a %d semaine.</item>
-        <item quantity="many">Dernier achat il y a %d de semaines.</item>
-        <item quantity="other">Dernier achat il y a %d semaines.</item>
+        <item quantity="one">Pas acheté depuis %d semaine</item>
+        <item quantity="many">Pas acheté depuis %d de semaines</item>
+        <item quantity="other">Pas acheté depuis %d semaines</item>
     </plurals>
-    <string name="reason_prior">Souvent acheté par les foyers comme le vôtre.</string>
+    <string name="reason_prior">Souvent acheté par les foyers comme le vôtre</string>
     <plurals name="reason_prior_household">
-        <item quantity="one">Souvent acheté par les foyers d\'%d personne.</item>
-        <item quantity="many">Souvent acheté par les foyers de %d de personnes.</item>
-        <item quantity="other">Souvent acheté par les foyers de %d personnes.</item>
+        <item quantity="one">Souvent acheté par les foyers de %d personne</item>
+        <item quantity="many">Souvent acheté par les foyers de %d de personnes</item>
+        <item quantity="other">Souvent acheté par les foyers de %d personnes</item>
     </plurals>
-    <string name="reason_exploration">Une suggestion, pour découvrir.</string>
-    <string name="reason_little_left">Il vous en restait un peu la dernière fois.</string>
-    <string name="reason_last_list">C\'était sur votre dernière liste.</string>
+    <string name="reason_exploration">Une idée à essayer</string>
+    <string name="reason_little_left">Il en restait un peu la dernière fois</string>
+    <string name="reason_last_list">Sur votre dernière liste</string>
 
     <!-- Questionnaire: review and end -->
-    <string name="review_title">Récapitulatif</string>
-    <string name="review_empty">Rien à ajouter pour l\'instant.</string>
-    <plurals name="review_summary">
-        <item quantity="one">%d article va être ajouté à votre liste.</item>
-        <item quantity="many">%d d\'articles vont être ajoutés à votre liste.</item>
-        <item quantity="other">%d articles vont être ajoutés à votre liste.</item>
+    <plurals name="review_questions">
+        <item quantity="one">%d question</item>
+        <item quantity="many">%d de questions</item>
+        <item quantity="other">%d questions</item>
     </plurals>
-    <string name="review_other_title">Autre chose\u00A0?</string>
-    <string name="review_search_placeholder">Rechercher un produit</string>
+    <plurals name="review_items_title">
+        <item quantity="one">%d article à ajouter</item>
+        <item quantity="many">%d d\'articles à ajouter</item>
+        <item quantity="other">%d articles à ajouter</item>
+    </plurals>
+    <string name="review_empty">Rien à ajouter pour l\'instant</string>
+    <string name="review_search_placeholder">Autre chose ? Ex. : piles, persil…</string>
     <!-- %1$s: product name, read by TalkBack. -->
     <string name="review_add_result">Ajouter %1$s</string>
-    <plurals name="review_confirm">
-        <item quantity="one">Ajouter %d article à ma liste</item>
-        <item quantity="many">Ajouter %d d\'articles à ma liste</item>
-        <item quantity="other">Ajouter %d articles à ma liste</item>
-    </plurals>
+    <string name="review_add_to_list">Ajouter à ma liste</string>
     <string name="review_finish_empty">Terminer sans rien ajouter</string>
+    <string name="review_back">Revenir aux questions</string>
     <string name="origin_suggested">Probablement nécessaire</string>
     <string name="origin_card">Question</string>
     <string name="origin_gate">Rayon</string>
@@ -210,7 +268,7 @@
         <item quantity="many">%d d\'articles ajoutés à votre liste</item>
         <item quantity="other">%d articles ajoutés à votre liste</item>
     </plurals>
-    <string name="done_items_text">Bonnes courses\u00A0! Cochez les articles au fur et à mesure.</string>
+    <string name="done_items_text">Cochez-les pendant vos courses.</string>
     <string name="done_nothing_title">Rien à ajouter cette fois</string>
     <string name="done_nothing_text">Vos réponses sont enregistrées pour les prochaines séances.</string>
     <string name="done_abandoned_title">Séance abandonnée</string>
@@ -223,26 +281,32 @@
     <string name="list_loading">Chargement de la liste…</string>
     <!-- %1$d: items still to buy, %2$d: items on the list. -->
     <plurals name="list_remaining">
-        <item quantity="one">%1$d à acheter sur %2$d</item>
-        <item quantity="many">%1$d à acheter sur %2$d</item>
-        <item quantity="other">%1$d à acheter sur %2$d</item>
+        <item quantity="one">%1$d sur %2$d restant</item>
+        <item quantity="many">%1$d sur %2$d restants</item>
+        <item quantity="other">%1$d sur %2$d restants</item>
     </plurals>
-    <string name="list_add_placeholder">Ajouter un produit…</string>
+    <string name="list_all_checked">Tout est coché</string>
+    <string name="list_add_placeholder">Ajouter un article</string>
+    <string name="list_share">Partager la liste</string>
+    <!-- A line of the shared list: %1$s name, %2$s quantity. -->
+    <string name="list_share_line" translatable="false">• %1$s (%2$s)</string>
+    <string name="list_share_line_plain" translatable="false">• %1$s</string>
     <!-- %1$s: product name, read by TalkBack. -->
-    <string name="list_add_product">Ajouter %1$s à la liste</string>
-    <string name="list_other_title">Autre chose\u00A0?</string>
+    <string name="list_add_product">Ajouter %1$s</string>
     <!-- %1$s: what the user typed, added as a free-text line. -->
-    <string name="list_add_free_text">Ajouter «\u00A0%1$s\u00A0»</string>
+    <string name="list_add_free_text">Ajouter « %1$s »</string>
     <string name="list_section_other">Autres</string>
+    <!-- TalkBack action of a line. -->
+    <string name="list_delete_item">Supprimer</string>
     <!-- %1$s: item name. -->
-    <string name="list_delete_item">Supprimer %1$s</string>
-    <string name="list_item_deleted">«\u00A0%1$s\u00A0» supprimé</string>
+    <string name="list_item_deleted">« %1$s » supprimé</string>
     <string name="list_empty_title">Votre liste est vide</string>
-    <string name="list_empty_text">Faites le point en quelques questions, ou ajoutez un produit ci-dessus.</string>
+    <string name="list_empty_text">Répondez à quelques questions, ou ajoutez un article ci-dessus.</string>
     <string name="list_complete">Courses terminées</string>
-    <string name="list_complete_title">Courses terminées\u00A0?</string>
+    <string name="list_complete_title">Courses terminées ?</string>
     <string name="list_complete_text">Les articles cochés sont enregistrés comme achetés. Les autres restent sur votre prochaine liste.</string>
     <string name="list_complete_confirm">Terminer</string>
-    <string name="list_error_action">La modification n\'a pas pu être enregistrée.</string>
+    <string name="list_error_action">La modification n\'a pas pu être enregistrée</string>
+    <string name="list_error_title">Liste indisponible</string>
     <string name="list_error_storage">La liste n\'a pas pu être lue sur l\'appareil.</string>
 </resources>

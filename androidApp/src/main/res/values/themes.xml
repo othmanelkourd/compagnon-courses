@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Window theme only (splash, window background): the UI itself is themed by Compose (CompagnonTheme). -->
-    <style name="Theme.Compagnon" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--
+        Window theme only (splash, window background): the UI itself is themed by Compose (CompagnonTheme).
+        Light in every system mode: the dark mode is not designed yet (design/CHARTE.md § 1).
+    -->
+    <style name="Theme.Compagnon" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+    </style>
 </resources>

@@ -2,12 +2,14 @@ package com.compagnon.courses.android.questions
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -21,6 +23,7 @@ import com.compagnon.courses.android.questions.QuestionFixtures.cleaningGate
 import com.compagnon.courses.android.questions.QuestionFixtures.pastaResult
 import com.compagnon.courses.android.questions.QuestionFixtures.reviewItems
 import com.compagnon.courses.android.questions.QuestionFixtures.suggested
+import com.compagnon.courses.android.testing.overline
 import com.compagnon.courses.android.testing.plural
 import com.compagnon.courses.android.testing.string
 import com.compagnon.courses.android.ui.components.SEARCH_FIELD_TAG
@@ -50,7 +53,7 @@ class QuestionStepsTest {
 
     private fun setState(state: QuestionUiState) {
         composeRule.setContent {
-            CompagnonTheme(dynamicColor = false) {
+            CompagnonTheme {
                 QuestionnaireContent(state = state, onEvent = { events += it }, onClose = {}, onOpenList = { openedList++ })
             }
         }
@@ -77,8 +80,8 @@ class QuestionStepsTest {
     fun aGateIsAnsweredWithTheButtonsOrASwipe() {
         setState(QuestionUiState.Gate(cleaningGate, progress, canUndo = true))
 
-        composeRule.onNodeWithText(composeRule.string(R.string.answer_yes)).performClick()
-        composeRule.onNodeWithText(composeRule.string(R.string.answer_no)).performClick()
+        composeRule.onNodeWithText(composeRule.string(R.string.gate_yes)).performClick()
+        composeRule.onNodeWithText(composeRule.string(R.string.gate_no)).performClick()
         composeRule.onNodeWithTag(SWIPE_CARD_TAG).performTouchInput { swipeLeft() }
 
         composeRule.runOnIdle {
@@ -94,11 +97,21 @@ class QuestionStepsTest {
         setState(QuestionUiState.GateItems(cleaningGate, suggested.map { it.copy(checked = false) }, 0, progress, true))
 
         composeRule.onNodeWithText("Entretien").assertIsDisplayed()
-        composeRule.onNodeWithText(composeRule.string(R.string.gate_items_none)).assertIsDisplayed()
+        // Nothing checked yet: the main button says so and waits.
+        composeRule.onNodeWithText(composeRule.string(R.string.checklist_none_checked)).assertIsNotEnabled()
         composeRule.onNode(isToggleable() and hasText("Œufs", substring = true)).performClick()
+
+        composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.ToggleItem("oeufs")), events) }
+    }
+
+    @Test
+    fun noneOfTheseUnchecksEveryLineThenConfirms() {
+        setState(QuestionUiState.Suggested(suggested, checkedCount = 1, progress = progress, canUndo = true))
+
         composeRule.onNodeWithText(composeRule.string(R.string.gate_items_none)).performClick()
 
-        composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.ToggleItem("oeufs"), QuestionEvent.ConfirmItems), events) }
+        // Only « Baguette » was checked: it is unchecked, then nothing is added.
+        composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.ToggleItem("pain"), QuestionEvent.ConfirmItems), events) }
     }
 
     // --- T1 « Probablement nécessaire » ---
@@ -135,7 +148,7 @@ class QuestionStepsTest {
         setState(QuestionUiState.Meta(question, QuestionProgress(0, 10), canUndo = false))
 
         composeRule.onNodeWithText(composeRule.string(R.string.meta_horizon_title)).assertIsDisplayed()
-        composeRule.onNodeWithText(composeRule.plural(R.plurals.meta_days, 14)).performClick()
+        composeRule.onNodeWithContentDescription(composeRule.plural(R.plurals.meta_days, 14)).performClick()
 
         composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.AnswerMeta(14)), events) }
     }
@@ -149,9 +162,20 @@ class QuestionStepsTest {
             .performClick()
             .performClick()
             .performClick()
-        composeRule.onNodeWithText(composeRule.string(R.string.action_validate)).performClick()
+        composeRule.onNodeWithText(composeRule.string(R.string.meta_continue, composeRule.plural(R.plurals.meta_guests, 3))).performClick()
 
         composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.AnswerMeta(3)), events) }
+    }
+
+    @Test
+    fun skippingAMetaQuestionKeepsItsPrefilledValue() {
+        val question = MetaQuestionUi(MetaQuestionKind.PERSONS, value = 2, min = 1, max = 12, choices = listOf(1, 2, 3, 4, 5, 6))
+        setState(QuestionUiState.Meta(question, QuestionProgress(1, 10), canUndo = true))
+
+        composeRule.onNode(hasContentDescription(composeRule.string(R.string.meta_increase))).performClick()
+        composeRule.onNodeWithText(composeRule.string(R.string.meta_skip)).performClick()
+
+        composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.AnswerMeta(2)), events) }
     }
 
     // --- Review ---
@@ -160,13 +184,39 @@ class QuestionStepsTest {
     fun theReviewListsTheItemsAndWritesTheList() {
         setState(QuestionUiState.Review(reviewItems, "", emptyList(), QuestionProgress(10, 10), canUndo = true))
 
-        composeRule.onNodeWithText(composeRule.string(R.string.review_title)).assertIsDisplayed()
+        composeRule.onNodeWithText(composeRule.plural(R.plurals.review_items_title, 2)).assertIsDisplayed()
+        composeRule.onNodeWithText(composeRule.plural(R.plurals.review_questions, 10)).assertIsDisplayed()
         composeRule.onNodeWithText("Lait demi-écrémé").assertIsDisplayed()
         composeRule.onNodeWithText("2 bouteilles").assertIsDisplayed()
-        composeRule.onNodeWithText(composeRule.plural(R.plurals.review_summary, 2)).assertIsDisplayed()
-        composeRule.onNodeWithText(composeRule.plural(R.plurals.review_confirm, 2)).performClick()
+        // Blocks by origin, with their overline.
+        composeRule.onNodeWithText(composeRule.overline(composeRule.string(R.string.origin_card))).assertIsDisplayed()
+        composeRule.onNodeWithText(composeRule.overline(composeRule.string(R.string.origin_suggested))).assertIsDisplayed()
+        composeRule.onNodeWithText(composeRule.string(R.string.review_add_to_list)).performClick()
 
         composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.Confirm), events) }
+    }
+
+    @Test
+    fun theReviewMenuStartsOverOrAbandonsButDoesNotSkip() {
+        setState(QuestionUiState.Review(reviewItems, "", emptyList(), QuestionProgress(10, 10), canUndo = true))
+
+        // Same top bar as iOS: [Fermer] and [⋯], no counter on the review.
+        composeRule.onNodeWithText(composeRule.string(R.string.question_progress, 10, 10)).assertDoesNotExist()
+        composeRule.onNodeWithContentDescription(composeRule.string(R.string.action_more)).performClick()
+        composeRule.onNodeWithText(composeRule.string(R.string.question_end_questions)).assertDoesNotExist()
+        composeRule.onNodeWithText(composeRule.string(R.string.question_abandon)).assertIsDisplayed()
+        composeRule.onNodeWithText(composeRule.string(R.string.question_start_over)).performClick()
+
+        composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.StartOver), events) }
+    }
+
+    @Test
+    fun theReviewGoesBackToTheQuestions() {
+        setState(QuestionUiState.Review(reviewItems, "", emptyList(), QuestionProgress(10, 10), canUndo = true))
+
+        composeRule.onNodeWithText(composeRule.string(R.string.review_back)).performClick()
+
+        composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.Undo), events) }
     }
 
     @Test
@@ -214,6 +264,7 @@ class QuestionStepsTest {
     fun aRetryableErrorOffersRetryAndStartOver() {
         setState(QuestionUiState.Error(QuestionErrorKind.NO_CATALOG, retryable = true))
 
+        composeRule.onNodeWithText(composeRule.string(R.string.question_error_no_catalog_title)).assertIsDisplayed()
         composeRule.onNodeWithText(composeRule.string(R.string.question_error_no_catalog)).assertIsDisplayed()
         composeRule.onNodeWithText(composeRule.string(R.string.action_retry)).performClick()
         composeRule.onNodeWithText(composeRule.string(R.string.question_start_over)).performClick()

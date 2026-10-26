@@ -8,6 +8,7 @@ import com.compagnon.courses.feature.questionflow.ItemOrigin
 import com.compagnon.courses.feature.questionflow.MetaQuestionKind
 import com.compagnon.courses.feature.questionflow.NuancedAnswer
 import com.compagnon.courses.feature.questionflow.ProductCardKind
+import com.compagnon.courses.feature.questionflow.ProductCardUi
 import com.compagnon.courses.feature.questionflow.QuestionErrorKind
 import com.compagnon.courses.feature.questionflow.ReasonKind
 import com.compagnon.courses.feature.questionflow.ReasonUi
@@ -18,28 +19,35 @@ import com.compagnon.courses.feature.questionflow.ReasonUi
  */
 internal object QuestionTexts {
 
-    /** « Pourquoi cette question ? »: one or more short sentences. */
-    fun reason(reason: ReasonUi): List<UiText> = when (reason.kind) {
-        ReasonKind.DUE -> buildList {
-            reason.daysSinceLast?.let { add(UiText.Plural(R.plurals.reason_due_last, it)) }
-            reason.intervalDays?.let { add(UiText.Plural(R.plurals.reason_due_interval, it)) }
-            reason.usualQuantity?.let { add(UiText.Res(R.string.reason_due_usual, listOf(it))) }
-            if (isEmpty()) add(UiText.Res(R.string.reason_due))
+    /**
+     * « Pourquoi cette question ? »: one line without a final period (`design/TEXTES.md`). A purchase cycle reads
+     * « Tous les 8 jours environ · dernier il y a 9 jours » on a card; a [compact] line (suggestion rows) keeps only
+     * « Dernier achat il y a 9 jours », or « Acheté tous les 8 jours environ » when the last purchase is unknown.
+     */
+    fun reason(reason: ReasonUi, compact: Boolean = false): UiText = when (reason.kind) {
+        ReasonKind.DUE -> {
+            val days = reason.daysSinceLast
+            val interval = reason.intervalDays
+            when {
+                days != null && interval != null && !compact -> UiText.Res(
+                    R.string.reason_due_both,
+                    listOf(UiText.Plural(R.plurals.reason_due_every, interval), UiText.Plural(R.plurals.reason_due_last_short, days)),
+                )
+                days != null -> UiText.Plural(R.plurals.reason_due_last, days)
+                interval != null -> UiText.Plural(R.plurals.reason_due_interval, interval)
+                else -> UiText.Res(R.string.reason_due)
+            }
         }
-        ReasonKind.STAPLE -> listOf(UiText.Res(R.string.reason_staple))
-        ReasonKind.SEASONAL -> listOf(UiText.Res(R.string.reason_seasonal))
-        ReasonKind.EVENT -> listOf(UiText.Res(R.string.reason_event))
-        ReasonKind.RADAR -> listOf(
-            reason.weeksSinceLast?.let { UiText.Plural(R.plurals.reason_radar_weeks, it) }
-                ?: UiText.Res(R.string.reason_radar),
-        )
-        ReasonKind.PRIOR -> listOf(
-            reason.householdSize?.let { UiText.Plural(R.plurals.reason_prior_household, it) }
-                ?: UiText.Res(R.string.reason_prior),
-        )
-        ReasonKind.EXPLORATION -> listOf(UiText.Res(R.string.reason_exploration))
-        ReasonKind.LITTLE_LEFT -> listOf(UiText.Res(R.string.reason_little_left))
-        ReasonKind.LAST_LIST -> listOf(UiText.Res(R.string.reason_last_list))
+        ReasonKind.STAPLE -> UiText.Res(R.string.reason_staple)
+        ReasonKind.SEASONAL -> UiText.Res(R.string.reason_seasonal)
+        ReasonKind.EVENT -> UiText.Res(R.string.reason_event)
+        ReasonKind.RADAR ->
+            reason.weeksSinceLast?.let { UiText.Plural(R.plurals.reason_radar_weeks, it) } ?: UiText.Res(R.string.reason_radar)
+        ReasonKind.PRIOR ->
+            reason.householdSize?.let { UiText.Plural(R.plurals.reason_prior_household, it) } ?: UiText.Res(R.string.reason_prior)
+        ReasonKind.EXPLORATION -> UiText.Res(R.string.reason_exploration)
+        ReasonKind.LITTLE_LEFT -> UiText.Res(R.string.reason_little_left)
+        ReasonKind.LAST_LIST -> UiText.Res(R.string.reason_last_list)
     }
 
     /** The question of a gate: the catalog's own wording, else « Besoin de quelque chose en {name} ? ». */
@@ -62,24 +70,68 @@ internal object QuestionTexts {
             if (value == 0) UiText.Res(R.string.meta_guests_none) else UiText.Plural(R.plurals.meta_guests, value)
     }
 
-    /** The badge above the question, or null for a standard card. */
-    @StringRes
-    fun cardBadge(kind: ProductCardKind): Int? = when (kind) {
-        ProductCardKind.STANDARD -> null
-        ProductCardKind.WATCH -> R.string.card_badge_watch
-        ProductCardKind.RADAR -> R.string.card_badge_radar
-        ProductCardKind.EXPLORATION -> R.string.card_badge_exploration
+    /**
+     * The chip of a card: « À surveiller » ([ProductCardKind.WATCH], tomato), « Radar », « À découvrir », and
+     * « Essentiel » for a standard card asked because it is a staple. Null for other standard cards.
+     */
+    fun cardBadge(card: ProductCardUi): CardBadge? = when (card.kind) {
+        ProductCardKind.STANDARD ->
+            if (card.reason?.kind == ReasonKind.STAPLE) CardBadge(R.string.card_badge_staple, watch = false) else null
+        ProductCardKind.WATCH -> CardBadge(R.string.card_badge_watch, watch = true)
+        ProductCardKind.RADAR -> CardBadge(R.string.card_badge_radar, watch = false)
+        ProductCardKind.EXPLORATION -> CardBadge(R.string.card_badge_exploration, watch = false)
     }
 
-    /** The nuanced answers of « Plus d'options », in display order. */
-    val nuancedAnswers: List<NuancedAnswer> = listOf(
+    @StringRes
+    fun metaSubtitle(kind: MetaQuestionKind): Int = when (kind) {
+        MetaQuestionKind.HORIZON_DAYS -> R.string.meta_horizon_subtitle
+        MetaQuestionKind.PERSONS -> R.string.meta_persons_subtitle
+        MetaQuestionKind.GUESTS -> R.string.meta_guests_subtitle
+    }
+
+    /** « Autre durée : 7 jours » / « Autre nombre : 3 personnes ». */
+    @StringRes
+    fun metaOther(kind: MetaQuestionKind): Int = when (kind) {
+        MetaQuestionKind.HORIZON_DAYS -> R.string.meta_other_days
+        MetaQuestionKind.PERSONS, MetaQuestionKind.GUESTS -> R.string.meta_other_count
+    }
+
+    /**
+     * A large choice: the number (« 7 ») and its unit below (« jours »); no guest is said in words (« Aucun »),
+     * without a unit.
+     */
+    fun metaChoice(kind: MetaQuestionKind, value: Int): MetaChoiceTexts = when {
+        kind == MetaQuestionKind.GUESTS && value == 0 -> MetaChoiceTexts(UiText.Res(R.string.meta_guests_none), unit = null)
+        else -> MetaChoiceTexts(
+            UiText.Raw(value.toString()),
+            UiText.Plural(
+                when (kind) {
+                    MetaQuestionKind.HORIZON_DAYS -> R.plurals.meta_days_unit
+                    MetaQuestionKind.PERSONS -> R.plurals.meta_persons_unit
+                    MetaQuestionKind.GUESTS -> R.plurals.meta_guests_unit
+                },
+                value,
+                args = emptyList(),
+            ),
+        )
+    }
+
+    /** « Il m'en reste »: the answers that say how much is left. */
+    val stockAnswers: List<NuancedAnswer> = listOf(
         NuancedAnswer.LITTLE_LEFT,
         NuancedAnswer.ENOUGH_FOR_A_WEEK,
         NuancedAnswer.ENOUGH_FOR_A_MONTH,
+    )
+
+    /** « Pas maintenant »: the answers that put the product off. */
+    val notNowAnswers: List<NuancedAnswer> = listOf(
         NuancedAnswer.LATER,
         NuancedAnswer.NOT_THIS_TIME,
         NuancedAnswer.NEVER,
     )
+
+    /** The nuanced answers of « Plus d'options », in display order (the two groups). */
+    val nuancedAnswers: List<NuancedAnswer> = stockAnswers + notNowAnswers
 
     @StringRes
     fun nuancedLabel(answer: NuancedAnswer): Int = when (answer) {
@@ -110,9 +162,22 @@ internal object QuestionTexts {
     }
 
     @StringRes
+    fun errorTitle(kind: QuestionErrorKind): Int = when (kind) {
+        QuestionErrorKind.NO_CATALOG -> R.string.question_error_no_catalog_title
+        QuestionErrorKind.PLANNING_FAILED -> R.string.question_error_planning_title
+        QuestionErrorKind.STORAGE_FAILED -> R.string.question_error_storage_title
+    }
+
+    @StringRes
     fun errorMessage(kind: QuestionErrorKind): Int = when (kind) {
         QuestionErrorKind.NO_CATALOG -> R.string.question_error_no_catalog
         QuestionErrorKind.PLANNING_FAILED -> R.string.question_error_planning
         QuestionErrorKind.STORAGE_FAILED -> R.string.question_error_storage
     }
 }
+
+/** The chip of a product card: [text], in the « À surveiller » tone when [watch], else « Essentiel »'s. */
+internal data class CardBadge(@param:StringRes val text: Int, val watch: Boolean)
+
+/** A large meta choice: [value] (« 7 », « Aucun ») and its [unit] (« jours »), if any. */
+internal data class MetaChoiceTexts(val value: UiText, val unit: UiText?)

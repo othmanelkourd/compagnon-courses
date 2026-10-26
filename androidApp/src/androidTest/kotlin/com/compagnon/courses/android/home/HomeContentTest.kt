@@ -5,7 +5,10 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -14,7 +17,6 @@ import com.compagnon.courses.android.catalog.formatCount
 import com.compagnon.courses.android.testing.plural
 import com.compagnon.courses.android.testing.string
 import com.compagnon.courses.android.ui.theme.CompagnonTheme
-import com.compagnon.courses.feature.catalog.CatalogStatusUiState
 import com.compagnon.courses.feature.catalog.CatalogSyncOutcome
 import com.compagnon.courses.feature.catalog.CatalogSyncUiState
 import com.compagnon.courses.feature.lists.ShoppingListUiState
@@ -34,14 +36,6 @@ class HomeContentTest {
     private var listOpened = 0
     private var refreshes = 0
 
-    private val published = CatalogStatusUiState.Loaded(
-        country = "FR",
-        version = 3,
-        publishedAt = "2026-10-24T08:30:00Z",
-        categoryCount = 18,
-        productCount = 312,
-        locales = listOf("fr-FR", "fr", "en"),
-    )
     private val synced = CatalogSyncUiState(
         syncing = false,
         localVersion = 3,
@@ -61,14 +55,12 @@ class HomeContentTest {
     )
 
     private fun setContent(
-        status: CatalogStatusUiState = published,
         sync: CatalogSyncUiState = synced,
         shoppingList: ShoppingListUiState = list,
     ) {
         composeRule.setContent {
-            CompagnonTheme(dynamicColor = false) {
+            CompagnonTheme {
                 HomeContent(
-                    status = status,
                     sync = sync,
                     list = shoppingList,
                     onStartSession = { sessions++ },
@@ -92,7 +84,12 @@ class HomeContentTest {
     fun showsTheListCountAndOpensIt() {
         setContent()
 
-        composeRule.onNodeWithText(composeRule.plural(R.plurals.home_list_count, 5, 5, 3)).assertIsDisplayed()
+        val summary = composeRule.string(
+            R.string.home_list_summary,
+            composeRule.plural(R.plurals.home_list_items, 5),
+            composeRule.plural(R.plurals.home_list_checked, 2),
+        )
+        composeRule.onNodeWithText(summary).assertIsDisplayed()
         composeRule.onNodeWithText(composeRule.string(R.string.home_my_list)).performClick()
 
         composeRule.runOnIdle { assertEquals(1, listOpened) }
@@ -106,44 +103,50 @@ class HomeContentTest {
     }
 
     @Test
-    fun showsTheLocalCatalogAndItsLastSync() {
+    fun theFooterShowsTheLocalCatalog() {
         setContent()
 
-        val locale = composeRule.activity.resources.configuration.locales[0]
-        val products = composeRule.activity.resources.getQuantityString(
-            R.plurals.catalog_product_count,
-            312,
-            formatCount(312, locale),
-        )
-        composeRule.onNodeWithText(composeRule.string(R.string.catalog_local_summary, products, 3L), substring = true)
-            .assertExists()
-        composeRule.onNodeWithText(composeRule.string(R.string.catalog_outcome_up_to_date), substring = true).assertExists()
+        composeRule.onNodeWithText(footerReady(), substring = true).assertIsDisplayed()
     }
 
     @Test
-    fun refreshSyncsTheCatalogUnlessASyncIsRunning() {
+    fun tappingTheFooterSyncsTheCatalogUnlessASyncIsRunning() {
         setContent()
-        composeRule.onNodeWithContentDescription(composeRule.string(R.string.catalog_sync_now)).assertIsEnabled().performClick()
+        composeRule.onNode(hasText(footerReady(), substring = true) and hasClickLabel(composeRule.string(R.string.catalog_sync_now)))
+            .assertIsEnabled()
+            .performClick()
         composeRule.runOnIdle { assertEquals(1, refreshes) }
     }
 
     @Test
     fun theRefreshIsDisabledWhileSyncing() {
-        setContent(status = CatalogStatusUiState.Loading, sync = synced.copy(syncing = true))
+        setContent(sync = synced.copy(syncing = true))
 
-        composeRule.onNodeWithContentDescription(composeRule.string(R.string.catalog_sync_now)).assertIsNotEnabled()
-        composeRule.onNodeWithText(composeRule.string(R.string.catalog_syncing), substring = true).assertExists()
+        composeRule.onNodeWithText(composeRule.string(R.string.catalog_syncing), substring = true).assertIsNotEnabled()
     }
 
     @Test
     fun offlineWithoutCatalogTellsTheUserToConnect() {
-        setContent(
-            status = CatalogStatusUiState.Error(message = "Impossible de joindre le serveur.", retryable = true),
-            sync = CatalogSyncUiState(lastOutcome = CatalogSyncOutcome.FAILED_NETWORK),
-        )
+        setContent(sync = CatalogSyncUiState(lastOutcome = CatalogSyncOutcome.FAILED_NETWORK))
 
-        composeRule.onNodeWithText(composeRule.string(R.string.catalog_local_none), substring = true).assertExists()
         composeRule.onNodeWithText(composeRule.string(R.string.catalog_outcome_offline_none), substring = true).assertExists()
-        composeRule.onNodeWithText("Impossible de joindre le serveur.", substring = true).assertExists()
+    }
+
+    @Test
+    fun offlineWithACatalogSaysItIsUsed() {
+        setContent(sync = synced.copy(lastOutcome = CatalogSyncOutcome.FAILED_NETWORK))
+
+        composeRule.onNodeWithText(composeRule.string(R.string.catalog_footer_offline, products()), substring = true).assertExists()
+    }
+
+    private fun products(): String {
+        val locale = composeRule.activity.resources.configuration.locales[0]
+        return composeRule.activity.resources.getQuantityString(R.plurals.catalog_product_count, 312, formatCount(312, locale))
+    }
+
+    private fun footerReady(): String = composeRule.string(R.string.catalog_footer_ready, products())
+
+    private fun hasClickLabel(label: String) = SemanticsMatcher("has click label $label") { node ->
+        node.config.getOrNull(SemanticsActions.OnClick)?.label == label
     }
 }

@@ -1,7 +1,9 @@
 import Shared
 import SwiftUI
 
-/// Recap before writing the list, with « Autre chose ? » (catalog search). « Ajouter à ma liste » writes it.
+/// Recap before writing the list (mockup `Review`), with « Autre chose ? » (catalog search). « Ajouter à ma liste »
+/// writes it; « Revenir aux questions » undoes the last answer. Items are grouped by where they come from (the
+/// state gives no category). Lines have no « Retirer » button: there is no event to remove a draft item.
 struct ReviewView: View {
     let review: QuestionUiStateReview
     let send: (any QuestionEvent) -> Void
@@ -16,103 +18,175 @@ struct ReviewView: View {
     }
 
     var body: some View {
-        List {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Récapitulatif")
-                    .font(.largeTitle.bold())
-                    .accessibilityAddTraits(.isHeader)
-                Text("\(review.items.count) articles à ajouter à votre liste")
-                    .font(.body)
-                    .foregroundStyle(.secondary)
-            }
-            .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets(top: 8, leading: 4, bottom: 0, trailing: 4))
-            Section {
-                if review.items.isEmpty {
-                    Text("Aucun article pour l'instant.")
-                        .foregroundStyle(.secondary)
-                } else {
-                    ForEach(review.items, id: \.productId) { item in
-                        HStack {
-                            Text(verbatim: item.name)
-                            Spacer(minLength: 8)
-                            Text(verbatim: item.quantity.label)
-                                .foregroundStyle(.secondary)
-                                .monospacedDigit()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 6) {
+                    if review.progress.answered > 0 {
+                        HStack(spacing: 8) {
+                            IconView(.check, size: 18, weight: .bold)
+                            Text("\(Int(review.progress.answered)) questions")
                         }
-                        .frame(minHeight: 36)
-                        .accessibilityElement(children: .combine)
+                        .textStyle(.counter)
+                        .foregroundStyle(Palette.basil)
                     }
+                    title
+                        .textStyle(.screenTitle)
+                        .foregroundStyle(Palette.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
                 }
-            }
+                .padding(.horizontal, Spacing.screen)
+                .padding(.top, 16)
 
-            Section("Autre chose\u{00A0}?") {
-                HStack(spacing: 8) {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.secondary)
-                        .accessibilityHidden(true)
-                    TextField("Rechercher un produit", text: $query)
-                        .focused($searchFocused)
-                        .submitLabel(.search)
-                        .autocorrectionDisabled()
-                        .frame(minHeight: 36)
-                    if !query.isEmpty {
-                        Button("Effacer", systemImage: "xmark.circle.fill") {
-                            query = ""
+                InputField(
+                    icon: .search,
+                    placeholder: Text("Autre chose\u{00A0}? Ex.\u{00A0}: piles, persil…"),
+                    text: $query,
+                    submitLabel: .search,
+                    focus: $searchFocused
+                )
+                .accessibilityLabel("Autre chose\u{00A0}?")
+                .padding(.horizontal, Spacing.screen)
+                .padding(.top, 18)
+
+                VStack(alignment: .leading, spacing: Spacing.betweenBlocks) {
+                    if !trimmedQuery.isEmpty {
+                        searchResults
+                    }
+                    ForEach(groups, id: \.origin) { group in
+                        BlockSection(title: originTitle(group.origin)) {
+                            ListBlock(data: group.items, id: \.productId) { item in
+                                ReviewRow(item: item)
+                            }
                         }
-                        .labelStyle(.iconOnly)
-                        .foregroundStyle(.secondary)
-                        .buttonStyle(.plain)
                     }
                 }
-                ForEach(review.searchResults, id: \.productId) { result in
-                    Button {
-                        send(QuestionEventAddOther(productId: result.productId))
-                        query = ""
-                    } label: {
-                        HStack {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title3)
-                                .foregroundStyle(.tint)
-                                .accessibilityHidden(true)
-                            Text(verbatim: result.name)
-                                .foregroundStyle(.primary)
-                            Spacer(minLength: 8)
-                            Text(verbatim: result.quantity.label)
-                                .foregroundStyle(.secondary)
-                        }
-                        .frame(minHeight: 36)
-                        .contentShape(.rect)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(Text("Ajouter \(result.name), \(result.quantity.label)"))
-                }
-                if !query.trimmingCharacters(in: .whitespaces).isEmpty && review.searchResults.isEmpty {
-                    Text("Aucun produit trouvé. Vous pourrez l'ajouter en texte libre dans la liste.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
+                .padding(.horizontal, Spacing.block)
+                .padding(.top, 18)
             }
+            .padding(.bottom, 16)
         }
-        .listStyle(.insetGrouped)
         .scrollDismissesKeyboard(.interactively)
         .onChange(of: query) { _, newValue in
             send(QuestionEventSearch(query: newValue))
         }
-        .safeAreaInset(edge: .bottom) {
-            Button {
-                send(QuestionEventConfirm.shared)
-            } label: {
-                if review.items.isEmpty {
-                    Text("Terminer sans rien ajouter")
-                } else {
-                    Label("Ajouter à ma liste", systemImage: "cart.badge.plus")
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(spacing: 10) {
+                Button {
+                    send(QuestionEventConfirm.shared)
+                } label: {
+                    if review.items.isEmpty {
+                        Text("Terminer sans rien ajouter")
+                    } else {
+                        Text("Ajouter à ma liste")
+                    }
                 }
+                .buttonStyle(.primary)
+
+                Button {
+                    send(QuestionEventUndo.shared)
+                } label: {
+                    ButtonLabel("Revenir aux questions", icon: .undo, iconSize: 18)
+                }
+                .buttonStyle(.text)
+                .disabled(!review.canUndo)
+                .accessibilityHint("Revient à la question précédente")
             }
-            .buttonStyle(.big(review.items.isEmpty ? .secondary : .primary))
-            .padding()
-            .background(.bar)
+            .padding(.horizontal, Spacing.screen)
+            .padding(.top, 24)
+            .padding(.bottom, 4)
+            .background { BottomFade() }
         }
+    }
+
+    private var trimmedQuery: String {
+        query.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var title: Text {
+        if review.items.isEmpty {
+            return Text("Rien à ajouter pour l'instant")
+        }
+        return Text("\(review.items.count) articles à ajouter")
+    }
+
+    @ViewBuilder
+    private var searchResults: some View {
+        if review.searchResults.isEmpty {
+            Text("Aucun produit pour «\u{00A0}\(trimmedQuery)\u{00A0}»")
+                .textStyle(.help)
+                .foregroundStyle(Palette.inkSoft)
+                .padding(.horizontal, 6)
+        } else {
+            ListBlock(data: review.searchResults, id: \.productId) { result in
+                Button {
+                    send(QuestionEventAddOther(productId: result.productId))
+                    query = ""
+                } label: {
+                    HStack(spacing: 12) {
+                        IconView(.plus, size: 20, weight: .bold)
+                            .foregroundStyle(Palette.basil)
+                        Text(verbatim: result.name)
+                            .textStyle(.listRow)
+                            .foregroundStyle(Palette.ink)
+                            .multilineTextAlignment(.leading)
+                        Spacer(minLength: 8)
+                        Text(verbatim: result.quantity.label)
+                            .textStyle(.secondary)
+                            .foregroundStyle(Palette.inkSoft)
+                    }
+                    .padding(.horizontal, 16)
+                    .frame(minHeight: 56)
+                    .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text("Ajouter \(result.name)"))
+                .accessibilityValue(Text(verbatim: result.quantity.label))
+            }
+        }
+    }
+
+    private struct OriginGroup {
+        let origin: ItemOrigin
+        let items: [ReviewItemUi]
+    }
+
+    private var groups: [OriginGroup] {
+        let order: [ItemOrigin] = [.suggested, .card, .gate, .other]
+        return order.compactMap { origin in
+            let items = review.items.filter { $0.origin == origin }
+            return items.isEmpty ? nil : OriginGroup(origin: origin, items: items)
+        }
+    }
+
+    private func originTitle(_ origin: ItemOrigin) -> Text {
+        switch origin {
+        case .suggested: Text("Probablement nécessaire")
+        case .card: Text("Question")
+        case .gate: Text("Rayon")
+        case .other: Text("Ajouté à la main")
+        }
+    }
+}
+
+/// Ligne récapitulatif: name and quantity.
+private struct ReviewRow: View {
+    let item: ReviewItemUi
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Text(verbatim: item.name)
+                .textStyle(.listRow)
+                .foregroundStyle(Palette.ink)
+            Spacer(minLength: 8)
+            Text(verbatim: item.quantity.label)
+                .textStyle(.secondary)
+                .foregroundStyle(Palette.inkSoft)
+                .monospacedDigit()
+        }
+        .padding(.horizontal, 16)
+        .frame(minHeight: 56)
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -123,36 +197,42 @@ struct SessionDoneView: View {
     let onClose: () -> Void
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 0) {
             Spacer()
-            Image(systemName: done.abandoned ? "xmark.circle" : "checkmark.circle.fill")
-                .font(.system(size: 80))
-                .foregroundStyle(done.abandoned ? Color.secondary : Color.green)
-                .symbolEffect(.bounce, value: done.itemsAdded)
-                .accessibilityHidden(true)
+            ZStack {
+                Circle().fill(done.abandoned ? Palette.pause : Palette.basilLight)
+                IconView(done.abandoned ? .close : .check, size: 40, weight: .bold)
+                    .foregroundStyle(done.abandoned ? Palette.inkSoft : Palette.basil)
+            }
+            .frame(width: 88, height: 88)
+            .symbolEffect(.bounce, value: done.itemsAdded)
+            .accessibilityHidden(true)
             message
-                .font(.title.bold())
+                .textStyle(.screenTitle)
+                .foregroundStyle(Palette.ink)
                 .multilineTextAlignment(.center)
                 .accessibilityAddTraits(.isHeader)
-            if !done.abandoned && done.itemsAdded > 0 {
-                Text("Cochez-les pendant vos courses.")
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-            }
+                .padding(.top, 20)
+            detail
+                .textStyle(.body)
+                .foregroundStyle(Palette.inkSoft)
+                .multilineTextAlignment(.center)
+                .padding(.top, 10)
             Spacer()
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 Button(action: onShowList) {
-                    Label("Voir ma liste", systemImage: "cart")
+                    ButtonLabel("Voir ma liste", icon: .basket)
                 }
-                .buttonStyle(.big)
+                .buttonStyle(.primary)
                 Button(action: onClose) {
                     Text("Retour à l'accueil")
                 }
-                .buttonStyle(.big(.secondary))
+                .buttonStyle(.secondary)
             }
         }
-        .padding()
+        .padding(.horizontal, Spacing.screen)
+        .padding(.top, Spacing.top)
+        .padding(.bottom, 4)
     }
 
     private var message: Text {
@@ -164,6 +244,16 @@ struct SessionDoneView: View {
         }
         return Text("\(Int(done.itemsAdded)) articles ajoutés à votre liste")
     }
+
+    private var detail: Text {
+        if done.abandoned {
+            return Text("Rien n'a été ajouté à votre liste.")
+        }
+        if done.itemsAdded == 0 {
+            return Text("Vos réponses sont enregistrées pour les prochaines séances.")
+        }
+        return Text("Cochez-les pendant vos courses.")
+    }
 }
 
 /// A session error, with « Réessayer » when it may work and « Recommencer » always.
@@ -172,21 +262,35 @@ struct SessionErrorView: View {
     let send: (any QuestionEvent) -> Void
 
     var body: some View {
-        ContentUnavailableView {
-            Label(title, systemImage: icon)
-        } description: {
+        VStack(spacing: 0) {
+            Spacer()
+            IconView(.info, size: 40, weight: .medium)
+                .foregroundStyle(Palette.tomatoText)
+                .frame(width: 88, height: 88)
+                .background(Palette.tomatoLight, in: .circle)
+            Text(title)
+                .textStyle(.screenTitle)
+                .foregroundStyle(Palette.ink)
+                .multilineTextAlignment(.center)
+                .accessibilityAddTraits(.isHeader)
+                .padding(.top, 20)
             description
-        } actions: {
-            VStack(spacing: 12) {
+                .textStyle(.body)
+                .foregroundStyle(Palette.inkSoft)
+                .multilineTextAlignment(.center)
+                .padding(.top, 10)
+            Spacer()
+            VStack(spacing: 10) {
                 if error.retryable {
                     Button("Réessayer") { send(QuestionEventRetry.shared) }
-                        .buttonStyle(.big)
+                        .buttonStyle(.primary)
                 }
                 Button("Recommencer") { send(QuestionEventStartOver.shared) }
-                    .buttonStyle(.big(.secondary))
+                    .buttonStyle(.secondary)
             }
-            .padding(.horizontal)
         }
+        .padding(.horizontal, Spacing.screen)
+        .padding(.bottom, 4)
     }
 
     private var title: LocalizedStringKey {
@@ -194,13 +298,6 @@ struct SessionErrorView: View {
         case .noCatalog: "Catalogue indisponible"
         case .planningFailed: "Questions indisponibles"
         case .storageFailed: "Enregistrement impossible"
-        }
-    }
-
-    private var icon: String {
-        switch error.kind {
-        case .noCatalog: "wifi.slash"
-        case .planningFailed, .storageFailed: "exclamationmark.triangle"
         }
     }
 

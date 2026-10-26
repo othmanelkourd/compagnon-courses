@@ -17,6 +17,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.compagnon.courses.android.R
+import com.compagnon.courses.android.testing.overline
 import com.compagnon.courses.android.testing.plural
 import com.compagnon.courses.android.testing.string
 import com.compagnon.courses.android.ui.components.SEARCH_FIELD_TAG
@@ -66,7 +67,7 @@ class ShoppingListContentTest {
 
     private fun setState(state: ShoppingListUiState) {
         composeRule.setContent {
-            CompagnonTheme(dynamicColor = false) {
+            CompagnonTheme {
                 ShoppingListContent(
                     state = state,
                     onEvent = { events += it },
@@ -81,14 +82,16 @@ class ShoppingListContentTest {
     fun showsSectionsInOrderWithOthersLast() {
         setState(loaded)
 
-        composeRule.onNodeWithText("Crèmerie").assertIsDisplayed()
-        composeRule.onNodeWithText(composeRule.string(R.string.list_section_other)).assertIsDisplayed()
+        val dairyTitle = composeRule.overline("Crèmerie")
+        val othersTitle = composeRule.overline(composeRule.string(R.string.list_section_other))
+        composeRule.onNodeWithText(dairyTitle).assertIsDisplayed()
+        composeRule.onNodeWithText(othersTitle).assertIsDisplayed()
         composeRule.onNodeWithText("2 bouteilles").assertIsDisplayed()
         composeRule.onNodeWithText("Bougies d'anniversaire").assertIsDisplayed()
         composeRule.onNodeWithText(composeRule.plural(R.plurals.list_remaining, 2, 2, 3)).assertIsDisplayed()
 
-        val dairy = composeRule.onNodeWithText("Crèmerie").fetchSemanticsNode().boundsInRoot.top
-        val others = composeRule.onNodeWithText(composeRule.string(R.string.list_section_other)).fetchSemanticsNode().boundsInRoot.top
+        val dairy = composeRule.onNodeWithText(dairyTitle).fetchSemanticsNode().boundsInRoot.top
+        val others = composeRule.onNodeWithText(othersTitle).fetchSemanticsNode().boundsInRoot.top
         assertTrue(dairy < others)
     }
 
@@ -115,7 +118,7 @@ class ShoppingListContentTest {
     fun talkBackCanDeleteALine() {
         setState(loaded)
 
-        val label = composeRule.string(R.string.list_delete_item, "Beurre doux")
+        val label = composeRule.string(R.string.list_delete_item)
         val actions = composeRule.onNode(isToggleable() and hasText("Beurre doux"))
             .fetchSemanticsNode()
             .config[SemanticsActions.CustomActions]
@@ -174,10 +177,34 @@ class ShoppingListContentTest {
     fun anythingElseAddsTheTypedTextAsAFreeLine() {
         setState(loaded.copy(searchQuery = "Bougies", searchResults = emptyList()))
 
-        composeRule.onNodeWithText(composeRule.string(R.string.list_other_title)).assertIsDisplayed()
         composeRule.onNodeWithText(composeRule.string(R.string.list_add_free_text, "Bougies")).performClick()
 
         composeRule.runOnIdle { assertEquals(ShoppingListEvent.AddFreeText("Bougies"), events.first()) }
+    }
+
+    @Test
+    fun aFailedActionIsShownWithoutASnackbar() {
+        setState(loaded.copy(error = ListErrorKind.STORAGE_FAILED))
+
+        composeRule.onNodeWithText(composeRule.string(R.string.list_error_action)).assertIsDisplayed()
+        composeRule.onNodeWithText(composeRule.string(R.string.action_undo)).assertDoesNotExist()
+    }
+
+    @Test
+    fun anEmptyListHasNothingToComplete() {
+        setState(empty)
+
+        composeRule.onNodeWithText(composeRule.string(R.string.list_complete)).assertDoesNotExist()
+        composeRule.onNode(hasContentDescription(composeRule.string(R.string.list_share))).assertDoesNotExist()
+    }
+
+    @Test
+    fun aFullyCheckedListSaysSoAndHasNothingToShare() {
+        setState(loaded.copy(remainingCount = 0))
+
+        composeRule.onNodeWithText(composeRule.string(R.string.list_all_checked)).assertIsDisplayed()
+        composeRule.onNode(hasContentDescription(composeRule.string(R.string.list_share))).assertDoesNotExist()
+        composeRule.onNodeWithText(composeRule.string(R.string.list_complete)).assertIsDisplayed()
     }
 
     @Test
@@ -194,8 +221,8 @@ class ShoppingListContentTest {
     fun completingTheListAsksForConfirmation() {
         setState(loaded)
 
-        composeRule.onNode(hasContentDescription(composeRule.string(R.string.action_more))).performClick()
         composeRule.onNodeWithText(composeRule.string(R.string.list_complete)).performClick()
+        composeRule.runOnIdle { assertEquals(emptyList<ShoppingListEvent>(), events) }
         composeRule.onNodeWithText(composeRule.string(R.string.list_complete_confirm)).performClick()
 
         composeRule.runOnIdle { assertEquals(listOf(ShoppingListEvent.CompleteList), events) }
@@ -205,6 +232,7 @@ class ShoppingListContentTest {
     fun aStorageErrorOffersRetry() {
         setState(ShoppingListUiState.Error(ListErrorKind.STORAGE_FAILED))
 
+        composeRule.onNodeWithText(composeRule.string(R.string.list_error_title)).assertIsDisplayed()
         composeRule.onNodeWithText(composeRule.string(R.string.list_error_storage)).assertIsDisplayed()
         composeRule.onNodeWithText(composeRule.string(R.string.action_retry)).performClick()
 

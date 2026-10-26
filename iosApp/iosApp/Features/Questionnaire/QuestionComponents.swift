@@ -1,128 +1,48 @@
 import Shared
 import SwiftUI
 
-/// A full-width, tall button for one-thumb answers (at least 56 pt high, grows with Dynamic Type).
-struct BigButtonStyle: ButtonStyle {
-    enum Kind {
-        /// Filled with the tint: « Oui », « Ajouter… ».
-        case primary
-        /// Tinted background: « Non », presets.
-        case secondary
-        /// Selected preset or choice.
-        case selected
-    }
-
-    var kind: Kind = .primary
-    @Environment(\.isEnabled) private var isEnabled
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.title3.weight(.semibold))
-            .multilineTextAlignment(.center)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
-            .frame(maxWidth: .infinity, minHeight: 56)
-            .foregroundStyle(foreground)
-            .background(background, in: .rect(cornerRadius: 16))
-            .overlay {
-                if kind == .selected {
-                    RoundedRectangle(cornerRadius: 16).strokeBorder(Color.accentColor, lineWidth: 2)
-                }
-            }
-            .opacity(isEnabled ? 1 : 0.4)
-            .scaleEffect(configuration.isPressed ? 0.97 : 1)
-            .animation(.snappy(duration: 0.15), value: configuration.isPressed)
-            .contentShape(.rect(cornerRadius: 16))
-    }
-
-    private var foreground: Color {
-        switch kind {
-        case .primary: .white
-        case .secondary, .selected: .primary
-        }
-    }
-
-    private var background: AnyShapeStyle {
-        switch kind {
-        case .primary: AnyShapeStyle(Color.accentColor)
-        case .secondary: AnyShapeStyle(Color(uiColor: .tertiarySystemFill))
-        case .selected: AnyShapeStyle(Color.accentColor.opacity(0.15))
-        }
-    }
-}
-
-extension ButtonStyle where Self == BigButtonStyle {
-    static var big: BigButtonStyle { BigButtonStyle() }
-    static func big(_ kind: BigButtonStyle.Kind) -> BigButtonStyle { BigButtonStyle(kind: kind) }
-}
-
-/// « − 2 bouteilles + »: a quantity stepper, one VoiceOver element adjusted by swiping up and down.
-struct QuantityStepperView: View {
-    let stepper: QuantityStepper
-    var compact = false
-    let onStep: (_ increment: Bool) -> Void
+/// The bottom row of every question: « Annuler » always at the bottom left, a contextual text button on the right.
+struct QuestionFooter<Trailing: View>: View {
+    let canUndo: Bool
+    let onUndo: () -> Void
+    @ViewBuilder let trailing: Trailing
 
     var body: some View {
-        HStack(spacing: compact ? 4 : 12) {
-            stepButton(increment: false)
-            Text(verbatim: stepper.selected.label)
-                .font(compact ? .subheadline.weight(.medium) : .title3.weight(.semibold))
-                .monospacedDigit()
-                .multilineTextAlignment(.center)
-                .lineLimit(compact ? 1 : 2)
-                .minimumScaleFactor(0.8)
-                .fixedSize(horizontal: compact, vertical: false)
-                .frame(minWidth: compact ? 56 : 120)
-                .contentTransition(.numericText())
-            stepButton(increment: true)
+        HStack(spacing: 8) {
+            UndoButton(enabled: canUndo, action: onUndo)
+            Spacer(minLength: 0)
+            trailing
         }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Quantité")
-        .accessibilityValue(Text(verbatim: stepper.selected.label))
-        .accessibilityAdjustableAction { direction in
-            switch direction {
-            case .increment: if stepper.canIncrement { onStep(true) }
-            case .decrement: if stepper.canDecrement { onStep(false) }
-            @unknown default: break
-            }
-        }
-    }
-
-    private func stepButton(increment: Bool) -> some View {
-        Button {
-            onStep(increment)
-        } label: {
-            Image(systemName: increment ? "plus" : "minus")
-                .font(compact ? .body.weight(.semibold) : .title2.weight(.semibold))
-                .frame(width: compact ? 36 : 52, height: compact ? 36 : 52)
-                .background(Color(uiColor: .tertiarySystemFill), in: .circle)
-                .contentShape(.circle)
-        }
-        .buttonStyle(.plain)
-        .disabled(increment ? !stepper.canIncrement : !stepper.canDecrement)
-        .opacity((increment ? stepper.canIncrement : stepper.canDecrement) ? 1 : 0.35)
-        .accessibilityLabel(increment ? "Plus" : "Moins")
     }
 }
 
-/// « 8 / 12 » with a thin bar, for the navigation bar.
-struct QuestionProgressView: View {
-    let progress: QuestionProgress
+/// Two buttons side by side in the proportions of the charter (« Non » : « Oui » = 1 : 1.6).
+struct RatioHStack: Layout {
+    var ratios: [CGFloat] = [1, 1.6]
+    var spacing: CGFloat = 10
 
-    var body: some View {
-        let total = max(Int(progress.total), 1)
-        let answered = min(Int(progress.answered), total)
-        VStack(spacing: 4) {
-            Text(verbatim: "\(answered) / \(total)")
-                .font(.subheadline.weight(.semibold))
-                .monospacedDigit()
-                .contentTransition(.numericText())
-            ProgressView(value: Double(answered), total: Double(total))
-                .frame(width: 120)
+    private func widths(for width: CGFloat, count: Int) -> [CGFloat] {
+        let used = Array(ratios.prefix(count)) + Array(repeating: 1, count: max(0, count - ratios.count))
+        let total = used.reduce(0, +)
+        let available = max(0, width - spacing * CGFloat(max(count - 1, 0)))
+        return used.map { available * $0 / total }
+    }
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let width = proposal.width ?? 320
+        let columns = widths(for: width, count: subviews.count)
+        let height = zip(subviews, columns)
+            .map { $0.sizeThatFits(ProposedViewSize(width: $1, height: nil)).height }
+            .max() ?? 0
+        return CGSize(width: width, height: height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        var x = bounds.minX
+        for (subview, width) in zip(subviews, widths(for: bounds.width, count: subviews.count)) {
+            subview.place(at: CGPoint(x: x, y: bounds.minY), proposal: ProposedViewSize(width: width, height: bounds.height))
+            x += width + spacing
         }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Progression")
-        .accessibilityValue(Text("\(answered) questions sur \(total)"))
     }
 }
 
@@ -131,22 +51,37 @@ struct QuestionBusyView: View {
     let title: LocalizedStringKey
 
     var body: some View {
-        ProgressView(title)
-            .controlSize(.large)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        VStack(spacing: 16) {
+            ProgressView()
+                .controlSize(.large)
+                .tint(Palette.basil)
+            Text(title)
+                .textStyle(.body)
+                .foregroundStyle(Palette.inkSoft)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityElement(children: .combine)
     }
 }
 
-/// « Pourquoi cette question ? »: one short line built from `ReasonUi`.
+/// « Pourquoi cette question ? »: one line without a final period, built from `ReasonUi` (`design/TEXTES.md`). A
+/// purchase cycle reads « Tous les 8 jours environ · dernier il y a 9 jours » on a card; a `compact` line (suggestion
+/// rows) keeps only « Dernier achat il y a 9 jours », or « Acheté tous les 8 jours environ » when the last purchase is
+/// unknown. Same rules as Android's `QuestionTexts.reason`.
 enum ReasonText {
-    static func text(for reason: ReasonUi) -> Text {
+    static func text(for reason: ReasonUi, compact: Bool = false) -> Text {
         switch reason.kind {
         case .due:
-            if let days = reason.daysSinceLast?.intValue, let interval = reason.intervalDays?.intValue {
-                return Text("Acheté il y a \(days) jours, d'habitude tous les \(interval) jours")
+            let days = reason.daysSinceLast?.intValue
+            let interval = reason.intervalDays?.intValue
+            if let days, let interval, !compact {
+                return Text("Tous les \(interval) jours environ · dernier il y a \(days) jours")
             }
-            if let days = reason.daysSinceLast?.intValue {
-                return Text("Acheté il y a \(days) jours")
+            if let days {
+                return Text("Dernier achat il y a \(days) jours")
+            }
+            if let interval {
+                return Text("Acheté tous les \(interval) jours environ")
             }
             return Text("Bientôt le moment d'en racheter")
         case .staple:
@@ -154,7 +89,7 @@ enum ReasonText {
         case .seasonal:
             return Text("C'est la saison")
         case .event:
-            return Text("Pour vos invités")
+            return Text("Pour l'événement qui approche")
         case .radar:
             if let weeks = reason.weeksSinceLast?.intValue {
                 return Text("Pas acheté depuis \(weeks) semaines")
@@ -175,20 +110,14 @@ enum ReasonText {
     }
 }
 
-/// The reason line under a question, with an info icon; VoiceOver reads it as « Pourquoi cette question : … ».
-struct ReasonLabel: View {
+/// The reason of a question as an « Indice » (info icon, Aide text); VoiceOver reads « Pourquoi cette question : … ».
+struct ReasonHint: View {
     let reason: ReasonUi
 
     var body: some View {
-        Label {
-            ReasonText.text(for: reason)
-        } icon: {
-            Image(systemName: "info.circle")
-        }
-        .font(.subheadline)
-        .foregroundStyle(.secondary)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Pourquoi cette question")
-        .accessibilityValue(ReasonText.text(for: reason))
+        Hint(text: ReasonText.text(for: reason))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Pourquoi cette question")
+            .accessibilityValue(ReasonText.text(for: reason))
     }
 }
