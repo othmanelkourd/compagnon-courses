@@ -1,6 +1,6 @@
 # iosApp
 
-SwiftUI app « Basilic » (bundle id `com.monbasilic.courses`, iOS 17+, Swift 6). The UI is native; the state and logic come
+SwiftUI app « Ocimio » (bundle id `com.ocimio.courses`, iOS 17+, Swift 6). The UI is native; the state and logic come
 from the shared Kotlin code through the static `Shared` framework (SKIE), see `shared/umbrella/README.md`.
 
 ## Build and run
@@ -34,7 +34,7 @@ xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug 
 `-API_BASE_URL http://localhost:8091`) or from the command line:
 
 ```sh
-xcrun simctl launch booted com.monbasilic.courses -API_BASE_URL http://localhost:8091
+xcrun simctl launch booted com.ocimio.courses -API_BASE_URL http://localhost:8091
 ```
 
 **Debug demo screens**: `-DemoScreen <name>` shows one screen with a fake state, without Koin, a server or a session

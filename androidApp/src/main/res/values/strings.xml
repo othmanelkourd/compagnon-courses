@@ -5,7 +5,7 @@
 -->
 <resources>
     <!-- Product name (placeholder until the name is chosen): not translated. -->
-    <string name="app_name" translatable="false">Basilic</string>
+    <string name="app_name" translatable="false">Ocimio</string>
 
     <!-- Common actions -->
     <!-- Dismisses a dialog. -->

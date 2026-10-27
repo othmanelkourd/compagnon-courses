@@ -16,7 +16,7 @@ enum FontName {
     /// Checks that every embedded font loads; a missing one falls back to the system font silently, so Debug builds
     /// stop on it. Called once at launch.
     static func verifyRegistered() {
-        let logger = Logger(subsystem: "com.monbasilic.courses", category: "fonts")
+        let logger = Logger(subsystem: "com.ocimio.courses", category: "fonts")
         let missing = all.filter { UIFont(name: $0, size: 17) == nil }
         if missing.isEmpty {
             logger.debug("Embedded fonts loaded: \(all.joined(separator: ", "), privacy: .public)")

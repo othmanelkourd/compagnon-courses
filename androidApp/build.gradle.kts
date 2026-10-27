@@ -23,7 +23,7 @@ android {
     namespace = "com.compagnon.courses.android"
 
     defaultConfig {
-        applicationId = "com.monbasilic.courses"
+        applicationId = "com.ocimio.courses"
         versionCode = 1
         versionName = "0.1.0"
     }
