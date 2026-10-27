@@ -197,6 +197,7 @@ internal class QuestionUiMapper(private val session: SessionData, locale: String
             usualQuantity = usualQuantity?.let { formatter.format(it) },
         )
         ReasonCode.Staple -> ReasonUi(ReasonKind.STAPLE)
+        is ReasonCode.Cadence -> ReasonUi(ReasonKind.CADENCE, intervalDays = intervalDays)
         ReasonCode.Seasonal -> ReasonUi(ReasonKind.SEASONAL)
         is ReasonCode.Event -> ReasonUi(ReasonKind.EVENT)
         is ReasonCode.Radar -> ReasonUi(ReasonKind.RADAR, weeksSinceLast = weeksSinceLast)

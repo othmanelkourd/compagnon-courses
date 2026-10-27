@@ -1,6 +1,7 @@
 package com.compagnon.courses.engine
 
 import com.compagnon.courses.core.model.Availability
+import com.compagnon.courses.core.model.DietaryTags
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.long
 import io.kotest.property.checkAll
@@ -31,13 +32,20 @@ class PlannerPropertiesTest {
             val cap = maxOf(world.config.maxSuggested, reused.size)
             assertTrue(plan.suggested.size <= cap, "${plan.suggested.size} items on the screen")
             // A T2 product without its own card (on the screen unchecked, or behind a gate) is never likelier
-            // than a standard card: cards are served first, by decreasing p.
-            val weakest = plan.questions.filterIsInstance<PlannedQuestion.Card>()
-                .filter { it.kind == CardKind.STANDARD }
-                .minOfOrNull { it.item.score } ?: return@checkAll
+            // than a standard card: cards are served first, by decreasing p (by bands of p when the session
+            // seed rotates close products), unless its category already has its maximum of cards.
+            val cards = plan.questions.filterIsInstance<PlannedQuestion.Card>()
+                .filter { it.kind == CardKind.STANDARD || it.kind == CardKind.WATCH }
+            val weakest = cards.filter { it.kind == CardKind.STANDARD }.minOfOrNull { it.item.score } ?: return@checkAll
+            val perCategory = cards.groupingBy { it.item.product.categoryId }.eachCount()
+            val band = world.config.priorityBand
+            fun rank(score: Double): Double = if (band > 0.0) kotlin.math.floor(score / band) else score
             val gated = plan.questions.filterIsInstance<PlannedQuestion.Gate>().flatMap { it.items }
             val uncarded = (plan.suggested - reused.toSet() + gated).filter { it.tier == Tier.T2 }
-            uncarded.forEach { assertTrue(it.score <= weakest, "${it.product.slug} (${it.score}) > card $weakest") }
+            val cardCap = world.config.maxCardsPerCategory
+            uncarded
+                .filter { cardCap == null || (perCategory[it.product.categoryId] ?: 0) < cardCap }
+                .forEach { assertTrue(rank(it.score) <= rank(weakest), "${it.product.slug} (${it.score}) > card $weakest") }
         }
     }
 
@@ -46,16 +54,30 @@ class PlannerPropertiesTest {
         checkAll(ITERATIONS, Worlds.world) { world ->
             val input = world.input
             val plan = QuestionPlanner(world.config).plan(input)
-            val excluded = input.household.excludedTags
+            val household = input.household
+            val excluded = household.effectiveExcludedTags
             for (item in plan.askedProducts) {
                 val stats = input.stats[item.productId]
                 assertTrue(item.product.tags.none { it in excluded }, "${item.product.slug} has an excluded tag")
+                val known = (stats?.nPurchases ?: 0) > 0 || stats?.userCadenceDays != null ||
+                    (household.customEssentials && stats?.essential == true)
+                if (!known && DietaryTags.BABY in item.product.tags) assertTrue(household.hasBaby, "baby product")
+                if (!known && DietaryTags.PET in item.product.tags) assertTrue(household.hasPet, "pet product")
                 assertTrue(stats?.neverAsk != true, "${item.product.slug} is never-ask")
                 assertTrue(stats?.snoozeUntil.let { it == null || it <= input.now }, "${item.product.slug} is snoozed")
                 assertTrue(item.product.market.availability != Availability.UNAVAILABLE)
                 if (input.context.mode == SessionMode.ZONE) assertEquals(input.context.zone, item.product.storageZone)
             }
             assertTrue(plan.deferred.none { id -> input.products.first { it.id == id }.tags.any { it in excluded } })
+        }
+    }
+
+    @Test
+    fun tiersNeverDependOnTheSeed() = runTest {
+        checkAll(ITERATIONS, Worlds.world, Arb.long()) { world, otherSeed ->
+            val planner = QuestionPlanner(world.config)
+            val tiers = planner.score(world.input).associate { it.product.id to it.tier }
+            assertEquals(tiers, planner.score(world.input.copy(seed = otherSeed)).associate { it.product.id to it.tier })
         }
     }
 

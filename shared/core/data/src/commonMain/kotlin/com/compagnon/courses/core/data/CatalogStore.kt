@@ -158,14 +158,20 @@ internal class CatalogStore(private val database: CompagnonDatabase) {
         }.distinctBy { it.code },
     )
 
-    /** One product of the local catalog, or null when unknown or invalid. */
+    /** One product of the local catalog, with its tags, or null when unknown or invalid. */
     fun product(id: ProductId): Product? {
         val dto = catalog.selectProduct(id.value).executeAsOneOrNull()?.toDtoOrNull() ?: return null
         return try {
-            dto.toDomain()
+            dto.toDomain().withTags()
         } catch (_: CatalogMappingException) {
             null
         }
+    }
+
+    /** Tags live in `catalog_product_tag`: without them, diet and allergen filters would let everything through. */
+    private fun Product.withTags(): Product {
+        val tags = catalog.selectTagsOf(id.value).executeAsList()
+        return if (tags.isEmpty()) this else copy(tags = tags.mapTo(LinkedHashSet(), ::TagId))
     }
 
     /** Products whose normalized name or plural forms contain [query] (prefix matches first). */
@@ -176,7 +182,7 @@ internal class CatalogStore(private val database: CompagnonDatabase) {
         return catalog.searchProducts(pattern, limit.toLong()).executeAsList().mapNotNull { row ->
             val dto = row.toDtoOrNull() ?: return@mapNotNull null
             try {
-                dto.toDomain()
+                dto.toDomain().withTags()
             } catch (_: CatalogMappingException) {
                 null
             }

@@ -4,10 +4,12 @@ import com.compagnon.courses.core.model.Availability
 import com.compagnon.courses.core.model.Category
 import com.compagnon.courses.core.model.CategoryId
 import com.compagnon.courses.core.model.CycleClass
+import com.compagnon.courses.core.model.DietaryTags
 import com.compagnon.courses.core.model.Product
 import com.compagnon.courses.core.model.ProductStats
 import com.compagnon.courses.core.model.Quantity
 import com.compagnon.courses.core.model.ZoneId
+import kotlin.math.floor
 import kotlin.random.Random
 
 /** A scored product: what the planner knows about one candidate. */
@@ -49,7 +51,7 @@ class QuestionPlanner(private val config: PlannerConfig = PlannerConfig()) {
         val meta = context.metaQuestions.distinct()
             .take(minOf(config.maxMetaQuestions, budget ?: Int.MAX_VALUE))
             .map { MetaQuestion(it, context.valueOf(it)) }
-        val ordering = Ordering(input)
+        val ordering = Ordering(input, config.priorityBand)
         val builder = ItemBuilder(input)
 
         val lastList = if (context.reuseLastList) {
@@ -91,6 +93,7 @@ class QuestionPlanner(private val config: PlannerConfig = PlannerConfig()) {
         val gated = if (context.mode == SessionMode.FULL) t3 + t4 else t3
         val (gatable, ungatable) = gated.partition { ordering.category(it.product.categoryId) != null }
         val allocator = Allocator(
+            maxCardsPerCategory = config.maxCardsPerCategory,
             screenOpen = screenOpen,
             maxSuggested = config.maxSuggested,
             overflowToSuggestedAbove = config.overflowToSuggestedAbove,
@@ -138,22 +141,36 @@ class QuestionPlanner(private val config: PlannerConfig = PlannerConfig()) {
         return QuestionPlan(meta, suggested, questions, deferred, budget)
     }
 
+    /**
+     * Products the household may be asked about: available, not excluded by its diet or avoidances, not
+     * snoozed or « never ». Baby products need a baby and pet products a pet, unless the household bought or
+     * declared them (onboarding essentials and cadences).
+     */
     private fun eligibleProducts(input: PlanningInput): List<Product> {
-        val excluded = input.household.excludedTags
+        val household = input.household
+        val excluded = household.effectiveExcludedTags
         return input.products.distinctBy { it.id }.filter { product ->
             val stats = input.stats[product.id]
+            val known = (stats?.nPurchases ?: 0) > 0 || scorer.isDeclared(stats, household)
             product.market.availability != Availability.UNAVAILABLE &&
                 product.unitPolicies.isNotEmpty() &&
                 product.tags.none { it in excluded } &&
+                (known || household.hasBaby || DietaryTags.BABY !in product.tags) &&
+                (known || household.hasPet || DietaryTags.PET !in product.tags) &&
                 stats?.neverAsk != true &&
                 stats?.snoozeUntil.let { it == null || it <= input.now } &&
                 (input.context.mode != SessionMode.ZONE || product.storageZone == input.context.zone)
         }
     }
 
+    /** Eligible products the planner may ask about: editorial candidates, bought before, or declared. */
     private fun candidates(input: PlanningInput): List<Candidate> =
         eligibleProducts(input)
-            .filter { it.market.isQuestionCandidate || (input.stats[it.id]?.nPurchases ?: 0) > 0 }
+            .filter { product ->
+                val stats = input.stats[product.id]
+                product.market.isQuestionCandidate || (stats?.nPurchases ?: 0) > 0 ||
+                    scorer.isDeclared(stats, input.household)
+            }
             .map { candidate(it, input) }
 
     private fun candidate(product: Product, input: PlanningInput): Candidate {
@@ -279,6 +296,7 @@ private fun expectedNeeds(items: List<Candidate>): Double = items.sumOf { it.pro
  * number of cards. Pure: [allocate] can be called several times.
  */
 private class Allocator(
+    private val maxCardsPerCategory: Int?,
     private val screenOpen: Boolean,
     private val maxSuggested: Int,
     private val overflowToSuggestedAbove: Double,
@@ -319,8 +337,21 @@ private class Allocator(
             deferred += lastList.map { it.candidate } + t1
         }
 
-        val cards = pool.take(cardCount.coerceIn(0, pool.size))
-        pool.drop(cards.size).forEach { candidate ->
+        val cards = mutableListOf<Candidate>()
+        val perCategory = HashMap<CategoryId, Int>()
+        val rest = mutableListOf<Candidate>()
+        for (candidate in pool) {
+            val categoryId = candidate.product.categoryId
+            val inCategory = perCategory[categoryId] ?: 0
+            // Watched products always get their card; the others spread over the aisles.
+            if (cards.size < cardCount && (candidate.watch || maxCardsPerCategory == null || inCategory < maxCardsPerCategory)) {
+                cards += candidate
+                perCategory[categoryId] = inCategory + 1
+            } else {
+                rest += candidate
+            }
+        }
+        rest.forEach { candidate ->
             if (screenOpen && candidate.probability > overflowToSuggestedAbove && suggested.size < maxSuggested) {
                 suggested += SuggestedEntry(candidate, preChecked = false, lastQuantity = null)
             } else {
@@ -346,7 +377,7 @@ private class Slot(
 )
 
 /** Category (store) and zone orders of one plan. */
-private class Ordering(input: PlanningInput) {
+private class Ordering(input: PlanningInput, bandWidth: Double) {
     private val categories: Map<CategoryId, Category> = input.categories.associateBy { it.id }
     private val categoryRanks: Map<CategoryId, Int>
     private val zoneRanks: Map<ZoneId, Int>
@@ -370,11 +401,24 @@ private class Ordering(input: PlanningInput) {
 
     fun zoneRank(id: ZoneId): Int = zoneRanks[id] ?: Int.MAX_VALUE
 
-    /** Within a group: watched first, then p decreasing, then popularity, then id. */
-    val byPriority: Comparator<Candidate> = compareByDescending<Candidate> { it.watch }
-        .thenByDescending { it.probability }
-        .thenBy { it.product.market.popularityRank ?: Int.MAX_VALUE }
-        .thenBy { it.product.id.value }
+    /**
+     * Within a group: watched first, then p decreasing by bands of [PlannerConfig.priorityBand], then a key
+     * drawn from the session seed (products of close p take turns from one session to the next), then id.
+     * Tiers never depend on the seed, and a resumed session keeps its seed. Without bands: p decreasing, then
+     * popularity, then id.
+     */
+    val byPriority: Comparator<Candidate> = if (bandWidth > 0.0) {
+        val seed = input.seed
+        compareByDescending<Candidate> { it.watch }
+            .thenByDescending { floor(it.probability / bandWidth).toLong() }
+            .thenBy { rotationKey(seed, it.product.id.value) }
+            .thenBy { it.product.id.value }
+    } else {
+        compareByDescending<Candidate> { it.watch }
+            .thenByDescending { it.probability }
+            .thenBy { it.product.market.popularityRank ?: Int.MAX_VALUE }
+            .thenBy { it.product.id.value }
+    }
 
     /** Order of the T1 screen: by store category (by zone first in a home tour), then priority. */
     fun forScreen(mode: SessionMode): Comparator<Candidate> {
@@ -442,3 +486,24 @@ private class Ordering(input: PlanningInput) {
         const val KIND_GATE = 2
     }
 }
+
+/**
+ * A pseudo-random key of [productId] for [seed]: FNV-1a over the UTF-16 code units of the id, mixed with the
+ * seed by splitmix64. Pure Kotlin arithmetic, identical on every platform.
+ */
+internal fun rotationKey(seed: Long, productId: String): Long {
+    var hash = FNV_OFFSET
+    for (char in productId) {
+        hash = (hash xor char.code.toLong()) * FNV_PRIME
+    }
+    var z = hash + seed * GOLDEN_GAMMA
+    z = (z xor (z ushr 30)) * MIX_1
+    z = (z xor (z ushr 27)) * MIX_2
+    return z xor (z ushr 31)
+}
+
+private const val FNV_OFFSET: Long = -0x340d631b7bdddcdbL // 0xcbf29ce484222325
+private const val FNV_PRIME: Long = 0x100000001b3L
+private const val GOLDEN_GAMMA: Long = -0x61c8864680b583ebL // 0x9e3779b97f4a7c15
+private const val MIX_1: Long = -0x40a7b892e31b1a47L // 0xbf58476d1ce4e5b9
+private const val MIX_2: Long = -0x6b2fb644ecceee15L // 0x94d049bb133111eb

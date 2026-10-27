@@ -68,7 +68,7 @@ internal suspend fun TestDevice.product(id: String): Product {
 internal fun TestDevice.watch(vararg slugs: String) {
     slugs.forEach { slug ->
         val id = com.compagnon.courses.core.testing.SeedCatalog.productId(slug)
-        database.householdQueries.upsertPref(id, null, null, 0, null, 1, null)
+        database.householdQueries.upsertPref(id, null, null, 0, null, 1, null, 0)
     }
 }
 

@@ -38,7 +38,9 @@ xcrun simctl launch booted com.ocimio.courses -API_BASE_URL http://localhost:809
 ```
 
 **Debug demo screens**: `-DemoScreen <name>` shows one screen with a fake state, without Koin, a server or a session
-(`home`, `meta`, `suggested`, `card`, `options`, `gate`, `gateItems`, `review`, `done`, `list`, `listEmpty`; see
+(`home`, `meta`, `suggested`, `card`, `options`, `gate`, `gateItems`, `review`, `done`, `list`, `listEmpty`,
+`onboarding-welcome`, `onboarding-household`, `onboarding-diet`, `onboarding-avoid`, `onboarding-essentials`,
+`onboarding-recurring`, `onboarding-rhythm`, `onboarding-recap`, `household`; see
 `Debug/DemoScreens.swift`, which also holds the SwiftUI previews and follows the data of the mockups). Handy for
 screenshots in English (`-AppleLanguages "(en)"`) or at large text sizes
 (`xcrun simctl ui booted content_size extra-extra-large`).
@@ -54,17 +56,24 @@ without editing `project.pbxproj`. `Info.plist` is excluded from the target memb
 `INFOPLIST_FILE`, merged with the generated keys.
 
 - `App/`: `@main` entry point (`doInitKoin` in `init`, with the device language; checks the embedded fonts in Debug),
-  `AppConfiguration`, `RootView` (`NavigationStack` with the three screens; the catalog and list models live as long
-  as the app), and `SwipeBackGesture` (the screens hide the navigation bar, so the edge swipe back is re-enabled).
+  `AppConfiguration`, `RootView` (an `AppGateModel` shows the first-run onboarding before the app, then the
+  `NavigationStack` with the questionnaire, the list and « Mon foyer »; the catalog and list models live as long as
+  the app), and `SwipeBackGesture` (the screens hide the navigation bar, so the edge swipe back is re-enabled; inside a
+  step of « Mon foyer » it goes back one step instead, `SwipeBack.isBlocked`).
 - `DesignSystem/`: the common charter (`design/CHARTE.md`, mockups in `design/maquette/`), shared with Android:
   `Palette` (colors, light only), `Typography` (type scale with `Font.custom(_:size:relativeTo:)`, so it follows
   Dynamic Type), `Metrics` (spacing, radii, shadows), `Icons` (the SF Symbols of the charter and three mockup
   strokes), `Buttons` (primary, secondary, text, icon) and `Components` (top bar with « n / 12 », choice tiles,
   chips, checkboxes, the three steppers, hint, field, list blocks, snackbar).
-- `Features/Home/`: « Accueil » (« Faire le point », « Ma liste » with its counts, catalog line at the bottom).
+- `Features/Home/`: « Accueil » (« Faire le point », « Ma liste » with its counts, « Mon foyer » with the household
+  summary, catalog line at the bottom).
+- `Features/Onboarding/`: `AppGateModel`, `OnboardingModel` (first launch or « Mon foyer », one per screen), the
+  stateless `OnboardingContent` with one view per step (mockups `Onboarding-*` and `Household-Edit`), and
+  `HouseholdTexts` (choices and summaries such as « 2 adultes · 1 bébé · 1 chat »).
 - `Features/Catalog/`: `CatalogStatusModel` (server status and local sync) and `CatalogStatusFooter`.
 - `Features/Questionnaire/`: `QuestionSessionModel` (one per screen) and the stateless `QuestionContent`, which
   renders each `QuestionUiState` (meta questions, T1 list, product cards, gates, gate products, review, done, error).
+  `BigChoiceQuestionView` (large choices and boxed stepper) is shared by the meta questions and the onboarding rhythm.
   `SwipeableCard`: right = « Oui », left = « Non », duplicated by buttons and VoiceOver actions.
 - `Features/List/`: `ShoppingListModel` and the « Ma liste » screen (sections as blocks, check, swipe to delete with
   a snackbar, add by search or free text, share, « Courses terminées »).

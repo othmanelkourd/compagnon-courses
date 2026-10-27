@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
@@ -54,15 +55,19 @@ internal fun Overline(
     )
 }
 
-/** « Bloc de liste »: Surface, Trait border, radius 20; rows separated by [BlockDivider]. */
+/** « Bloc de liste »: Surface, Trait border, radius 20 (24 for the onboarding blocks); rows separated by [BlockDivider]. */
 @Composable
-internal fun ListBlock(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
+internal fun ListBlock(
+    modifier: Modifier = Modifier,
+    shape: Shape = CompagnonShapes.Block,
+    content: @Composable ColumnScope.() -> Unit,
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(CompagnonShapes.Block)
+            .clip(shape)
             .background(CompagnonColors.Surface)
-            .border(1.dp, CompagnonColors.Line, CompagnonShapes.Block),
+            .border(1.dp, CompagnonColors.Line, shape),
         content = content,
     )
 }

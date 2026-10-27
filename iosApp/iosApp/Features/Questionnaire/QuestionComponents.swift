@@ -106,6 +106,15 @@ enum ReasonText {
             return Text("Il en restait un peu la dernière fois")
         case .lastList:
             return Text("Sur votre dernière liste")
+        case .cadence:
+            // The rhythm given in « Mon foyer », for a product never bought yet.
+            switch reason.intervalDays?.intValue {
+            case 7: return Text("Vous en achetez chaque semaine")
+            case 14: return Text("Vous en achetez toutes les 2 semaines")
+            case 30: return Text("Vous en achetez chaque mois")
+            case let days?: return Text("Vous en achetez tous les \(days) jours")
+            case nil: return Text("Bientôt le moment d'en racheter")
+            }
         }
     }
 }

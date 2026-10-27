@@ -63,13 +63,15 @@ struct Checkbox: View {
 
     let checked: Bool
     var shape: Shape = .round
+    /// Fill of a checked box: Basilic, or Contour case for a box that cannot be changed (« Déjà exclu »).
+    var fill: Color = Palette.basil
 
     var body: some View {
         let radius: CGFloat = shape == .round ? 13 : 8
         ZStack {
             if checked {
                 RoundedRectangle(cornerRadius: radius)
-                    .fill(Palette.basil)
+                    .fill(fill)
                 IconView(.check, size: 16, weight: .heavy)
                     .foregroundStyle(Palette.surface)
             } else {
@@ -193,18 +195,20 @@ struct BoxedStepper: View {
     let accessibilityValue: Text
     let canDecrement: Bool
     let canIncrement: Bool
+    var decrementLabel = Text("Moins")
+    var incrementLabel = Text("Plus")
     let onStep: (_ increment: Bool) -> Void
 
     var body: some View {
         HStack(spacing: 8) {
-            StepperSquareButton(increment: false, height: 48, enabled: canDecrement, label: Text("Moins")) { onStep(false) }
+            StepperSquareButton(increment: false, height: 48, enabled: canDecrement, label: decrementLabel) { onStep(false) }
             text
                 .textStyle(.listRow)
                 .foregroundStyle(Palette.ink)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
                 .contentTransition(.numericText())
-            StepperSquareButton(increment: true, height: 48, enabled: canIncrement, label: Text("Plus")) { onStep(true) }
+            StepperSquareButton(increment: true, height: 48, enabled: canIncrement, label: incrementLabel) { onStep(true) }
         }
         .padding(10)
         .background(Palette.surface, in: .rect(cornerRadius: Radius.block))
@@ -262,6 +266,7 @@ struct FreeStepper: View {
 struct ChoiceTileStyle: ButtonStyle {
     let selected: Bool
     var height: CGFloat = 64
+    var radius: CGFloat = Radius.tile
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -271,12 +276,12 @@ struct ChoiceTileStyle: ButtonStyle {
             .padding(.vertical, 6)
             .frame(maxWidth: .infinity, minHeight: height)
             .background(selected ? Palette.basilLight : (configuration.isPressed ? Palette.surfaceSoft : Palette.surface),
-                        in: .rect(cornerRadius: Radius.tile))
+                        in: .rect(cornerRadius: radius))
             .overlay {
-                RoundedRectangle(cornerRadius: Radius.tile)
+                RoundedRectangle(cornerRadius: radius)
                     .strokeBorder(selected ? Palette.basil : Palette.line, lineWidth: selected ? 2 : 1)
             }
-            .contentShape(.rect(cornerRadius: Radius.tile))
+            .contentShape(.rect(cornerRadius: radius))
             .accessibilityAddTraits(selected ? .isSelected : [])
     }
 }
@@ -360,6 +365,8 @@ struct ListBlock<Data: RandomAccessCollection, ID: Hashable, Row: View>: View {
     let data: Data
     let id: KeyPath<Data.Element, ID>
     var separatorInset: CGFloat = 0
+    /// 20, or 24 for the blocks of the onboarding (charter § 3: 20 to 24).
+    var radius: CGFloat = Radius.block
     @ViewBuilder let row: (Data.Element) -> Row
 
     var body: some View {
@@ -375,9 +382,9 @@ struct ListBlock<Data: RandomAccessCollection, ID: Hashable, Row: View>: View {
                 }
             }
         }
-        .background(Palette.surface, in: .rect(cornerRadius: Radius.block))
-        .clipShape(.rect(cornerRadius: Radius.block))
-        .overlay { RoundedRectangle(cornerRadius: Radius.block).strokeBorder(Palette.line, lineWidth: 1) }
+        .background(Palette.surface, in: .rect(cornerRadius: radius))
+        .clipShape(.rect(cornerRadius: radius))
+        .overlay { RoundedRectangle(cornerRadius: radius).strokeBorder(Palette.line, lineWidth: 1) }
     }
 }
 
@@ -403,9 +410,11 @@ struct BlockSection<Content: View>: View {
 struct ProgressSegments: View {
     let total: Int
     let filled: Int
+    /// 3 between the 12 segments of the questionnaire, 4 between the 4 of the onboarding.
+    var spacing: CGFloat = 3
 
     var body: some View {
-        HStack(spacing: 3) {
+        HStack(spacing: spacing) {
             ForEach(0..<max(total, 1), id: \.self) { index in
                 RoundedRectangle(cornerRadius: 3)
                     .fill(index < filled ? Palette.basil : Palette.segmentEmpty)

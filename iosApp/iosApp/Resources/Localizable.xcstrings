@@ -1,6 +1,86 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+    "%lld ados" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld teen"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld teens"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ado"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ados"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld adultes" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld adult"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld adults"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld adulte"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld adultes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld articles" : {
       "localizations" : {
         "en" : {
@@ -121,6 +201,46 @@
         }
       }
     },
+    "%lld bébés" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld baby"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld babies"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld bébé"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld bébés"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld cochés" : {
       "localizations" : {
         "en" : {
@@ -154,6 +274,86 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld cochés"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld enfants" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld child"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld children"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld enfant"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld enfants"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld essentiels" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld essential"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld essentials"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld essentiel"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld essentiels"
                 }
               }
             }
@@ -281,6 +481,46 @@
         }
       }
     },
+    "%lld produits" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld product"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld products"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld produit"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld produits"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld questions" : {
       "localizations" : {
         "en" : {
@@ -314,6 +554,46 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld questions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld récurrents" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld recurring"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld recurring"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld récurrent"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld récurrents"
                 }
               }
             }
@@ -421,12 +701,62 @@
         }
       }
     },
+    "1 autre animal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 other pet"
+          }
+        }
+      }
+    },
+    "1 chat" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 cat"
+          }
+        }
+      }
+    },
+    "1 chien" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 dog"
+          }
+        }
+      }
+    },
     "12 questions" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "12 questions"
+          }
+        }
+      }
+    },
+    "18 ans et plus" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "18 and over"
+          }
+        }
+      }
+    },
+    "2 semaines" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 weeks"
           }
         }
       }
@@ -497,6 +827,36 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "Ados" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teens"
+          }
+        }
+      }
+    },
+    "Adultes" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adults"
+          }
+        }
+      }
+    },
+    "Adultes, enfants, animaux" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adults, children, pets"
           }
         }
       }
@@ -581,6 +941,16 @@
         }
       }
     },
+    "Ajouter un produit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a product"
+          }
+        }
+      }
+    },
     "Ajouter « %@ »" : {
       "localizations" : {
         "en" : {
@@ -607,6 +977,56 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Added by hand"
+          }
+        }
+      }
+    },
+    "Alcool" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alcohol"
+          }
+        }
+      }
+    },
+    "Alimentation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Food"
+          }
+        }
+      }
+    },
+    "Aller à l'accueil" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to home"
+          }
+        }
+      }
+    },
+    "Allergie, intolérance ou simple choix : ces produits ne vous seront plus proposés." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allergy, intolerance or simple choice: these products won't be suggested anymore."
+          }
+        }
+      }
+    },
+    "Amandes, noix, noisettes…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Almonds, walnuts, peanuts…"
           }
         }
       }
@@ -651,6 +1071,16 @@
         }
       }
     },
+    "Aucun produit d'origine animale" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No animal products"
+          }
+        }
+      }
+    },
     "Aucun produit pour « %@ »" : {
       "localizations" : {
         "en" : {
@@ -661,12 +1091,42 @@
         }
       }
     },
+    "Aucun produit récurrent pour l'instant." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No recurring product yet."
+          }
+        }
+      }
+    },
+    "Aucune restriction" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No restrictions"
+          }
+        }
+      }
+    },
     "Augmenter" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Increase"
+          }
+        }
+      }
+    },
+    "Autre" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other"
           }
         }
       }
@@ -761,6 +1221,36 @@
         }
       }
     },
+    "Bières, vins et spiritueux" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beer, wine and spirits"
+          }
+        }
+      }
+    },
+    "Bébés" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Babies"
+          }
+        }
+      }
+    },
+    "C'est la durée proposée à chaque « faire le point ». Vous pourrez toujours la changer." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This is the duration suggested each time you take stock. You can always change it."
+          }
+        }
+      }
+    },
     "C'est la saison" : {
       "localizations" : {
         "en" : {
@@ -822,6 +1312,76 @@
         }
       }
     },
+    "Ce que vous changez ici s'applique dès le prochain « faire le point »." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What you change here applies from your next “take stock”."
+          }
+        }
+      }
+    },
+    "Ce que vous rachetez souvent" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What you buy again often"
+          }
+        }
+      }
+    },
+    "Ce qui ne doit jamais manquer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What must never run out"
+          }
+        }
+      }
+    },
+    "Ce qui ne doit jamais manquer chez vous. Les plus courants sont déjà cochés." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What must never run out at home. The most common ones are already checked."
+          }
+        }
+      }
+    },
+    "Ces informations restent sur votre téléphone." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This information stays on your phone."
+          }
+        }
+      }
+    },
+    "Chaque mois" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every month"
+          }
+        }
+      }
+    },
+    "Chaque semaine" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every week"
+          }
+        }
+      }
+    },
     "Chargement de la liste…" : {
       "localizations" : {
         "en" : {
@@ -832,12 +1392,52 @@
         }
       }
     },
+    "Chargement du catalogue…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading the catalog…"
+          }
+        }
+      }
+    },
     "Chargement…" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loading…"
+          }
+        }
+      }
+    },
+    "Chat" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cat"
+          }
+        }
+      }
+    },
+    "Chercher un produit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search for a product"
+          }
+        }
+      }
+    },
+    "Chien" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dog"
           }
         }
       }
@@ -892,6 +1492,36 @@
         }
       }
     },
+    "Commencer · ≈ 2 min" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start · ≈ 2 min"
+          }
+        }
+      }
+    },
+    "Comment mangez-vous ?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How do you eat?"
+          }
+        }
+      }
+    },
+    "Continuer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        }
+      }
+    },
     "Continuer avec %@" : {
       "localizations" : {
         "en" : {
@@ -908,6 +1538,116 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Continue without guests"
+          }
+        }
+      }
+    },
+    "Continuer · %lld essentiels" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Continue · %lld essential"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Continue · %lld essentials"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Continuer · %lld essentiel"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Continuer · %lld essentiels"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Continuer · %lld personnes" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Continue · %lld person"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Continue · %lld people"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Continuer · %lld personne"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Continuer · %lld personnes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Continuer · %lld à éviter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue · %lld to avoid"
+          }
+        }
+      }
+    },
+    "Courses chaque mois" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shopping every month"
+          }
+        }
+      }
+    },
+    "Courses chaque semaine" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shopping every week"
           }
         }
       }
@@ -938,6 +1678,76 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Shopping done?"
+          }
+        }
+      }
+    },
+    "Courses tous les %lld jours" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Shopping every day"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Shopping every %lld days"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Courses tous les jours"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Courses tous les %lld jours"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Courses toutes les 2 semaines" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shopping every 2 weeks"
+          }
+        }
+      }
+    },
+    "De 13 à 17 ans" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "13 to 17"
+          }
+        }
+      }
+    },
+    "De 3 à 12 ans" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 to 12"
           }
         }
       }
@@ -982,6 +1792,26 @@
         }
       }
     },
+    "Des animaux ?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Any pets?"
+          }
+        }
+      }
+    },
+    "Des courses à votre image" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shopping that fits you"
+          }
+        }
+      }
+    },
     "Des invités ?" : {
       "localizations" : {
         "en" : {
@@ -992,29 +1822,42 @@
         }
       }
     },
-    "dialog.cancel" : {
-      "comment" : "Dismisses a confirmation; « Annuler » elsewhere undoes.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Annuler"
-          }
-        }
-      }
-    },
     "Diminuer" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Decrease"
+          }
+        }
+      }
+    },
+    "Donnez le rythme : on vous le proposera au bon moment, ni trop tôt ni trop tard." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set the rhythm: we'll suggest it at the right time, neither too early nor too late."
+          }
+        }
+      }
+    },
+    "Du poisson, pas de viande" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fish, no meat"
+          }
+        }
+      }
+    },
+    "Déjà exclu par le régime %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Already excluded by the %@ diet"
           }
         }
       }
@@ -1039,12 +1882,32 @@
         }
       }
     },
+    "Enfants" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Children"
+          }
+        }
+      }
+    },
     "Enregistrement impossible" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Could not save"
+          }
+        }
+      }
+    },
+    "Enregistrement…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saving…"
           }
         }
       }
@@ -1059,12 +1922,32 @@
         }
       }
     },
+    "Essentiels" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essentials"
+          }
+        }
+      }
+    },
     "Faire le point" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Take stock"
+          }
+        }
+      }
+    },
+    "Faire le point maintenant" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take stock now"
           }
         }
       }
@@ -1089,6 +1972,26 @@
         }
       }
     },
+    "Foyer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Household"
+          }
+        }
+      }
+    },
+    "Fruits à coque" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuts"
+          }
+        }
+      }
+    },
     "Garde la valeur proposée" : {
       "localizations" : {
         "en" : {
@@ -1099,32 +2002,22 @@
         }
       }
     },
-    "glisser : non" : {
+    "Gluten" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "swipe: no"
+            "value" : "Gluten"
           }
         }
       }
     },
-    "glisser : oui" : {
+    "Halal" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "swipe: yes"
-          }
-        }
-      }
-    },
-    "habituel" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "usual"
+            "value" : "Halal"
           }
         }
       }
@@ -1239,6 +2132,16 @@
         }
       }
     },
+    "Je mange de tout" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I eat everything"
+          }
+        }
+      }
+    },
     "Je n'en achète plus" : {
       "localizations" : {
         "en" : {
@@ -1289,6 +2192,26 @@
         }
       }
     },
+    "Lactose" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lactose"
+          }
+        }
+      }
+    },
+    "Lait, fromages, yaourts…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Milk, cheese, yogurt…"
+          }
+        }
+      }
+    },
     "Le catalogue n'a pas pu être enregistré sur l'appareil" : {
       "localizations" : {
         "en" : {
@@ -1309,6 +2232,16 @@
         }
       }
     },
+    "Le catalogue n'est pas encore sur l'appareil. Connectez-vous à internet, ou passez cette étape." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The catalog is not on this device yet. Connect to the internet, or skip this step."
+          }
+        }
+      }
+    },
     "Les articles cochés sont enregistrés comme achetés. Les autres restent sur votre prochaine liste." : {
       "localizations" : {
         "en" : {
@@ -1325,6 +2258,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The questions could not be prepared."
+          }
+        }
+      }
+    },
+    "Les questions s'adaptent maintenant à vous. Tout reste modifiable dans « Mon foyer »." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The questions now adapt to you. Everything can still be changed in “My household”."
           }
         }
       }
@@ -1369,12 +2312,52 @@
         }
       }
     },
+    "Modifier" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
+          }
+        }
+      }
+    },
     "Moins" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Less"
+          }
+        }
+      }
+    },
+    "Moins de 3 ans" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Under 3"
+          }
+        }
+      }
+    },
+    "Mois" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Month"
+          }
+        }
+      }
+    },
+    "Mon foyer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My household"
           }
         }
       }
@@ -1405,6 +2388,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Never ask again"
+          }
+        }
+      }
+    },
+    "Ni porc, ni charcuterie de porc" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No pork, no pork cold cuts"
+          }
+        }
+      }
+    },
+    "Ni viande, ni poisson" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No meat, no fish"
           }
         }
       }
@@ -1445,6 +2448,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "We won't ask again for 7 days"
+          }
+        }
+      }
+    },
+    "On ne vous proposera jamais un produit qui ne vous correspond pas." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We'll never suggest a product that doesn't suit you."
           }
         }
       }
@@ -1629,6 +2642,16 @@
         }
       }
     },
+    "Pescétarien" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pescatarian"
+          }
+        }
+      }
+    },
     "Plus" : {
       "localizations" : {
         "en" : {
@@ -1689,6 +2712,16 @@
         }
       }
     },
+    "Pour proposer les bonnes quantités, et les produits bébé ou animaux seulement s'il y en a." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To suggest the right quantities, and baby or pet products only when there are any."
+          }
+        }
+      }
+    },
     "Pour prévoir un peu plus cette fois." : {
       "localizations" : {
         "en" : {
@@ -1719,6 +2752,16 @@
         }
       }
     },
+    "Produits récurrents et fréquence des courses" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recurring products and how often you shop"
+          }
+        }
+      }
+    },
     "Préparation des questions…" : {
       "localizations" : {
         "en" : {
@@ -1739,12 +2782,42 @@
         }
       }
     },
+    "Pâtes, pain, farine de blé…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasta, bread, wheat flour…"
+          }
+        }
+      }
+    },
     "Quantité" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quantity"
+          }
+        }
+      }
+    },
+    "Quatre questions sur votre foyer, et Ocimio vous proposera les bons produits, au bon moment." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Four questions about your household, and Ocimio will suggest the right products at the right time."
+          }
+        }
+      }
+    },
+    "Quelque chose à éviter ?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anything to avoid?"
           }
         }
       }
@@ -1795,6 +2868,16 @@
         }
       }
     },
+    "Qui vit à la maison ?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Who lives at home?"
+          }
+        }
+      }
+    },
     "Quitte le questionnaire, qui reprendra au même endroit" : {
       "localizations" : {
         "en" : {
@@ -1841,6 +2924,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Asked again at the end of the questions"
+          }
+        }
+      }
+    },
+    "Reste sur votre téléphone, jamais partagé." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stays on your phone, never shared."
+          }
+        }
+      }
+    },
+    "Retirer %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove %@"
+          }
+        }
+      }
+    },
+    "Retour" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
           }
         }
       }
@@ -1935,6 +3048,36 @@
         }
       }
     },
+    "Rien à éviter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing to avoid"
+          }
+        }
+      }
+    },
+    "Rythme" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rhythm"
+          }
+        }
+      }
+    },
+    "Rythme : %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rhythm: %@"
+          }
+        }
+      }
+    },
     "Réessayer" : {
       "comment" : "Button of the error state that retries loading.",
       "localizations" : {
@@ -1942,6 +3085,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Try again"
+          }
+        }
+      }
+    },
+    "Régime du foyer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Household diet"
+          }
+        }
+      }
+    },
+    "Régime et produits à éviter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diet and products to avoid"
           }
         }
       }
@@ -1962,6 +3125,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Without changing your habits"
+          }
+        }
+      }
+    },
+    "Sans porc" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No pork"
+          }
+        }
+      }
+    },
+    "Sans porc ni alcool" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No pork or alcohol"
+          }
+        }
+      }
+    },
+    "Semaine" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week"
           }
         }
       }
@@ -2074,26 +3267,6 @@
             "value" : "%#@interval@ · %#@days@"
           },
           "substitutions" : {
-            "interval" : {
-              "argNum" : 1,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "About every day"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "About every %arg days"
-                    }
-                  }
-                }
-              }
-            },
             "days" : {
               "argNum" : 2,
               "formatSpecifier" : "lld",
@@ -2113,6 +3286,26 @@
                   }
                 }
               }
+            },
+            "interval" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "About every day"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "About every %arg days"
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -2122,26 +3315,6 @@
             "value" : "%#@interval@ · %#@days@"
           },
           "substitutions" : {
-            "interval" : {
-              "argNum" : 1,
-              "formatSpecifier" : "lld",
-              "variations" : {
-                "plural" : {
-                  "one" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "Tous les jours environ"
-                    }
-                  },
-                  "other" : {
-                    "stringUnit" : {
-                      "state" : "translated",
-                      "value" : "Tous les %arg jours environ"
-                    }
-                  }
-                }
-              }
-            },
             "days" : {
               "argNum" : 2,
               "formatSpecifier" : "lld",
@@ -2161,6 +3334,26 @@
                   }
                 }
               }
+            },
+            "interval" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "Tous les jours environ"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "Tous les %arg jours environ"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -2176,6 +3369,16 @@
         }
       }
     },
+    "Tout reprendre depuis le début" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start again from the beginning"
+          }
+        }
+      }
+    },
     "Tout un rayon" : {
       "localizations" : {
         "en" : {
@@ -2186,12 +3389,62 @@
         }
       }
     },
+    "Toutes les 2 semaines" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 2 weeks"
+          }
+        }
+      }
+    },
+    "Un de moins : %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One fewer: %@"
+          }
+        }
+      }
+    },
+    "Un de plus : %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One more: %@"
+          }
+        }
+      }
+    },
     "Un essentiel que vous achetez souvent" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "A staple you buy often"
+          }
+        }
+      }
+    },
+    "Un jour de moins" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One day less"
+          }
+        }
+      }
+    },
+    "Un jour de plus" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One more day"
           }
         }
       }
@@ -2286,12 +3539,52 @@
         }
       }
     },
+    "Voir moins" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See less"
+          }
+        }
+      }
+    },
+    "Voir tout (%lld)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See all (%lld)"
+          }
+        }
+      }
+    },
+    "Vos essentiels" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your essentials"
+          }
+        }
+      }
+    },
     "Vos essentiels, à vos quantités habituelles. Décochez ce qui ne sert pas cette fois." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Your staples, in your usual quantities. Uncheck what you don't need this time."
+          }
+        }
+      }
+    },
+    "Vos réponses restent sur votre téléphone." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your answers stay on your phone."
           }
         }
       }
@@ -2306,6 +3599,46 @@
         }
       }
     },
+    "Votre façon de manger" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How you eat"
+          }
+        }
+      }
+    },
+    "Votre foyer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your household"
+          }
+        }
+      }
+    },
+    "Votre foyer est prêt" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your household is ready"
+          }
+        }
+      }
+    },
+    "Votre foyer n'a pas pu être enregistré sur l'appareil" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your household could not be saved on this device"
+          }
+        }
+      }
+    },
     "Votre liste est vide" : {
       "localizations" : {
         "en" : {
@@ -2316,12 +3649,219 @@
         }
       }
     },
+    "Votre rythme" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your rhythm"
+          }
+        }
+      }
+    },
     "Vous compris. On ajuste les quantités en conséquence." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Including you. We adjust the quantities to match."
+          }
+        }
+      }
+    },
+    "Vous en achetez chaque mois" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You buy it every month"
+          }
+        }
+      }
+    },
+    "Vous en achetez chaque semaine" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You buy it every week"
+          }
+        }
+      }
+    },
+    "Vous en achetez tous les %lld jours" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "You buy it every day"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "You buy it every %lld days"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Vous en achetez tous les jours"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Vous en achetez tous les %lld jours"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Vous en achetez toutes les 2 semaines" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You buy it every 2 weeks"
+          }
+        }
+      }
+    },
+    "Vous faites les courses…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You go shopping…"
+          }
+        }
+      }
+    },
+    "Végan" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vegan"
+          }
+        }
+      }
+    },
+    "Végétarien" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vegetarian"
+          }
+        }
+      }
+    },
+    "dialog.cancel" : {
+      "comment" : "Dismisses a confirmation; « Annuler » elsewhere undoes.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        }
+      }
+    },
+    "glisser : non" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "swipe: no"
+          }
+        }
+      }
+    },
+    "glisser : oui" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "swipe: yes"
+          }
+        }
+      }
+    },
+    "habituel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "usual"
+          }
+        }
+      }
+    },
+    "sans alcool" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no alcohol"
+          }
+        }
+      }
+    },
+    "sans fruits à coque" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no nuts"
+          }
+        }
+      }
+    },
+    "sans gluten" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no gluten"
+          }
+        }
+      }
+    },
+    "sans lactose" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no lactose"
+          }
+        }
+      }
+    },
+    "sans œufs" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no eggs"
           }
         }
       }
@@ -2352,6 +3892,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Running low"
+          }
+        }
+      }
+    },
+    "Étape %lld sur %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step %lld of %lld"
+          }
+        }
+      }
+    },
+    "Œufs" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eggs"
+          }
+        }
+      }
+    },
+    "Œufs et produits qui en contiennent" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eggs and products containing them"
           }
         }
       }

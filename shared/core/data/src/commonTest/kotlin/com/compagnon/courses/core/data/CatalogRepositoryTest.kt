@@ -176,6 +176,8 @@ class CatalogRepositoryTest {
         assertTrue(data.catalog.search("pomm").first().slug.startsWith("pomme"))
         assertTrue(data.catalog.search("crème").any { it.slug.startsWith("creme") })
         assertEquals(emptyList(), data.catalog.search("  "))
+        // Search results carry their tags (diet and allergen filters rely on them).
+        assertTrue(com.compagnon.courses.core.model.TagId("contains-lactose") in data.catalog.search("lait entier").first { it.slug == "lait-entier" }.tags)
         assertEquals(emptyList(), data.catalog.search("%"))
         assertEquals(3, data.catalog.search("e", limit = 3).size)
     }

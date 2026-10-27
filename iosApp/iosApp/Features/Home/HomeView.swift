@@ -1,21 +1,25 @@
 import Shared
 import SwiftUI
 
-/// « Accueil » (mockup `Main`): start a question session, open the list, and the catalog status at the bottom.
-/// Only data that exists is shown: no first name, no planned shopping day, no statistics tiles.
+/// « Accueil » (mockup `Main`): start a question session, open the list and « Mon foyer », and the catalog status at
+/// the bottom. Only data that exists is shown: no first name, no planned shopping day, no statistics tiles.
 struct HomeView: View {
     let catalog: CatalogStatusModel
     let list: ShoppingListModel
+    let household: HouseholdSummaryUi
     let onStartSession: () -> Void
     let onOpenList: () -> Void
+    let onOpenHousehold: () -> Void
 
     var body: some View {
         HomeContent(
             listState: list.state,
+            household: household,
             catalogSync: catalog.sync,
             catalogBusy: catalog.isBusy,
             onStartSession: onStartSession,
             onOpenList: onOpenList,
+            onOpenHousehold: onOpenHousehold,
             onRefreshCatalog: catalog.refresh
         )
         .refreshable {
@@ -27,10 +31,12 @@ struct HomeView: View {
 /// Stateless rendering of the home screen (previews and Debug demo screens use fake states).
 struct HomeContent: View {
     let listState: any ShoppingListUiState
+    let household: HouseholdSummaryUi
     let catalogSync: CatalogSyncUiState
     var catalogBusy = false
     let onStartSession: () -> Void
     let onOpenList: () -> Void
+    let onOpenHousehold: () -> Void
     var onRefreshCatalog: () -> Void = {}
 
     var body: some View {
@@ -40,6 +46,7 @@ struct HomeContent: View {
                     header
                     StartSessionCard(action: onStartSession)
                     MyListCard(state: listState, action: onOpenList)
+                    HouseholdCard(summary: household, action: onOpenHousehold)
                     Spacer(minLength: 12)
                     CatalogStatusFooter(sync: catalogSync, busy: catalogBusy, onRefresh: onRefreshCatalog)
                 }
@@ -192,5 +199,42 @@ private struct MyListCard: View {
         } else {
             Text("Chargement…")
         }
+    }
+}
+
+/// « Mon foyer »: the household in a few words (« 4 personnes · Halal · 14 essentiels »), opens « Mon foyer ».
+private struct HouseholdCard: View {
+    let summary: HouseholdSummaryUi
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 16) {
+                IconView(.house, size: 24, weight: .medium)
+                    .foregroundStyle(Palette.basil)
+                    .frame(width: 52, height: 52)
+                    .background(Palette.basilLight, in: .rect(cornerRadius: 16))
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Mon foyer")
+                        .textStyle(.cardTitle)
+                        .foregroundStyle(Palette.ink)
+                    Text(verbatim: HouseholdTexts.card(summary))
+                        .textStyle(.secondary)
+                        .foregroundStyle(Palette.inkSoft)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                IconView(.chevronRight, size: 20)
+                    .foregroundStyle(Palette.inkMuted)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .background(Palette.surface, in: .rect(cornerRadius: Radius.homeListCard))
+            .overlay { RoundedRectangle(cornerRadius: Radius.homeListCard).strokeBorder(Palette.line, lineWidth: 1) }
+            .contentShape(.rect(cornerRadius: Radius.homeListCard))
+        }
+        .buttonStyle(PressScaleStyle())
+        .accessibilityElement(children: .combine)
     }
 }

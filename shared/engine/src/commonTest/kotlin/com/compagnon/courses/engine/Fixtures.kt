@@ -65,6 +65,9 @@ internal object Fixtures {
 
     val PORK = TagId("pork")
 
+    /** The planner without the seeded rotation nor the per-category card cap: products ordered by p only. */
+    val BY_SCORE: PlannerConfig = PlannerConfig(maxCardsPerCategory = null, priorityBand = 0.0)
+
     fun category(slug: String, position: Int): Category = Category(
         id = CategoryId("cat-$slug"),
         slug = slug,

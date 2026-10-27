@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -148,7 +149,7 @@ private fun ButtonContent(
 
 /**
  * « Bouton texte »: no background, Basilic 16 / 600, 48 high (44 in the mockup, 48 dp on Android). [color] is
- * Encre for « Annuler ».
+ * Encre for « Annuler »; [textStyle] is 14 / 600 for « Voir tout (44) ».
  */
 @Composable
 internal fun TextActionButton(
@@ -159,6 +160,7 @@ internal fun TextActionButton(
     color: Color = CompagnonColors.Basil,
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
+    textStyle: TextStyle = CompagnonType.ButtonText,
 ) {
     val tint = if (enabled) color else CompagnonColors.InkMuted
     Row(
@@ -171,7 +173,7 @@ internal fun TextActionButton(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (leadingIcon != null) Icon(leadingIcon, contentDescription = null, tint = tint, modifier = Modifier.size(18.dp))
-        Text(text = text, style = CompagnonType.ButtonText, color = tint)
+        Text(text = text, style = textStyle, color = tint)
         if (trailingIcon != null) Icon(trailingIcon, contentDescription = null, tint = tint, modifier = Modifier.size(16.dp))
     }
 }

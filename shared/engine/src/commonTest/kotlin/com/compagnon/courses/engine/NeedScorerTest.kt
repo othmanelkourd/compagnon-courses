@@ -128,4 +128,48 @@ class NeedScorerTest {
         val clockSkew = ProductStats(nPurchases = 1, lastAt = NOW + 2.days)
         assertEquals(score(boughtDaysAgo(0)).probability, score(clockSkew).probability, 1e-9)
     }
+
+    @Test
+    fun theHouseholdsEssentialsReplaceTheCatalogs() {
+        val chosen = household().copy(customEssentials = true)
+        val catalogStaple = product("pain", penetration = 0.6, isStaple = true)
+        val notChosen = scorer.score(catalogStaple, null, chosen, context(), MarketSignals.NONE, NOW)
+        // No longer an essential: the non-staple cold-start weight applies, without the Staple reason.
+        assertEquals(0.3, notChosen.probability, 1e-9)
+        assertTrue(ReasonCode.Staple !in notChosen.reasons)
+
+        val other = product("riz", penetration = 0.6, isStaple = false)
+        val essential = ProductStats(essential = true)
+        assertTrue(scorer.isStaple(other, essential, chosen))
+        assertTrue(!scorer.isStaple(other, essential, household()), "ignored until the household chose its essentials")
+    }
+
+    @Test
+    fun aDeclaredProductStartsFromItsPhaseInTheCycle() {
+        val baguette = product("baguette", penetration = 0.2, isStaple = false, repurchaseDays = 30)
+        fun declared(days: Int, horizon: Int = 7) =
+            score(ProductStats(userCadenceDays = days), horizonDays = horizon, product = baguette)
+
+        // H / Î, capped at 0.9: weekly → T1, every two weeks → card, monthly → behind its gate.
+        assertEquals(0.9, declared(7).probability, 1e-9)
+        assertEquals(0.5, declared(14).probability, 1e-9)
+        assertEquals(7.0 / 30.0, declared(30).probability, 1e-9)
+        assertEquals(listOf<ReasonCode>(ReasonCode.Cadence(14)), declared(14).reasons)
+        // Once bought, the logistic curve takes over (Due).
+        val bought = score(boughtDaysAgo(3).copy(userCadenceDays = 14), product = baguette)
+        assertTrue(bought.reasons.first() is ReasonCode.Due)
+    }
+
+    @Test
+    fun aChosenEssentialNeverBoughtHasAFloor() {
+        val chosen = household().copy(customEssentials = true)
+        val rice = product("riz", penetration = 0.1, isStaple = false, repurchaseDays = 60)
+        val score = scorer.score(rice, ProductStats(essential = true), chosen, context(), MarketSignals.NONE, NOW)
+        // H / Î = 7 / 60 < 0.35: the floor keeps it on a card.
+        assertEquals(0.35, score.probability, 1e-9)
+        assertEquals(listOf<ReasonCode>(ReasonCode.Staple), score.reasons)
+        // Without any interval, an essential starts at the floor.
+        val unknown = product("x", penetration = 0.1, isStaple = false, repurchaseDays = null)
+        assertEquals(0.35, scorer.score(unknown, ProductStats(essential = true), chosen, context(), MarketSignals.NONE, NOW).probability, 1e-9)
+    }
 }

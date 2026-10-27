@@ -19,52 +19,28 @@ struct MetaQuestionView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Overline(text: Text("Pour bien doser"), color: Palette.basil)
-                        title
-                            .textStyle(.screenTitleLarge)
-                            .foregroundStyle(Palette.ink)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .accessibilityAddTraits(.isHeader)
-                        subtitle
-                            .textStyle(.body)
-                            .foregroundStyle(Palette.inkSoft)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-
-                    LazyVGrid(columns: columns, spacing: 10) {
-                        ForEach(choices, id: \.self) { choice in
-                            Button {
-                                value = choice
-                                send(QuestionEventAnswerMeta(value: Int32(choice)))
-                            } label: {
-                                choiceLabel(choice)
-                            }
-                            .buttonStyle(ChoiceTileStyle(selected: choice == value, height: 88))
-                            .accessibilityLabel(valueLabel(choice))
-                        }
-                    }
-                    .padding(.top, 32)
-
-                    BoxedStepper(
-                        text: otherValueLabel,
-                        accessibilityLabel: title,
-                        accessibilityValue: valueLabel(value),
-                        canDecrement: value > Int(question.min),
-                        canIncrement: value < Int(question.max),
-                        onStep: { step($0 ? 1 : -1) }
-                    )
-                    .padding(.top, 16)
-                }
-                .padding(.top, 40)
-                .padding(.horizontal, Spacing.screen)
-                .padding(.bottom, 16)
-            }
-            .scrollBounceBehavior(.basedOnSize)
-
+        BigChoiceQuestionView(
+            overline: Text("Pour bien doser"),
+            title: title,
+            subtitle: subtitle,
+            choices: choices,
+            columns: columnCount,
+            isSelected: { $0 == value },
+            accessibilityLabel: valueLabel,
+            onSelect: { choice in
+                value = choice
+                send(QuestionEventAnswerMeta(value: Int32(choice)))
+            },
+            tileLabel: choiceLabel,
+            stepper: BoxedStepper(
+                text: otherValueLabel,
+                accessibilityLabel: title,
+                accessibilityValue: valueLabel(value),
+                canDecrement: value > Int(question.min),
+                canIncrement: value < Int(question.max),
+                onStep: { step($0 ? 1 : -1) }
+            )
+        ) {
             VStack(spacing: 0) {
                 Text("Un toucher suffit\u{00A0}: la question suivante arrive.")
                     .textStyle(.help)
@@ -86,8 +62,6 @@ struct MetaQuestionView: View {
                 }
                 .padding(.top, 12)
             }
-            .padding(.horizontal, Spacing.screen)
-            .padding(.bottom, 4)
         }
     }
 
@@ -95,11 +69,10 @@ struct MetaQuestionView: View {
         question.choices.map(\.intValue)
     }
 
-    private var columns: [GridItem] {
+    private var columnCount: Int {
         // Up to four choices on one row; more on balanced rows of three (or four for 7 and 8). Same rule on Android.
         let count = choices.count
-        let columns = count <= 4 ? max(count, 1) : (count == 7 || count == 8 ? 4 : 3)
-        return Array(repeating: GridItem(.flexible(), spacing: 10), count: columns)
+        return count <= 4 ? max(count, 1) : (count == 7 || count == 8 ? 4 : 3)
     }
 
     private var title: Text {

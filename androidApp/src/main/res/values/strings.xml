@@ -309,4 +309,220 @@
     <string name="list_error_action">La modification n\'a pas pu être enregistrée</string>
     <string name="list_error_title">Liste indisponible</string>
     <string name="list_error_storage">La liste n\'a pas pu être lue sur l\'appareil.</string>
+
+    <!-- Reasons: a rhythm declared in « Mon foyer », never bought yet -->
+    <string name="reason_cadence_week">Vous en achetez chaque semaine</string>
+    <string name="reason_cadence_two_weeks">Vous en achetez toutes les 2 semaines</string>
+    <string name="reason_cadence_month">Vous en achetez chaque mois</string>
+    <plurals name="reason_cadence_days">
+        <item quantity="one">Vous en achetez tous les jours</item>
+        <item quantity="many">Vous en achetez tous les %d de jours</item>
+        <item quantity="other">Vous en achetez tous les %d jours</item>
+    </plurals>
+
+    <!-- Onboarding « Mon foyer »: frame and welcome -->
+    <!-- Above the 4 segments. -->
+    <string name="onboarding_step">Étape %1$d sur %2$d</string>
+    <!-- [←] (TalkBack). -->
+    <string name="onboarding_back">Retour</string>
+    <string name="onboarding_skip">Passer</string>
+    <string name="onboarding_continue">Continuer</string>
+    <string name="onboarding_saving">Enregistrement…</string>
+    <!-- Tomato banner. -->
+    <string name="onboarding_error_storage">Votre foyer n\'a pas pu être enregistré sur l\'appareil</string>
+    <string name="onboarding_welcome_title">Des courses à votre image</string>
+    <string name="onboarding_welcome_text">Quatre questions sur votre foyer, et Ocimio vous proposera les bons produits, au bon moment.</string>
+    <!-- Also the overline of step 1. -->
+    <string name="onboarding_section_household">Votre foyer</string>
+    <string name="onboarding_section_household_hint">Adultes, enfants, animaux</string>
+    <!-- Also the overline of step 2. -->
+    <string name="onboarding_section_food">Votre façon de manger</string>
+    <string name="onboarding_section_food_hint">Régime et produits à éviter</string>
+    <!-- Also the title of step 3. -->
+    <string name="onboarding_section_essentials">Vos essentiels</string>
+    <string name="onboarding_section_essentials_hint">Ce qui ne doit jamais manquer</string>
+    <!-- Also the overline of step 4. -->
+    <string name="onboarding_section_rhythm">Votre rythme</string>
+    <string name="onboarding_section_rhythm_hint">Produits récurrents et fréquence des courses</string>
+    <string name="onboarding_private">Vos réponses restent sur votre téléphone.</string>
+    <string name="onboarding_start">Commencer · ≈ 2 min</string>
+    <string name="onboarding_later">Plus tard</string>
+
+    <!-- Onboarding step 1: the household -->
+    <string name="onboarding_household_title">Qui vit à la maison ?</string>
+    <string name="onboarding_household_text">Pour proposer les bonnes quantités, et les produits bébé ou animaux seulement s\'il y en a.</string>
+    <string name="onboarding_adults">Adultes</string>
+    <string name="onboarding_adults_hint">18 ans et plus</string>
+    <string name="onboarding_babies">Bébés</string>
+    <string name="onboarding_babies_hint">Moins de 3 ans</string>
+    <string name="onboarding_children">Enfants</string>
+    <string name="onboarding_children_hint">De 3 à 12 ans</string>
+    <string name="onboarding_teens">Ados</string>
+    <string name="onboarding_teens_hint">De 13 à 17 ans</string>
+    <!-- [−] (TalkBack). %1$s: the row label, in lower case. -->
+    <string name="onboarding_member_less">Un de moins : %1$s</string>
+    <!-- [+] (TalkBack). -->
+    <string name="onboarding_member_more">Un de plus : %1$s</string>
+    <string name="onboarding_pets_title">Des animaux ?</string>
+    <string name="onboarding_pet_dog">Chien</string>
+    <string name="onboarding_pet_cat">Chat</string>
+    <string name="onboarding_pet_other">Autre</string>
+    <plurals name="onboarding_household_continue">
+        <item quantity="one">Continuer · %d personne</item>
+        <item quantity="many">Continuer · %d de personnes</item>
+        <item quantity="other">Continuer · %d personnes</item>
+    </plurals>
+
+    <!-- Onboarding step 2: diet and products to avoid -->
+    <string name="onboarding_diet_title">Comment mangez-vous ?</string>
+    <string name="onboarding_diet_text">On ne vous proposera jamais un produit qui ne vous correspond pas.</string>
+    <!-- Radio group (TalkBack). -->
+    <string name="onboarding_diet_group">Régime du foyer</string>
+    <string name="diet_omnivore">Je mange de tout</string>
+    <string name="diet_omnivore_hint">Aucune restriction</string>
+    <string name="diet_no_pork">Sans porc</string>
+    <string name="diet_no_pork_hint">Ni porc, ni charcuterie de porc</string>
+    <string name="diet_halal">Halal</string>
+    <string name="diet_halal_hint">Sans porc ni alcool</string>
+    <string name="diet_pescatarian">Pescétarien</string>
+    <string name="diet_pescatarian_hint">Du poisson, pas de viande</string>
+    <string name="diet_vegetarian">Végétarien</string>
+    <string name="diet_vegetarian_hint">Ni viande, ni poisson</string>
+    <string name="diet_vegan">Végan</string>
+    <string name="diet_vegan_hint">Aucun produit d\'origine animale</string>
+    <string name="onboarding_diet_private">Reste sur votre téléphone, jamais partagé.</string>
+    <string name="onboarding_avoid_title">Quelque chose à éviter ?</string>
+    <string name="onboarding_avoid_text">Allergie, intolérance ou simple choix : ces produits ne vous seront plus proposés.</string>
+    <string name="avoid_gluten">Gluten</string>
+    <string name="avoid_gluten_hint">Pâtes, pain, farine de blé…</string>
+    <string name="avoid_lactose">Lactose</string>
+    <string name="avoid_lactose_hint">Lait, fromages, yaourts…</string>
+    <string name="avoid_nuts">Fruits à coque</string>
+    <string name="avoid_nuts_hint">Amandes, noix, noisettes…</string>
+    <string name="avoid_eggs">Œufs</string>
+    <string name="avoid_eggs_hint">Œufs et produits qui en contiennent</string>
+    <string name="avoid_alcohol">Alcool</string>
+    <string name="avoid_alcohol_hint">Bières, vins et spiritueux</string>
+    <!-- A box already excluded by the diet. %1$s: the diet, in lower case. -->
+    <string name="onboarding_avoid_locked">Déjà exclu par le régime %1$s</string>
+    <!-- At least one box checked by the person. -->
+    <string name="onboarding_avoid_continue">Continuer · %1$d à éviter</string>
+    <string name="onboarding_avoid_none">Rien à éviter</string>
+
+    <!-- Onboarding step 3: essentials -->
+    <string name="onboarding_essentials_text">Ce qui ne doit jamais manquer chez vous. Les plus courants sont déjà cochés.</string>
+    <string name="onboarding_search">Chercher un produit</string>
+    <string name="onboarding_aisle_more">Voir tout (%1$d)</string>
+    <string name="onboarding_aisle_less">Voir moins</string>
+    <plurals name="onboarding_essentials_continue">
+        <item quantity="one">Continuer · %d essentiel</item>
+        <item quantity="many">Continuer · %d de essentiels</item>
+        <item quantity="other">Continuer · %d essentiels</item>
+    </plurals>
+    <string name="onboarding_catalog_loading">Chargement du catalogue…</string>
+    <string name="onboarding_catalog_missing">Le catalogue n\'est pas encore sur l\'appareil. Connectez-vous à internet, ou passez cette étape.</string>
+
+    <!-- Onboarding step 4: recurring products and rhythm -->
+    <string name="onboarding_recurring_title">Ce que vous rachetez souvent</string>
+    <string name="onboarding_recurring_text">Donnez le rythme : on vous le proposera au bon moment, ni trop tôt ni trop tard.</string>
+    <string name="cadence_week">Semaine</string>
+    <string name="cadence_two_weeks">2 semaines</string>
+    <string name="cadence_month">Mois</string>
+    <!-- Selector (TalkBack). %1$s: product name. -->
+    <string name="onboarding_cadence_group">Rythme : %1$s</string>
+    <!-- [✕] of a row (TalkBack). -->
+    <string name="onboarding_recurring_remove">Retirer %1$s</string>
+    <string name="onboarding_recurring_add">Ajouter un produit</string>
+    <string name="onboarding_recurring_empty">Aucun produit récurrent pour l\'instant.</string>
+    <string name="onboarding_rhythm_title">Vous faites les courses…</string>
+    <string name="onboarding_rhythm_text">C\'est la durée proposée à chaque « faire le point ». Vous pourrez toujours la changer.</string>
+    <string name="rhythm_week">Chaque semaine</string>
+    <string name="rhythm_two_weeks">Toutes les 2 semaines</string>
+    <string name="rhythm_month">Chaque mois</string>
+    <!-- Sub-line of the tiles, « Autre durée ». -->
+    <plurals name="onboarding_days">
+        <item quantity="one">%d jour</item>
+        <item quantity="many">%d de jours</item>
+        <item quantity="other">%d jours</item>
+    </plurals>
+    <string name="onboarding_rhythm_other">Autre durée : %1$s</string>
+    <string name="onboarding_rhythm_less">Un jour de moins</string>
+    <string name="onboarding_rhythm_more">Un jour de plus</string>
+    <string name="onboarding_rhythm_continue">Continuer avec %1$s</string>
+
+    <!-- Onboarding recap, « Mon foyer » and its home card -->
+    <string name="onboarding_recap_title">Votre foyer est prêt</string>
+    <string name="onboarding_recap_text">Les questions s\'adaptent maintenant à vous. Tout reste modifiable dans « Mon foyer ».</string>
+    <string name="household_row_household">Foyer</string>
+    <string name="household_row_food">Alimentation</string>
+    <string name="household_row_essentials">Essentiels</string>
+    <string name="household_row_rhythm">Rythme</string>
+    <string name="household_edit">Modifier</string>
+    <string name="onboarding_start_session">Faire le point maintenant</string>
+    <string name="onboarding_go_home">Aller à l\'accueil</string>
+    <!-- Screen and home card. -->
+    <string name="household_title">Mon foyer</string>
+    <string name="household_text">Ce que vous changez ici s\'applique dès le prochain « faire le point ».</string>
+    <string name="household_private">Ces informations restent sur votre téléphone.</string>
+    <string name="household_restart">Tout reprendre depuis le début</string>
+    <!-- [←] (TalkBack). -->
+    <string name="household_back">Retour à l\'accueil</string>
+    <plurals name="household_adults">
+        <item quantity="one">%d adulte</item>
+        <item quantity="many">%d de adultes</item>
+        <item quantity="other">%d adultes</item>
+    </plurals>
+    <plurals name="household_babies">
+        <item quantity="one">%d bébé</item>
+        <item quantity="many">%d de bébés</item>
+        <item quantity="other">%d bébés</item>
+    </plurals>
+    <plurals name="household_children">
+        <item quantity="one">%d enfant</item>
+        <item quantity="many">%d de enfants</item>
+        <item quantity="other">%d enfants</item>
+    </plurals>
+    <plurals name="household_teens">
+        <item quantity="one">%d ado</item>
+        <item quantity="many">%d de ados</item>
+        <item quantity="other">%d ados</item>
+    </plurals>
+    <string name="household_pet_dog">1 chien</string>
+    <string name="household_pet_cat">1 chat</string>
+    <string name="household_pet_other">1 autre animal</string>
+    <string name="household_avoid_gluten">sans gluten</string>
+    <string name="household_avoid_lactose">sans lactose</string>
+    <string name="household_avoid_nuts">sans fruits à coque</string>
+    <string name="household_avoid_eggs">sans œufs</string>
+    <string name="household_avoid_alcohol">sans alcool</string>
+    <!-- Row « Essentiels ». -->
+    <plurals name="household_essentials">
+        <item quantity="one">%d produit</item>
+        <item quantity="many">%d de produits</item>
+        <item quantity="other">%d produits</item>
+    </plurals>
+    <string name="household_rhythm_week">Courses chaque semaine</string>
+    <string name="household_rhythm_two_weeks">Courses toutes les 2 semaines</string>
+    <string name="household_rhythm_month">Courses chaque mois</string>
+    <plurals name="household_rhythm_days">
+        <item quantity="one">Courses tous les jours</item>
+        <item quantity="many">Courses tous les %d de jours</item>
+        <item quantity="other">Courses tous les %d jours</item>
+    </plurals>
+    <plurals name="household_recurring">
+        <item quantity="one">%d récurrent</item>
+        <item quantity="many">%d de récurrents</item>
+        <item quantity="other">%d récurrents</item>
+    </plurals>
+    <!-- Home card. -->
+    <plurals name="home_household_persons">
+        <item quantity="one">%d personne</item>
+        <item quantity="many">%d de personnes</item>
+        <item quantity="other">%d personnes</item>
+    </plurals>
+    <plurals name="home_household_essentials">
+        <item quantity="one">%d essentiel</item>
+        <item quantity="many">%d de essentiels</item>
+        <item quantity="other">%d essentiels</item>
+    </plurals>
 </resources>

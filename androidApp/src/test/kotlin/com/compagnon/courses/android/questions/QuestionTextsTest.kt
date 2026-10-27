@@ -63,7 +63,8 @@ class QuestionTextsTest {
 
     @Test
     fun everyReasonKindHasItsOwnText() {
-        val texts = ReasonKind.entries.map { QuestionTexts.reason(ReasonUi(it)) }
+        // A declared rhythm always comes with its interval (the shared mapper sets it).
+        val texts = ReasonKind.entries.map { QuestionTexts.reason(ReasonUi(it, intervalDays = if (it == ReasonKind.CADENCE) 7 else null)) }
 
         assertEquals(ReasonKind.entries.size, texts.toSet().size)
     }
@@ -170,5 +171,21 @@ class QuestionTextsTest {
             QuestionErrorKind.entries.size,
             QuestionErrorKind.entries.map(QuestionTexts::errorTitle).toSet().size,
         )
+    }
+
+    @Test
+    fun aDeclaredRhythmSaysHowOftenItIsBought() {
+        // « Vous en achetez chaque semaine » for the three rhythms of « Mon foyer », a count for any other.
+        assertEquals(UiText.Res(R.string.reason_cadence_week), QuestionTexts.reason(ReasonUi(ReasonKind.CADENCE, intervalDays = 7)))
+        assertEquals(
+            UiText.Res(R.string.reason_cadence_two_weeks),
+            QuestionTexts.reason(ReasonUi(ReasonKind.CADENCE, intervalDays = 14)),
+        )
+        assertEquals(UiText.Res(R.string.reason_cadence_month), QuestionTexts.reason(ReasonUi(ReasonKind.CADENCE, intervalDays = 30)))
+        assertEquals(
+            UiText.Plural(R.plurals.reason_cadence_days, 10),
+            QuestionTexts.reason(ReasonUi(ReasonKind.CADENCE, intervalDays = 10), compact = true),
+        )
+        assertEquals(UiText.Res(R.string.reason_due), QuestionTexts.reason(ReasonUi(ReasonKind.CADENCE)))
     }
 }

@@ -2,12 +2,17 @@ package com.compagnon.courses.engine
 
 import com.compagnon.courses.core.model.AgeBand
 import com.compagnon.courses.core.model.Availability
+import com.compagnon.courses.core.model.Avoidance
 import com.compagnon.courses.core.model.CategoryId
 import com.compagnon.courses.core.model.CycleClass
+import com.compagnon.courses.core.model.Diet
+import com.compagnon.courses.core.model.DietaryTags
 import com.compagnon.courses.core.model.Dimension
 import com.compagnon.courses.core.model.EventId
 import com.compagnon.courses.core.model.LocalizedName
 import com.compagnon.courses.core.model.PackageFormat
+import com.compagnon.courses.core.model.Pet
+import com.compagnon.courses.core.model.PetKind
 import com.compagnon.courses.core.model.Product
 import com.compagnon.courses.core.model.ProductId
 import com.compagnon.courses.core.model.ProductMarket
@@ -49,7 +54,10 @@ internal data class World(val config: PlannerConfig, val input: PlanningInput) {
 }
 
 internal object Worlds {
-    val TAGS: List<TagId> = listOf(TagId("pork"), TagId("alcohol"), TagId("gluten"), TagId("lactose"))
+    val TAGS: List<TagId> = listOf(
+        TagId("pork"), TagId("alcohol"), TagId("gluten"), TagId("lactose"),
+        DietaryTags.MEAT, DietaryTags.EGGS, DietaryTags.BABY, DietaryTags.PET,
+    )
     private val UNIT_CODES: List<UnitCode> = listOf(GRAM, KILOGRAM, MILLILITER, LITER, PIECE, DOZEN, BOTTLE, BOX)
     private val STEPS: List<Long> = listOf(1L, 5L, 50L, 100L, 250L, 500L, 1000L, 2000L)
 
@@ -116,6 +124,7 @@ internal object Worlds {
             watch = Arb.int(0..7).bind() == 0,
             neverAsk = Arb.int(0..9).bind() == 0,
             userCadenceDays = Arb.int(1..60).orNull(0.8).bind(),
+            essential = Arb.int(0..3).bind() == 0,
             usualQty = Arb.long(1L..20_000L).orNull(0.5).bind()?.let { Quantity(it, Arb.element(units).bind()) },
         )
     }
@@ -129,7 +138,11 @@ internal object Worlds {
         val horizon = Arb.int(1..30).bind()
         val household = Fixtures.household(adults = Arb.int(1..4).bind()).copy(
             children = Arb.list(Arb.element(AgeBand.entries), 0..3).bind(),
-            excludedTags = TAGS.filter { Arb.int(0..2).bind() == 0 }.toSet(),
+            excludedTags = TAGS.take(4).filter { Arb.int(0..2).bind() == 0 }.toSet(),
+            pets = PetKind.entries.filter { Arb.int(0..3).bind() == 0 }.map(::Pet),
+            diet = Arb.element(Diet.entries).bind(),
+            avoid = Avoidance.entries.filter { Arb.int(0..4).bind() == 0 }.toSet(),
+            customEssentials = Arb.boolean().bind(),
         )
         val context = SessionContext(
             mode = mode,
@@ -163,6 +176,8 @@ internal object Worlds {
             explorationSlots = Arb.int(0..2).bind(),
             maxSuggested = Arb.int(0..20).bind(),
             gateSlots = Arb.int(0..3).bind(),
+            maxCardsPerCategory = Arb.element(listOf(null, 1, 2, 3)).bind(),
+            priorityBand = Arb.element(listOf(0.0, 0.05, 0.1)).bind(),
         )
         World(
             config = config,

@@ -7,6 +7,32 @@
     /// follows the mockups of `design/maquette/`.
     enum DemoScreen: String, CaseIterable {
         case home, meta, suggested, card, options, gate, gateItems, review, done, list, listEmpty
+        case onboardingWelcome = "onboarding-welcome"
+        case onboardingHousehold = "onboarding-household"
+        case onboardingDiet = "onboarding-diet"
+        case onboardingAvoid = "onboarding-avoid"
+        case onboardingEssentials = "onboarding-essentials"
+        case onboardingRecurring = "onboarding-recurring"
+        case onboardingRhythm = "onboarding-rhythm"
+        case onboardingRecap = "onboarding-recap"
+        /// « Mon foyer » (`Household-Edit`).
+        case household
+
+        /// The onboarding step this demo shows, if it is one.
+        var onboardingStep: OnboardingStep? {
+            switch self {
+            case .onboardingWelcome: .welcome
+            case .onboardingHousehold: .household
+            case .onboardingDiet: .diet
+            case .onboardingAvoid: .avoid
+            case .onboardingEssentials: .essentials
+            case .onboardingRecurring: .recurring
+            case .onboardingRhythm: .rhythm
+            case .onboardingRecap: .recap
+            case .household: .overview
+            default: nil
+            }
+        }
 
         static func fromLaunchArguments(_ defaults: UserDefaults = .standard) -> DemoScreen? {
             defaults.string(forKey: "DemoScreen").flatMap(DemoScreen.init(rawValue:))
@@ -18,13 +44,25 @@
 
         var body: some View {
             NavigationStack {
+                if let step = screen.onboardingStep {
+                    OnboardingContent(state: DemoData.onboarding(step), send: { _ in })
+                } else {
+                    content
+                }
+            }
+        }
+
+        @ViewBuilder
+        private var content: some View {
                 switch screen {
                 case .home:
                     HomeContent(
                         listState: DemoData.homeList,
+                        household: DemoData.householdSummary,
                         catalogSync: DemoData.catalogSync,
                         onStartSession: {},
-                        onOpenList: {}
+                        onOpenList: {},
+                        onOpenHousehold: {}
                     )
                 case .list:
                     ShoppingListContent(state: DemoData.list, send: { _ in })
@@ -35,7 +73,6 @@
                 default:
                     QuestionContent(state: DemoData.question(screen), send: { _ in })
                 }
-            }
         }
     }
 
@@ -201,6 +238,74 @@
             sections: [], itemCount: 14, remainingCount: 13, searchQuery: "", searchResults: [], undo: nil, error: nil
         )
 
+        // MARK: Onboarding (mockups `Onboarding-*` and `Household-Edit`)
+
+        static let householdSummary = HouseholdSummaryUi(
+            adults: 2, babies: 1, children: 1, teens: 0, pets: [.cat], diet: .halal, avoid: [.lactose],
+            essentials: 14, recurring: 4, horizonDays: 7, onboarded: true
+        )
+
+        static func chip(_ name: String, _ checked: Bool) -> ProductChipUi {
+            ProductChipUi(productId: name, name: name, checked: checked)
+        }
+
+        static let essentialsAisles = [
+            EssentialsAisleUi(categoryId: "fruits-legumes", title: "Fruits et légumes", items: [
+                chip("Bananes", true), chip("Pommes", true), chip("Oignons", true), chip("Pommes de terre", true),
+                chip("Tomates", false), chip("Carottes", false),
+            ], total: 44, expanded: false),
+            EssentialsAisleUi(categoryId: "boulangerie", title: "Boulangerie", items: [
+                chip("Baguette", true), chip("Pain de mie", false), chip("Brioche", false),
+            ], total: 12, expanded: false),
+            EssentialsAisleUi(categoryId: "epicerie-salee", title: "Épicerie salée", items: [
+                chip("Riz", true), chip("Pâtes", true), chip("Huile d'olive", true), chip("Sel fin", false),
+            ], total: 48, expanded: false),
+            EssentialsAisleUi(categoryId: "bebe", title: "Bébé", items: [
+                chip("Couches", true), chip("Lait infantile", true), chip("Petits pots", false),
+            ], total: 9, expanded: false),
+            EssentialsAisleUi(categoryId: "animaux", title: "Animaux", items: [
+                chip("Croquettes chat", true), chip("Litière", true),
+            ], total: 8, expanded: false),
+        ]
+
+        static func onboarding(_ step: OnboardingStep) -> OnboardingUiStateReady {
+            let numbers: [OnboardingStep: Int32] = [.household: 1, .diet: 2, .avoid: 2, .essentials: 3, .recurring: 4, .rhythm: 4]
+            let number = numbers[step]
+            return OnboardingUiStateReady(
+                mode: step == .overview ? .edit : .firstRun,
+                step: step,
+                stepNumber: number.map { KotlinInt(value: $0) },
+                stepCount: 4,
+                canSkip: number != nil && step != .household,
+                closeInsteadOfBack: false,
+                household: HouseholdStepUi(adults: 2, babies: 1, children: 1, teens: 0, pets: [.cat], maxMembers: 12),
+                diet: .halal,
+                avoid: [
+                    AvoidOptionUi(choice: .gluten, checked: false, locked: false),
+                    AvoidOptionUi(choice: .lactose, checked: true, locked: false),
+                    AvoidOptionUi(choice: .nuts, checked: false, locked: false),
+                    AvoidOptionUi(choice: .eggs, checked: false, locked: false),
+                    AvoidOptionUi(choice: .alcohol, checked: true, locked: true),
+                ],
+                essentials: EssentialsStepUi(
+                    query: "", aisles: essentialsAisles, results: [], checkedCount: 14, catalogLoading: false, catalogMissing: false
+                ),
+                recurring: RecurringStepUi(
+                    rows: [
+                        RecurringRowUi(productId: "baguette", name: "Baguette", cadence: .week),
+                        RecurringRowUi(productId: "couches", name: "Couches", cadence: .twoWeeks),
+                        RecurringRowUi(productId: "croquettes", name: "Croquettes chat", cadence: .month),
+                    ],
+                    adding: false, query: "", results: []
+                ),
+                rhythm: RhythmStepUi(days: 7, choice: .week, maxDays: 31),
+                summary: householdSummary,
+                saving: false,
+                error: nil,
+                exit: nil
+            )
+        }
+
         static let catalogSync = CatalogSyncUiState(
             syncing: false, localVersion: KotlinLong(value: 3), lastSyncedAt: "2026-10-24T08:30:00Z",
             productCount: 312, categoryCount: 18, lastOutcome: .upToDate
@@ -254,5 +359,25 @@
 
     #Preview("Liste vide") {
         DemoScreenView(screen: .listEmpty)
+    }
+
+    #Preview("Bienvenue") {
+        DemoScreenView(screen: .onboardingWelcome)
+    }
+
+    #Preview("Onboarding : foyer") {
+        DemoScreenView(screen: .onboardingHousehold)
+    }
+
+    #Preview("Onboarding : essentiels") {
+        DemoScreenView(screen: .onboardingEssentials)
+    }
+
+    #Preview("Onboarding : rythme") {
+        DemoScreenView(screen: .onboardingRhythm)
+    }
+
+    #Preview("Mon foyer") {
+        DemoScreenView(screen: .household)
     }
 #endif

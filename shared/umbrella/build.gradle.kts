@@ -23,6 +23,7 @@ kotlin {
             export(projects.shared.feature.catalog)
             export(projects.shared.feature.questionFlow)
             export(projects.shared.feature.lists)
+            export(projects.shared.feature.onboarding)
         }
     }
 
@@ -31,6 +32,7 @@ kotlin {
             api(projects.shared.feature.catalog)
             api(projects.shared.feature.questionFlow)
             api(projects.shared.feature.lists)
+            api(projects.shared.feature.onboarding)
             // `sharedModules(config: NetworkConfig, scope: CatalogScope)` is public API.
             api(projects.shared.core.network)
             api(projects.shared.core.data)

@@ -158,3 +158,6 @@ DELETE FROM catalog_product_tag;
 
 selectAllTags:
 SELECT * FROM catalog_product_tag;
+
+selectTagsOf:
+SELECT tag FROM catalog_product_tag WHERE product_id = :productId ORDER BY tag;

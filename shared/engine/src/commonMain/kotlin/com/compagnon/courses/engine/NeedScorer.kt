@@ -17,7 +17,11 @@ sealed interface ReasonCode {
     /** Bought [daysSinceLast] days ago, usually every [intervalDays] days, usually [usualQuantity]. */
     data class Due(val daysSinceLast: Int, val intervalDays: Int, val usualQuantity: Quantity?) : ReasonCode
 
+    /** An essential: of the household (onboarding) or, until it chose them, of the catalog. */
     data object Staple : ReasonCode
+
+    /** No purchase yet, but the household said it buys it every [intervalDays] days (onboarding). */
+    data class Cadence(val intervalDays: Int) : ReasonCode
 
     data object Seasonal : ReasonCode
 
@@ -64,6 +68,7 @@ class NeedScorer(private val config: ScoreConfig = ScoreConfig()) {
         val interval = estimatedInterval(product, stats, household)
         val lastAt = stats?.lastAt
 
+        val staple = isStaple(product, stats, household)
         val base = if (lastAt != null && interval != null) {
             val daysSince = (now - lastAt).toDouble(DurationUnit.DAYS).coerceAtLeast(0.0)
             reasons += ReasonCode.Due(
@@ -73,11 +78,18 @@ class NeedScorer(private val config: ScoreConfig = ScoreConfig()) {
             )
             val ratio = (daysSince + context.horizonDays) / interval
             1.0 / (1.0 + exp(-config.slope * (ratio - 1.0)))
+        } else if (lastAt == null && isDeclared(stats, household)) {
+            // Declared at onboarding, never bought: the share of the cycle the shopping covers (no fake purchase).
+            if (staple) reasons += ReasonCode.Staple
+            stats?.userCadenceDays?.let { reasons += ReasonCode.Cadence(it) }
+            val phase = interval?.let { (context.horizonDays / it).coerceAtMost(config.declaredMax) }
+            val floor = if (staple) config.declaredEssentialFloor else 0.0
+            maxOf(phase ?: config.declaredEssentialFloor, floor)
         } else {
-            if (product.isStaple) reasons += ReasonCode.Staple
+            if (staple) reasons += ReasonCode.Staple
             reasons += ReasonCode.Prior(household.size)
             val penetration = product.market.householdPenetration ?: config.defaultPenetration
-            penetration * if (product.isStaple) config.stapleWeight else config.nonStapleWeight
+            penetration * if (staple) config.stapleWeight else config.nonStapleWeight
         }
 
         var odds = toOdds(base)
@@ -104,6 +116,17 @@ class NeedScorer(private val config: ScoreConfig = ScoreConfig()) {
         }
         return NeedScore(probability, reasons, interval)
     }
+
+    /**
+     * An essential for this household: the ones it chose at onboarding ([HouseholdProfile.customEssentials]),
+     * otherwise the catalog's.
+     */
+    fun isStaple(product: Product, stats: ProductStats?, household: HouseholdProfile): Boolean =
+        if (household.customEssentials) stats?.essential == true else product.isStaple
+
+    /** Chosen as an essential or given a cadence by the household (onboarding). */
+    fun isDeclared(stats: ProductStats?, household: HouseholdProfile): Boolean =
+        (household.customEssentials && stats?.essential == true) || stats?.userCadenceDays != null
 
     /**
      * Î_q: the household interval shrunk toward the size-corrected country prior, then corrected by the last

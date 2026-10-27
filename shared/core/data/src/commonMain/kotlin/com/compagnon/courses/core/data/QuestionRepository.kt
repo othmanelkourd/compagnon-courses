@@ -289,6 +289,7 @@ val ReasonCode.wireName: String
     get() = when (this) {
         is ReasonCode.Due -> "due"
         ReasonCode.Staple -> "staple"
+        is ReasonCode.Cadence -> "cadence"
         ReasonCode.Seasonal -> "seasonal"
         is ReasonCode.Event -> "event"
         is ReasonCode.Radar -> "radar"

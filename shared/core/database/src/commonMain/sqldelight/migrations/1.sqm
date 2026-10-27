@@ -1,0 +1,8 @@
+-- Version 1 → 2: the onboarding « Mon foyer » (pets, diet, avoidances, the household's essentials, onboarded_at).
+-- Same columns and defaults as the CREATE TABLE statements of Household.sq.
+ALTER TABLE household_profile ADD COLUMN pets TEXT NOT NULL DEFAULT '[]';
+ALTER TABLE household_profile ADD COLUMN diet TEXT NOT NULL DEFAULT 'OMNIVORE';
+ALTER TABLE household_profile ADD COLUMN avoid TEXT NOT NULL DEFAULT '[]';
+ALTER TABLE household_profile ADD COLUMN essentials_chosen INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE household_profile ADD COLUMN onboarded_at INTEGER;
+ALTER TABLE household_product_pref ADD COLUMN household_staple INTEGER NOT NULL DEFAULT 0;

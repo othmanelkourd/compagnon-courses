@@ -20,7 +20,12 @@ data class Pet(val kind: PetKind)
 /**
  * The household as seen by the question engine.
  *
- * @property excludedTags tags never to be asked about (F14: no « porc ? » for a halal household).
+ * @property excludedTags tags never to be asked about, set by hand (F14); the diet adds its own, see
+ *   [effectiveExcludedTags].
+ * @property diet the household's diet (onboarding step 2).
+ * @property avoid what the household avoids on top of its diet.
+ * @property customEssentials true once the household chose its essentials (onboarding step 3): they replace the
+ *   catalog's `isStaple` products ([ProductStats.essential]).
  */
 data class HouseholdProfile(
     val adults: Int,
@@ -29,6 +34,9 @@ data class HouseholdProfile(
     val country: CountryCode,
     val system: MeasurementSystem,
     val excludedTags: Set<TagId> = emptySet(),
+    val diet: Diet = Diet.OMNIVORE,
+    val avoid: Set<Avoidance> = emptySet(),
+    val customEssentials: Boolean = false,
 ) {
     init {
         require(adults >= 0) { "adults cannot be negative: $adults" }
@@ -37,6 +45,13 @@ data class HouseholdProfile(
 
     /** Number of members. */
     val size: Int get() = adults + children.size
+
+    val hasBaby: Boolean get() = AgeBand.BABY in children
+
+    val hasPet: Boolean get() = pets.isNotEmpty()
+
+    /** The tags never asked about: [excludedTags], plus those of the [diet] and of [avoid]. */
+    val effectiveExcludedTags: Set<TagId> get() = excludedTags + DietaryTags.excludedBy(diet, avoid)
 }
 
 /**
@@ -52,6 +67,8 @@ data class HouseholdProfile(
  * @property usualQty last answered quantity, in the unit it was answered in.
  * @property nextDueAt after a « no »: when the product is expected to be needed (informational in V0).
  * @property lastNoAt the last « no » answer.
+ * @property essential chosen as an essential by the household (onboarding step 3); only read when
+ *   [HouseholdProfile.customEssentials] is true.
  */
 data class ProductStats(
     val nPurchases: Int = 0,
@@ -67,6 +84,7 @@ data class ProductStats(
     val usualQty: Quantity? = null,
     val nextDueAt: Instant? = null,
     val lastNoAt: Instant? = null,
+    val essential: Boolean = false,
 ) {
     init {
         require(nPurchases >= 0) { "nPurchases cannot be negative: $nPurchases" }

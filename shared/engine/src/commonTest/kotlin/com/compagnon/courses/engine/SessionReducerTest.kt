@@ -37,7 +37,7 @@ import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class SessionReducerTest {
-    private val reducer = SessionReducer()
+    private val reducer = SessionReducer(QuestionPlanner(Fixtures.BY_SCORE))
     private val sessionId = SessionId("session-1")
     private val listId = ListId("list-1")
 

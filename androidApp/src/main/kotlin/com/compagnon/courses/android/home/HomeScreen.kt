@@ -38,7 +38,9 @@ import com.compagnon.courses.android.R
 import com.compagnon.courses.android.catalog.CatalogFooter
 import com.compagnon.courses.android.catalog.currentLocale
 import com.compagnon.courses.android.ui.components.AppIcons
+import com.compagnon.courses.android.onboarding.OnboardingTexts
 import com.compagnon.courses.android.ui.components.ProgressBar
+import com.compagnon.courses.android.ui.components.resolve
 import com.compagnon.courses.android.ui.components.softShadow
 import com.compagnon.courses.android.ui.theme.CompagnonColors
 import com.compagnon.courses.android.ui.theme.CompagnonShapes
@@ -50,19 +52,22 @@ import com.compagnon.courses.feature.catalog.CatalogStatusViewModel
 import com.compagnon.courses.feature.catalog.CatalogSyncUiState
 import com.compagnon.courses.feature.lists.ShoppingListUiState
 import com.compagnon.courses.feature.lists.ShoppingListViewModel
+import com.compagnon.courses.feature.onboarding.HouseholdSummaryUi
 import java.time.LocalDate
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 /**
- * « Accueil »: « Faire le point » (a question session), « Ma liste » with its count, and the catalog status.
- * Creating the catalog ViewModel syncs the local catalog.
+ * « Accueil »: « Faire le point » (a question session), « Ma liste » with its count, « Mon foyer » with the
+ * [household] summary, and the catalog status. Creating the catalog ViewModel syncs the local catalog.
  */
 @Composable
 fun HomeScreen(
+    household: HouseholdSummaryUi?,
     onStartSession: () -> Unit,
     onOpenList: () -> Unit,
+    onOpenHousehold: () -> Unit,
     modifier: Modifier = Modifier,
     scope: CatalogScope = koinInject(),
     catalogViewModel: CatalogStatusViewModel = koinViewModel { parametersOf(scope.country) },
@@ -73,16 +78,19 @@ fun HomeScreen(
     HomeContent(
         sync = sync,
         list = list,
+        household = household,
         onStartSession = onStartSession,
         onOpenList = onOpenList,
+        onOpenHousehold = onOpenHousehold,
         onRefresh = { catalogViewModel.onEvent(CatalogStatusEvent.Refresh) },
         modifier = modifier,
     )
 }
 
 /**
- * Stateless home screen: today's date and the headline, the big « Faire le point » card, « Ma liste », and the
- * catalog at the foot. Only data that exists is shown (no first name, no planned day, no statistics).
+ * Stateless home screen: today's date and the headline, the big « Faire le point » card, « Ma liste », « Mon foyer »
+ * (when the [household] is known), and the catalog at the foot. Only data that exists is shown (no first name, no
+ * planned day, no statistics).
  */
 @Composable
 internal fun HomeContent(
@@ -92,6 +100,8 @@ internal fun HomeContent(
     onOpenList: () -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
+    household: HouseholdSummaryUi? = null,
+    onOpenHousehold: () -> Unit = {},
     today: LocalDate = LocalDate.now(),
 ) {
     Column(
@@ -128,6 +138,7 @@ internal fun HomeContent(
             }
             StartSessionCard(onClick = onStartSession)
             ListCard(list = list, onOpenList = onOpenList)
+            if (household != null) HouseholdCard(household = household, onClick = onOpenHousehold)
         }
         CatalogFooter(
             sync = sync,
@@ -232,6 +243,45 @@ private fun ListCard(list: ShoppingListUiState, onOpenList: () -> Unit) {
             if (loaded != null && !loaded.isEmpty) {
                 ProgressBar(fraction = (loaded.itemCount - loaded.remainingCount) / loaded.itemCount.toFloat())
             }
+        }
+        Icon(AppIcons.ChevronRight, contentDescription = null, tint = CompagnonColors.InkMuted, modifier = Modifier.size(20.dp))
+    }
+}
+
+/** « Mon foyer »: house tile, « 4 personnes · Halal · 14 essentiels », chevron. */
+@Composable
+private fun HouseholdCard(household: HouseholdSummaryUi, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(CompagnonShapes.BlockLarge)
+            .background(CompagnonColors.Surface)
+            .border(1.dp, CompagnonColors.Line, CompagnonShapes.BlockLarge)
+            .clickable(role = Role.Button, onClick = onClick)
+            .padding(horizontal = 20.dp, vertical = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(52.dp)
+                .clip(CompagnonShapes.Field)
+                .background(CompagnonColors.BasilLight),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(AppIcons.Home, contentDescription = null, tint = CompagnonColors.Basil, modifier = Modifier.size(24.dp))
+        }
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                text = stringResource(R.string.household_title),
+                style = CompagnonType.ListRow.copy(fontSize = 19.sp, lineHeight = 24.sp, fontWeight = FontWeight.Bold),
+                color = CompagnonColors.Ink,
+            )
+            Text(
+                text = OnboardingTexts.homeSummary(household).resolve(),
+                style = CompagnonType.Secondary,
+                color = CompagnonColors.InkSoft,
+            )
         }
         Icon(AppIcons.ChevronRight, contentDescription = null, tint = CompagnonColors.InkMuted, modifier = Modifier.size(20.dp))
     }

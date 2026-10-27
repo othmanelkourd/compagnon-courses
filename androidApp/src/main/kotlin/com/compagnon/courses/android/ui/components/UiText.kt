@@ -21,6 +21,9 @@ internal sealed interface UiText {
 
     /** [count] selects the plural form; [args] fill the placeholders (usually the count itself). */
     data class Plural(@param:PluralsRes val id: Int, val count: Int, val args: List<Any> = listOf(count)) : UiText
+
+    /** [parts] joined by [separator]: « 2 adultes · 1 bébé · 1 chat ». */
+    data class Joined(val parts: List<UiText>, val separator: String = " · ") : UiText
 }
 
 @Composable
@@ -29,4 +32,5 @@ internal fun UiText.resolve(): String = when (this) {
     is UiText.Raw -> text
     is UiText.Res -> stringResource(id, *args.map { if (it is UiText) it.resolve() else it }.toTypedArray())
     is UiText.Plural -> pluralStringResource(id, count, *args.toTypedArray())
+    is UiText.Joined -> parts.map { it.resolve() }.joinToString(separator)
 }

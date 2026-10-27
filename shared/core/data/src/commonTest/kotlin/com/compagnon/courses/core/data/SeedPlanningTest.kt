@@ -1,9 +1,13 @@
 package com.compagnon.courses.core.data
 
+import com.compagnon.courses.core.model.AgeBand
+import com.compagnon.courses.core.model.Diet
+import com.compagnon.courses.core.model.DietaryTags
 import com.compagnon.courses.core.model.TagId
 import com.compagnon.courses.engine.PlannedQuestion
 import com.compagnon.courses.engine.QuestionPlan
 import com.compagnon.courses.engine.QuestionPlanner
+import com.compagnon.courses.engine.ScoredProduct
 import com.compagnon.courses.engine.SessionMode
 import com.compagnon.courses.engine.Tier
 import kotlin.test.Test
@@ -89,7 +93,97 @@ class SeedPlanningTest {
             assertTrue(plan.suggested.size <= 15)
         }
     }
+
+    private suspend fun TestData.planFor(setup: HouseholdSetup?, seed: Long = 42): Pair<QuestionPlan, List<ScoredProduct>> {
+        if (setup != null) households.saveSetup(setup)
+        val input = assertNotNull(questions.planningSetup(SessionMode.QUICK, clock.now, seed)).input
+        return planner.plan(input) to planner.score(input)
+    }
+
+    private fun QuestionPlan.everyProposed() = askedProducts + gates.flatMap { it.items }
+
+    @Test
+    fun aHalalFamilyWithABabyIsNeverAskedAboutPorkAlcoholOrPetProducts() = runTest {
+        val data = TestData(StandardTestDispatcher(testScheduler))
+        data.syncSeed()
+
+        val (plan, scored) = data.planFor(
+            HouseholdSetup(adults = 2, children = listOf(AgeBand.BABY, AgeBand.CHILD), diet = Diet.HALAL),
+        )
+        println("halal family with a baby: ${plan.describe()}")
+
+        val tags = scored.flatMap { it.product.tags }.toSet()
+        assertTrue(DietaryTags.PORK !in tags && DietaryTags.ALCOHOL !in tags, "pork or alcohol scored")
+        assertTrue(DietaryTags.PET !in tags, "a pet product without a pet")
+        // Baby products are not editorial candidates: they come from the essentials the onboarding pre-checks.
+        assertTrue(plan.everyProposed().none { DietaryTags.PORK in it.product.tags || DietaryTags.ALCOHOL in it.product.tags })
+    }
+
+    @Test
+    fun aVeganLivingAloneIsNeverAskedAboutAnimalBabyOrPetProducts() = runTest {
+        val data = TestData(StandardTestDispatcher(testScheduler))
+        data.syncSeed()
+
+        val (plan, scored) = data.planFor(HouseholdSetup(adults = 1, diet = Diet.VEGAN))
+        println("vegan alone: ${plan.describe()}")
+
+        val forbidden = setOf(DietaryTags.MEAT, DietaryTags.FISH, DietaryTags.LACTOSE, DietaryTags.EGGS, DietaryTags.BABY, DietaryTags.PET)
+        assertTrue(scored.none { item -> item.product.tags.any { it in forbidden } })
+        assertTrue(plan.cards.size >= 4, "only ${plan.cards.size} cards: ${plan.describe()}")
+    }
+
+    @Test
+    fun theHouseholdsEssentialsAndCadencesShapeTheFirstSession() = runTest {
+        val data = TestData(StandardTestDispatcher(testScheduler))
+        data.syncSeed()
+        val baguette = seedProductId("baguette")
+        val couches = seedProductId("couches")
+        val painDeMie = seedProductId("pain-de-mie")
+
+        val (plan, scored) = data.planFor(
+            HouseholdSetup(
+                adults = 2,
+                children = listOf(AgeBand.BABY),
+                essentials = setOf(baguette, painDeMie, seedProductId("huile-d-olive")),
+                cadences = mapOf(baguette to 7, couches to 14),
+            ),
+        )
+        println("household essentials: ${plan.describe()}")
+
+        // Weekly → the T1 screen; every two weeks → a card; the catalog's other staples are no longer essentials.
+        assertTrue(plan.suggested.any { it.productId == baguette }, "the weekly baguette is not on the T1 screen")
+        assertTrue(plan.cards.any { it.item.productId == couches }, "the diapers every 2 weeks are not a card")
+        val bananas = scored.firstOrNull { it.product.slug == "bananes" }
+        assertTrue(bananas == null || bananas.tier != Tier.T1, "a catalog staple stays in T1 after the household chose")
+        assertTrue(scored.first { it.product.id == painDeMie }.tier <= Tier.T2, "a chosen essential is at least a card")
+    }
+
+    @Test
+    fun twoSeedsAskDifferentCardsWithTheSameTiers() = runTest {
+        val data = TestData(StandardTestDispatcher(testScheduler))
+        data.syncSeed()
+        data.households.saveSetup(HouseholdSetup(adults = 2))
+
+        val (first, firstScores) = data.planFor(null, seed = 1)
+        val others = (2L..6L).map { data.planFor(null, seed = it) }
+
+        assertTrue(others.any { (plan, _) -> plan.cards.map { it.item.productId }.toSet() != first.cards.map { it.item.productId }.toSet() })
+        others.forEach { (_, scores) ->
+            assertEquals(firstScores.associate { it.product.id to it.tier }, scores.associate { it.product.id to it.tier })
+        }
+        // Cards spread over the aisles.
+        assertTrue(first.cards.groupingBy { it.item.product.categoryId }.eachCount().values.all { it <= 3 })
+    }
+
+    @Test
+    fun everyDietaryTagExistsInTheSeed() = runTest {
+        val data = TestData(StandardTestDispatcher(testScheduler))
+        data.syncSeed()
+        val tags = assertNotNull(data.catalog.catalog()).products.flatMap { it.tags }.toSet()
+        assertEquals(emptySet(), DietaryTags.ALL - tags)
+    }
 }
+
 
 private val QuestionPlan.cards: List<PlannedQuestion.Card> get() = questions.filterIsInstance<PlannedQuestion.Card>()
 

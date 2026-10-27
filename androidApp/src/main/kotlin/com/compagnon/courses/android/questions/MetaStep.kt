@@ -2,11 +2,8 @@ package com.compagnon.courses.android.questions
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -25,10 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.compagnon.courses.android.R
 import com.compagnon.courses.android.ui.components.BottomLinks
-import com.compagnon.courses.android.ui.components.BoxedStepper
 import com.compagnon.courses.android.ui.components.Overline
 import com.compagnon.courses.android.ui.components.PrimaryButton
-import com.compagnon.courses.android.ui.components.QuantityChoiceTile
 import com.compagnon.courses.android.ui.components.TextActionButton
 import com.compagnon.courses.android.ui.components.resolve
 import com.compagnon.courses.android.ui.theme.CompagnonColors
@@ -86,32 +81,18 @@ internal fun MetaStep(state: QuestionUiState.Meta, onEvent: (QuestionEvent) -> U
                     color = CompagnonColors.InkSoft,
                 )
             }
-            if (question.choices.isNotEmpty()) {
-                Spacer(Modifier.height(32.dp))
-                val columns = metaColumns(question.choices.size)
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    question.choices.chunked(columns).forEach { row ->
-                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            row.forEach { choice ->
-                                val texts = QuestionTexts.metaChoice(question.kind, choice)
-                                QuantityChoiceTile(
-                                    value = texts.value.resolve(),
-                                    subline = texts.unit?.resolve(),
-                                    selected = choice == value,
-                                    large = true,
-                                    contentDescription = QuestionTexts.metaValue(question.kind, choice).resolve(),
-                                    onClick = { onEvent(QuestionEvent.AnswerMeta(choice)) },
-                                    modifier = Modifier.weight(1f),
-                                )
-                            }
-                            repeat(columns - row.size) { Spacer(Modifier.weight(1f)) }
-                        }
-                    }
-                }
-            }
-            Spacer(Modifier.height(16.dp))
-            BoxedStepper(
-                label = stringResource(QuestionTexts.metaOther(question.kind), valueText),
+            BigChoiceQuestion(
+                choices = question.choices.map { choice ->
+                    val texts = QuestionTexts.metaChoice(question.kind, choice)
+                    BigChoice(
+                        value = texts.value.resolve(),
+                        subline = texts.unit?.resolve(),
+                        selected = choice == value,
+                        contentDescription = QuestionTexts.metaValue(question.kind, choice).resolve(),
+                        onClick = { onEvent(QuestionEvent.AnswerMeta(choice)) },
+                    )
+                },
+                otherLabel = stringResource(QuestionTexts.metaOther(question.kind), valueText),
                 canDecrement = value > question.min,
                 canIncrement = value < question.max,
                 onStep = { increment -> value = (value + if (increment) 1 else -1).coerceIn(question.min, question.max) },

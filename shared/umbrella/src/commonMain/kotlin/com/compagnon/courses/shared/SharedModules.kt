@@ -6,6 +6,7 @@ import com.compagnon.courses.core.network.NetworkConfig
 import com.compagnon.courses.core.network.networkModule
 import com.compagnon.courses.feature.catalog.catalogFeatureModule
 import com.compagnon.courses.feature.lists.listsFeatureModule
+import com.compagnon.courses.feature.onboarding.onboardingFeatureModule
 import com.compagnon.courses.feature.questionflow.questionFlowModule
 import kotlin.experimental.ExperimentalObjCRefinement
 import kotlin.native.HiddenFromObjC
@@ -26,6 +27,7 @@ fun sharedModules(config: NetworkConfig, scope: CatalogScope = CatalogScope.DEFA
     catalogFeatureModule,
     questionFlowModule,
     listsFeatureModule,
+    onboardingFeatureModule,
 )
 
 /** The [app.cash.sqldelight.db.SqlDriver] of the platform (closed with the Koin application). */

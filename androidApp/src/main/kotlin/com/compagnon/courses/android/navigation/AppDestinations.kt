@@ -15,6 +15,10 @@ data object QuestionnaireKey : NavKey
 @Serializable
 data object ShoppingListKey : NavKey
 
+/** « Mon foyer »: the household, edited section by section. Its onboarding ViewModel lives with this entry. */
+@Serializable
+data object HouseholdKey : NavKey
+
 /**
  * Back stack moves of the app, kept free of Compose so they are unit tested. The stack always keeps [HomeKey]
  * at its root.
@@ -30,6 +34,20 @@ internal object AppNavigation {
     fun showList(backStack: MutableList<NavKey>) {
         while (backStack.size > 1 && backStack.last() == QuestionnaireKey) backStack.removeAt(backStack.lastIndex)
         if (backStack.lastOrNull() != ShoppingListKey) backStack += ShoppingListKey
+    }
+
+    /** Opens « Mon foyer », unless it is already on top. */
+    fun openHousehold(backStack: MutableList<NavKey>) {
+        if (backStack.lastOrNull() != HouseholdKey) backStack += HouseholdKey
+    }
+
+    /**
+     * Leaves « Mon foyer » (closed, or « Aller à l'accueil »); with [startSession] (« Faire le point maintenant »),
+     * the questionnaire replaces it.
+     */
+    fun leaveHousehold(backStack: MutableList<NavKey>, startSession: Boolean) {
+        if (backStack.size > 1 && backStack.last() == HouseholdKey) backStack.removeAt(backStack.lastIndex)
+        if (startSession) startSession(backStack)
     }
 
     /** Goes back one screen; the root stays. Returns false when there was nothing to pop. */

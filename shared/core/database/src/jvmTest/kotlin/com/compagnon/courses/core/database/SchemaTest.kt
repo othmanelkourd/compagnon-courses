@@ -1,8 +1,12 @@
 package com.compagnon.courses.core.database
 
+import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
+import java.io.File
+import java.util.Properties
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class SchemaTest {
@@ -10,8 +14,8 @@ class SchemaTest {
     private val database = createDatabase(driver)
 
     @Test
-    fun theSchemaIsVersionOneWithEveryTable() {
-        assertEquals(1L, CompagnonDatabase.Schema.version)
+    fun theSchemaIsVersionTwoWithEveryTable() {
+        assertEquals(2L, CompagnonDatabase.Schema.version)
         val tables = driver.executeQuery(
             identifier = null,
             sql = "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name",
@@ -56,9 +60,70 @@ class SchemaTest {
     @Test
     fun theProfileHasASingleRow() {
         val queries = database.householdQueries
-        queries.upsertProfile(2, "[]", "FR", "METRIC", 7, "[]", "[]", 0)
-        queries.upsertProfile(3, "[]", "FR", "METRIC", 7, "[]", "[]", 1)
-        assertEquals(3L, queries.selectProfile().executeAsOne().adults)
+        queries.upsertProfile(2, "[]", "FR", "METRIC", 7, "[]", "[]", 0, "[]", "OMNIVORE", "[]", 0, null)
+        queries.upsertProfile(3, "[]", "FR", "METRIC", 7, "[]", "[]", 1, "[\"CAT\"]", "HALAL", "[]", 1, 1)
+        val row = queries.selectProfile().executeAsOne()
+        assertEquals(3L, row.adults)
+        assertEquals("HALAL", row.diet)
+        assertEquals(1L, row.onboarded_at)
         assertTrue(database.outboxQueries.countPending().executeAsOne() == 0L)
+    }
+
+    @Test
+    fun essentialsAndCadencesAreSetWithoutTouchingTheOtherPreferences() {
+        val queries = database.householdQueries
+        queries.upsertPref("milk", 2000, "liter", 0, null, 1, null, 0)
+        queries.insertPrefIfMissing("milk")
+        queries.insertPrefIfMissing("bread")
+        queries.setEssential("milk")
+        queries.setEssential("bread")
+        queries.setCadence(7, "bread")
+        assertEquals(listOf("bread", "milk"), queries.selectEssentialIds().executeAsList())
+        val milk = queries.selectPref("milk").executeAsOne()
+        assertEquals(2000L, milk.usual_qty_milli)
+        assertEquals(1L, milk.watch)
+        assertEquals(7L, queries.selectCadences().executeAsOne().ask_every_days)
+
+        queries.clearEssentials()
+        queries.clearCadences()
+        assertTrue(queries.selectEssentialIds().executeAsList().isEmpty())
+        assertTrue(queries.selectCadences().executeAsList().isEmpty())
+        assertEquals(1L, queries.selectPref("milk").executeAsOne().watch)
+    }
+
+    @Test
+    fun aVersionOneDatabaseMigratesWithoutLosingItsData() {
+        val file = File.createTempFile("compagnon-v1", ".db").apply { deleteOnExit() }
+        File("src/commonMain/sqldelight/databases/1.db").copyTo(file, overwrite = true)
+        val driver = JdbcSqliteDriver("jdbc:sqlite:${file.absolutePath}", Properties())
+        driver.execute(
+            null,
+            "INSERT INTO household_profile (id, adults, children, country, measurement_system, usual_horizon_days, " +
+                "store_category_order, excluded_tags, updated_at) VALUES (1, 3, '[\"BABY\"]', 'FR', 'METRIC', 14, '[]', " +
+                "'[\"contains-pork\"]', 5)",
+            0,
+        )
+        driver.execute(
+            null,
+            "INSERT INTO household_product_pref (product_id, never_ask, watch, ask_every_days) VALUES ('milk', 1, 0, 10)",
+            0,
+        )
+
+        CompagnonDatabase.Schema.migrate(driver, oldVersion = 1, newVersion = 2)
+
+        val migrated = createDatabase(driver).householdQueries
+        val profile = migrated.selectProfile().executeAsOne()
+        assertEquals(3L, profile.adults)
+        assertEquals(14L, profile.usual_horizon_days)
+        assertEquals("[\"contains-pork\"]", profile.excluded_tags)
+        assertEquals("OMNIVORE", profile.diet)
+        assertEquals("[]", profile.pets)
+        assertEquals(0L, profile.essentials_chosen)
+        assertNull(profile.onboarded_at)
+        val pref = migrated.selectPref("milk").executeAsOne()
+        assertEquals(1L, pref.never_ask)
+        assertEquals(10L, pref.ask_every_days)
+        assertEquals(0L, pref.household_staple)
+        driver.close()
     }
 }

@@ -12,6 +12,12 @@ import com.compagnon.courses.feature.catalog.CatalogStatusUiState
 import com.compagnon.courses.feature.catalog.CatalogStatusViewModel
 import com.compagnon.courses.feature.lists.ShoppingListUiState
 import com.compagnon.courses.feature.lists.ShoppingListViewModel
+import com.compagnon.courses.feature.onboarding.AppGateUiState
+import com.compagnon.courses.feature.onboarding.AppGateViewModel
+import com.compagnon.courses.feature.onboarding.OnboardingMode
+import com.compagnon.courses.feature.onboarding.OnboardingStep
+import com.compagnon.courses.feature.onboarding.OnboardingUiState
+import com.compagnon.courses.feature.onboarding.OnboardingViewModel
 import com.compagnon.courses.feature.questionflow.QuestionEvent
 import com.compagnon.courses.feature.questionflow.QuestionSessionViewModel
 import com.compagnon.courses.feature.questionflow.QuestionUiState
@@ -109,6 +115,24 @@ class SharedModulesTest {
         val loaded = assertIs<ShoppingListUiState.Loaded>(list.state.first { it != ShoppingListUiState.Loading })
         assertEquals(0, loaded.itemCount)
         assertEquals("fr-FR", app.koin.get<CatalogScope>().locale)
+        app.close()
+    }
+
+    @Test
+    fun sharedGraphProvidesTheGateAndTheOnboarding() = runTest {
+        val config = NetworkConfig(baseUrl = "http://api.test", platform = "android", appVersion = "0.1.0")
+        val server = MockCatalogServer()
+        val app = koinApplication {
+            modules(sharedModules(config, CatalogScope.forDevice("fr-FR")) + mockHttpModule(config, server.engine))
+        }
+
+        val gate = app.koin.get<AppGateViewModel>()
+        assertEquals(AppGateUiState.NeedsOnboarding, gate.state.first { it != AppGateUiState.Loading })
+        val onboarding = app.koin.get<OnboardingViewModel> { parametersOf(OnboardingMode.FIRST_RUN) }
+        val ready = assertIs<OnboardingUiState.Ready>(onboarding.state.first { it is OnboardingUiState.Ready })
+        assertEquals(OnboardingStep.WELCOME, ready.step)
+        val edit = app.koin.get<OnboardingViewModel> { parametersOf(OnboardingMode.EDIT) }
+        assertEquals(OnboardingStep.OVERVIEW, assertIs<OnboardingUiState.Ready>(edit.state.first { it is OnboardingUiState.Ready }).step)
         app.close()
     }
 }

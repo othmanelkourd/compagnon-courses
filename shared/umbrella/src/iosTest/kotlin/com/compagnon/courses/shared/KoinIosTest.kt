@@ -8,6 +8,10 @@ import com.compagnon.courses.core.network.createHttpClient
 import com.compagnon.courses.core.testing.MockCatalogServer
 import com.compagnon.courses.feature.catalog.CatalogStatusUiState
 import com.compagnon.courses.feature.lists.ShoppingListUiState
+import com.compagnon.courses.feature.onboarding.AppGateUiState
+import com.compagnon.courses.feature.onboarding.OnboardingMode
+import com.compagnon.courses.feature.onboarding.OnboardingStep
+import com.compagnon.courses.feature.onboarding.OnboardingUiState
 import com.compagnon.courses.feature.questionflow.QuestionUiState
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -93,6 +97,21 @@ class KoinIosTest {
 
         assertIs<QuestionUiState.Meta>(questions.state.first { it != QuestionUiState.Loading })
         assertIs<ShoppingListUiState.Loaded>(list.state.first { it != ShoppingListUiState.Loading })
+        owner.clear()
+    }
+
+    @Test
+    fun providersCreateOwnedGateAndOnboardingViewModels() = runTest {
+        val server = MockCatalogServer()
+        startSharedKoin(config, overrides = listOf(mockHttpModule(config, server.engine)))
+        val owner = ViewModelOwner()
+
+        val gate = AppGateViewModelProvider().create(owner = owner)
+        val onboarding = OnboardingViewModelProvider().create(mode = OnboardingMode.EDIT, owner = owner)
+
+        assertEquals(AppGateUiState.NeedsOnboarding, gate.state.first { it != AppGateUiState.Loading })
+        val ready = assertIs<OnboardingUiState.Ready>(onboarding.state.first { it is OnboardingUiState.Ready })
+        assertEquals(OnboardingStep.OVERVIEW, ready.step)
         owner.clear()
     }
 

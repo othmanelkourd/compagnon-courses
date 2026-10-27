@@ -39,8 +39,13 @@ courses/
 ├─ shared/
 │  ├─ core/model/               # :shared:core:model       unités, Quantity (sans Double), entités, mappers DTO → domaine
 │  ├─ core/network/             # :shared:core:network     client Ktor, CatalogApi, NetworkError
+│  ├─ core/database/            # :shared:core:database    SQLDelight : schéma, migrations (databases/n.db)
+│  ├─ core/data/                # :shared:core:data        dépôts : catalogue, foyer (« Mon foyer »), listes, séances
 │  ├─ engine/                   # :shared:engine           moteur de questions v0, Kotlin pur
 │  ├─ feature/catalog/          # :shared:feature:catalog  CatalogStatusViewModel
+│  ├─ feature/question-flow/    # :shared:feature:question-flow  QuestionSessionViewModel
+│  ├─ feature/lists/            # :shared:feature:lists    ShoppingListViewModel
+│  ├─ feature/onboarding/       # :shared:feature:onboarding  AppGateViewModel, OnboardingViewModel (« Mon foyer »)
 │  └─ umbrella/                 # :shared:umbrella         graphe Koin, framework iOS « Shared » (SKIE appliqué ici seulement)
 ├─ androidApp/                  # :androidApp              app Compose (com.ocimio.courses)
 ├─ iosApp/                      # iosApp.xcodeproj         app SwiftUI (com.ocimio.courses)

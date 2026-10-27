@@ -32,21 +32,26 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.compagnon.courses.android.R
 import com.compagnon.courses.android.ui.theme.CompagnonColors
 import com.compagnon.courses.android.ui.theme.CompagnonShapes
 import com.compagnon.courses.android.ui.theme.CompagnonType
 
-/** The questionnaire progress: [total] segments of 5, 3 apart, filled (Basilic) up to the question [current]. */
+/**
+ * The questionnaire progress: [total] segments of 5, [gap] apart (3 in the questionnaire, 4 in the onboarding),
+ * filled (Basilic) up to the question [current].
+ */
 @Composable
-internal fun ProgressSegments(current: Int, total: Int, modifier: Modifier = Modifier) {
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+internal fun ProgressSegments(current: Int, total: Int, modifier: Modifier = Modifier, gap: Dp = 3.dp) {
+    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(gap)) {
         repeat(total) { index ->
             Box(
                 modifier = Modifier
@@ -82,6 +87,7 @@ internal fun ProgressBar(fraction: Float, modifier: Modifier = Modifier, height:
 /**
  * « Choix de quantité »: Surface tile, Trait border, radius 16, value 20 / 700; selected: Basilic clair, Basilic
  * border of 2. [large] is the meta question size (88 high, value 28, radius 20) with a [subline] (« jours »).
+ * [valueStyle] and [minHeight] override the value size and the height (rhythm tiles: words 17 / 700, 96 high).
  */
 @Composable
 internal fun QuantityChoiceTile(
@@ -92,12 +98,14 @@ internal fun QuantityChoiceTile(
     subline: String? = null,
     large: Boolean = false,
     contentDescription: String? = null,
+    valueStyle: TextStyle? = null,
+    minHeight: Dp? = null,
 ) {
     val shape = if (large) CompagnonShapes.Block else CompagnonShapes.Field
     val textColor = if (selected) CompagnonColors.BasilDark else CompagnonColors.Ink
     Column(
         modifier = modifier
-            .heightIn(min = if (large) 88.dp else 64.dp)
+            .heightIn(min = minHeight ?: if (large) 88.dp else 64.dp)
             .clip(shape)
             .background(if (selected) CompagnonColors.BasilLight else CompagnonColors.Surface)
             .border(
@@ -112,12 +120,13 @@ internal fun QuantityChoiceTile(
             }
             .padding(horizontal = 6.dp, vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        // Words (rhythm tiles) keep 4 between the value and its sub-line, like the mockup.
+        verticalArrangement = Arrangement.spacedBy(if (valueStyle != null) 4.dp else 0.dp, Alignment.CenterVertically),
     ) {
         Text(
             text = value,
             // A large tile without a sub-line holds a word (« Aucun »): it keeps the regular value size (same on iOS).
-            style = if (large && subline != null) CompagnonType.ValueLarge else CompagnonType.Value,
+            style = valueStyle ?: if (large && subline != null) CompagnonType.ValueLarge else CompagnonType.Value,
             color = textColor,
             textAlign = TextAlign.Center,
         )
@@ -157,10 +166,11 @@ internal fun Chip(text: String, tone: ChipTone, modifier: Modifier = Modifier) {
 
 /**
  * « Case à cocher », drawn only (the row around it toggles): « ronde » (26, suggestions) or « carrée » (radius 8,
- * Ma liste). Checked: Basilic with a white tick; empty: Contour case border of 2. It sits in a 48 box.
+ * Ma liste). Checked: Basilic with a white tick (Contour case when not [enabled]: « déjà exclu par le régime »);
+ * empty: Contour case border of 2. It sits in a 48 box.
  */
 @Composable
-internal fun CheckMark(checked: Boolean, round: Boolean, modifier: Modifier = Modifier) {
+internal fun CheckMark(checked: Boolean, round: Boolean, modifier: Modifier = Modifier, enabled: Boolean = true) {
     val shape: Shape = if (round) CircleShape else CompagnonShapes.Checkbox
     Box(modifier = modifier.size(48.dp), contentAlignment = Alignment.Center) {
         if (checked) {
@@ -168,7 +178,7 @@ internal fun CheckMark(checked: Boolean, round: Boolean, modifier: Modifier = Mo
                 modifier = Modifier
                     .size(if (round) 28.dp else 26.dp)
                     .clip(shape)
-                    .background(CompagnonColors.Basil),
+                    .background(if (enabled) CompagnonColors.Basil else CompagnonColors.CheckboxOutline),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(AppIcons.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
@@ -249,6 +259,48 @@ internal fun CompactStepper(
         StepButton(
             AppIcons.Add, stringResource(R.string.quantity_increase, itemName), canIncrement, { onStep(true) },
             width = 36.dp, height = 44.dp, shape = CompagnonShapes.Small, background = Color.Transparent, iconSize = 16.dp,
+        )
+    }
+}
+
+/**
+ * A count in a row (onboarding household: « − 2 + »): Surface douce, radius 14, 44 buttons around the value
+ * (18 / 700). The button descriptions say what changes (« Un de moins : adultes »).
+ */
+@Composable
+internal fun CountStepper(
+    value: Int,
+    canDecrement: Boolean,
+    canIncrement: Boolean,
+    onStep: (increment: Boolean) -> Unit,
+    decreaseDescription: String,
+    increaseDescription: String,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .clip(CompagnonShapes.Control)
+            .background(CompagnonColors.SurfaceSoft)
+            .padding(2.dp),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        StepButton(
+            AppIcons.Remove, decreaseDescription, canDecrement, { onStep(false) },
+            width = 44.dp, height = 44.dp, shape = CompagnonShapes.Control, background = Color.Transparent, iconSize = 18.dp,
+        )
+        Text(
+            text = value.toString(),
+            style = CompagnonType.Value.copy(fontSize = 18.sp, lineHeight = 22.sp),
+            color = CompagnonColors.Ink,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .widthIn(min = 28.dp)
+                .semantics { liveRegion = LiveRegionMode.Polite },
+        )
+        StepButton(
+            AppIcons.Add, increaseDescription, canIncrement, { onStep(true) },
+            width = 44.dp, height = 44.dp, shape = CompagnonShapes.Control, background = Color.Transparent, iconSize = 18.dp,
         )
     }
 }

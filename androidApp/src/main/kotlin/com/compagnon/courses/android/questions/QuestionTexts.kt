@@ -23,6 +23,8 @@ internal object QuestionTexts {
      * « Pourquoi cette question ? »: one line without a final period (`design/TEXTES.md`). A purchase cycle reads
      * « Tous les 8 jours environ · dernier il y a 9 jours » on a card; a [compact] line (suggestion rows) keeps only
      * « Dernier achat il y a 9 jours », or « Acheté tous les 8 jours environ » when the last purchase is unknown.
+     * A rhythm declared in « Mon foyer » reads « Vous en achetez chaque semaine » (7, 14 and 30 days have their own
+     * words).
      */
     fun reason(reason: ReasonUi, compact: Boolean = false): UiText = when (reason.kind) {
         ReasonKind.DUE -> {
@@ -48,6 +50,13 @@ internal object QuestionTexts {
         ReasonKind.EXPLORATION -> UiText.Res(R.string.reason_exploration)
         ReasonKind.LITTLE_LEFT -> UiText.Res(R.string.reason_little_left)
         ReasonKind.LAST_LIST -> UiText.Res(R.string.reason_last_list)
+        ReasonKind.CADENCE -> when (val interval = reason.intervalDays) {
+            null -> UiText.Res(R.string.reason_due)
+            7 -> UiText.Res(R.string.reason_cadence_week)
+            14 -> UiText.Res(R.string.reason_cadence_two_weeks)
+            30 -> UiText.Res(R.string.reason_cadence_month)
+            else -> UiText.Plural(R.plurals.reason_cadence_days, interval)
+        }
     }
 
     /** The question of a gate: the catalog's own wording, else « Besoin de quelque chose en {name} ? ». */

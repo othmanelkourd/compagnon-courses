@@ -10,6 +10,13 @@ extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
     }
 
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        viewControllers.count > 1
+        viewControllers.count > 1 && !SwipeBack.isBlocked
     }
+}
+
+/// Turns the system edge swipe off while a pushed screen handles it itself: inside a step of « Mon foyer », the
+/// swipe goes back one step instead of leaving the screen.
+@MainActor
+enum SwipeBack {
+    static var isBlocked = false
 }

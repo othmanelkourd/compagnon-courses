@@ -117,12 +117,12 @@ data class MetaQuestionUi(
     val choices: List<Int>,
 )
 
-enum class ReasonKind { DUE, STAPLE, SEASONAL, EVENT, RADAR, PRIOR, EXPLORATION, LITTLE_LEFT, LAST_LIST }
+enum class ReasonKind { DUE, STAPLE, SEASONAL, EVENT, RADAR, PRIOR, EXPLORATION, LITTLE_LEFT, LAST_LIST, CADENCE }
 
 /**
  * « Pourquoi cette question ? ». Fields are set by kind: [DUE][ReasonKind.DUE] → [daysSinceLast],
  * [intervalDays] and [usualQuantity]; [RADAR][ReasonKind.RADAR] → [weeksSinceLast]; [PRIOR][ReasonKind.PRIOR]
- * → [householdSize].
+ * → [householdSize]; [CADENCE][ReasonKind.CADENCE] → [intervalDays].
  */
 data class ReasonUi(
     val kind: ReasonKind,

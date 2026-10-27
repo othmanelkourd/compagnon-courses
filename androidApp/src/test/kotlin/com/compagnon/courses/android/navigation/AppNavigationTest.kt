@@ -54,4 +54,32 @@ class AppNavigationTest {
         assertFalse(AppNavigation.back(stack))
         assertEquals(listOf(HomeKey), stack)
     }
+
+    @Test
+    fun openHouseholdPushesItOnce() {
+        val stack = mutableListOf<NavKey>(HomeKey)
+
+        AppNavigation.openHousehold(stack)
+        AppNavigation.openHousehold(stack)
+
+        assertEquals(listOf(HomeKey, HouseholdKey), stack)
+    }
+
+    @Test
+    fun leavingTheHouseholdGoesBackHome() {
+        val stack = mutableListOf<NavKey>(HomeKey, HouseholdKey)
+
+        AppNavigation.leaveHousehold(stack, startSession = false)
+
+        assertEquals(listOf(HomeKey), stack)
+    }
+
+    @Test
+    fun takingStockFromTheHouseholdReplacesItWithTheQuestionnaire() {
+        val stack = mutableListOf<NavKey>(HomeKey, HouseholdKey)
+
+        AppNavigation.leaveHousehold(stack, startSession = true)
+
+        assertEquals(listOf(HomeKey, QuestionnaireKey), stack)
+    }
 }

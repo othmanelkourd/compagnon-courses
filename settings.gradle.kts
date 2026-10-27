@@ -44,6 +44,7 @@ include(":shared:engine")
 include(":shared:feature:catalog")
 include(":shared:feature:question-flow")
 include(":shared:feature:lists")
+include(":shared:feature:onboarding")
 include(":shared:umbrella")
 
 // Apps

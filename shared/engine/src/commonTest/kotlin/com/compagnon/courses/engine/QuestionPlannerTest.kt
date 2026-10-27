@@ -1,9 +1,18 @@
 package com.compagnon.courses.engine
 
+import com.compagnon.courses.core.model.AgeBand
 import com.compagnon.courses.core.model.Availability
+import com.compagnon.courses.core.model.Avoidance
 import com.compagnon.courses.core.model.CycleClass
+import com.compagnon.courses.core.model.Diet
+import com.compagnon.courses.core.model.DietaryTags
+import com.compagnon.courses.core.model.HouseholdProfile
+import com.compagnon.courses.core.model.Pet
+import com.compagnon.courses.core.model.PetKind
+import com.compagnon.courses.core.model.Product
 import com.compagnon.courses.core.model.ProductStats
 import com.compagnon.courses.core.model.Quantity
+import com.compagnon.courses.core.model.TagId
 import com.compagnon.courses.engine.Fixtures.CLEANING
 import com.compagnon.courses.engine.Fixtures.CUPBOARD
 import com.compagnon.courses.engine.Fixtures.DAIRY
@@ -25,7 +34,7 @@ import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
 
 class QuestionPlannerTest {
-    private val planner = QuestionPlanner()
+    private val planner = QuestionPlanner(Fixtures.BY_SCORE)
 
     private val milk = product("lait", penetration = 0.9)
     private val yogurt = product("yaourt", penetration = 0.5)
@@ -133,7 +142,7 @@ class QuestionPlannerTest {
         assertEquals(8, plan.cost)
 
         // Without a reserve, gates only get what the cards leave: here nothing.
-        val strict = QuestionPlanner(PlannerConfig(gateSlots = 0))
+        val strict = QuestionPlanner(Fixtures.BY_SCORE.copy(gateSlots = 0))
             .plan(input(cards + bleach + water, context = context(budget = 8)))
         assertEquals(8, strict.cards().size)
         assertTrue(strict.gates().isEmpty())
@@ -186,7 +195,7 @@ class QuestionPlannerTest {
         assertEquals(staples.drop(15).map { it.id } + overflow.id, tight.deferred)
 
         // With room on the screen, the overflow joins it unchecked.
-        val roomy = QuestionPlanner(PlannerConfig(maxSuggested = 30))
+        val roomy = QuestionPlanner(Fixtures.BY_SCORE.copy(maxSuggested = 30))
             .plan(input(staples + overflow, context = context(budget = 1)))
         assertEquals(21, roomy.suggested.size)
         assertEquals(listOf(overflow.id), roomy.suggested.filterNot { it.preChecked }.map { it.productId })
@@ -271,7 +280,7 @@ class QuestionPlannerTest {
         assertEquals(6, plan.cost)
 
         // Without radar slots, the shampoo (p ≈ 0.57) loses against the other cards.
-        val noRadar = QuestionPlanner(PlannerConfig(radarSlots = 0))
+        val noRadar = QuestionPlanner(Fixtures.BY_SCORE.copy(radarSlots = 0))
             .plan(input(others + shampoo, stats = stats, context = context(budget = 6)))
         assertTrue(noRadar.cards().none { it.item.product.slug == "shampooing" })
     }
@@ -289,7 +298,7 @@ class QuestionPlannerTest {
 
     @Test
     fun explorationIsReproducibleWithTheSeed() {
-        val planner = QuestionPlanner(PlannerConfig(explorationSlots = 1))
+        val planner = QuestionPlanner(Fixtures.BY_SCORE.copy(explorationSlots = 1))
         val unknown = (1..10).map { product("inconnu-$it", penetration = 0.05) }
         fun explored(seed: Long) = planner.plan(input(unknown + yogurt, seed = seed)).cards()
             .single { it.kind == CardKind.EXPLORATION }.item.product.slug
@@ -365,5 +374,87 @@ class QuestionPlannerTest {
         // A card in an unknown category is still asked.
         val card = product("carte", penetration = 0.5, category = Fixtures.category("inconnue", 99))
         assertEquals(listOf("carte"), planner.plan(input(listOf(card))).questions.map { it.label })
+    }
+
+    @Test
+    fun theDietAndAvoidancesExcludeTheirTags() {
+        val ham = product("jambon", tags = setOf(DietaryTags.PORK, DietaryTags.MEAT))
+        val beer = product("biere", tags = setOf(DietaryTags.ALCOHOL, DietaryTags.GLUTEN))
+        val salmon = product("saumon", tags = setOf(DietaryTags.FISH))
+        val cheese = product("fromage", tags = setOf(DietaryTags.LACTOSE))
+        val rice = product("riz", tags = setOf(TagId("vegan")))
+        val products = listOf(ham, beer, salmon, cheese, rice)
+        fun asked(diet: Diet, avoid: Set<Avoidance> = emptySet()): List<String> {
+            val plan = planner.plan(input(products, household = household().copy(diet = diet, avoid = avoid)))
+            return (plan.askedProducts.map { it.product.slug } + plan.deferred.map { it.value.removePrefix("prod-") }).sorted()
+        }
+
+        assertEquals(listOf("fromage", "riz", "saumon"), asked(Diet.HALAL))
+        assertEquals(listOf("biere", "fromage", "riz", "saumon"), asked(Diet.PESCATARIAN))
+        assertEquals(listOf("biere", "fromage", "riz"), asked(Diet.VEGETARIAN))
+        assertEquals(listOf("biere", "riz"), asked(Diet.VEGAN))
+        assertEquals(listOf("jambon", "riz", "saumon"), asked(Diet.OMNIVORE, setOf(Avoidance.GLUTEN, Avoidance.LACTOSE)))
+    }
+
+    @Test
+    fun babyAndPetProductsNeedABabyOrAPet() {
+        val diapers = product("couches", tags = setOf(DietaryTags.BABY))
+        val kibble = product("croquettes", tags = setOf(DietaryTags.PET))
+        val products = listOf(diapers, kibble, milk)
+        fun asked(household: HouseholdProfile, stats: Map<Product, ProductStats> = emptyMap()) =
+            planner.score(input(products, household = household, stats = stats)).map { it.product.slug }.sorted()
+
+        assertEquals(listOf("lait"), asked(household()))
+        assertEquals(listOf("couches", "lait"), asked(household().copy(children = listOf(AgeBand.BABY))))
+        assertEquals(listOf("croquettes", "lait"), asked(household().copy(pets = listOf(Pet(PetKind.CAT)))))
+        // Bought before, or declared at onboarding: still asked.
+        assertEquals(listOf("couches", "croquettes", "lait"), asked(household(), mapOf(diapers to boughtDaysAgo(3), kibble to ProductStats(userCadenceDays = 30))))
+    }
+
+    @Test
+    fun essentialsAndCadencesMakeANonCandidateEligible() {
+        val baguette = product("baguette", penetration = 0.1, candidate = false, isStaple = false, repurchaseDays = 7)
+        val stats = mapOf(baguette to ProductStats(userCadenceDays = 7))
+
+        assertTrue(planner.score(input(listOf(baguette))).isEmpty())
+        val plan = planner.plan(input(listOf(baguette), stats = stats))
+        assertEquals(listOf("baguette"), plan.suggested.slugs)
+        assertEquals(ReasonCode.Cadence(7), plan.suggested.single().reasons.first())
+    }
+
+    @Test
+    fun cardsAreCappedPerCategory() {
+        val dairy = (1..6).map { product("d$it", penetration = 0.7 - it * 0.01) }
+        val drink = product("eau", penetration = 0.4, category = DRINKS)
+        val capped = QuestionPlanner(Fixtures.BY_SCORE.copy(maxCardsPerCategory = 3))
+
+        val plan = capped.plan(input(dairy + drink, context(budget = 12)))
+
+        val cards = plan.questions.filterIsInstance<PlannedQuestion.Card>().map { it.item.product.slug }
+        assertEquals(listOf("d1", "d2", "d3", "eau"), cards)
+        assertEquals(listOf("d4", "d5", "d6"), plan.gates().single().items.slugs)
+    }
+
+    @Test
+    fun theSeedRotatesProductsOfCloseScoresWithoutChangingTiers() {
+        val products = (1..12).map { product("p$it", penetration = 0.5) }
+        val rotating = QuestionPlanner(PlannerConfig(maxCardsPerCategory = null))
+        fun cards(seed: Long) = rotating.plan(input(products, context(budget = 6)).copy(seed = seed))
+            .questions.filterIsInstance<PlannedQuestion.Card>().map { it.item.product.slug }
+
+        val first = cards(1L)
+        assertEquals(first, cards(1L))
+        assertTrue((2L..20L).any { cards(it).toSet() != first.toSet() }, "the same cards whatever the seed")
+        val tiers = rotating.score(input(products)).map { it.tier }.toSet()
+        assertEquals(setOf(Tier.T2), tiers)
+    }
+
+    @Test
+    fun rotationKeysAreStable() {
+        // Pinned values: the same on Android, iOS and the JVM, and across releases (resumed sessions).
+        assertEquals(996580060897260808L, rotationKey(0L, "abc"))
+        assertEquals(7080716837051220213L, rotationKey(42L, "prod-lait"))
+        assertTrue(rotationKey(0L, "abc") != rotationKey(1L, "abc"))
+        assertTrue(rotationKey(0L, "abc") != rotationKey(0L, "abd"))
     }
 }

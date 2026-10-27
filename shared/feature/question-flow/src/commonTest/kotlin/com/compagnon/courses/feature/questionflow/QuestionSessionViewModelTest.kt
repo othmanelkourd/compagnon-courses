@@ -4,6 +4,8 @@ import app.cash.turbine.test
 import com.compagnon.courses.core.model.AddedVia
 import com.compagnon.courses.core.model.Quantity
 import com.compagnon.courses.core.model.UnitCode
+import com.compagnon.courses.core.data.HouseholdSetup
+import com.compagnon.courses.core.model.AgeBand
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -219,6 +221,27 @@ class QuestionSessionViewModelTest {
         val next = device.newViewModel()
         advanceUntilIdle()
         assertEquals(0, assertIs<QuestionUiState.Meta>(next.state.value).progress.answered)
+    }
+
+    @Test
+    fun savingMonFoyerStartsTheNextSessionAfreshForTheNewHousehold() = test { device ->
+        device.sync()
+        val first = device.newViewModel()
+        advanceUntilIdle()
+        first.answerMetas(values = listOf(10, 3, 1))
+        device.clearViewModels()
+
+        device.households.saveSetup(HouseholdSetup(adults = 3, children = listOf(AgeBand.BABY), usualHorizonDays = 14))
+        val next = device.newViewModel()
+        advanceUntilIdle()
+
+        // Not resumed (the open session was closed), and pre-filled from the new household.
+        val meta = assertIs<QuestionUiState.Meta>(next.state.value)
+        assertEquals(0, meta.progress.answered)
+        assertEquals(14, meta.question.value)
+        next.onEvent(QuestionEvent.AnswerMeta(14))
+        advanceUntilIdle()
+        assertEquals(4, assertIs<QuestionUiState.Meta>(next.state.value).question.value)
     }
 
     @Test

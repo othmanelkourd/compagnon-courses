@@ -237,4 +237,188 @@
     <string name="list_error_action">The change could not be saved</string>
     <string name="list_error_title">List unavailable</string>
     <string name="list_error_storage">The list could not be read on this device.</string>
+
+    <!-- Reasons: a rhythm declared in « Mon foyer », never bought yet -->
+    <string name="reason_cadence_week">You buy it every week</string>
+    <string name="reason_cadence_two_weeks">You buy it every 2 weeks</string>
+    <string name="reason_cadence_month">You buy it every month</string>
+    <plurals name="reason_cadence_days">
+        <item quantity="one">You buy it every day</item>
+        <item quantity="other">You buy it every %d days</item>
+    </plurals>
+
+    <!-- Onboarding « Mon foyer »: frame and welcome -->
+    <string name="onboarding_step">Step %1$d of %2$d</string>
+    <string name="onboarding_back">Back</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="onboarding_saving">Saving…</string>
+    <string name="onboarding_error_storage">Your household could not be saved on this device</string>
+    <string name="onboarding_welcome_title">Shopping that fits you</string>
+    <string name="onboarding_welcome_text">Four questions about your household, and Ocimio will suggest the right products at the right time.</string>
+    <string name="onboarding_section_household">Your household</string>
+    <string name="onboarding_section_household_hint">Adults, children, pets</string>
+    <string name="onboarding_section_food">How you eat</string>
+    <string name="onboarding_section_food_hint">Diet and products to avoid</string>
+    <string name="onboarding_section_essentials">Your essentials</string>
+    <string name="onboarding_section_essentials_hint">What must never run out</string>
+    <string name="onboarding_section_rhythm">Your rhythm</string>
+    <string name="onboarding_section_rhythm_hint">Recurring products and how often you shop</string>
+    <string name="onboarding_private">Your answers stay on your phone.</string>
+    <string name="onboarding_start">Start · ≈ 2 min</string>
+    <string name="onboarding_later">Later</string>
+
+    <!-- Onboarding step 1: the household -->
+    <string name="onboarding_household_title">Who lives at home?</string>
+    <string name="onboarding_household_text">To suggest the right quantities, and baby or pet products only when there are any.</string>
+    <string name="onboarding_adults">Adults</string>
+    <string name="onboarding_adults_hint">18 and over</string>
+    <string name="onboarding_babies">Babies</string>
+    <string name="onboarding_babies_hint">Under 3</string>
+    <string name="onboarding_children">Children</string>
+    <string name="onboarding_children_hint">3 to 12</string>
+    <string name="onboarding_teens">Teens</string>
+    <string name="onboarding_teens_hint">13 to 17</string>
+    <string name="onboarding_member_less">One fewer: %1$s</string>
+    <string name="onboarding_member_more">One more: %1$s</string>
+    <string name="onboarding_pets_title">Any pets?</string>
+    <string name="onboarding_pet_dog">Dog</string>
+    <string name="onboarding_pet_cat">Cat</string>
+    <string name="onboarding_pet_other">Other</string>
+    <plurals name="onboarding_household_continue">
+        <item quantity="one">Continue · %d person</item>
+        <item quantity="other">Continue · %d people</item>
+    </plurals>
+
+    <!-- Onboarding step 2: diet and products to avoid -->
+    <string name="onboarding_diet_title">How do you eat?</string>
+    <string name="onboarding_diet_text">We\'ll never suggest a product that doesn\'t suit you.</string>
+    <string name="onboarding_diet_group">Household diet</string>
+    <string name="diet_omnivore">I eat everything</string>
+    <string name="diet_omnivore_hint">No restrictions</string>
+    <string name="diet_no_pork">No pork</string>
+    <string name="diet_no_pork_hint">No pork, no pork cold cuts</string>
+    <string name="diet_halal">Halal</string>
+    <string name="diet_halal_hint">No pork or alcohol</string>
+    <string name="diet_pescatarian">Pescatarian</string>
+    <string name="diet_pescatarian_hint">Fish, no meat</string>
+    <string name="diet_vegetarian">Vegetarian</string>
+    <string name="diet_vegetarian_hint">No meat, no fish</string>
+    <string name="diet_vegan">Vegan</string>
+    <string name="diet_vegan_hint">No animal products</string>
+    <string name="onboarding_diet_private">Stays on your phone, never shared.</string>
+    <string name="onboarding_avoid_title">Anything to avoid?</string>
+    <string name="onboarding_avoid_text">Allergy, intolerance or simple choice: these products won\'t be suggested anymore.</string>
+    <string name="avoid_gluten">Gluten</string>
+    <string name="avoid_gluten_hint">Pasta, bread, wheat flour…</string>
+    <string name="avoid_lactose">Lactose</string>
+    <string name="avoid_lactose_hint">Milk, cheese, yogurt…</string>
+    <string name="avoid_nuts">Nuts</string>
+    <string name="avoid_nuts_hint">Almonds, walnuts, peanuts…</string>
+    <string name="avoid_eggs">Eggs</string>
+    <string name="avoid_eggs_hint">Eggs and products containing them</string>
+    <string name="avoid_alcohol">Alcohol</string>
+    <string name="avoid_alcohol_hint">Beer, wine and spirits</string>
+    <string name="onboarding_avoid_locked">Already excluded by the %1$s diet</string>
+    <string name="onboarding_avoid_continue">Continue · %1$d to avoid</string>
+    <string name="onboarding_avoid_none">Nothing to avoid</string>
+
+    <!-- Onboarding step 3: essentials -->
+    <string name="onboarding_essentials_text">What must never run out at home. The most common ones are already checked.</string>
+    <string name="onboarding_search">Search for a product</string>
+    <string name="onboarding_aisle_more">See all (%1$d)</string>
+    <string name="onboarding_aisle_less">See less</string>
+    <plurals name="onboarding_essentials_continue">
+        <item quantity="one">Continue · %d essential</item>
+        <item quantity="other">Continue · %d essentials</item>
+    </plurals>
+    <string name="onboarding_catalog_loading">Loading the catalog…</string>
+    <string name="onboarding_catalog_missing">The catalog is not on this device yet. Connect to the internet, or skip this step.</string>
+
+    <!-- Onboarding step 4: recurring products and rhythm -->
+    <string name="onboarding_recurring_title">What you buy again often</string>
+    <string name="onboarding_recurring_text">Set the rhythm: we\'ll suggest it at the right time, neither too early nor too late.</string>
+    <string name="cadence_week">Week</string>
+    <string name="cadence_two_weeks">2 weeks</string>
+    <string name="cadence_month">Month</string>
+    <string name="onboarding_cadence_group">Rhythm: %1$s</string>
+    <string name="onboarding_recurring_remove">Remove %1$s</string>
+    <string name="onboarding_recurring_add">Add a product</string>
+    <string name="onboarding_recurring_empty">No recurring product yet.</string>
+    <string name="onboarding_rhythm_title">You go shopping…</string>
+    <string name="onboarding_rhythm_text">This is the duration suggested each time you take stock. You can always change it.</string>
+    <string name="rhythm_week">Every week</string>
+    <string name="rhythm_two_weeks">Every 2 weeks</string>
+    <string name="rhythm_month">Every month</string>
+    <plurals name="onboarding_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <string name="onboarding_rhythm_other">Other duration: %1$s</string>
+    <string name="onboarding_rhythm_less">One day less</string>
+    <string name="onboarding_rhythm_more">One more day</string>
+    <string name="onboarding_rhythm_continue">Continue with %1$s</string>
+
+    <!-- Onboarding recap, « Mon foyer » and its home card -->
+    <string name="onboarding_recap_title">Your household is ready</string>
+    <string name="onboarding_recap_text">The questions now adapt to you. Everything can still be changed in “My household”.</string>
+    <string name="household_row_household">Household</string>
+    <string name="household_row_food">Food</string>
+    <string name="household_row_essentials">Essentials</string>
+    <string name="household_row_rhythm">Rhythm</string>
+    <string name="household_edit">Edit</string>
+    <string name="onboarding_start_session">Take stock now</string>
+    <string name="onboarding_go_home">Go to home</string>
+    <string name="household_title">My household</string>
+    <string name="household_text">What you change here applies from your next “take stock”.</string>
+    <string name="household_private">This information stays on your phone.</string>
+    <string name="household_restart">Start again from the beginning</string>
+    <string name="household_back">Back to home</string>
+    <plurals name="household_adults">
+        <item quantity="one">%d adult</item>
+        <item quantity="other">%d adults</item>
+    </plurals>
+    <plurals name="household_babies">
+        <item quantity="one">%d baby</item>
+        <item quantity="other">%d babies</item>
+    </plurals>
+    <plurals name="household_children">
+        <item quantity="one">%d child</item>
+        <item quantity="other">%d children</item>
+    </plurals>
+    <plurals name="household_teens">
+        <item quantity="one">%d teen</item>
+        <item quantity="other">%d teens</item>
+    </plurals>
+    <string name="household_pet_dog">1 dog</string>
+    <string name="household_pet_cat">1 cat</string>
+    <string name="household_pet_other">1 other pet</string>
+    <string name="household_avoid_gluten">no gluten</string>
+    <string name="household_avoid_lactose">no lactose</string>
+    <string name="household_avoid_nuts">no nuts</string>
+    <string name="household_avoid_eggs">no eggs</string>
+    <string name="household_avoid_alcohol">no alcohol</string>
+    <plurals name="household_essentials">
+        <item quantity="one">%d product</item>
+        <item quantity="other">%d products</item>
+    </plurals>
+    <string name="household_rhythm_week">Shopping every week</string>
+    <string name="household_rhythm_two_weeks">Shopping every 2 weeks</string>
+    <string name="household_rhythm_month">Shopping every month</string>
+    <plurals name="household_rhythm_days">
+        <item quantity="one">Shopping every day</item>
+        <item quantity="other">Shopping every %d days</item>
+    </plurals>
+    <plurals name="household_recurring">
+        <item quantity="one">%d recurring</item>
+        <item quantity="other">%d recurring</item>
+    </plurals>
+    <plurals name="home_household_persons">
+        <item quantity="one">%d person</item>
+        <item quantity="other">%d people</item>
+    </plurals>
+    <plurals name="home_household_essentials">
+        <item quantity="one">%d essential</item>
+        <item quantity="other">%d essentials</item>
+    </plurals>
 </resources>

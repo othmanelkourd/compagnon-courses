@@ -25,6 +25,8 @@ enum class Tier {
  * @property slope steepness of `p₀ = 1 / (1 + e^(−slope × (r − 1)))`.
  * @property stapleWeight cold-start weight of a staple product (`p₀ = penetration × weight`).
  * @property defaultPenetration cold-start penetration when the market has none.
+ * @property declaredMax cap of `p₀ = H / Î` for a product declared at onboarding and never bought.
+ * @property declaredEssentialFloor floor of p₀ for an essential chosen at onboarding and never bought.
  */
 data class ScoreConfig(
     val referenceHouseholdSize: Double = 2.0,
@@ -44,12 +46,15 @@ data class ScoreConfig(
     val guestsOdds: Double = 1.2,
     val consecutiveNoOdds: Double = 0.6,
     val watchFloor: Double = 0.5,
+    val declaredMax: Double = 0.9,
+    val declaredEssentialFloor: Double = 0.35,
 ) {
     init {
         require(referenceHouseholdSize > 0.0 && shrinkage >= 0.0 && slope > 0.0) { "Invalid score coefficients" }
         require(sizeFactorMin in 0.0..sizeFactorMax) { "Invalid household size factor bounds" }
         require(quantityCorrectionMin in 0.0..quantityCorrectionMax) { "Invalid quantity correction bounds" }
         require(watchFloor in 0.0..1.0) { "watchFloor must be a probability" }
+        require(declaredEssentialFloor in 0.0..declaredMax && declaredMax <= 1.0) { "Invalid declared bounds" }
     }
 }
 
@@ -70,6 +75,10 @@ data class ScoreConfig(
  *   cards get every other slot first. Gates are the only way a budgeted session offers the T3 long tail
  *   (131 of the 182 cold-start candidates of the seed): without a reserve, a household with as many T2
  *   products as slots would never see one. 0 gives gates only what the cards leave.
+ * @property maxCardsPerCategory at most this many cards per category (watched products excepted), so that the
+ *   cards cover more aisles; the others fold into their gate. Null: no cap.
+ * @property priorityBand width of the p bands within which products are ordered by the session seed rather
+ *   than by p (rotation between sessions); 0 orders by p only.
  */
 data class PlannerConfig(
     val defaultBudget: Int = 15,
@@ -83,6 +92,8 @@ data class PlannerConfig(
     val cardAbove: Double = 0.3,
     val gateAbove: Double = 0.1,
     val overflowToSuggestedAbove: Double = 0.6,
+    val maxCardsPerCategory: Int? = 3,
+    val priorityBand: Double = 0.05,
     val score: ScoreConfig = ScoreConfig(),
 ) {
     init {
@@ -91,6 +102,8 @@ data class PlannerConfig(
             "Slots cannot be negative"
         }
         require(maxSuggested >= 0) { "The T1 screen cap cannot be negative" }
+        require(maxCardsPerCategory == null || maxCardsPerCategory > 0) { "maxCardsPerCategory must be positive" }
+        require(priorityBand >= 0.0 && priorityBand.isFinite()) { "priorityBand cannot be negative" }
         require(gateAbove <= cardAbove && cardAbove <= suggestedAbove) { "Tier thresholds must be increasing" }
     }
 

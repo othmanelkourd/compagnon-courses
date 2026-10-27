@@ -103,6 +103,17 @@ internal object AppIcons {
     /** The « Il en reste un peu » levels (a low stock). */
     val Levels: ImageVector by lazy { lineIcon("Levels", "M4 18h16M6 14h12M9 10h6") }
 
+    /** `home` (« Mon foyer »). */
+    val Home: ImageVector by lazy { lineIcon("Home", "M3 10.5 12 3l9 7.5", "M5 9.5V20h14V9.5", "M10 20v-5h4v5") }
+
+    /** `lock` (« Vos réponses restent sur votre téléphone »). */
+    val Lock: ImageVector by lazy {
+        lineIcon("Lock", "M7 11h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z", "M8 11V8a4 4 0 0 1 8 0v3")
+    }
+
+    /** The « Alimentation » row of « Mon foyer » (a drop with a line, `design/maquette/Household-Edit.dc.html`). */
+    val Food: ImageVector by lazy { lineIcon("Food", "M12 21c4-3 7-6.5 7-11a7 7 0 0 0-14 0c0 4.5 3 8 7 11zM12 7v6") }
+
     private const val CIRCLE_9 = "M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0z"
 
     private fun icon(name: String, autoMirror: Boolean = false, block: ImageVector.Builder.() -> Unit): ImageVector =
