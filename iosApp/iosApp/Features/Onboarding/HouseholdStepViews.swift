@@ -1,7 +1,8 @@
 import Shared
 import SwiftUI
 
-/// Step 1 « Qui vit à la maison ? » (mockup `Onboarding-Household`): a stepper per kind of member, pets as toggles.
+/// Step 1 « Qui vit à la maison ? » (mockup `Onboarding-Household`): a stepper per kind of member, pets as toggles
+/// with their face.
 struct HouseholdStepView: View {
     let state: OnboardingUiStateReady
     let send: (any OnboardingEvent) -> Void
@@ -15,6 +16,7 @@ struct HouseholdStepView: View {
             VStack(alignment: .leading, spacing: 0) {
                 OnboardingHeader(
                     overline: Text(verbatim: HouseholdTexts.sectionTitle(.household)),
+                    imageKey: ScreenIllustration.onboardingHousehold,
                     title: Text("Qui vit à la maison\u{00A0}?"),
                     subtitle: Text("Pour proposer les bonnes quantités, et les produits bébé ou animaux seulement s'il y en a.")
                 )
@@ -58,24 +60,40 @@ struct HouseholdStepView: View {
                         Button {
                             send(OnboardingEventTogglePet(pet: pet))
                         } label: {
-                            HStack(spacing: 6) {
-                                if on {
-                                    IconView(.check, size: 16, weight: .heavy)
-                                }
+                            HStack(spacing: 8) {
+                                // The pet's face, with a check badge when it is chosen.
+                                Illustration(Self.imageKey(pet), size: 28, pops: false)
+                                    .overlay(alignment: .bottomTrailing) {
+                                        if on {
+                                            CheckBadge(size: 16, borderColor: Palette.basilLight, checkSize: 9, checkWidth: 1.5)
+                                                .offset(x: 5, y: 4)
+                                        }
+                                    }
                                 Text(verbatim: HouseholdTexts.petLabel(pet))
                                     .font(.custom(FontName.figtreeBold, size: 16, relativeTo: .callout))
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.8)
                             }
+                            .chipPop(trigger: on)
                         }
                         .buttonStyle(ChoiceTileStyle(selected: on, height: 52))
+                        .accessibilityAddTraits(on ? .isSelected : [])
                     }
                 }
             }
         } bottom: {
             OnboardingPrimaryButton(saving: state.saving, action: { send(OnboardingEventNext.shared) }) {
                 Text("Continuer · \(Int(household.persons)) personnes")
+                    .rollingNumber(Int(household.persons))
             }
+        }
+    }
+
+    private static func imageKey(_ pet: PetChoice) -> String {
+        switch pet {
+        case .dog: ScreenIllustration.petDog
+        case .cat: ScreenIllustration.petCat
+        case .other: ScreenIllustration.petOther
         }
     }
 }
@@ -97,14 +115,13 @@ private struct MemberStepper: View {
                 .foregroundStyle(Palette.ink)
                 .monospacedDigit()
                 .frame(minWidth: 28)
-                .contentTransition(.numericText())
+                .rollingNumber(count)
                 .accessibilityLabel(Text(verbatim: label))
                 .accessibilityValue(Text(verbatim: "\(count)"))
             button(increment: true, enabled: canIncrement, label: Text("Un de plus\u{00A0}: \(lowercased)"))
         }
         .padding(2)
         .background(Palette.surfaceSoft, in: .rect(cornerRadius: Radius.stepperButton))
-        .animation(.snappy, value: count)
     }
 
     private func button(increment: Bool, enabled: Bool, label: Text) -> some View {
@@ -134,6 +151,7 @@ struct DietStepView: View {
             VStack(alignment: .leading, spacing: 0) {
                 OnboardingHeader(
                     overline: Text(verbatim: HouseholdTexts.sectionTitle(.food)),
+                    imageKey: ScreenIllustration.onboardingFood,
                     title: Text("Comment mangez-vous\u{00A0}?"),
                     subtitle: Text("On ne vous proposera jamais un produit qui ne vous correspond pas.")
                 )
@@ -201,8 +219,8 @@ private struct DietRow: View {
     }
 }
 
-/// Step 2 « Quelque chose à éviter ? » (mockup `Onboarding-Avoid`): the avoidances already implied by the diet are
-/// checked in grey and cannot be changed.
+/// Step 2 « Quelque chose à éviter ? » (mockup `Onboarding-Avoid`), an image at the end of each line: the avoidances
+/// already implied by the diet are checked in grey and cannot be changed.
 struct AvoidStepView: View {
     let state: OnboardingUiStateReady
     let send: (any OnboardingEvent) -> Void
@@ -213,6 +231,7 @@ struct AvoidStepView: View {
             VStack(alignment: .leading, spacing: 0) {
                 OnboardingHeader(
                     overline: Text(verbatim: HouseholdTexts.sectionTitle(.food)),
+                    imageKey: ScreenIllustration.onboardingAvoid,
                     title: Text("Quelque chose à éviter\u{00A0}?"),
                     subtitle: Text("Allergie, intolérance ou simple choix\u{00A0}: ces produits ne vous seront plus proposés.")
                 )
@@ -234,6 +253,7 @@ struct AvoidStepView: View {
             OnboardingPrimaryButton(saving: state.saving, action: { send(OnboardingEventNext.shared) }) {
                 if chosen > 0 {
                     Text("Continuer · \(chosen) à éviter")
+                        .rollingNumber(chosen)
                 } else {
                     Text("Continuer")
                 }
@@ -260,7 +280,8 @@ private struct AvoidRow: View {
             HStack(spacing: 3) {
                 Checkbox(checked: option.checked, shape: .square, fill: option.locked ? Palette.checkboxBorder : Palette.basil)
                 TitleHint(title: Text(verbatim: label), hint: Text(verbatim: hint))
-                Spacer(minLength: 0)
+                Spacer(minLength: 8)
+                Illustration(Self.imageKey(option.choice), size: 34, pops: false)
             }
             .padding(.leading, 5)
             .padding(.trailing, 16)
@@ -275,5 +296,15 @@ private struct AvoidRow: View {
         .accessibilityValue(option.checked ? Text("Coché") : Text("Non coché"))
         .accessibilityHint(Text(verbatim: hint))
         .accessibilityAddTraits(option.checked ? [.isButton, .isSelected] : .isButton)
+    }
+
+    private static func imageKey(_ avoid: AvoidChoice) -> String {
+        switch avoid {
+        case .gluten: ScreenIllustration.avoidGluten
+        case .lactose: ScreenIllustration.avoidLactose
+        case .nuts: ScreenIllustration.avoidNuts
+        case .eggs: ScreenIllustration.avoidEggs
+        case .alcohol: ScreenIllustration.avoidAlcohol
+        }
     }
 }

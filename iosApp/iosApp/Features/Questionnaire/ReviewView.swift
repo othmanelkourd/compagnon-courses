@@ -34,6 +34,7 @@ struct ReviewView: View {
                         .foregroundStyle(Palette.ink)
                         .fixedSize(horizontal: false, vertical: true)
                         .accessibilityAddTraits(.isHeader)
+                        .rollingNumber(review.items.count)
                 }
                 .padding(.horizontal, Spacing.screen)
                 .padding(.top, 16)
@@ -57,6 +58,7 @@ struct ReviewView: View {
                         BlockSection(title: originTitle(group.origin)) {
                             ListBlock(data: group.items, id: \.productId) { item in
                                 ReviewRow(item: item)
+                                    .cascade(0)
                             }
                         }
                     }
@@ -124,8 +126,7 @@ struct ReviewView: View {
                     query = ""
                 } label: {
                     HStack(spacing: 12) {
-                        IconView(.plus, size: 20, weight: .bold)
-                            .foregroundStyle(Palette.basil)
+                        IllustrationPlate(key: result.imageKey, size: 40, imageSize: 28)
                         Text(verbatim: result.name)
                             .textStyle(.listRow)
                             .foregroundStyle(Palette.ink)
@@ -134,8 +135,12 @@ struct ReviewView: View {
                         Text(verbatim: result.quantity.label)
                             .textStyle(.secondary)
                             .foregroundStyle(Palette.inkSoft)
+                        IconView(.plus, size: 20, weight: .bold)
+                            .foregroundStyle(Palette.basil)
                     }
-                    .padding(.horizontal, 16)
+                    .padding(.leading, 12)
+                    .padding(.trailing, 16)
+                    .padding(.vertical, 8)
                     .frame(minHeight: 56)
                     .contentShape(.rect)
                 }
@@ -169,12 +174,13 @@ struct ReviewView: View {
     }
 }
 
-/// Ligne récapitulatif: name and quantity.
+/// Ligne récapitulatif: the product's image on a 40 disc, name and quantity.
 private struct ReviewRow: View {
     let item: ReviewItemUi
 
     var body: some View {
         HStack(spacing: 12) {
+            IllustrationPlate(key: item.imageKey, size: 40, imageSize: 28)
             Text(verbatim: item.name)
                 .textStyle(.listRow)
                 .foregroundStyle(Palette.ink)
@@ -184,55 +190,104 @@ private struct ReviewRow: View {
                 .foregroundStyle(Palette.inkSoft)
                 .monospacedDigit()
         }
-        .padding(.horizontal, 16)
+        .padding(.leading, 12)
+        .padding(.trailing, 16)
+        .padding(.vertical, 8)
         .frame(minHeight: 56)
         .accessibilityElement(children: .combine)
     }
 }
 
-/// The end of a session: what happened, then the list or the home screen.
+/// The end of a session (mockup `Done`): the shopping bags with a check that pops, what happened, then the list or
+/// the home screen. When items were added, leaves fall once (motion 9) with a success haptic.
 struct SessionDoneView: View {
     let done: QuestionUiStateDone
     let onShowList: () -> Void
     let onClose: () -> Void
 
+    @State private var celebrates = false
+
+    private var succeeded: Bool {
+        !done.abandoned && done.itemsAdded > 0
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            ZStack {
-                Circle().fill(done.abandoned ? Palette.pause : Palette.basilLight)
-                IconView(done.abandoned ? .close : .check, size: 40, weight: .bold)
-                    .foregroundStyle(done.abandoned ? Palette.inkSoft : Palette.basil)
-            }
-            .frame(width: 88, height: 88)
-            .symbolEffect(.bounce, value: done.itemsAdded)
-            .accessibilityHidden(true)
-            message
-                .textStyle(.screenTitle)
-                .foregroundStyle(Palette.ink)
-                .multilineTextAlignment(.center)
-                .accessibilityAddTraits(.isHeader)
-                .padding(.top, 20)
-            detail
-                .textStyle(.body)
-                .foregroundStyle(Palette.inkSoft)
-                .multilineTextAlignment(.center)
-                .padding(.top, 10)
-            Spacer()
+            picture
+                .accessibilityHidden(true)
             VStack(spacing: 10) {
+                message
+                    .textStyle(.screenTitle)
+                    .foregroundStyle(Palette.ink)
+                    .multilineTextAlignment(.center)
+                    .accessibilityAddTraits(.isHeader)
+                detail
+                    .textStyle(.body)
+                    .foregroundStyle(Palette.inkSoft)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.top, 30)
+            .cascade(3)
+            Spacer()
+            Spacer()
+                .frame(maxHeight: 40)
+            VStack(spacing: 12) {
                 Button(action: onShowList) {
                     ButtonLabel("Voir ma liste", icon: .basket)
                 }
                 .buttonStyle(.primary)
+                .cascade(5, delay: 0.04)
                 Button(action: onClose) {
                     Text("Retour à l'accueil")
                 }
                 .buttonStyle(.secondary)
+                .cascade(6, delay: 0.08)
             }
         }
         .padding(.horizontal, Spacing.screen)
         .padding(.top, Spacing.top)
         .padding(.bottom, 4)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background {
+            HaloBackground(spots: [HaloSpot(alignment: .top, x: 0, y: 60, size: 560, opacity: 1)])
+        }
+        .overlay {
+            if celebrates {
+                LeafConfetti()
+                    .ignoresSafeArea()
+            }
+        }
+        .sensoryFeedback(.success, trigger: celebrates) { _, started in started }
+        .onAppear {
+            if succeeded { celebrates = true }
+        }
+    }
+
+    /// The bags on a 160 disc ringed with Basilic clair, and the Basilic check badge; a neutral disc with ✕ when the
+    /// session was abandoned.
+    @ViewBuilder
+    private var picture: some View {
+        if done.abandoned {
+            ZStack {
+                Circle().fill(Palette.pause)
+                IconView(.close, size: 40, weight: .bold)
+                    .foregroundStyle(Palette.inkSoft)
+            }
+            .frame(width: 88, height: 88)
+        } else {
+            IllustrationPlate(key: ScreenIllustration.sessionDone, size: 160, imageSize: 108, shadow: true)
+                .background {
+                    Circle()
+                        .fill(Palette.basilLight.opacity(0.5))
+                        .padding(-12)
+                }
+                .overlay(alignment: .bottomTrailing) {
+                    CheckBadge(size: 44, border: 4, borderColor: Palette.canvas, checkSize: 22, checkWidth: 2.9, pops: true, delay: 0.24)
+                        .offset(x: -4, y: -6)
+                }
+                .popIn()
+        }
     }
 
     private var message: Text {

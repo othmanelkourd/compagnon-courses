@@ -37,7 +37,7 @@ courses/
 │  ├─ api-contract/             # :contract:api-contract   KMP : DTO @Serializable, ApiPaths, ErrorCode, ContractJson
 │  └─ openapi/openapi.json      # exporté par le serveur, versionné
 ├─ shared/
-│  ├─ core/model/               # :shared:core:model       unités, Quantity (sans Double), entités, mappers DTO → domaine
+│  ├─ core/model/               # :shared:core:model       unités, Quantity (sans Double), entités, mappers DTO → domaine, clés d'images
 │  ├─ core/network/             # :shared:core:network     client Ktor, CatalogApi, NetworkError
 │  ├─ core/database/            # :shared:core:database    SQLDelight : schéma, migrations (databases/n.db)
 │  ├─ core/data/                # :shared:core:data        dépôts : catalogue, foyer (« Mon foyer »), listes, séances
@@ -52,6 +52,7 @@ courses/
 ├─ server/app/                  # :server:app              serveur Ktor, Flyway, Exposed, import du seed
 ├─ backoffice/                  # Vite + React + TypeScript + react-admin (npm)
 ├─ catalog-content/             # seed éditorial du catalogue (JSON)
+├─ design/                      # charte, textes, maquette, icône (brand/), images 3D (illustrations/), polices
 ├─ infra/
 │  ├─ docker/compose.yml        # PostgreSQL 18, Mailpit, stockage S3 (RustFS) en local
 │  └─ tofu/                     # OpenTofu (en attente de l'ADR-007)
@@ -59,7 +60,7 @@ courses/
 └─ docs/                        # plan, ADR, API, modèle de données, moteur de questions
 ```
 
-L'app s'appelle **Ocimio**, d'après *Ocimum*, le nom botanique du basilic (domaine prévu : `ocimio` en .com, .fr et .app). Ses identifiants sur les stores sont `com.ocimio.courses` (`applicationId` Android et bundle id iOS) ; ils ne pourront plus changer après la première publication. Le package Kotlin `com.compagnon.courses` reste un nom interne, invisible des utilisateurs. L'icône et sa géométrie sont dans `design/brand/`.
+L'app s'appelle **Ocimio**, d'après *Ocimum*, le nom botanique du basilic (domaine prévu : `ocimio` en .com, .fr et .app). Ses identifiants sur les stores sont `com.ocimio.courses` (`applicationId` Android et bundle id iOS) ; ils ne pourront plus changer après la première publication. Le package Kotlin `com.compagnon.courses` reste un nom interne, invisible des utilisateurs. L'icône et sa géométrie sont dans `design/brand/` ; les images 3D des produits dans `design/illustrations/`.
 
 ## Prérequis
 

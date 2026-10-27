@@ -42,13 +42,19 @@ struct HomeContent: View {
     var body: some View {
         GeometryReader { proxy in
             ScrollView {
+                // The blocks come in one after the other (motion 2).
                 VStack(alignment: .leading, spacing: 20) {
                     header
+                        .cascade(0)
                     StartSessionCard(action: onStartSession)
+                        .cascade(1)
                     MyListCard(state: listState, action: onOpenList)
+                        .cascade(2)
                     HouseholdCard(summary: household, action: onOpenHousehold)
+                        .cascade(3)
                     Spacer(minLength: 12)
                     CatalogStatusFooter(sync: catalogSync, busy: catalogBusy, onRefresh: onRefreshCatalog)
+                        .cascade(4)
                 }
                 .padding(.horizontal, Spacing.screen)
                 .padding(.top, Spacing.top + 8)
@@ -56,7 +62,13 @@ struct HomeContent: View {
                 .frame(minHeight: proxy.size.height, alignment: .top)
             }
         }
-        .background(Palette.canvas)
+        .background {
+            // Two halos: top right, and a fainter one bottom left (mockup `Main`).
+            HaloBackground(spots: [
+                HaloSpot(alignment: .topTrailing, x: 150, y: -170, size: 440),
+                HaloSpot(alignment: .bottomLeading, x: -180, y: 200, size: 420, opacity: 0.7),
+            ])
+        }
         .toolbar(.hidden, for: .navigationBar)
     }
 
@@ -81,42 +93,90 @@ extension String {
     }
 }
 
-/// The main action: a large Basilic card « Faire le point ».
+/// The main action: a large Basilic card « Faire le point », with its leaf pattern, a translucent disc and a basket
+/// of 3D products in the bottom right corner (mockup `Main`). The products step aside at accessibility text sizes.
 private struct StartSessionCard: View {
     let action: () -> Void
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
+        let large = dynamicTypeSize.isAccessibilitySize
         Button(action: action) {
             VStack(alignment: .leading, spacing: 18) {
-                // The arrow sits on the title row, as on Android.
                 VStack(alignment: .leading, spacing: 6) {
-                    HStack(alignment: .center, spacing: 12) {
-                        Text("Faire le point")
-                            .textStyle(.screenTitle)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        IconView(.arrowRight, size: 26)
-                    }
+                    // Clear of the arrow; the subtitle is clear of the products too.
+                    Text("Faire le point")
+                        .textStyle(.screenTitle)
+                        .padding(.trailing, 40)
                     Text("Quelques questions, et votre liste est prête.")
                         .textStyle(.body)
                         .opacity(0.88)
                         .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: large ? .infinity : 200, alignment: .leading)
                 }
+                Spacer(minLength: 0)
                 ViewThatFits(in: .horizontal) {
                     HStack(spacing: 16) { facts }
                     VStack(alignment: .leading, spacing: 6) { facts }
                 }
                 .textStyle(.secondaryStrong)
             }
+            // At least 212 high with its padding, the facts at the bottom, and no higher than its content needs.
+            .frame(maxWidth: .infinity, minHeight: 212 - 48, alignment: .leading)
+            .fixedSize(horizontal: false, vertical: true)
             .multilineTextAlignment(.leading)
             .foregroundStyle(Palette.surface)
             .padding(24)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .cardBackground(Palette.basil, radius: Radius.card, elevation: .accentCard)
+            .background(alignment: .bottomTrailing) {
+                if !large {
+                    composition
+                }
+            }
+            .background(alignment: .topTrailing) {
+                LeafPattern.homeCard
+            }
+            .overlay(alignment: .topTrailing) {
+                IconView(.arrowRight, size: 26)
+                    .foregroundStyle(Palette.surface)
+                    .padding(.top, 28)
+                    .padding(.trailing, 24)
+            }
+            .background(Palette.basil)
+            .clipShape(.rect(cornerRadius: Radius.card))
+            .background {
+                RoundedRectangle(cornerRadius: Radius.card)
+                    .fill(Palette.basil)
+                    .elevation(.accentCard)
+            }
             .contentShape(.rect(cornerRadius: Radius.card))
         }
         .buttonStyle(PressScaleStyle())
         .accessibilityElement(children: .combine)
         .accessibilityHint("Démarre une série de questions pour préparer la liste")
+    }
+
+    /// The translucent disc and the basket with a baguette, an apple and a salad (positions of the mockup, from the
+    /// bottom right corner); each pops in after the card.
+    private var composition: some View {
+        ZStack(alignment: .bottomTrailing) {
+            Circle()
+                .fill(Palette.surface.opacity(0.10))
+                .frame(width: 150, height: 150)
+                .offset(x: 18, y: 14)
+            Illustration(ScreenIllustration.homeSession, size: 126, delay: 0.24)
+                .rotationEffect(.degrees(-6))
+                .offset(x: 6, y: 4)
+            Illustration(ScreenIllustration.decorBaguette, size: 62, delay: 0.32)
+                .rotationEffect(.degrees(-24))
+                .offset(x: -70, y: -74)
+            Illustration(ScreenIllustration.decorApple, size: 50, delay: 0.32)
+                .offset(x: -30, y: -92)
+            Illustration(ScreenIllustration.decorLeafy, size: 46, delay: 0.32)
+                .rotationEffect(.degrees(-12))
+                .offset(x: -104, y: -44)
+        }
+        .accessibilityHidden(true)
     }
 
     @ViewBuilder
@@ -132,16 +192,7 @@ private struct StartSessionCard: View {
     }
 }
 
-/// A slight press feedback for the large cards.
-private struct PressScaleStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.98 : 1)
-            .animation(.snappy(duration: 0.15), value: configuration.isPressed)
-    }
-}
-
-/// « Ma liste »: item count, checked count and a progress bar.
+/// « Ma liste »: its notepad, item count, checked count and a progress bar that fills when the screen appears.
 private struct MyListCard: View {
     let state: any ShoppingListUiState
     let action: () -> Void
@@ -149,8 +200,7 @@ private struct MyListCard: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 16) {
-                IconView(.basket, size: 26, weight: .medium)
-                    .foregroundStyle(Palette.basil)
+                Illustration(ScreenIllustration.homeList, size: 40, delay: 0.24)
                     .frame(width: 52, height: 52)
                     .background(Palette.basilLight, in: .rect(cornerRadius: 16))
                 VStack(alignment: .leading, spacing: 6) {
@@ -193,6 +243,7 @@ private struct MyListCard: View {
                 let items = String(localized: "\(Int(loaded.itemCount)) articles")
                 let checkedText = String(localized: "\(checked) cochés")
                 Text(verbatim: "\(items) · \(checkedText)")
+                    .rollingNumber(checked)
             }
         } else if state is ShoppingListUiStateError {
             Text("Liste indisponible")
@@ -202,7 +253,7 @@ private struct MyListCard: View {
     }
 }
 
-/// « Mon foyer »: the household in a few words (« 4 personnes · Halal · 14 essentiels »), opens « Mon foyer ».
+/// « Mon foyer »: its house, the household in a few words (« 4 personnes · Halal · 14 essentiels »), opens « Mon foyer ».
 private struct HouseholdCard: View {
     let summary: HouseholdSummaryUi
     let action: () -> Void
@@ -210,8 +261,7 @@ private struct HouseholdCard: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 16) {
-                IconView(.house, size: 24, weight: .medium)
-                    .foregroundStyle(Palette.basil)
+                Illustration(ScreenIllustration.homeHousehold, size: 40, delay: 0.32)
                     .frame(width: 52, height: 52)
                     .background(Palette.basilLight, in: .rect(cornerRadius: 16))
                 VStack(alignment: .leading, spacing: 4) {

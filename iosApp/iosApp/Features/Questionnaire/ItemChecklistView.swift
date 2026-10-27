@@ -31,6 +31,8 @@ struct ItemChecklistView: View {
 
                 ListBlock(data: items, id: \.productId) { item in
                     SuggestionRow(item: item, send: send)
+                        // The first lines come in one after the other (motion 2).
+                        .cascade(min(rowIndex(item), 8), delay: Motion.stagger)
                 }
                 .padding(.horizontal, Spacing.block)
             }
@@ -45,6 +47,7 @@ struct ItemChecklistView: View {
                         Text("Aucun article coché")
                     } else {
                         Text("Ajouter \(checkedCount) articles")
+                            .rollingNumber(checkedCount)
                     }
                 }
                 .buttonStyle(.primary)
@@ -63,6 +66,10 @@ struct ItemChecklistView: View {
         }
     }
 
+    private func rowIndex(_ item: SuggestedItemUi) -> Int {
+        items.firstIndex { $0.productId == item.productId } ?? 0
+    }
+
     /// Unchecks every line, then validates: nothing is added.
     private func confirmNothing() {
         for item in items where item.checked {
@@ -72,7 +79,8 @@ struct ItemChecklistView: View {
     }
 }
 
-/// Ligne suggestion: round checkbox, name (Encre discrète when unchecked), reason, compact stepper.
+/// Ligne suggestion: the product's image as a 48 toggle (Basilic clair disc and a check badge; Surface douce, the
+/// image at 45 % and an empty ring when unchecked), name (Encre discrète when unchecked), reason, compact stepper.
 private struct SuggestionRow: View {
     let item: SuggestedItemUi
     let send: (any QuestionEvent) -> Void
@@ -83,13 +91,13 @@ private struct SuggestionRow: View {
         // At accessibility text sizes the stepper goes under the name.
         let layout = dynamicTypeSize.isAccessibilitySize
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
-            : AnyLayout(HStackLayout(spacing: 6))
+            : AnyLayout(HStackLayout(spacing: 12))
         layout {
             Button {
                 send(QuestionEventToggleItem(productId: item.productId))
             } label: {
-                HStack(spacing: 6) {
-                    Checkbox(checked: item.checked, shape: .round)
+                HStack(spacing: 12) {
+                    ImageToggle(imageKey: item.imageKey, checked: item.checked)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(verbatim: item.name)
                             .textStyle(.listRow)
@@ -119,8 +127,24 @@ private struct SuggestionRow: View {
             // Its natural width first (the quantity is capped): the name wraps before a quantity does.
             .layoutPriority(1)
         }
-        .padding(.vertical, 8)
-        .padding(.leading, 4)
-        .padding(.trailing, 10)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
+    }
+}
+
+/// The image of a suggestion as its checkbox (mockup `Suggested`): a 44 disc in a 48 touch area, with a 22 badge on
+/// its corner that fills and draws its check when the line is checked.
+private struct ImageToggle: View {
+    let imageKey: String
+    let checked: Bool
+
+    var body: some View {
+        IllustrationPlate(key: imageKey, size: 44, imageSize: 32, dimmed: !checked)
+            .frame(width: Target.checkbox, height: Target.checkbox)
+            .overlay(alignment: .bottomTrailing) {
+                CheckBadge(checked: checked, size: 22, checkSize: 12, checkWidth: 1.7)
+                    .offset(x: 2, y: 2)
+            }
+            .chipPop(trigger: checked)
     }
 }

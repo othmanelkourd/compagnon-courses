@@ -3,20 +3,33 @@ import SwiftUI
 
 /// One product question (mockup `Card`): swipe right = « Oui » (with the stepper's quantity), left = « Non »,
 /// duplicated by the buttons below the card. Presets answer « Oui » with their quantity in one tap.
+///
+/// The card sits on the pile (motion 3): the card behind shows the next question's image (`nextImageKey`) and comes
+/// forward, 0.96 → 1, while this one flies off; the next screen cross-fades over it with the same image in place.
 struct ProductCardScreen: View {
     let card: ProductCardUi
+    /// The image of the next question, on the card behind; nil for the last card.
+    var nextImageKey: String?
     let canUndo: Bool
     let send: (any QuestionEvent) -> Void
+    /// The image pops in, except when the card comes from the pile (the card behind already showed it).
+    var imagePops = true
     var showsOptionsInitially = false
 
     @State private var command: SwipeCommand?
     @State private var showsOptions = false
+    /// This card is flying off: the card behind comes forward.
+    @State private var advancing = false
+    /// The height the band takes on this card (it shrinks when the screen is short), for the card behind.
+    @State private var bandHeight: CGFloat?
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         let scrolls = dynamicTypeSize.isAccessibilitySize
         VStack(spacing: 0) {
-            Group {
+            // One block, so that the top padding is the card's only (not the hints' too).
+            VStack(spacing: 0) {
                 if scrolls {
                     ScrollView { cardStack(dragEnabled: false, fills: false) }
                 } else {
@@ -60,7 +73,7 @@ struct ProductCardScreen: View {
         .padding(.horizontal, Spacing.screen)
         .padding(.bottom, 4)
         .sheet(isPresented: $showsOptions) {
-            NuancedAnswersSheet(productName: card.name) { answer in
+            NuancedAnswersSheet(productName: card.name, imageKey: card.imageKey) { answer in
                 showsOptions = false
                 send(QuestionEventNuanced(answer: answer))
             }
@@ -72,27 +85,27 @@ struct ProductCardScreen: View {
 
     /// The card over the next one (70 % opacity, slightly smaller and lower): the pile of questions.
     private func cardStack(dragEnabled: Bool, fills: Bool) -> some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: Radius.card)
-                .fill(Palette.surface)
-                .overlay { RoundedRectangle(cornerRadius: Radius.card).strokeBorder(Palette.line, lineWidth: 1) }
-                .padding(.horizontal, 14)
-                .scaleEffect(0.96)
-                .offset(y: 14)
-                .opacity(0.7)
-                .accessibilityHidden(true)
-            SwipeableCard(command: $command, dragEnabled: dragEnabled, onSwipe: answer) {
-                ProductCardContent(card: card, fills: fills, send: send, onPreset: { preset in
+        let band = CardBand.Style(dynamicTypeSize)
+        return SwipeableCard(command: $command, dragEnabled: dragEnabled, onLeave: comeForward, onSwipe: answer) {
+            ProductCardContent(
+                card: card, band: band, imagePops: imagePops, fills: fills, send: send,
+                onPreset: { preset in
                     command = SwipeCommand(direction: .yes) {
                         send(QuestionEventYes(quantity: preset.value))
                     }
-                })
-            }
-            .accessibilityElement(children: .contain)
-            .accessibilityAction(named: Text("Oui, \(card.quantity.selected.label)")) { answer(.yes) }
-            .accessibilityAction(named: Text("Non")) { answer(.no) }
-            .accessibilityAction(named: Text("Plus d'options")) { showsOptions = true }
+                },
+                onBandHeight: { bandHeight = $0 }
+            )
         }
+        // Behind the card and exactly its size (the card's flight does not move it).
+        .background {
+            PileBackCard(imageKey: nextImageKey, band: band, bandHeight: bandHeight, advanced: advancing)
+                .accessibilityHidden(true)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityAction(named: Text("Oui, \(card.quantity.selected.label)")) { answer(.yes) }
+        .accessibilityAction(named: Text("Non")) { answer(.no) }
+        .accessibilityAction(named: Text("Plus d'options")) { showsOptions = true }
         .padding(.bottom, 18)
     }
 
@@ -121,15 +134,129 @@ struct ProductCardScreen: View {
         case .no: send(QuestionEventNo.shared)
         }
     }
+
+    /// The card behind comes forward while this one flies off (400 ms), or goes back if it returns.
+    private func comeForward(_ leaving: Bool) {
+        guard !reduceMotion, nextImageKey != nil else { return }
+        withAnimation(Motion.standard(leaving ? Motion.Duration.ample : Motion.Duration.standard)) {
+            advancing = leaving
+        }
+    }
 }
 
-/// The card itself: category and chip, name, question, reason, unit, presets and the free stepper.
+/// The card behind the current one: an empty card with the band of the next question's image. At rest it is
+/// 14 points narrower on each side, at 0.96, 14 lower and at 70 %; `advanced`, it takes the place of the card.
+private struct PileBackCard: View {
+    let imageKey: String?
+    let band: CardBand.Style?
+    /// The height of the band on the card in front, so that the images match when this card takes its place.
+    let bandHeight: CGFloat?
+    let advanced: Bool
+
+    var body: some View {
+        VStack(spacing: 0) {
+            if let imageKey, let band {
+                // Where the band sits on a card: under the 26 high header row.
+                CardBand(imageKey: imageKey, style: band, height: bandHeight ?? band.height, pops: false)
+                    .padding(.top, 26 + 14)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(EdgeInsets(top: 24, leading: 22, bottom: 22, trailing: 22))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background {
+            RoundedRectangle(cornerRadius: Radius.card)
+                .fill(Palette.surface)
+                .shadow(color: Palette.ink.opacity(advanced ? 0.08 : 0), radius: 12, x: 0, y: 8)
+        }
+        .overlay { RoundedRectangle(cornerRadius: Radius.card).strokeBorder(Palette.line, lineWidth: 1) }
+        .padding(.horizontal, advanced ? 0 : 14)
+        .scaleEffect(advanced ? 1 : 0.96)
+        .offset(y: advanced ? 0 : 14)
+        .opacity(advanced ? 1 : 0.7)
+    }
+}
+
+/// The Basilic clair band at the top of a product card (mockup `Card`): a white glow, the leaf pattern, the soft
+/// shadow and the product's image. At the largest text sizes the image shrinks, then the band goes away; on a short
+/// screen the band gives up its height first (with `height: nil`), the image with it.
+struct CardBand: View {
+    struct Style: Equatable {
+        let height: CGFloat
+        let imageSize: CGFloat
+
+        static let regular = Style(height: 100, imageSize: 84)
+        static let compact = Style(height: 72, imageSize: 56)
+
+        /// 100 high with an 84 image; 72 and 56 from « xxLarge » to AX2; none from AX3 (`nil`).
+        init?(_ size: DynamicTypeSize) {
+            switch size {
+            case ...DynamicTypeSize.xLarge: self = .regular
+            case ...DynamicTypeSize.accessibility2: self = .compact
+            default: return nil
+            }
+        }
+
+        private init(height: CGFloat, imageSize: CGFloat) {
+            self.height = height
+            self.imageSize = imageSize
+        }
+    }
+
+    let imageKey: String
+    let style: Style
+    /// A fixed height, or `nil` to take what the card leaves, up to the style's height.
+    var height: CGFloat?
+    var pops = true
+
+    var body: some View {
+        Group {
+            if let height {
+                band(height: height)
+            } else {
+                GeometryReader { proxy in
+                    band(height: proxy.size.height)
+                }
+                .frame(maxHeight: style.height)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityHidden(true)
+    }
+
+    private func band(height: CGFloat) -> some View {
+        let imageSize = min(style.imageSize, height * 0.84)
+        return ZStack {
+            EllipticalGradient(colors: [Palette.surface.opacity(0.85), Palette.surface.opacity(0)], endRadiusFraction: 0.5)
+                .frame(width: height * 1.8, height: height * 1.8)
+            LeafPattern.cardBand
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            ObjectShadow(width: imageSize * 0.72)
+                .offset(y: height / 2 - 15)
+            Illustration(imageKey, size: imageSize, pops: pops, delay: 0.16)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: height)
+        .background(Palette.basilLight)
+        .clipShape(.rect(cornerRadius: 22))
+        // Too short to show anything: gone.
+        .opacity(height < 32 ? 0 : 1)
+    }
+}
+
+/// The card itself: category and chip, the band with the product's image, name, question, reason, unit, presets and
+/// the free stepper.
 struct ProductCardContent: View {
     let card: ProductCardUi
+    /// The band at the current text size, or none.
+    var band: CardBand.Style? = .regular
+    var imagePops = true
     /// Fills the available height (the presets go to the bottom); off when the card scrolls.
     var fills = true
     let send: (any QuestionEvent) -> Void
     let onPreset: (QuantityChoice) -> Void
+    /// The height the band finally takes.
+    var onBandHeight: (CGFloat) -> Void = { _ in }
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -137,24 +264,33 @@ struct ProductCardContent: View {
         VStack(alignment: .leading, spacing: 0) {
             header
 
+            if let band {
+                // When the card fills a short screen, the band gives up its height before anything else.
+                CardBand(imageKey: card.imageKey, style: band, height: fills ? nil : band.height, pops: imagePops)
+                    .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { onBandHeight($0) }
+                    .padding(.top, 14)
+                    .layoutPriority(-1)
+            }
+
             Text(verbatim: card.name)
                 .textStyle(.productTitle)
                 .foregroundStyle(Palette.ink)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)
-                .padding(.top, 18)
+                .padding(.top, band == nil ? 18 : 14)
             Text("Il vous faut \(card.needPhrase)\u{00A0}?")
                 .textStyle(.question)
                 .foregroundStyle(Palette.inkSoft)
                 .fixedSize(horizontal: false, vertical: true)
-                .padding(.top, 10)
+                .padding(.top, band == nil ? 10 : 8)
             if let reason = card.reason {
                 ReasonHint(reason: reason)
-                    .padding(.top, 14)
+                    .padding(.top, band == nil ? 14 : 12)
             }
 
             if fills {
-                Spacer(minLength: 20)
+                Spacer(minLength: band == nil ? 20 : 12)
+                    .layoutPriority(-2)
             }
 
             if card.units.count > 1 {
@@ -272,9 +408,11 @@ private struct UnitPicker: View {
     }
 }
 
-/// « Plus d'options » (mockup `Options`): the nuanced answers of a card, in two groups.
+/// « Plus d'options » (mockup `Options`): the product's image and name, then the nuanced answers of a card, in two
+/// groups.
 struct NuancedAnswersSheet: View {
     let productName: String
+    let imageKey: String
     let onAnswer: (NuancedAnswer) -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -283,6 +421,7 @@ struct NuancedAnswersSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .top, spacing: 12) {
+                    IllustrationPlate(key: imageKey, size: 52, imageSize: 36, pops: true, delay: 0.12)
                     VStack(alignment: .leading, spacing: 4) {
                         Text(verbatim: productName)
                             .textStyle(.sheetTitle)

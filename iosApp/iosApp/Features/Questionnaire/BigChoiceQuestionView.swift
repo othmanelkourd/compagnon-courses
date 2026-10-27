@@ -25,6 +25,8 @@ struct BigChoiceQuestionView<Choice: Hashable, TileLabel: View, Bottom: View>: V
     }
 
     let overline: Text
+    /// The image before the overline (onboarding rhythm); none for the meta questions.
+    var overlineImageKey: String?
     let title: Text
     let subtitle: Text
     var metrics: Metrics = .meta
@@ -43,7 +45,13 @@ struct BigChoiceQuestionView<Choice: Hashable, TileLabel: View, Bottom: View>: V
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     VStack(alignment: .leading, spacing: 10) {
-                        Overline(text: overline, color: Palette.basil)
+                        HStack(spacing: 8) {
+                            if let overlineImageKey {
+                                Illustration(overlineImageKey, size: 30, delay: 0.08)
+                                    .padding(.vertical, -6)
+                            }
+                            Overline(text: overline, color: Palette.basil)
+                        }
                         title
                             .textStyle(metrics.titleStyle)
                             .foregroundStyle(Palette.ink)

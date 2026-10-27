@@ -29,6 +29,8 @@ struct SwipeableCard<Content: View>: View {
     var dragEnabled = true
     /// The stamp is white on the dark aisle card, Basilic or Tomate on a white card (as on Android).
     var onDark = false
+    /// `true` when the card starts to fly off (the card behind comes forward), `false` if it comes back.
+    var onLeave: (Bool) -> Void = { _ in }
     let onSwipe: (SwipeDirection) -> Void
     @ViewBuilder let content: Content
 
@@ -70,6 +72,8 @@ struct SwipeableCard<Content: View>: View {
             }
     }
 
+    /// The card flies off (exit curve, 250 ms; motion 3), then `perform` answers. With « Réduire les animations » it
+    /// answers at once and the screens cross-fade.
     private func fling(_ direction: SwipeDirection, then perform: @escaping () -> Void) {
         guard !leaving else { return }
         leaving = true
@@ -78,8 +82,9 @@ struct SwipeableCard<Content: View>: View {
             scheduleReturn()
             return
         }
+        onLeave(true)
         let target: CGFloat = direction == .yes ? 700 : -700
-        withAnimation(.easeIn(duration: 0.2)) {
+        withAnimation(Motion.exit()) {
             offset = target
         } completion: {
             perform()
@@ -92,7 +97,8 @@ struct SwipeableCard<Content: View>: View {
         Task { @MainActor in
             try? await Task.sleep(for: .seconds(1.2))
             leaving = false
-            withAnimation(.spring(duration: 0.35)) { offset = 0 }
+            onLeave(false)
+            withAnimation(reduceMotion ? nil : .spring(duration: 0.35)) { offset = 0 }
         }
     }
 

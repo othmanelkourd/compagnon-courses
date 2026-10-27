@@ -13,6 +13,7 @@ import com.compagnon.courses.core.model.DietaryTags
 import com.compagnon.courses.core.model.Product
 import com.compagnon.courses.core.model.ProductId
 import com.compagnon.courses.core.model.format.capitalizedFirst
+import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.engine.SessionContext
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.Job
@@ -507,12 +508,12 @@ class OnboardingViewModel(
             essentials = essentialsUi(current, setup),
             recurring = RecurringStepUi(
                 rows = current.cadences.mapNotNull { (id, cadence) ->
-                    products[id]?.let { RecurringRowUi(id.value, nameOf(it), cadence) }
+                    products[id]?.let { RecurringRowUi(id.value, nameOf(it), cadence, imageOf(it)) }
                 },
                 adding = screen.addingRecurring,
                 query = screen.recurringQuery,
                 results = screen.recurringResults.mapNotNull { id ->
-                    products[id]?.let { ProductChipUi(id.value, nameOf(it), checked = id in current.cadences) }
+                    products[id]?.let { ProductChipUi(id.value, nameOf(it), checked = id in current.cadences, imageKey = imageOf(it)) }
                 },
             ),
             rhythm = RhythmStepUi(current.horizonDays, current.rhythm, SessionContext.MAX_HORIZON_DAYS),
@@ -549,16 +550,17 @@ class OnboardingViewModel(
             EssentialsAisleUi(
                 categoryId = category.id.value,
                 title = category.name,
-                items = shown.map { ProductChipUi(it.id.value, nameOf(it), it.id in checked) },
+                items = shown.map { ProductChipUi(it.id.value, nameOf(it), it.id in checked, imageOf(it)) },
                 total = all.size,
                 expanded = expanded,
+                imageKey = Illustrations.forCategory(category.slug),
             )
         }
         return EssentialsStepUi(
             query = screen.essentialsQuery,
             aisles = aisles,
             results = screen.essentialsResults.mapNotNull { id ->
-                products[id]?.let { ProductChipUi(id.value, nameOf(it), id in checked) }
+                products[id]?.let { ProductChipUi(id.value, nameOf(it), id in checked, imageOf(it)) }
             },
             checkedCount = checked.size,
             catalogLoading = false,
@@ -567,6 +569,9 @@ class OnboardingViewModel(
     }
 
     private fun nameOf(product: Product): String = product.name.text.capitalizedFirst()
+
+    private fun imageOf(product: Product): String =
+        Illustrations.forProduct(product.slug, loadedCatalog?.categories?.firstOrNull { it.id == product.categoryId }?.slug)
 
     // --- Conversions ---
 

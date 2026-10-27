@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "hot_beverage.png",
+      "idiom": "universal",
+      "scale": "2x"
+    }
+  ],
+  "info": {
+    "author": "xcode",
+    "version": 1
+  }
+}

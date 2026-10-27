@@ -108,12 +108,12 @@ data class HouseholdStepUi(
  */
 data class AvoidOptionUi(val choice: AvoidChoice, val checked: Boolean, val locked: Boolean)
 
-/** A product chip (essentials) or search result. */
-data class ProductChipUi(val productId: String, val name: String, val checked: Boolean)
+/** A product chip (essentials) or search result, with its illustration ([imageKey], `Illustrations`). */
+data class ProductChipUi(val productId: String, val name: String, val checked: Boolean, val imageKey: String)
 
 /**
  * One aisle of the essentials grid: the checked products and the most common ones, or the whole aisle when
- * [expanded]. [total] is the aisle's product count (« Voir tout (44) »).
+ * [expanded]. [total] is the aisle's product count (« Voir tout (44) »); [imageKey] the aisle's illustration.
  */
 data class EssentialsAisleUi(
     val categoryId: String,
@@ -121,6 +121,7 @@ data class EssentialsAisleUi(
     val items: List<ProductChipUi>,
     val total: Int,
     val expanded: Boolean,
+    val imageKey: String,
 )
 
 /**
@@ -140,8 +141,8 @@ data class EssentialsStepUi(
     val catalogMissing: Boolean,
 )
 
-/** A recurring product and its rhythm. */
-data class RecurringRowUi(val productId: String, val name: String, val cadence: CadenceChoice)
+/** A recurring product and its rhythm, with its illustration ([imageKey]). */
+data class RecurringRowUi(val productId: String, val name: String, val cadence: CadenceChoice, val imageKey: String)
 
 /**
  * The « Ce que vous rachetez souvent » step. [adding]: the search field of « Ajouter un produit » is open,

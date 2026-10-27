@@ -46,9 +46,13 @@ class ShoppingListContentTest {
     private val events = mutableListOf<ShoppingListEvent>()
     private var sessionsStarted = 0
 
-    private val milk = ListItemUi("1", "Lait demi-écrémé", "2 bouteilles", checked = false, productId = "lait", isFreeText = false)
-    private val butter = ListItemUi("2", "Beurre doux", "250 g", checked = true, productId = "beurre", isFreeText = false)
-    private val candles = ListItemUi("3", "Bougies d'anniversaire", null, checked = false, productId = null, isFreeText = true)
+    private val milk = ListItemUi(
+        "1", "Lait demi-écrémé", "2 bouteilles", checked = false, productId = "lait", isFreeText = false, imageKey = "glass_of_milk",
+    )
+    private val butter = ListItemUi("2", "Beurre doux", "250 g", checked = true, productId = "beurre", isFreeText = false, imageKey = "butter")
+    private val candles = ListItemUi(
+        "3", "Bougies d'anniversaire", null, checked = false, productId = null, isFreeText = true, imageKey = "memo",
+    )
 
     private val loaded = ShoppingListUiState.Loaded(
         sections = listOf(
@@ -160,7 +164,7 @@ class ShoppingListContentTest {
         setState(
             loaded.copy(
                 searchQuery = "pât",
-                searchResults = listOf(ProductSuggestionUi(productId = "pates", name = "Pâtes", quantityLabel = "500 g")),
+                searchResults = listOf(ProductSuggestionUi(productId = "pates", name = "Pâtes", quantityLabel = "500 g", imageKey = "spaghetti")),
             ),
         )
 

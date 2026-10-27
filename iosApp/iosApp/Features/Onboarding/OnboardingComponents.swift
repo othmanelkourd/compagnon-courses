@@ -22,6 +22,7 @@ struct OnboardingTopBar: View {
                         .textStyle(.counter)
                         .foregroundStyle(Palette.ink)
                         .monospacedDigit()
+                        .rollingNumber(stepNumber)
                     ProgressSegments(total: stepCount, filled: stepNumber, spacing: 4)
                 }
                 .frame(maxWidth: .infinity)
@@ -46,9 +47,12 @@ struct OnboardingTopBar: View {
     }
 }
 
-/// Overline, title and subtitle of a step (« VOTRE FOYER », « Qui vit à la maison ? », …).
+/// Overline, title and subtitle of a step (« VOTRE FOYER », « Qui vit à la maison ? », …). The step's image (30)
+/// pops in before the overline, or (38) after the title of a step without overline (« Vos essentiels »).
 struct OnboardingHeader: View {
     var overline: Text?
+    /// The illustration of the step, in the overline (or after the title when there is none).
+    var imageKey: String?
     let title: Text
     let subtitle: Text
     var titleStyle: TextStyle = .screenTitle
@@ -58,13 +62,24 @@ struct OnboardingHeader: View {
     var body: some View {
         VStack(alignment: .leading, spacing: spacing) {
             if let overline {
-                Overline(text: overline, color: Palette.basil)
+                HStack(spacing: 8) {
+                    if let imageKey {
+                        Illustration(imageKey, size: 30, delay: 0.08)
+                            .padding(.vertical, -6)
+                    }
+                    Overline(text: overline, color: Palette.basil)
+                }
             }
-            title
-                .textStyle(titleStyle)
-                .foregroundStyle(Palette.ink)
-                .fixedSize(horizontal: false, vertical: true)
-                .accessibilityAddTraits(.isHeader)
+            HStack(alignment: .center, spacing: 10) {
+                title
+                    .textStyle(titleStyle)
+                    .foregroundStyle(Palette.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                if overline == nil, let imageKey {
+                    Illustration(imageKey, size: 38, delay: 0.08)
+                }
+            }
             subtitle
                 .textStyle(subtitleStyle)
                 .foregroundStyle(Palette.inkSoft)
@@ -239,15 +254,30 @@ struct TitleHint: View {
     }
 }
 
-/// The 40 square of a row (Basilic clair, radius 12): a number on the welcome screen, an icon in « Mon foyer ».
+/// The square of a row (Basilic clair): an image of the section on the welcome screen (44, radius 14) and in « Mon
+/// foyer » (40, radius 12).
 struct RowBadge<Content: View>: View {
+    var size: CGFloat = 40
+    var radius: CGFloat = Radius.optionTile
     @ViewBuilder let content: Content
 
     var body: some View {
         content
             .foregroundStyle(Palette.basil)
-            .frame(width: 40, height: 40)
-            .background(Palette.basilLight, in: .rect(cornerRadius: Radius.optionTile))
+            .frame(width: size, height: size)
+            .background(Palette.basilLight, in: .rect(cornerRadius: radius))
+    }
+}
+
+extension HouseholdSection {
+    /// The image of a section (welcome screen, « Mon foyer »).
+    var imageKey: String {
+        switch self {
+        case .household: ScreenIllustration.onboardingHousehold
+        case .food: ScreenIllustration.onboardingFood
+        case .essentials: ScreenIllustration.onboardingEssentials
+        case .rhythm: ScreenIllustration.onboardingRecurring
+        }
     }
 }
 
@@ -314,30 +344,36 @@ struct FlowLayout: Layout {
     }
 }
 
-/// A product chip of the essentials (44 high, capsule, 15 / 600). Checked: Basilic clair, 2 pt Basilic border,
-/// Basilic foncé text with a check.
+/// A product chip of the essentials (44 high, capsule, 15 / 600): the product's image (24), its name and, checked,
+/// a check that draws itself after it. Checked: Basilic clair, 2 pt Basilic border, Basilic foncé text. The chip pops
+/// when it changes (motion 4).
 struct ProductChip: View {
     let name: String
+    let imageKey: String
     let checked: Bool
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 6) {
-                if checked {
-                    IconView(.check, size: 15, weight: .heavy)
-                }
+            HStack(spacing: 7) {
+                Illustration(imageKey, size: 24, pops: false)
                 Text(verbatim: name)
                     .font(.custom(FontName.figtreeSemiBold, size: 15, relativeTo: .subheadline))
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
+                if checked {
+                    DrawnCheck(size: 14, lineWidth: 1.9, color: Palette.basilDark)
+                }
             }
             .foregroundStyle(checked ? Palette.basilDark : Palette.ink)
-            .padding(.horizontal, 14)
+            .padding(.leading, 10)
+            .padding(.trailing, 12)
             .frame(minHeight: 44)
             .background(checked ? Palette.basilLight : Palette.surface, in: .capsule)
             .overlay { Capsule().strokeBorder(checked ? Palette.basil : Palette.line, lineWidth: checked ? 2 : 1) }
             .contentShape(.capsule)
+            .chipPop(trigger: checked)
+            .animation(Motion.standard(Motion.Duration.quick), value: checked)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Text(verbatim: name))

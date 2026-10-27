@@ -31,7 +31,7 @@ struct ButtonLabel: View {
     }
 }
 
-/// Bouton principal: Basilic, white 18 / 700, radius 18, 56 to 60 high. Pressed: Basilic foncé.
+/// Bouton principal: Basilic, white 18 / 700, radius 18, 56 to 60 high. Pressed: Basilic foncé, at 0.98.
 struct PrimaryButtonStyle: ButtonStyle {
     var height: CGFloat = 56
     @Environment(\.isEnabled) private var isEnabled
@@ -47,11 +47,12 @@ struct PrimaryButtonStyle: ButtonStyle {
             .background(configuration.isPressed ? Palette.basilDark : Palette.basil, in: .rect(cornerRadius: Radius.button))
             .opacity(isEnabled ? 1 : 0.4)
             .contentShape(.rect(cornerRadius: Radius.button))
+            .pressScale(configuration.isPressed)
     }
 }
 
-/// Bouton secondaire: Surface, 1.5 Trait fort border, Encre 18 / 700. `basil`: border and text in Basilic
-/// (« Courses terminées »).
+/// Bouton secondaire: Surface, 1.5 Trait fort border, Encre 18 / 700, at 0.98 when pressed. `basil`: border and text in
+/// Basilic (« Courses terminées »).
 struct SecondaryButtonStyle: ButtonStyle {
     var height: CGFloat = 56
     var basil = false
@@ -72,6 +73,7 @@ struct SecondaryButtonStyle: ButtonStyle {
             }
             .opacity(isEnabled ? 1 : 0.4)
             .contentShape(.rect(cornerRadius: Radius.button))
+            .pressScale(configuration.isPressed)
     }
 }
 

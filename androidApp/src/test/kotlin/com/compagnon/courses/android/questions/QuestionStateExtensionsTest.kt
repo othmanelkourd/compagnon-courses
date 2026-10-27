@@ -34,6 +34,7 @@ class QuestionStateExtensionsTest {
         units = emptyList(),
         isSameAsLastTime = false,
         reason = null,
+        imageKey = "glass_of_milk",
     )
 
     @Test
@@ -99,8 +100,8 @@ class QuestionStateExtensionsTest {
             QuestionUiState.Meta(MetaQuestionUi(MetaQuestionKind.PERSONS, 2, 1, 12, listOf(1, 2, 4)), progress, false),
             QuestionUiState.Meta(MetaQuestionUi(MetaQuestionKind.GUESTS, 0, 0, 20, listOf(0, 2)), progress, false),
             QuestionUiState.Suggested(emptyList(), 0, progress, false),
-            QuestionUiState.Gate(CategoryGateUi("menage", "Entretien", null, 4), progress, false),
-            QuestionUiState.GateItems(CategoryGateUi("menage", "Entretien", null, 4), emptyList(), 0, progress, false),
+            QuestionUiState.Gate(CategoryGateUi("menage", "Entretien", null, 4, "broom"), progress, false),
+            QuestionUiState.GateItems(CategoryGateUi("menage", "Entretien", null, 4, "broom"), emptyList(), 0, progress, false),
         ).map { it.stepKey() }
 
         assertEquals(keys.size, keys.toSet().size)

@@ -2,15 +2,20 @@ package com.compagnon.courses.android.list
 
 import android.content.Intent
 import android.content.res.Resources
+import androidx.compose.animation.BoundsTransform
+import androidx.compose.animation.animateBounds
+import androidx.compose.animation.core.snap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -45,7 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -60,9 +65,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.compagnon.courses.android.R
 import com.compagnon.courses.android.ui.components.AddRow
+import com.compagnon.courses.android.ui.components.AnimatedCounter
 import com.compagnon.courses.android.ui.components.AppIcons
 import com.compagnon.courses.android.ui.components.BlockDivider
 import com.compagnon.courses.android.ui.components.CompagnonIconButton
@@ -76,10 +83,19 @@ import com.compagnon.courses.android.ui.components.ProgressBar
 import com.compagnon.courses.android.ui.components.SearchField
 import com.compagnon.courses.android.ui.components.SecondaryButton
 import com.compagnon.courses.android.ui.components.SectionBlock
+import com.compagnon.courses.android.ui.components.riseIn
+import com.compagnon.courses.android.ui.components.splitSpace
+import com.compagnon.courses.android.ui.illustration.HaloAnchor
+import com.compagnon.courses.android.ui.illustration.HeroIllustration
+import com.compagnon.courses.android.ui.illustration.anchoredHalo
+import com.compagnon.courses.android.ui.illustration.haloSource
 import com.compagnon.courses.android.ui.theme.CompagnonColors
+import com.compagnon.courses.android.ui.theme.CompagnonMotion
 import com.compagnon.courses.android.ui.theme.CompagnonShapes
 import com.compagnon.courses.android.ui.theme.CompagnonSpacing
 import com.compagnon.courses.android.ui.theme.CompagnonType
+import com.compagnon.courses.android.ui.theme.LocalReduceMotion
+import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.feature.lists.ListItemUi
 import com.compagnon.courses.feature.lists.ShoppingListEvent
 import com.compagnon.courses.feature.lists.ShoppingListUiState
@@ -303,137 +319,165 @@ private fun LoadedList(
             query.clearText()
         }
     }
+    val reduceMotion = LocalReduceMotion.current
+    val rowMove = remember(reduceMotion) {
+        BoundsTransform { _, _ -> if (reduceMotion) snap() else CompagnonMotion.standard() }
+    }
     val blockPadding = Modifier.padding(start = CompagnonSpacing.Block, end = CompagnonSpacing.Block, top = 14.dp)
+    val density = LocalDensity.current
+    // The heights of the title and of the field: the empty list takes the rest of the screen.
+    var titleHeight by remember { mutableIntStateOf(0) }
+    var fieldHeight by remember { mutableIntStateOf(0) }
+    val halo = remember { HaloAnchor() }
+    val emptyList = state.isEmpty && typed.isEmpty()
 
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(bottom = bottomPadding + 16.dp),
-    ) {
-        item(key = "title") {
-            Column(modifier = Modifier.padding(start = CompagnonSpacing.Screen, end = CompagnonSpacing.Screen, top = 16.dp)) {
-                Row(verticalAlignment = Alignment.Bottom) {
-                    Text(
-                        text = stringResource(R.string.list_title),
-                        style = CompagnonType.ScreenTitleLarge,
-                        color = CompagnonColors.Ink,
-                        modifier = Modifier
-                            .weight(1f)
-                            .semantics { heading() },
-                    )
-                    if (!state.isEmpty) {
+    BoxWithConstraints(modifier = modifier) {
+        val viewport = maxHeight
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .then(if (emptyList) Modifier.anchoredHalo(halo, size = 520.dp, offsetY = 90.dp) else Modifier),
+            contentPadding = PaddingValues(bottom = bottomPadding + 16.dp),
+        ) {
+            item(key = "title") {
+                Column(
+                    modifier = Modifier
+                        .onSizeChanged { titleHeight = it.height }
+                        .padding(start = CompagnonSpacing.Screen, end = CompagnonSpacing.Screen, top = 16.dp),
+                ) {
+                    Row(verticalAlignment = Alignment.Bottom) {
                         Text(
-                            text = if (state.remainingCount == 0) {
-                                stringResource(R.string.list_all_checked)
-                            } else {
-                                pluralStringResource(
-                                    R.plurals.list_remaining,
-                                    state.remainingCount,
-                                    state.remainingCount,
-                                    state.itemCount,
-                                )
-                            },
-                            style = CompagnonType.Secondary.copy(fontWeight = FontWeight.SemiBold),
-                            color = CompagnonColors.InkSoft,
-                            modifier = Modifier.padding(bottom = 4.dp, start = 12.dp),
+                            text = stringResource(R.string.list_title),
+                            style = CompagnonType.ScreenTitleLarge,
+                            color = CompagnonColors.Ink,
+                            modifier = Modifier
+                                .weight(1f)
+                                .semantics { heading() },
+                        )
+                        if (!state.isEmpty) {
+                            AnimatedCounter(
+                                text = if (state.remainingCount == 0) {
+                                    stringResource(R.string.list_all_checked)
+                                } else {
+                                    pluralStringResource(
+                                        R.plurals.list_remaining,
+                                        state.remainingCount,
+                                        state.remainingCount,
+                                        state.itemCount,
+                                    )
+                                },
+                                count = state.remainingCount,
+                                style = CompagnonType.Secondary.copy(fontWeight = FontWeight.SemiBold),
+                                color = CompagnonColors.InkSoft,
+                                modifier = Modifier.padding(bottom = 4.dp, start = 12.dp),
+                            )
+                        }
+                    }
+                    if (!state.isEmpty) {
+                        ProgressBar(
+                            fraction = (state.itemCount - state.remainingCount) / state.itemCount.toFloat(),
+                            fillOnAppear = true,
+                            modifier = Modifier.padding(top = 10.dp),
                         )
                     }
                 }
-                if (!state.isEmpty) {
-                    ProgressBar(
-                        fraction = (state.itemCount - state.remainingCount) / state.itemCount.toFloat(),
-                        modifier = Modifier.padding(top = 10.dp),
-                    )
-                }
             }
-        }
-        item(key = "add") {
-            SearchField(
-                state = query,
-                onQueryChange = { onEvent(ShoppingListEvent.Search(it)) },
-                placeholder = stringResource(R.string.list_add_placeholder),
-                icon = FieldIcon.ADD,
-                // Return adds the first product found, otherwise the text itself (same on iOS).
-                onSubmit = {
-                    val first = state.searchResults.firstOrNull()
-                    if (first != null && typed.isNotEmpty()) {
-                        onEvent(ShoppingListEvent.AddProduct(first.productId))
-                        query.clearText()
-                    } else {
-                        addFreeText()
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = CompagnonSpacing.Screen, end = CompagnonSpacing.Screen, top = 16.dp),
-            )
-        }
-        state.error?.let {
-            item(key = "error") {
-                Text(
-                    text = stringResource(R.string.list_error_action),
-                    style = CompagnonType.Help,
-                    color = CompagnonColors.TomatoText,
-                    modifier = blockPadding
+            item(key = "add") {
+                SearchField(
+                    state = query,
+                    onQueryChange = { onEvent(ShoppingListEvent.Search(it)) },
+                    placeholder = stringResource(R.string.list_add_placeholder),
+                    icon = FieldIcon.ADD,
+                    // Return adds the first product found, otherwise the text itself (same on iOS).
+                    onSubmit = {
+                        val first = state.searchResults.firstOrNull()
+                        if (first != null && typed.isNotEmpty()) {
+                            onEvent(ShoppingListEvent.AddProduct(first.productId))
+                            query.clearText()
+                        } else {
+                            addFreeText()
+                        }
+                    },
+                    modifier = Modifier
+                        .onSizeChanged { fieldHeight = it.height }
                         .fillMaxWidth()
-                        .clip(CompagnonShapes.Small)
-                        .background(CompagnonColors.TomatoLight)
-                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                        .padding(start = CompagnonSpacing.Screen, end = CompagnonSpacing.Screen, top = 16.dp),
                 )
             }
-        }
-        // While typing: one block with the products found, then the typed text as a free line (same on iOS).
-        if (typed.isNotEmpty()) {
-            item(key = "results") {
-                ListBlock(modifier = Modifier.padding(start = CompagnonSpacing.Block, end = CompagnonSpacing.Block, top = 16.dp)) {
-                    state.searchResults.forEach { result ->
-                        key(result.productId) {
-                            AddRow(
-                                name = result.name,
-                                detail = result.quantityLabel,
-                                onClickLabel = stringResource(R.string.list_add_product, result.name),
-                                onClick = {
-                                    onEvent(ShoppingListEvent.AddProduct(result.productId))
-                                    query.clearText()
-                                },
-                            )
-                            BlockDivider()
+            state.error?.let {
+                item(key = "error") {
+                    Text(
+                        text = stringResource(R.string.list_error_action),
+                        style = CompagnonType.Help,
+                        color = CompagnonColors.TomatoText,
+                        modifier = blockPadding
+                            .fillMaxWidth()
+                            .clip(CompagnonShapes.Small)
+                            .background(CompagnonColors.TomatoLight)
+                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                    )
+                }
+            }
+            // While typing: one block with the products found, then the typed text as a free line (same on iOS).
+            if (typed.isNotEmpty()) {
+                item(key = "results") {
+                    ListBlock(modifier = Modifier.padding(start = CompagnonSpacing.Block, end = CompagnonSpacing.Block, top = 16.dp)) {
+                        state.searchResults.forEach { result ->
+                            key(result.productId) {
+                                AddRow(
+                                    name = result.name,
+                                    detail = result.quantityLabel,
+                                    imageKey = result.imageKey,
+                                    imageSize = 26.dp,
+                                    plateSize = 36.dp,
+                                    onClickLabel = stringResource(R.string.list_add_product, result.name),
+                                    onClick = {
+                                        onEvent(ShoppingListEvent.AddProduct(result.productId))
+                                        query.clearText()
+                                    },
+                                )
+                                BlockDivider()
+                            }
                         }
+                        AddRow(
+                            name = stringResource(R.string.list_add_free_text, typed),
+                            detail = null,
+                            imageKey = Illustrations.Screen.FREE_TEXT,
+                            imageSize = 26.dp,
+                            plateSize = 36.dp,
+                            onClickLabel = stringResource(R.string.list_add_free_text, typed),
+                            onClick = addFreeText,
+                        )
                     }
-                    AddRow(
-                        name = stringResource(R.string.list_add_free_text, typed),
-                        detail = null,
-                        onClickLabel = stringResource(R.string.list_add_free_text, typed),
-                        onClick = addFreeText,
+                }
+            } else if (state.isEmpty) {
+                item(key = "empty") {
+                    val available = viewport - with(density) { (titleHeight + fieldHeight).toDp() } - 16.dp
+                    EmptyList(
+                        halo = halo,
+                        onStartSession = onStartSession,
+                        modifier = Modifier.heightIn(min = available),
                     )
                 }
             }
-        } else if (state.isEmpty) {
-            item(key = "empty") {
-                ListMessage(
-                    icon = AppIcons.Basket,
-                    problem = false,
-                    title = stringResource(R.string.list_empty_title),
-                    text = stringResource(R.string.list_empty_text),
-                    modifier = Modifier.padding(top = 48.dp),
-                ) {
-                    PrimaryButton(
-                        text = stringResource(R.string.home_start_session),
-                        onClick = onStartSession,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
-            }
-        }
 
-        if (typed.isEmpty()) items(state.sections, key = { "section:${it.categoryId}" }) { section ->
-            SectionBlock(
-                title = section.title ?: stringResource(R.string.list_section_other),
-                modifier = blockPadding.then(Modifier.animateItem()),
-            ) {
-                section.items.forEachIndexed { index, item ->
-                    key(item.id) {
-                        if (index > 0) BlockDivider()
-                        SwipeToDeleteRow(item = item, onEvent = onEvent)
+            if (typed.isEmpty()) items(state.sections, key = { "section:${it.categoryId}" }) { section ->
+                SectionBlock(
+                    title = section.title ?: stringResource(R.string.list_section_other),
+                    modifier = blockPadding.then(Modifier.animateItem()),
+                ) {
+                    // A checked line goes down to the end of its section (animation 7), the others close up.
+                    LookaheadScope {
+                        Column {
+                            section.items.forEachIndexed { index, item ->
+                                key(item.id) {
+                                    Column(modifier = Modifier.animateBounds(this@LookaheadScope, boundsTransform = rowMove)) {
+                                        if (index > 0) BlockDivider()
+                                        SwipeToDeleteRow(item = item, onEvent = onEvent)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -478,6 +522,7 @@ private fun SwipeToDeleteRow(item: ListItemUi, onEvent: (ShoppingListEvent) -> U
         ProductRow(
             name = item.name,
             quantity = item.quantityLabel,
+            imageKey = item.imageKey,
             checked = item.checked,
             onToggle = { onEvent(ShoppingListEvent.ToggleChecked(item.id)) },
             modifier = Modifier.semantics {
@@ -492,66 +537,106 @@ private fun SwipeToDeleteRow(item: ListItemUi, onEvent: (ShoppingListEvent) -> U
     }
 }
 
-/** An empty or unreadable list: a round icon tile, a Bricolage title, a sentence and an action (same on iOS). */
+/**
+ * `List-Empty.dc.html`: the cart on its disc, « Votre liste est vide » and its sentence in the free height (on a
+ * halo), « Faire le point » at the bottom.
+ */
 @Composable
-private fun ListMessage(
-    icon: ImageVector,
-    problem: Boolean,
-    title: String,
-    text: String,
-    modifier: Modifier = Modifier,
-    action: @Composable () -> Unit,
-) {
+private fun EmptyList(halo: HaloAnchor, onStartSession: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .navigationBarsPadding()
             .padding(horizontal = CompagnonSpacing.Screen),
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(
+        Column(
             modifier = Modifier
-                .size(80.dp)
-                .clip(CircleShape)
-                .background(if (problem) CompagnonColors.TomatoLight else CompagnonColors.BasilLight),
-            contentAlignment = Alignment.Center,
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = splitSpace(above = 1f, below = 1.2f),
         ) {
-            Icon(
-                icon,
-                contentDescription = null,
-                tint = if (problem) CompagnonColors.TomatoText else CompagnonColors.Basil,
-                modifier = Modifier.size(36.dp),
+            HeroIllustration(
+                key = Illustrations.Screen.LIST_EMPTY,
+                disc = 136.dp,
+                image = 92.dp,
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .haloSource(halo),
+            )
+            Text(
+                text = stringResource(R.string.list_empty_title),
+                style = CompagnonType.ScreenTitle.copy(fontSize = 28.sp, lineHeight = 31.sp),
+                color = CompagnonColors.Ink,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(top = 26.dp)
+                    .riseIn(delayMillis = 120)
+                    .semantics { heading() },
+            )
+            Text(
+                text = stringResource(R.string.list_empty_text),
+                style = CompagnonType.Body,
+                color = CompagnonColors.InkSoft,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(top = 10.dp, bottom = 24.dp)
+                    .riseIn(delayMillis = 160),
             )
         }
-        Text(
-            text = title,
-            style = CompagnonType.ScreenTitle,
-            color = CompagnonColors.Ink,
-            textAlign = TextAlign.Center,
+        PrimaryButton(
+            text = stringResource(R.string.home_start_session),
+            onClick = onStartSession,
             modifier = Modifier
-                .padding(top = 20.dp)
-                .semantics { heading() },
+                .fillMaxWidth()
+                .riseIn(delayMillis = 240),
         )
-        Text(
-            text = text,
-            style = CompagnonType.Body,
-            color = CompagnonColors.InkSoft,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 8.dp),
-        )
-        Box(modifier = Modifier.padding(top = 24.dp)) { action() }
     }
 }
 
+/** An unreadable list: a round Tomate tile with the info icon, a Bricolage title, a sentence and « Réessayer ». */
 @Composable
 private fun ListErrorContent(onRetry: () -> Unit, modifier: Modifier = Modifier) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        ListMessage(
-            icon = AppIcons.Info,
-            problem = true,
-            title = stringResource(R.string.list_error_title),
-            text = stringResource(R.string.list_error_storage),
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = CompagnonSpacing.Screen),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            PrimaryButton(text = stringResource(R.string.action_retry), onClick = onRetry, modifier = Modifier.fillMaxWidth())
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape)
+                    .background(CompagnonColors.TomatoLight),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(AppIcons.Info, contentDescription = null, tint = CompagnonColors.TomatoText, modifier = Modifier.size(36.dp))
+            }
+            Text(
+                text = stringResource(R.string.list_error_title),
+                style = CompagnonType.ScreenTitle,
+                color = CompagnonColors.Ink,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .semantics { heading() },
+            )
+            Text(
+                text = stringResource(R.string.list_error_storage),
+                style = CompagnonType.Body,
+                color = CompagnonColors.InkSoft,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 8.dp),
+            )
+            PrimaryButton(
+                text = stringResource(R.string.action_retry),
+                onClick = onRetry,
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .fillMaxWidth(),
+            )
         }
     }
 }

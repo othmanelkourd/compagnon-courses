@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "ear_of_corn.png",
+      "idiom": "universal",
+      "scale": "2x"
+    }
+  ],
+  "info": {
+    "author": "xcode",
+    "version": 1
+  }
+}

@@ -48,6 +48,7 @@ data class ListSectionUi(
  * One line: unchecked lines first in each section, then the checked ones.
  *
  * @property quantityLabel « 2 bouteilles », « 1,5 kg »; null for a free text without quantity.
+ * @property imageKey the product's illustration (`Illustrations`), the memo one for a free text.
  */
 data class ListItemUi(
     val id: String,
@@ -56,6 +57,7 @@ data class ListItemUi(
     val checked: Boolean,
     val productId: String?,
     val isFreeText: Boolean,
+    val imageKey: String,
 )
 
 /** A catalog product found by the search, with the quantity it is added with (its default unit policy). */
@@ -63,6 +65,7 @@ data class ProductSuggestionUi(
     val productId: String,
     val name: String,
     val quantityLabel: String,
+    val imageKey: String,
 )
 
 enum class UndoKind { DELETED, CHECKED, UNCHECKED }

@@ -41,6 +41,7 @@ import com.compagnon.courses.android.ui.components.ReviewRow
 import com.compagnon.courses.android.ui.components.SearchField
 import com.compagnon.courses.android.ui.components.SectionBlock
 import com.compagnon.courses.android.ui.components.TextActionButton
+import com.compagnon.courses.android.ui.components.riseIn
 import com.compagnon.courses.android.ui.theme.CompagnonColors
 import com.compagnon.courses.android.ui.theme.CompagnonSpacing
 import com.compagnon.courses.android.ui.theme.CompagnonType
@@ -116,6 +117,7 @@ internal fun ReviewStep(state: QuestionUiState.Review, onEvent: (QuestionEvent) 
                                 AddRow(
                                     name = result.name,
                                     detail = result.quantity.label,
+                                    imageKey = result.imageKey,
                                     onClickLabel = stringResource(R.string.review_add_result, result.name),
                                     onClick = {
                                         onEvent(QuestionEvent.AddOther(result.productId))
@@ -147,7 +149,10 @@ internal fun ReviewStep(state: QuestionUiState.Review, onEvent: (QuestionEvent) 
                             ReviewRow(
                                 name = item.name,
                                 quantity = item.quantity.label,
-                                modifier = Modifier.semantics(mergeDescendants = true) {},
+                                imageKey = item.imageKey,
+                                modifier = Modifier
+                                    .riseIn(index = index)
+                                    .semantics(mergeDescendants = true) {},
                             )
                         }
                     }

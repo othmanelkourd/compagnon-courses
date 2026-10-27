@@ -1,8 +1,8 @@
 import Shared
 import SwiftUI
 
-/// Step 4 « Ce que vous rachetez souvent » (mockup `Onboarding-Recurring`): each recurring product with its rhythm
-/// (Semaine, 2 semaines, Mois) and a small [✕]; « Ajouter un produit » opens a search inside the block.
+/// Step 4 « Ce que vous rachetez souvent » (mockup `Onboarding-Recurring`): each recurring product with its image, its
+/// rhythm (Semaine, 2 semaines, Mois) and a small [✕]; « Ajouter un produit » opens a search inside the block.
 struct RecurringStepView: View {
     let state: OnboardingUiStateReady
     let send: (any OnboardingEvent) -> Void
@@ -23,6 +23,7 @@ struct RecurringStepView: View {
             VStack(alignment: .leading, spacing: 0) {
                 OnboardingHeader(
                     overline: Text(verbatim: HouseholdTexts.sectionTitle(.rhythm)),
+                    imageKey: ScreenIllustration.onboardingRecurring,
                     title: Text("Ce que vous rachetez souvent"),
                     subtitle: Text("Donnez le rythme\u{00A0}: on vous le proposera au bon moment, ni trop tôt ni trop tard."),
                     spacing: 8
@@ -159,7 +160,9 @@ private struct RecurringRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 8) {
+            HStack(spacing: 10) {
+                IllustrationPlate(key: row.imageKey, size: 36, imageSize: 26)
+                    .padding(.vertical, -4)
                 Text(verbatim: row.name)
                     .font(.custom(FontName.figtreeSemiBold, size: 17, relativeTo: .body))
                     .foregroundStyle(Palette.ink)
@@ -227,6 +230,7 @@ struct RhythmStepView: View {
         let days = Int(rhythm.days)
         BigChoiceQuestionView(
             overline: Text(verbatim: HouseholdTexts.sectionTitle(.rhythm)),
+            overlineImageKey: ScreenIllustration.onboardingRhythm,
             title: Text("Vous faites les courses…"),
             subtitle: Text("C'est la durée proposée à chaque «\u{00A0}faire le point\u{00A0}». Vous pourrez toujours la changer."),
             metrics: .onboarding,

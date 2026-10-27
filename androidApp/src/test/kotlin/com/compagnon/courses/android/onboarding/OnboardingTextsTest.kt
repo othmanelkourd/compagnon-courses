@@ -2,15 +2,20 @@ package com.compagnon.courses.android.onboarding
 
 import com.compagnon.courses.android.R
 import com.compagnon.courses.android.ui.components.UiText
+import com.compagnon.courses.android.ui.illustration.illustrationRes
+import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.feature.onboarding.AvoidChoice
 import com.compagnon.courses.feature.onboarding.AvoidOptionUi
 import com.compagnon.courses.feature.onboarding.DietChoice
 import com.compagnon.courses.feature.onboarding.HouseholdSection
 import com.compagnon.courses.feature.onboarding.HouseholdSummaryUi
 import com.compagnon.courses.feature.onboarding.MemberKind
+import com.compagnon.courses.feature.onboarding.OnboardingStep
 import com.compagnon.courses.feature.onboarding.PetChoice
 import com.compagnon.courses.feature.onboarding.RhythmChoice
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class OnboardingTextsTest {
@@ -126,5 +131,34 @@ class OnboardingTextsTest {
             listOf(RhythmChoice.WEEK to 7, RhythmChoice.TWO_WEEKS to 14, RhythmChoice.MONTH to 30),
             OnboardingTexts.rhythmTiles.map { it.choice to it.days },
         )
+    }
+
+    @Test
+    fun everySectionStepAvoidAndPetHasABundledImage() {
+        val keys = HouseholdSection.entries.map(OnboardingTexts::sectionImage) +
+            OnboardingStep.entries.mapNotNull(OnboardingTexts::stepImage) +
+            AvoidChoice.entries.map(OnboardingTexts::avoidImage) +
+            PetChoice.entries.map(OnboardingTexts::petImage)
+
+        assertTrue(keys.all { illustrationRes(it) != null })
+    }
+
+    @Test
+    fun theWelcomeAndMyHouseholdHaveNoStepImage() {
+        // Their sections have an image each instead; the diet options have none at all.
+        assertNull(OnboardingTexts.stepImage(OnboardingStep.WELCOME))
+        assertNull(OnboardingTexts.stepImage(OnboardingStep.OVERVIEW))
+        assertEquals(Illustrations.Screen.ONBOARDING_AVOID, OnboardingTexts.stepImage(OnboardingStep.AVOID))
+    }
+
+    @Test
+    fun onlyTheBoxesCheckedByThePersonAreCounted() {
+        val options = listOf(
+            AvoidOptionUi(AvoidChoice.LACTOSE, checked = true, locked = false),
+            AvoidOptionUi(AvoidChoice.ALCOHOL, checked = true, locked = true),
+            AvoidOptionUi(AvoidChoice.EGGS, checked = false, locked = false),
+        )
+
+        assertEquals(1, OnboardingTexts.avoidChosen(options))
     }
 }

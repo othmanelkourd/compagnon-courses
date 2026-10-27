@@ -20,8 +20,11 @@ struct ShoppingListContent: View {
 
     @State private var query = ""
     @State private var confirmsCompletion = false
+    /// Height of the title and the add field, to place the empty list under them.
+    @State private var headerHeight: CGFloat = 0
     @FocusState private var fieldFocused: Bool
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 0) {
@@ -31,7 +34,10 @@ struct ShoppingListContent: View {
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(Palette.canvas)
+        .background {
+            // The empty list has a halo behind its cart (mockup `List-Empty`).
+            HaloBackground(spots: showsEmptyList ? [HaloSpot(alignment: .top, x: 0, y: 250, size: 520, opacity: 1)] : [])
+        }
         .toolbar(.hidden, for: .navigationBar)
         .onChange(of: query) { _, newValue in
             send(ShoppingListEventSearch(query: newValue))
@@ -106,16 +112,7 @@ struct ShoppingListContent: View {
             if showsResults {
                 searchResults(loaded)
             } else if loaded.isEmpty {
-                ListMessageView(
-                    icon: .basket,
-                    title: Text("Votre liste est vide"),
-                    message: Text("Répondez à quelques questions, ou ajoutez un article ci-dessus.")
-                ) {
-                    Button("Faire le point", action: onStartSession)
-                        .buttonStyle(.primary)
-                }
-                .padding(.top, 48)
-                .plainListRow()
+                EmptyView()
             } else {
                 ForEach(loaded.sections, id: \.categoryId) { section in
                     Overline(text: section.title.map { Text(verbatim: $0) } ?? Text("Autres"))
@@ -133,7 +130,22 @@ struct ShoppingListContent: View {
         .scrollContentBackground(.hidden)
         .environment(\.defaultMinListRowHeight, 0)
         .scrollDismissesKeyboard(.interactively)
-        .animation(.snappy, value: loaded.sections)
+        // A checked line goes down its section (motion 7); it just takes its place with « Réduire les animations ».
+        .animation(reduceMotion ? nil : Motion.standard(), value: loaded.sections)
+        .scrollDisabled(loaded.isEmpty && !showsResults)
+        .overlay {
+            if loaded.isEmpty && !showsResults {
+                // Between the add field and « Faire le point », a little higher than the middle.
+                VStack(spacing: 0) {
+                    Color.clear.frame(height: headerHeight + 16)
+                    Spacer(minLength: 16)
+                    EmptyListView()
+                    Spacer(minLength: 16)
+                    Color.clear.frame(height: 32)
+                }
+                .ignoresSafeArea(.keyboard)
+            }
+        }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             bottomBar(loaded)
         }
@@ -170,6 +182,7 @@ struct ShoppingListContent: View {
             .padding(.top, 16)
         }
         .padding(.horizontal, Spacing.screen)
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { headerHeight = $0 }
     }
 
     private var title: some View {
@@ -188,6 +201,7 @@ struct ShoppingListContent: View {
                 Text("Tout est coché")
             } else {
                 Text("\(Int(loaded.remainingCount)) sur \(Int(loaded.itemCount)) restants")
+                    .rollingNumber(Int(loaded.remainingCount))
             }
         }
         .textStyle(.secondaryStrong)
@@ -207,13 +221,13 @@ struct ShoppingListContent: View {
                     Button {
                         addProduct(result.productId)
                     } label: {
-                        AddRowLabel(title: Text(verbatim: result.name), detail: Text(verbatim: result.quantityLabel))
+                        AddRowLabel(imageKey: result.imageKey, title: Text(verbatim: result.name), detail: Text(verbatim: result.quantityLabel))
                     }
                     .accessibilityLabel(Text("Ajouter \(result.name)"))
                     .accessibilityValue(Text(verbatim: result.quantityLabel))
                 case .freeText(let text):
                     Button(action: addFreeText) {
-                        AddRowLabel(title: Text("Ajouter «\u{00A0}\(text)\u{00A0}»"), detail: nil)
+                        AddRowLabel(imageKey: ScreenIllustration.freeText, title: Text("Ajouter «\u{00A0}\(text)\u{00A0}»"), detail: nil)
                     }
                 }
             }
@@ -232,13 +246,17 @@ struct ShoppingListContent: View {
                     onDismiss: { send(ShoppingListEventDismissUndo.shared) }
                 )
                 .padding(.horizontal, Spacing.block - Spacing.screen)
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
             }
             if !loaded.isEmpty {
                 Button("Courses terminées") {
                     confirmsCompletion = true
                 }
                 .buttonStyle(.secondary(basil: true))
+            } else if trimmedQuery.isEmpty {
+                Button("Faire le point", action: onStartSession)
+                    .buttonStyle(.primary)
+                    .cascade(5, delay: 0.04)
             }
         }
         .padding(.horizontal, Spacing.screen)
@@ -250,6 +268,10 @@ struct ShoppingListContent: View {
 
     private var trimmedQuery: String {
         query.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var showsEmptyList: Bool {
+        (state as? ShoppingListUiStateLoaded)?.isEmpty == true && trimmedQuery.isEmpty
     }
 
     private func addProduct(_ productId: String) {
@@ -286,15 +308,16 @@ private enum SearchRow {
     }
 }
 
-/// A search result or the free text: « + » in Basilic, name, quantity.
+/// A search result or the free text: its image on a 36 disc (a memo for the free text), name, quantity, « + » in
+/// Basilic.
 private struct AddRowLabel: View {
+    let imageKey: String
     let title: Text
     let detail: Text?
 
     var body: some View {
         HStack(spacing: 12) {
-            IconView(.plus, size: 20, weight: .bold)
-                .foregroundStyle(Palette.basil)
+            IllustrationPlate(key: imageKey, size: 36, imageSize: 26)
             title
                 .textStyle(.listRow)
                 .foregroundStyle(Palette.ink)
@@ -305,14 +328,19 @@ private struct AddRowLabel: View {
                     .textStyle(.secondary)
                     .foregroundStyle(Palette.inkSoft)
             }
+            IconView(.plus, size: 20, weight: .bold)
+                .foregroundStyle(Palette.basil)
         }
-        .padding(.horizontal, 16)
+        .padding(.leading, 10)
+        .padding(.trailing, 16)
+        .padding(.vertical, 8)
         .frame(minHeight: 56)
         .contentShape(.rect)
     }
 }
 
-/// Ligne produit: square checkbox, name (struck through in Encre discrète when checked), quantity.
+/// Ligne produit: square checkbox, the product's image on a 36 disc (faded once checked), name (struck through in
+/// Encre discrète when checked, the line drawn from left to right), quantity.
 private struct ListItemRow: View {
     let item: ListItemUi
     let send: (any ShoppingListEvent) -> Void
@@ -323,11 +351,8 @@ private struct ListItemRow: View {
         } label: {
             HStack(spacing: 10) {
                 Checkbox(checked: item.checked, shape: .square)
-                Text(verbatim: item.name)
-                    .textStyle(.listRow)
-                    .strikethrough(item.checked, color: Palette.inkMuted)
-                    .foregroundStyle(item.checked ? Palette.inkMuted : Palette.ink)
-                    .multilineTextAlignment(.leading)
+                IllustrationPlate(key: item.imageKey, size: 36, imageSize: 26, dimmed: item.checked)
+                StruckText(text: item.name, struck: item.checked)
                 Spacer(minLength: 8)
                 if let quantity = item.quantityLabel {
                     Text(verbatim: quantity)
@@ -390,6 +415,78 @@ private struct DeletedSnackbar: View {
                 guard !Task.isCancelled else { return }
                 onDismiss()
             }
+    }
+}
+
+/// A name crossed out by a line drawn from its leading edge (motion 7): the struck copy of the text is revealed by a
+/// growing mask (250 ms), on every line of a long name at once. It fades in with « Réduire les animations ».
+private struct StruckText: View {
+    let text: String
+    let struck: Bool
+
+    @State private var progress: CGFloat
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    init(text: String, struck: Bool) {
+        self.text = text
+        self.struck = struck
+        _progress = State(initialValue: struck ? 1 : 0)
+    }
+
+    var body: some View {
+        Text(verbatim: text)
+            .textStyle(.listRow)
+            .foregroundStyle(struck ? Palette.inkMuted : Palette.ink)
+            .multilineTextAlignment(.leading)
+            .overlay {
+                Text(verbatim: text)
+                    .textStyle(.listRow)
+                    .strikethrough(true, color: Palette.inkMuted)
+                    .foregroundStyle(.clear)
+                    .multilineTextAlignment(.leading)
+                    .mask(alignment: .leading) {
+                        GeometryReader { proxy in
+                            Rectangle().frame(width: proxy.size.width * (reduceMotion ? 1 : progress))
+                        }
+                    }
+                    .opacity(reduceMotion ? progress : 1)
+                    .accessibilityHidden(true)
+            }
+            .animation(Motion.standard(), value: struck)
+            .onChange(of: struck) { _, struck in
+                withAnimation(reduceMotion ? Motion.fade : Motion.standard()) {
+                    progress = struck ? 1 : 0
+                }
+            }
+    }
+}
+
+/// The empty list (mockup `List-Empty`): the cart on a large Basilic clair disc, the title and the message; « Faire
+/// le point » waits at the bottom of the screen.
+private struct EmptyListView: View {
+    var body: some View {
+        VStack(spacing: 0) {
+            IllustrationPlate(key: ScreenIllustration.listEmpty, size: 136, imageSize: 92, shadow: true)
+                .popIn(delay: 0.04)
+                .accessibilityHidden(true)
+            VStack(spacing: 10) {
+                Text("Votre liste est vide")
+                    .textStyle(.screenTitle)
+                    .foregroundStyle(Palette.ink)
+                    .accessibilityAddTraits(.isHeader)
+                    .cascade(3)
+                Text("Répondez à quelques questions, ou ajoutez un article ci-dessus.")
+                    .textStyle(.body)
+                    .foregroundStyle(Palette.inkSoft)
+                    .cascade(4)
+            }
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.top, 26)
+        }
+        .padding(.horizontal, 28)
+        .frame(maxWidth: .infinity)
+        .allowsHitTesting(false)
     }
 }
 

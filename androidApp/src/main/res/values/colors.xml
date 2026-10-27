@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Charter colours (design/CHARTE.md § 1) needed outside Compose. Compose uses CompagnonColors. -->
-    <!-- Basilic: background of the launcher icon. -->
-    <color name="ic_launcher_background">#1E6B45</color>
     <!-- Fond: window background behind the first frame. -->
     <color name="background">#F5F6F1</color>
 </resources>

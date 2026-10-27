@@ -17,6 +17,7 @@ import com.compagnon.courses.core.model.ShoppingList
 import com.compagnon.courses.core.model.UnitCatalog
 import com.compagnon.courses.core.model.format.QuantityFormatter
 import com.compagnon.courses.core.model.format.capitalizedFirst
+import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.engine.QuantityAdvisor
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.Job
@@ -173,6 +174,9 @@ class ShoppingListViewModel(
         val order = storeOrder(categories.sortedWith(compareBy({ it.position }, { it.id.value })).map { it.id }, snapshot.household)
         val byCategory = snapshot.list.items.groupBy { item -> item.productId?.let { products[it]?.categoryId } }
         val names = categories.associate { it.id to it.name }
+        val slugs = categories.associate { it.id to it.slug }
+
+        fun imageOf(product: Product): String = Illustrations.forProduct(product.slug, slugs[product.categoryId])
 
         fun line(item: ListItem): ListItemUi {
             val product = item.productId?.let { products[it] }
@@ -183,6 +187,7 @@ class ShoppingListViewModel(
                 checked = item.isChecked,
                 productId = item.productId?.value,
                 isFreeText = item.freeText != null,
+                imageKey = if (item.freeText != null || product == null) Illustrations.Screen.FREE_TEXT else imageOf(product),
             )
         }
 
@@ -200,7 +205,7 @@ class ShoppingListViewModel(
             searchQuery = local.query,
             searchResults = local.results.mapNotNull { product ->
                 defaultQuantity(product, units)?.let { quantity ->
-                    ProductSuggestionUi(product.id.value, product.name.text.capitalizedFirst(), formatter.format(quantity, product))
+                    ProductSuggestionUi(product.id.value, product.name.text.capitalizedFirst(), formatter.format(quantity, product), imageOf(product))
                 }
             },
             undo = local.undo?.let { UndoUi(it.kind, it.name) },

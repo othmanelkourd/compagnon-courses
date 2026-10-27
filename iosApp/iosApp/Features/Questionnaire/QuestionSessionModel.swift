@@ -12,6 +12,9 @@ import SwiftUI
 final class QuestionSessionModel {
     private(set) var state: any QuestionUiState = QuestionUiStateLoading.shared
 
+    /// How the last state change moved through the questions, for the transition of the screens.
+    private(set) var change: QuestionStepChange = .forward
+
     /// The last haptic and a counter that changes with each one, for `.sensoryFeedback(trigger:)`.
     private(set) var haptic: (kind: QuestionHaptic, tick: Int)?
 
@@ -31,8 +34,10 @@ final class QuestionSessionModel {
     private func observeState() async {
         guard let viewModel else { return }
         for await newState in viewModel.state {
-            // One animation for every step: the outgoing card leaves, the next one comes in.
-            withAnimation(.snappy(duration: 0.28)) {
+            let change = QuestionStepChange(from: state, to: newState)
+            // One animation for every change; each screen's transition brings its own timing.
+            withAnimation(Motion.standard()) {
+                self.change = change
                 state = newState
             }
         }
@@ -60,5 +65,29 @@ final class QuestionSessionModel {
 
     isolated deinit {
         owner.clear()
+    }
+}
+
+/// How the questionnaire moved from one state to the next.
+enum QuestionStepChange {
+    /// The next question: it slides in from the trailing edge (motion 1).
+    case forward
+    /// Back to an earlier question (« Annuler »): it slides in from the leading edge.
+    case backward
+    /// From a card (or an aisle) to the next one: the card behind already came forward, the screens cross-fade.
+    case nextCard
+
+    init(from old: any QuestionUiState, to new: any QuestionUiState) {
+        if let before = QuestionStep(old).progress?.answered, let after = QuestionStep(new).progress?.answered, after < before {
+            self = .backward
+        } else if Self.isCard(old), Self.isCard(new) {
+            self = .nextCard
+        } else {
+            self = .forward
+        }
+    }
+
+    private static func isCard(_ state: any QuestionUiState) -> Bool {
+        state is QuestionUiStateCard || state is QuestionUiStateGate
     }
 }

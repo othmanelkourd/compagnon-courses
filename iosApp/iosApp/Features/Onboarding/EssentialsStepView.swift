@@ -26,6 +26,7 @@ struct EssentialsStepView: View {
         OnboardingStepLayout(fade: true) {
             VStack(alignment: .leading, spacing: 0) {
                 OnboardingHeader(
+                    imageKey: ScreenIllustration.onboardingEssentials,
                     title: Text(verbatim: HouseholdTexts.sectionTitle(.essentials)),
                     subtitle: Text("Ce qui ne doit jamais manquer chez vous. Les plus courants sont déjà cochés."),
                     spacing: 8
@@ -51,6 +52,7 @@ struct EssentialsStepView: View {
             OnboardingPrimaryButton(saving: state.saving, action: { send(OnboardingEventNext.shared) }) {
                 if catalogReady {
                     Text("Continuer · \(Int(essentials.checkedCount)) essentiels")
+                        .rollingNumber(Int(essentials.checkedCount))
                 } else {
                     Text("Continuer")
                 }
@@ -100,7 +102,7 @@ struct EssentialsStepView: View {
             } else {
                 FlowLayout {
                     ForEach(essentials.results, id: \.productId) { chip in
-                        ProductChip(name: chip.name, checked: chip.checked) {
+                        ProductChip(name: chip.name, imageKey: chip.imageKey, checked: chip.checked) {
                             send(OnboardingEventToggleEssential(productId: chip.productId))
                         }
                     }
@@ -147,7 +149,7 @@ private struct AisleChips: View {
             }
             FlowLayout {
                 ForEach(aisle.items, id: \.productId) { chip in
-                    ProductChip(name: chip.name, checked: chip.checked) {
+                    ProductChip(name: chip.name, imageKey: chip.imageKey, checked: chip.checked) {
                         send(OnboardingEventToggleEssential(productId: chip.productId))
                     }
                 }

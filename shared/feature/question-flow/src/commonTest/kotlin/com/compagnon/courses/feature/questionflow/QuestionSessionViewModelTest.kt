@@ -6,6 +6,8 @@ import com.compagnon.courses.core.model.Quantity
 import com.compagnon.courses.core.model.UnitCode
 import com.compagnon.courses.core.data.HouseholdSetup
 import com.compagnon.courses.core.model.AgeBand
+import com.compagnon.courses.core.model.illustration.Illustrations
+import com.compagnon.courses.core.testing.SeedCatalog
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -161,6 +163,48 @@ class QuestionSessionViewModelTest {
         val line = review.items.first { it.productId == card.productId }
         assertEquals(switched.quantity.selected, line.quantity)
         assertEquals(ItemOrigin.CARD, line.origin)
+    }
+
+    @Test
+    fun linesAndCardsCarryTheirIllustrationAndTheNextOne() = test { device ->
+        device.sync()
+        device.watch("pommes", "lait-demi-ecreme")
+        val viewModel = device.newViewModel()
+        advanceUntilIdle()
+        viewModel.answerMetas()
+
+        val suggested = assertIs<QuestionUiState.Suggested>(viewModel.state.value)
+        suggested.items.forEach { assertTrue(it.imageKey in Illustrations.ALL, it.imageKey) }
+        viewModel.onEvent(QuestionEvent.ConfirmItems)
+        advanceUntilIdle()
+
+        // Each card shows its product; the card behind shows the next question (a product or an aisle).
+        val cardImages = mutableMapOf<String, String>()
+        var afterCard = false
+        var expectedNext: String? = null
+        repeat(30) {
+            val current = viewModel.state.value
+            if (afterCard) {
+                when (current) {
+                    is QuestionUiState.Card -> assertEquals(expectedNext, current.card.imageKey)
+                    is QuestionUiState.Gate -> assertEquals(expectedNext, current.gate.imageKey)
+                    else -> assertEquals(null, expectedNext, "$current")
+                }
+            }
+            afterCard = current is QuestionUiState.Card
+            when (current) {
+                is QuestionUiState.Card -> {
+                    cardImages[current.card.productId] = current.card.imageKey
+                    expectedNext = current.nextImageKey
+                    viewModel.onEvent(QuestionEvent.No)
+                }
+                is QuestionUiState.Gate -> viewModel.onEvent(QuestionEvent.AnswerGate(yes = false))
+                else -> return@repeat
+            }
+            advanceUntilIdle()
+        }
+        assertEquals("glass_of_milk", cardImages[SeedCatalog.productId("lait-demi-ecreme")])
+        assertEquals("red_apple", cardImages[SeedCatalog.productId("pommes")])
     }
 
     @Test

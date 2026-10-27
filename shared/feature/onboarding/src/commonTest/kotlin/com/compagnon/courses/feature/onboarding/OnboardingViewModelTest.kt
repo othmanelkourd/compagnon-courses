@@ -15,6 +15,7 @@ import com.compagnon.courses.core.model.Avoidance
 import com.compagnon.courses.core.model.Diet
 import com.compagnon.courses.core.model.PetKind
 import com.compagnon.courses.core.model.ProductId
+import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.core.testing.MockCatalogServer
 import com.compagnon.courses.core.testing.SeedCatalog
 import com.compagnon.courses.core.testing.TestClock
@@ -124,6 +125,9 @@ class OnboardingViewModelTest {
         assertTrue(chips.none { it.productId == id("jambon-blanc").value })
         assertTrue(chips.none { it.productId == id("croquettes-chien").value && it.checked })
         assertTrue(essentials.essentials.aisles.any { it.title == "Bébé" })
+        assertEquals("baby_bottle", essentials.essentials.aisles.first { it.title == "Bébé" }.imageKey)
+        assertEquals("baguette_bread", chips.first { it.productId == id("baguette").value }.imageKey)
+        chips.forEach { assertTrue(it.imageKey in Illustrations.ALL, it.imageKey) }
 
         send(viewModel, OnboardingEvent.ToggleEssential(id("baguette").value))
         val withoutBaguette = viewModel.ready().essentials.checkedCount
@@ -132,6 +136,7 @@ class OnboardingViewModelTest {
         assertEquals(OnboardingStep.RECURRING, recurring.step)
         assertEquals(4, recurring.stepNumber)
         assertTrue(recurring.recurring.rows.size in 1..3, "pre-filled: ${recurring.recurring.rows}")
+        recurring.recurring.rows.forEach { assertTrue(it.imageKey in Illustrations.ALL, it.imageKey) }
 
         send(
             viewModel,

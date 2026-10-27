@@ -25,11 +25,17 @@ sealed interface QuestionUiState {
         val canUndo: Boolean,
     ) : QuestionUiState
 
-    /** One full-screen product card: yes (with a quantity), no, or a nuanced answer. */
+    /**
+     * One full-screen product card: yes (with a quantity), no, or a nuanced answer.
+     *
+     * @property nextImageKey the illustration of the next question (product or aisle), shown on the card behind;
+     *   null when this card is the last one.
+     */
     data class Card(
         val card: ProductCardUi,
         val progress: QuestionProgress,
         val canUndo: Boolean,
+        val nextImageKey: String? = null,
     ) : QuestionUiState
 
     /** « Besoin de quelque chose en Entretien ? » */
@@ -133,13 +139,17 @@ data class ReasonUi(
     val householdSize: Int? = null,
 )
 
-/** A line of the T1 screen or of a gate's products: toggled and stepped with events keyed by [productId]. */
+/**
+ * A line of the T1 screen or of a gate's products: toggled and stepped with events keyed by [productId].
+ * [imageKey]: its illustration (`Illustrations`), on every product line and card below.
+ */
 data class SuggestedItemUi(
     val productId: String,
     val name: String,
     val checked: Boolean,
     val quantity: QuantityStepper,
     val reason: ReasonUi?,
+    val imageKey: String,
 )
 
 enum class ProductCardKind {
@@ -177,6 +187,7 @@ data class ProductCardUi(
     val units: List<UnitOptionUi>,
     val isSameAsLastTime: Boolean,
     val reason: ReasonUi?,
+    val imageKey: String,
 )
 
 /** The nuanced answers of a card (« Plus d'options »). */
@@ -200,12 +211,16 @@ enum class NuancedAnswer {
     NEVER,
 }
 
-/** @property question the catalog's gate question, or null (fallback: « Besoin de quelque chose en {name} ? »). */
+/**
+ * @property question the catalog's gate question, or null (fallback: « Besoin de quelque chose en {name} ? »).
+ * @property imageKey the aisle's illustration.
+ */
 data class CategoryGateUi(
     val categoryId: String,
     val name: String,
     val question: String?,
     val productCount: Int,
+    val imageKey: String,
 )
 
 enum class ItemOrigin {
@@ -223,6 +238,7 @@ data class ReviewItemUi(
     val name: String,
     val quantity: QuantityChoice,
     val origin: ItemOrigin,
+    val imageKey: String,
 )
 
 /** A search result of « Autre chose ? », added with its default [quantity] by [QuestionEvent.AddOther]. */
@@ -230,6 +246,7 @@ data class ProductSearchResultUi(
     val productId: String,
     val name: String,
     val quantity: QuantityChoice,
+    val imageKey: String,
 )
 
 /** Short feedback for the platform haptics. */

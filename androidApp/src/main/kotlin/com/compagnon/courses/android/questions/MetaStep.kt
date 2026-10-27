@@ -117,6 +117,7 @@ internal fun MetaStep(state: QuestionUiState.Meta, onEvent: (QuestionEvent) -> U
                 stringResource(R.string.meta_continue, valueText)
             },
             onClick = { onEvent(QuestionEvent.AnswerMeta(value)) },
+            count = value,
             modifier = Modifier.fillMaxWidth(),
         )
         BottomLinks(

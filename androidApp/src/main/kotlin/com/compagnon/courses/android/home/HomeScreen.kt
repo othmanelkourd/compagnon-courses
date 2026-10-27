@@ -1,19 +1,26 @@
 package com.compagnon.courses.android.home
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -37,16 +44,23 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.compagnon.courses.android.R
 import com.compagnon.courses.android.catalog.CatalogFooter
 import com.compagnon.courses.android.catalog.currentLocale
-import com.compagnon.courses.android.ui.components.AppIcons
 import com.compagnon.courses.android.onboarding.OnboardingTexts
+import com.compagnon.courses.android.ui.components.AppIcons
 import com.compagnon.courses.android.ui.components.ProgressBar
+import com.compagnon.courses.android.ui.components.pressScale
 import com.compagnon.courses.android.ui.components.resolve
+import com.compagnon.courses.android.ui.components.riseIn
 import com.compagnon.courses.android.ui.components.softShadow
+import com.compagnon.courses.android.ui.illustration.Halo
+import com.compagnon.courses.android.ui.illustration.Illustration
+import com.compagnon.courses.android.ui.illustration.LeafPattern
+import com.compagnon.courses.android.ui.illustration.PatternLeaf
 import com.compagnon.courses.android.ui.theme.CompagnonColors
 import com.compagnon.courses.android.ui.theme.CompagnonShapes
 import com.compagnon.courses.android.ui.theme.CompagnonSpacing
 import com.compagnon.courses.android.ui.theme.CompagnonType
 import com.compagnon.courses.core.data.CatalogScope
+import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.feature.catalog.CatalogStatusEvent
 import com.compagnon.courses.feature.catalog.CatalogStatusViewModel
 import com.compagnon.courses.feature.catalog.CatalogSyncUiState
@@ -89,8 +103,8 @@ fun HomeScreen(
 
 /**
  * Stateless home screen: today's date and the headline, the big « Faire le point » card, « Ma liste », « Mon foyer »
- * (when the [household] is known), and the catalog at the foot. Only data that exists is shown (no first name, no
- * planned day, no statistics).
+ * (when the [household] is known), and the catalog at the foot, on two halos. Only data that exists is shown (no
+ * first name, no planned day, no statistics). The blocks come in one after the other (animation 2).
  */
 @Composable
 internal fun HomeContent(
@@ -104,85 +118,174 @@ internal fun HomeContent(
     onOpenHousehold: () -> Unit = {},
     today: LocalDate = LocalDate.now(),
 ) {
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .background(CompagnonColors.Background)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+            .background(CompagnonColors.Background),
     ) {
+        Halo(size = 440.dp, top = (-170).dp, right = (-150).dp)
+        Halo(size = 420.dp, bottom = (-200).dp, left = (-180).dp, alpha = 0.7f)
         Column(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = CompagnonSpacing.Screen)
-                .padding(top = 16.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
+                .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding(),
         ) {
-            val locale = currentLocale()
-            val pattern = stringResource(R.string.home_date_pattern)
-            val date = remember(today, pattern, locale) { formatHomeDate(today, pattern, locale) }
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = date,
-                    style = CompagnonType.Secondary.copy(fontWeight = FontWeight.Medium),
-                    color = CompagnonColors.InkSoft,
-                )
-                Text(
-                    text = stringResource(R.string.home_headline),
-                    style = CompagnonType.ScreenTitleLarge,
-                    color = CompagnonColors.Ink,
-                    modifier = Modifier.semantics { heading() },
-                )
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = CompagnonSpacing.Screen)
+                    .padding(top = 16.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+            ) {
+                val locale = currentLocale()
+                val pattern = stringResource(R.string.home_date_pattern)
+                val date = remember(today, pattern, locale) { formatHomeDate(today, pattern, locale) }
+                Column(modifier = Modifier.riseIn(index = 0), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        text = date,
+                        style = CompagnonType.Secondary.copy(fontWeight = FontWeight.Medium),
+                        color = CompagnonColors.InkSoft,
+                    )
+                    Text(
+                        text = stringResource(R.string.home_headline),
+                        style = CompagnonType.ScreenTitleLarge,
+                        color = CompagnonColors.Ink,
+                        modifier = Modifier.semantics { heading() },
+                    )
+                }
+                StartSessionCard(onClick = onStartSession, modifier = Modifier.riseIn(index = 1))
+                ListCard(list = list, onOpenList = onOpenList, modifier = Modifier.riseIn(index = 2))
+                if (household != null) {
+                    HouseholdCard(household = household, onClick = onOpenHousehold, modifier = Modifier.riseIn(index = 3))
+                }
             }
-            StartSessionCard(onClick = onStartSession)
-            ListCard(list = list, onOpenList = onOpenList)
-            if (household != null) HouseholdCard(household = household, onClick = onOpenHousehold)
+            CatalogFooter(
+                sync = sync,
+                onRefresh = onRefresh,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .riseIn(index = 4)
+                    .padding(horizontal = CompagnonSpacing.Screen)
+                    .padding(bottom = CompagnonSpacing.Bottom),
+            )
         }
-        CatalogFooter(
-            sync = sync,
-            onRefresh = onRefresh,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(horizontal = CompagnonSpacing.Screen)
-                .padding(bottom = CompagnonSpacing.Bottom),
-        )
     }
 }
 
-/** The big Basilic card: « Faire le point », the promise, « ≈ 2 min · 12 questions ». */
+/** The leaves drawn in the top right corner of « Faire le point » (`Main.dc.html`). */
+private val StartCardLeaves = listOf(
+    PatternLeaf(180f, 34f, 28f),
+    PatternLeaf(118f, 18f, -24f, 0.7f),
+    PatternLeaf(214f, 108f, 64f, 0.8f),
+    PatternLeaf(150f, 90f, -8f, 0.55f),
+)
+
+/**
+ * The big Basilic card: « Faire le point », the promise, « ≈ 2 min · 12 questions », with its decor: leaves as a
+ * watermark, a light disc, and a basket of groceries spilling out of the bottom right corner.
+ */
 @Composable
-private fun StartSessionCard(onClick: () -> Unit) {
-    Column(
-        modifier = Modifier
+private fun StartSessionCard(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    val interaction = remember { MutableInteractionSource() }
+    Box(
+        modifier = modifier
+            .pressScale(interaction)
             .fillMaxWidth()
-            .softShadow(CompagnonShapes.Card, radius = 24.dp, offsetY = 10.dp, alpha = 0.25f, color = CompagnonColors.Basil)
+            .softShadow(CompagnonShapes.Card, radius = 24.dp, offsetY = 10.dp, alpha = 0.22f, color = CompagnonColors.Basil)
             .clip(CompagnonShapes.Card)
             .background(CompagnonColors.Basil)
-            .clickable(role = Role.Button, onClick = onClick)
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(18.dp),
+            .clickable(
+                interactionSource = interaction,
+                indication = LocalIndication.current,
+                role = Role.Button,
+                onClick = onClick,
+            ),
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        LeafPattern(
+            leaves = StartCardLeaves,
+            width = 230.dp,
+            height = 212.dp,
+            color = Color.White.copy(alpha = 0.12f),
+            modifier = Modifier.align(Alignment.TopEnd),
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .offset(x = 18.dp, y = 14.dp)
+                .size(150.dp)
+                .clip(CircleShape)
+                .background(Color.White.copy(alpha = 0.10f)),
+        )
+        // The groceries: positions of the mockup from the bottom right corner (right, bottom), in dp.
+        Illustration(
+            key = Illustrations.Screen.HOME_SESSION,
+            size = 126.dp,
+            rotation = -6f,
+            popDelayMillis = 240,
+            modifier = Modifier.align(Alignment.BottomEnd).offset(x = 6.dp, y = 4.dp),
+        )
+        Illustration(
+            key = Illustrations.Screen.DECOR_BAGUETTE,
+            size = 62.dp,
+            rotation = -24f,
+            popDelayMillis = 320,
+            modifier = Modifier.align(Alignment.BottomEnd).offset(x = (-70).dp, y = (-74).dp),
+        )
+        Illustration(
+            key = Illustrations.Screen.DECOR_APPLE,
+            size = 50.dp,
+            popDelayMillis = 320,
+            modifier = Modifier.align(Alignment.BottomEnd).offset(x = (-30).dp, y = (-92).dp),
+        )
+        Illustration(
+            key = Illustrations.Screen.DECOR_LEAFY,
+            size = 46.dp,
+            rotation = -12f,
+            popDelayMillis = 320,
+            modifier = Modifier.align(Alignment.BottomEnd).offset(x = (-104).dp, y = (-44).dp),
+        )
+        Icon(
+            AppIcons.ArrowForward,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 28.dp, end = 24.dp)
+                .size(26.dp),
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 212.dp)
+                .padding(24.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column(modifier = Modifier.widthIn(max = 200.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(
                     text = stringResource(R.string.home_start_session),
                     style = CompagnonType.ScreenTitle.copy(lineHeight = 34.sp),
                     color = Color.White,
-                    modifier = Modifier.weight(1f),
                 )
-                Icon(AppIcons.ArrowForward, contentDescription = null, tint = Color.White, modifier = Modifier.size(26.dp))
+                Text(
+                    text = stringResource(R.string.home_intro),
+                    style = CompagnonType.Body,
+                    color = Color.White.copy(alpha = 0.88f),
+                )
             }
-            Text(
-                text = stringResource(R.string.home_intro),
-                style = CompagnonType.Body,
-                color = Color.White.copy(alpha = 0.88f),
-            )
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            CardFact(icon = AppIcons.Clock, text = stringResource(R.string.home_duration))
-            CardFact(icon = AppIcons.ListBullets, text = stringResource(R.string.home_questions))
+            // Kept left of the groceries: the second fact goes below the first with a large font.
+            FlowRow(
+                modifier = Modifier
+                    .padding(top = 18.dp)
+                    .widthIn(max = 230.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                CardFact(icon = AppIcons.Clock, text = stringResource(R.string.home_duration))
+                CardFact(icon = AppIcons.ListBullets, text = stringResource(R.string.home_questions))
+            }
         }
     }
 }
@@ -195,9 +298,9 @@ private fun CardFact(icon: ImageVector, text: String) {
     }
 }
 
-/** « Ma liste »: basket tile, « 16 articles · 4 cochés », the progress of the checks, chevron. */
+/** « Ma liste »: notepad tile, « 16 articles · 4 cochés », the progress of the checks (filling in), chevron. */
 @Composable
-private fun ListCard(list: ShoppingListUiState, onOpenList: () -> Unit) {
+private fun ListCard(list: ShoppingListUiState, onOpenList: () -> Unit, modifier: Modifier = Modifier) {
     val loaded = list as? ShoppingListUiState.Loaded
     val summary = when (list) {
         is ShoppingListUiState.Loaded -> if (list.isEmpty) {
@@ -213,26 +316,25 @@ private fun ListCard(list: ShoppingListUiState, onOpenList: () -> Unit) {
         ShoppingListUiState.Loading -> stringResource(R.string.home_list_loading)
         is ShoppingListUiState.Error -> stringResource(R.string.home_list_error)
     }
+    val interaction = remember { MutableInteractionSource() }
     Row(
-        modifier = Modifier
+        modifier = modifier
+            .pressScale(interaction)
             .fillMaxWidth()
             .clip(CompagnonShapes.BlockLarge)
             .background(CompagnonColors.Surface)
             .border(1.dp, CompagnonColors.Line, CompagnonShapes.BlockLarge)
-            .clickable(role = Role.Button, onClick = onOpenList)
+            .clickable(
+                interactionSource = interaction,
+                indication = LocalIndication.current,
+                role = Role.Button,
+                onClick = onOpenList,
+            )
             .padding(20.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            modifier = Modifier
-                .size(52.dp)
-                .clip(CompagnonShapes.Field)
-                .background(CompagnonColors.BasilLight),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(AppIcons.Basket, contentDescription = null, tint = CompagnonColors.Basil, modifier = Modifier.size(26.dp))
-        }
+        HomeTile(key = Illustrations.Screen.HOME_LIST, popDelayMillis = 240)
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
                 text = stringResource(R.string.home_my_list),
@@ -241,7 +343,10 @@ private fun ListCard(list: ShoppingListUiState, onOpenList: () -> Unit) {
             )
             Text(text = summary, style = CompagnonType.Secondary, color = CompagnonColors.InkSoft)
             if (loaded != null && !loaded.isEmpty) {
-                ProgressBar(fraction = (loaded.itemCount - loaded.remainingCount) / loaded.itemCount.toFloat())
+                ProgressBar(
+                    fraction = (loaded.itemCount - loaded.remainingCount) / loaded.itemCount.toFloat(),
+                    fillOnAppear = true,
+                )
             }
         }
         Icon(AppIcons.ChevronRight, contentDescription = null, tint = CompagnonColors.InkMuted, modifier = Modifier.size(20.dp))
@@ -250,27 +355,26 @@ private fun ListCard(list: ShoppingListUiState, onOpenList: () -> Unit) {
 
 /** « Mon foyer »: house tile, « 4 personnes · Halal · 14 essentiels », chevron. */
 @Composable
-private fun HouseholdCard(household: HouseholdSummaryUi, onClick: () -> Unit) {
+private fun HouseholdCard(household: HouseholdSummaryUi, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    val interaction = remember { MutableInteractionSource() }
     Row(
-        modifier = Modifier
+        modifier = modifier
+            .pressScale(interaction)
             .fillMaxWidth()
             .clip(CompagnonShapes.BlockLarge)
             .background(CompagnonColors.Surface)
             .border(1.dp, CompagnonColors.Line, CompagnonShapes.BlockLarge)
-            .clickable(role = Role.Button, onClick = onClick)
+            .clickable(
+                interactionSource = interaction,
+                indication = LocalIndication.current,
+                role = Role.Button,
+                onClick = onClick,
+            )
             .padding(horizontal = 20.dp, vertical = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            modifier = Modifier
-                .size(52.dp)
-                .clip(CompagnonShapes.Field)
-                .background(CompagnonColors.BasilLight),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(AppIcons.Home, contentDescription = null, tint = CompagnonColors.Basil, modifier = Modifier.size(24.dp))
-        }
+        HomeTile(key = Illustrations.Screen.HOME_HOUSEHOLD, popDelayMillis = 320)
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 text = stringResource(R.string.household_title),
@@ -285,4 +389,16 @@ private fun HouseholdCard(household: HouseholdSummaryUi, onClick: () -> Unit) {
         }
         Icon(AppIcons.ChevronRight, contentDescription = null, tint = CompagnonColors.InkMuted, modifier = Modifier.size(20.dp))
     }
+}
+
+/** The 52 Basilic clair tile of a home card, with its 40 image. */
+@Composable
+private fun HomeTile(key: String, popDelayMillis: Int) {
+    Illustration(
+        key = key,
+        size = 40.dp,
+        plate = 52.dp,
+        plateShape = CompagnonShapes.Field,
+        popDelayMillis = popDelayMillis,
+    )
 }

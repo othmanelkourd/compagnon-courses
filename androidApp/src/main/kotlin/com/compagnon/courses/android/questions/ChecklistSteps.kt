@@ -35,6 +35,7 @@ import com.compagnon.courses.android.ui.components.PrimaryButton
 import com.compagnon.courses.android.ui.components.SuggestionRow
 import com.compagnon.courses.android.ui.components.TextActionButton
 import com.compagnon.courses.android.ui.components.resolve
+import com.compagnon.courses.android.ui.components.riseIn
 import com.compagnon.courses.android.ui.theme.CompagnonColors
 import com.compagnon.courses.android.ui.theme.CompagnonSpacing
 import com.compagnon.courses.android.ui.theme.CompagnonType
@@ -116,8 +117,11 @@ private fun ChecklistLayout(
                                 SuggestionRow(
                                     name = item.name,
                                     reason = item.reason?.let { QuestionTexts.reason(it, compact = true).resolve() },
+                                    imageKey = item.imageKey,
                                     checked = item.checked,
                                     onToggle = { onEvent(QuestionEvent.ToggleItem(item.productId)) },
+                                    // The lines come in one after the other (animation 2).
+                                    modifier = Modifier.riseIn(index = index + 1),
                                 ) {
                                     CompactStepper(
                                         label = item.quantity.selected.label,
@@ -150,6 +154,7 @@ private fun ChecklistLayout(
                 },
                 onClick = { onEvent(QuestionEvent.ConfirmItems) },
                 enabled = checkedCount > 0,
+                count = checkedCount.takeIf { it > 0 },
                 modifier = Modifier.fillMaxWidth(),
             )
             BottomLinks(

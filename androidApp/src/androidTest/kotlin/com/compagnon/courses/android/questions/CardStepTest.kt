@@ -43,7 +43,9 @@ class CardStepTest {
 
     private val events = mutableListOf<QuestionEvent>()
 
-    private fun setCard(state: QuestionUiState.Card = QuestionUiState.Card(milkCard, QuestionProgress(7, 12), canUndo = true)) {
+    private fun setCard(
+        state: QuestionUiState.Card = QuestionUiState.Card(milkCard, QuestionProgress(7, 12), canUndo = true, nextImageKey = "egg"),
+    ) {
         composeRule.setContent {
             CompagnonTheme {
                 QuestionnaireContent(state = state, onEvent = { events += it }, onClose = {}, onOpenList = {})
@@ -86,6 +88,31 @@ class CardStepTest {
     fun theNoButtonAnswersNo() {
         setCard()
 
+        composeRule.onNodeWithText(composeRule.string(R.string.answer_no)).performClick()
+
+        composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.No), events) }
+    }
+
+    @Test
+    fun theCardAnswersOnceWhileItFliesOff() {
+        setCard()
+        composeRule.mainClock.autoAdvance = false
+
+        // « Oui » sends the card off; « Non » during its flight is ignored.
+        composeRule.onNodeWithText(composeRule.string(R.string.answer_yes_with_quantity, "2 bouteilles")).performClick()
+        composeRule.mainClock.advanceTimeBy(100)
+        composeRule.onNodeWithText(composeRule.string(R.string.answer_no)).performClick()
+        composeRule.mainClock.autoAdvance = true
+
+        composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.Yes()), events) }
+    }
+
+    @Test
+    fun theLastCardHasNoCardBehindAndStillAnswers() {
+        // The others show the next question's image behind them (decorative, not read).
+        setCard(QuestionUiState.Card(milkCard, QuestionProgress(11, 12), canUndo = true, nextImageKey = null))
+
+        composeRule.onNodeWithText("Lait demi-écrémé").assertIsDisplayed()
         composeRule.onNodeWithText(composeRule.string(R.string.answer_no)).performClick()
 
         composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.No), events) }

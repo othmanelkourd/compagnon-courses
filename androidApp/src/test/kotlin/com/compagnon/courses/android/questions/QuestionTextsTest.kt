@@ -1,5 +1,6 @@
 package com.compagnon.courses.android.questions
 
+import androidx.compose.ui.unit.dp
 import com.compagnon.courses.android.R
 import com.compagnon.courses.android.ui.components.UiText
 import com.compagnon.courses.feature.questionflow.CategoryGateUi
@@ -71,7 +72,7 @@ class QuestionTextsTest {
 
     @Test
     fun gateUsesTheCatalogQuestionElseTheFallback() {
-        val gate = CategoryGateUi(categoryId = "entretien", name = "Entretien", question = null, productCount = 12)
+        val gate = CategoryGateUi(categoryId = "entretien", name = "Entretien", question = null, productCount = 12, imageKey = "broom")
 
         assertEquals(UiText.Res(R.string.gate_question_fallback, listOf("Entretien")), QuestionTexts.gateQuestion(gate))
         assertEquals(
@@ -106,6 +107,7 @@ class QuestionTextsTest {
             units = emptyList(),
             isSameAsLastTime = false,
             reason = ReasonUi(ReasonKind.DUE),
+            imageKey = "glass_of_milk",
         )
 
         assertNull(QuestionTexts.cardBadge(card))
@@ -147,6 +149,15 @@ class QuestionTextsTest {
         assertEquals(listOf(1, 3, 4, 3, 3, 4, 4, 3), listOf(1, 3, 4, 5, 6, 7, 8, 9).map(::metaColumns))
         // Card presets: three on one row, four on two rows.
         assertEquals(listOf(1, 2, 3, 2, 3), listOf(1, 2, 3, 4, 5).map(::presetColumns))
+    }
+
+    @Test
+    fun theCardImageShrinksThenGoesWithALargerFont() {
+        assertEquals(CardBannerSize(height = 100.dp, image = 84.dp), cardBannerSize(1f))
+        assertEquals(CardBannerSize(height = 100.dp, image = 84.dp), cardBannerSize(1.15f))
+        assertEquals(CardBannerSize(height = 72.dp, image = 56.dp), cardBannerSize(1.3f))
+        assertNull(cardBannerSize(1.6f))
+        assertNull(cardBannerSize(2f))
     }
 
     @Test

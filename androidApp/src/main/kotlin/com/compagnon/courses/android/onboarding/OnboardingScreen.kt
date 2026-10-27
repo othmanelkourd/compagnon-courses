@@ -2,9 +2,16 @@ package com.compagnon.courses.android.onboarding
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +28,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -28,10 +36,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
@@ -39,19 +51,25 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.compagnon.courses.android.R
+import com.compagnon.courses.android.ui.components.AnimatedCounter
 import com.compagnon.courses.android.ui.components.AppIcons
 import com.compagnon.courses.android.ui.components.CompagnonIconButton
 import com.compagnon.courses.android.ui.components.Overline
 import com.compagnon.courses.android.ui.components.PrimaryButton
 import com.compagnon.courses.android.ui.components.ProgressSegments
 import com.compagnon.courses.android.ui.components.TextActionButton
+import com.compagnon.courses.android.ui.illustration.Halo
+import com.compagnon.courses.android.ui.illustration.Illustration
 import com.compagnon.courses.android.ui.theme.CompagnonColors
+import com.compagnon.courses.android.ui.theme.CompagnonMotion
 import com.compagnon.courses.android.ui.theme.CompagnonShapes
 import com.compagnon.courses.android.ui.theme.CompagnonSpacing
 import com.compagnon.courses.android.ui.theme.CompagnonType
+import com.compagnon.courses.android.ui.theme.LocalReduceMotion
 import com.compagnon.courses.feature.onboarding.OnboardingEvent
 import com.compagnon.courses.feature.onboarding.OnboardingExit
 import com.compagnon.courses.feature.onboarding.OnboardingMode
@@ -96,42 +114,90 @@ internal fun OnboardingContent(
     modifier: Modifier = Modifier,
 ) {
     val ready = state as? OnboardingUiState.Ready
+    // The recap celebrates once, not again when the person comes back to it after « Modifier ».
+    var celebrated by rememberSaveable { mutableStateOf(false) }
     BackHandler(enabled = ready != null && !(ready.mode == OnboardingMode.FIRST_RUN && ready.step == OnboardingStep.WELCOME)) {
         onEvent(OnboardingEvent.Back)
     }
 
-    Column(
+    val reduceMotion = LocalReduceMotion.current
+    val shift = with(LocalDensity.current) { 24.dp.roundToPx() }
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .background(CompagnonColors.Background)
-            .statusBarsPadding(),
+            .background(CompagnonColors.Background),
     ) {
         // Loading: the plain background (reading the household takes a few milliseconds).
-        if (ready == null) return@Column
-        OnboardingTopBar(state = ready, onEvent = onEvent)
-        if (ready.error != null) ErrorBanner(onRetry = { onEvent(OnboardingEvent.Retry) })
-        AnimatedContent(
-            targetState = ready,
-            contentKey = { it.step },
-            transitionSpec = { fadeIn() togetherWith fadeOut() },
-            label = "onboarding step",
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-        ) { step ->
-            when (step.step) {
-                OnboardingStep.WELCOME -> WelcomeStep(step, onEvent)
-                OnboardingStep.OVERVIEW -> OverviewStep(step, onEvent)
-                OnboardingStep.HOUSEHOLD -> HouseholdStep(step, onEvent)
-                OnboardingStep.DIET -> DietStep(step, onEvent)
-                OnboardingStep.AVOID -> AvoidStep(step, onEvent)
-                OnboardingStep.ESSENTIALS -> EssentialsStep(step, onEvent)
-                OnboardingStep.RECURRING -> RecurringStep(step, onEvent)
-                OnboardingStep.RHYTHM -> RhythmStep(step, onEvent)
-                OnboardingStep.RECAP -> RecapStep(step, onEvent)
+        if (ready == null) return@Box
+        Crossfade(targetState = StepHalo.of(ready.step), animationSpec = CompagnonMotion.standard(), label = "halo") { halo ->
+            when (halo) {
+                StepHalo.WELCOME -> Halo(size = 480.dp, top = (-150).dp, right = (-170).dp, alpha = 1f)
+                StepHalo.RECAP -> Halo(size = 520.dp, top = (-170).dp, left = (-150).dp, alpha = 1f)
+                StepHalo.STEP -> Halo(size = 440.dp, top = (-170).dp, right = (-170).dp)
+            }
+        }
+        Column(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
+            OnboardingTopBar(state = ready, onEvent = onEvent)
+            if (ready.error != null) ErrorBanner(onRetry = { onEvent(OnboardingEvent.Retry) })
+            AnimatedContent(
+                targetState = ready,
+                contentKey = { it.step },
+                transitionSpec = { stepTransition(shift, reduceMotion) },
+                label = "onboarding step",
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+            ) { step ->
+                when (step.step) {
+                    OnboardingStep.WELCOME -> WelcomeStep(step, onEvent)
+                    OnboardingStep.OVERVIEW -> OverviewStep(step, onEvent)
+                    OnboardingStep.HOUSEHOLD -> HouseholdStep(step, onEvent)
+                    OnboardingStep.DIET -> DietStep(step, onEvent)
+                    OnboardingStep.AVOID -> AvoidStep(step, onEvent)
+                    OnboardingStep.ESSENTIALS -> EssentialsStep(step, onEvent)
+                    OnboardingStep.RECURRING -> RecurringStep(step, onEvent)
+                    OnboardingStep.RHYTHM -> RhythmStep(step, onEvent)
+                    OnboardingStep.RECAP -> RecapStep(step, onEvent, celebrate = !celebrated, onCelebrated = { celebrated = true })
+                }
             }
         }
     }
+}
+
+/** The three halos of the onboarding (`Onboarding-*.dc.html`): welcome, recap, and the steps in between. */
+private enum class StepHalo {
+    WELCOME,
+    RECAP,
+    STEP,
+    ;
+
+    companion object {
+        fun of(step: OnboardingStep): StepHalo = when (step) {
+            OnboardingStep.WELCOME -> WELCOME
+            OnboardingStep.RECAP -> RECAP
+            else -> STEP
+        }
+    }
+}
+
+/**
+ * Animation 1, « Passage d'étape »: a later screen comes from the right (24 and a fade, standard 250), an earlier
+ * one from the left. Fades only with « Réduire les animations ».
+ */
+private fun AnimatedContentTransitionScope<OnboardingUiState.Ready>.stepTransition(
+    shift: Int,
+    reduceMotion: Boolean,
+): ContentTransform {
+    val fade = CompagnonMotion.standard<Float>()
+    val transform = if (reduceMotion) {
+        fadeIn(fade) togetherWith fadeOut(fade)
+    } else {
+        val slide = CompagnonMotion.standard<IntOffset>()
+        val from = if (targetState.step.ordinal >= initialState.step.ordinal) shift else -shift
+        (slideInHorizontally(slide) { from } + fadeIn(fade)) togetherWith
+            (slideOutHorizontally(slide) { -from } + fadeOut(fade))
+    }
+    return transform using SizeTransform(clip = false)
 }
 
 /**
@@ -168,8 +234,9 @@ private fun OnboardingTopBar(state: OnboardingUiState.Ready, onEvent: (Onboardin
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
-                Text(
+                AnimatedCounter(
                     text = stringResource(R.string.onboarding_step, number, state.stepCount),
+                    count = number,
                     style = CompagnonType.Counter,
                     color = CompagnonColors.Ink,
                     modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
@@ -219,12 +286,13 @@ private fun ErrorBanner(onRetry: () -> Unit) {
 }
 
 /**
- * A step that fits on one screen: [content] scrolls under the top bar ([top] below it), the [bottom] actions stay
- * above the navigation bar.
+ * A step that fits on one screen: [content] scrolls ([scrollState]) under the top bar ([top] below it), the
+ * [bottom] actions stay above the navigation bar.
  */
 @Composable
 internal fun StepLayout(
     top: Dp = 32.dp,
+    scrollState: ScrollState = rememberScrollState(),
     bottom: @Composable ColumnScope.() -> Unit,
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -239,7 +307,7 @@ internal fun StepLayout(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(top = top, bottom = 16.dp),
             content = content,
         )
@@ -247,17 +315,42 @@ internal fun StepLayout(
     }
 }
 
-/** The Basilic overline (section), the step title (Bricolage 32) and its sentence. */
+/**
+ * The Basilic overline (section) with its 30 image ([imageKey]), the step title (Bricolage 32) with an optional
+ * 38 image after it ([titleImageKey], the essentials) and its sentence.
+ */
 @Composable
-internal fun StepHeader(overline: String?, title: String, text: String, modifier: Modifier = Modifier) {
+internal fun StepHeader(
+    overline: String?,
+    title: String,
+    text: String,
+    modifier: Modifier = Modifier,
+    imageKey: String? = null,
+    titleImageKey: String? = null,
+) {
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(if (overline != null) 10.dp else 8.dp)) {
-        if (overline != null) Overline(text = overline, color = CompagnonColors.Basil, heading = false)
-        Text(
-            text = title,
-            style = CompagnonType.ScreenTitle,
-            color = CompagnonColors.Ink,
-            modifier = Modifier.semantics { heading() },
-        )
+        if (overline != null) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (imageKey != null) {
+                    // The image overflows the overline's line (the mockup's `margin: -6px 0`).
+                    Box(modifier = Modifier.height(18.dp).wrapContentHeight(unbounded = true)) {
+                        Illustration(key = imageKey, size = 30.dp, popDelayMillis = 80)
+                    }
+                }
+                Overline(text = overline, color = CompagnonColors.Basil, heading = false)
+            }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(
+                text = title,
+                style = CompagnonType.ScreenTitle,
+                color = CompagnonColors.Ink,
+                modifier = Modifier
+                    .weight(1f, fill = false)
+                    .semantics { heading() },
+            )
+            if (titleImageKey != null) Illustration(key = titleImageKey, size = 38.dp, popDelayMillis = 80)
+        }
         Text(text = text, style = CompagnonType.BodyCompact, color = CompagnonColors.InkSoft)
     }
 }
@@ -280,14 +373,25 @@ internal fun PrivacyNote(text: String, modifier: Modifier = Modifier, centered: 
     }
 }
 
-/** The main button of a step; « Enregistrement… » and disabled while the household is saved. */
+/**
+ * The main button of a step; « Enregistrement… » and disabled while the household is saved. [count], the number in
+ * [text] (« Continuer · 4 personnes »), rolls when it changes.
+ */
 @Composable
-internal fun StepPrimaryButton(text: String, saving: Boolean, onClick: () -> Unit, enabled: Boolean = true) {
+internal fun StepPrimaryButton(
+    text: String,
+    saving: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    count: Int? = null,
+) {
     PrimaryButton(
         text = if (saving) stringResource(R.string.onboarding_saving) else text,
         onClick = onClick,
         enabled = enabled && !saving,
-        modifier = Modifier.fillMaxWidth(),
+        count = count.takeUnless { saving },
+        modifier = modifier.fillMaxWidth(),
     )
 }
 

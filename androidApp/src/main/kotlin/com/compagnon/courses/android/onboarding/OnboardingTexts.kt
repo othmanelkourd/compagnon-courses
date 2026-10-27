@@ -3,6 +3,7 @@ package com.compagnon.courses.android.onboarding
 import androidx.annotation.StringRes
 import com.compagnon.courses.android.R
 import com.compagnon.courses.android.ui.components.UiText
+import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.feature.onboarding.AvoidChoice
 import com.compagnon.courses.feature.onboarding.AvoidOptionUi
 import com.compagnon.courses.feature.onboarding.CadenceChoice
@@ -10,6 +11,7 @@ import com.compagnon.courses.feature.onboarding.DietChoice
 import com.compagnon.courses.feature.onboarding.HouseholdSection
 import com.compagnon.courses.feature.onboarding.HouseholdSummaryUi
 import com.compagnon.courses.feature.onboarding.MemberKind
+import com.compagnon.courses.feature.onboarding.OnboardingStep
 import com.compagnon.courses.feature.onboarding.PetChoice
 import com.compagnon.courses.feature.onboarding.RhythmChoice
 
@@ -111,9 +113,12 @@ internal object OnboardingTexts {
 
     /** « Continuer · 1 à éviter » when the person checked a box themselves (not the ones of the diet), else « Continuer ». */
     fun avoidContinue(options: List<AvoidOptionUi>): UiText {
-        val chosen = options.count { it.checked && !it.locked }
+        val chosen = avoidChosen(options)
         return if (chosen > 0) UiText.Res(R.string.onboarding_avoid_continue, listOf(chosen)) else UiText.Res(R.string.onboarding_continue)
     }
+
+    /** The boxes the person checked themselves (the number of « Continuer · 1 à éviter »). */
+    fun avoidChosen(options: List<AvoidOptionUi>): Int = options.count { it.checked && !it.locked }
 
     @StringRes
     fun cadenceLabel(cadence: CadenceChoice): Int = when (cadence) {
@@ -128,6 +133,43 @@ internal object OnboardingTexts {
         RhythmTile(RhythmChoice.TWO_WEEKS, R.string.rhythm_two_weeks, CadenceChoice.TWO_WEEKS.days),
         RhythmTile(RhythmChoice.MONTH, R.string.rhythm_month, CadenceChoice.MONTH.days),
     )
+
+    // --- Images (`Illustrations` keys) ---
+
+    /** The image of a section (welcome list, « Mon foyer »). */
+    fun sectionImage(section: HouseholdSection): String = when (section) {
+        HouseholdSection.HOUSEHOLD -> Illustrations.Screen.ONBOARDING_HOUSEHOLD
+        HouseholdSection.FOOD -> Illustrations.Screen.ONBOARDING_FOOD
+        HouseholdSection.ESSENTIALS -> Illustrations.Screen.ONBOARDING_ESSENTIALS
+        HouseholdSection.RHYTHM -> Illustrations.Screen.ONBOARDING_RECURRING
+    }
+
+    /** The image next to a step's overline (or title, for the essentials); none on the welcome and « Mon foyer ». */
+    fun stepImage(step: OnboardingStep): String? = when (step) {
+        OnboardingStep.HOUSEHOLD -> Illustrations.Screen.ONBOARDING_HOUSEHOLD
+        OnboardingStep.DIET -> Illustrations.Screen.ONBOARDING_FOOD
+        OnboardingStep.AVOID -> Illustrations.Screen.ONBOARDING_AVOID
+        OnboardingStep.ESSENTIALS -> Illustrations.Screen.ONBOARDING_ESSENTIALS
+        OnboardingStep.RECURRING -> Illustrations.Screen.ONBOARDING_RECURRING
+        OnboardingStep.RHYTHM -> Illustrations.Screen.ONBOARDING_RHYTHM
+        OnboardingStep.RECAP -> Illustrations.Screen.ONBOARDING_RECAP
+        OnboardingStep.WELCOME, OnboardingStep.OVERVIEW -> null
+    }
+
+    /** The image at the end of an « à éviter » line. The diets have none. */
+    fun avoidImage(avoid: AvoidChoice): String = when (avoid) {
+        AvoidChoice.GLUTEN -> Illustrations.Screen.AVOID_GLUTEN
+        AvoidChoice.LACTOSE -> Illustrations.Screen.AVOID_LACTOSE
+        AvoidChoice.NUTS -> Illustrations.Screen.AVOID_NUTS
+        AvoidChoice.EGGS -> Illustrations.Screen.AVOID_EGGS
+        AvoidChoice.ALCOHOL -> Illustrations.Screen.AVOID_ALCOHOL
+    }
+
+    fun petImage(pet: PetChoice): String = when (pet) {
+        PetChoice.DOG -> Illustrations.Screen.PET_DOG
+        PetChoice.CAT -> Illustrations.Screen.PET_CAT
+        PetChoice.OTHER -> Illustrations.Screen.PET_OTHER
+    }
 
     // --- Summaries (recap, « Mon foyer », home card) ---
 

@@ -16,7 +16,7 @@ struct OnboardingScreen: View {
     }
 
     var body: some View {
-        OnboardingContent(state: model.state, send: model.send)
+        OnboardingContent(state: model.state, forward: model.forward, send: model.send)
             .task {
                 await model.observe()
             }
@@ -45,6 +45,8 @@ struct OnboardingScreen: View {
 /// screens) with a fake state.
 struct OnboardingContent: View {
     let state: any OnboardingUiState
+    /// The last step change went forward (or back): the direction of the step transition.
+    var forward = true
     let send: (any OnboardingEvent) -> Void
 
     var body: some View {
@@ -53,18 +55,35 @@ struct OnboardingContent: View {
             case .loading:
                 Palette.canvas
             case .ready(let ready):
-                ReadyOnboarding(state: ready, send: send)
+                ReadyOnboarding(state: ready, forward: forward, send: send)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Palette.canvas)
+        .background {
+            HaloBackground(spots: haloSpots)
+                .animation(Motion.standard(Motion.Duration.ample), value: haloSpots)
+        }
         .toolbar(.hidden, for: .navigationBar)
+    }
+
+    /// A halo in the top right corner of every step; larger on the welcome screen, top left on the recap.
+    private var haloSpots: [HaloSpot] {
+        switch (state as? OnboardingUiStateReady)?.step {
+        case nil: []
+        case .welcome: [HaloSpot(alignment: .topTrailing, x: 170, y: -150, size: 480, opacity: 1)]
+        case .recap: [HaloSpot(alignment: .topLeading, x: -150, y: -170, size: 520, opacity: 1)]
+        default: [.step]
+        }
     }
 }
 
 private struct ReadyOnboarding: View {
     let state: OnboardingUiStateReady
+    let forward: Bool
     let send: (any OnboardingEvent) -> Void
+
+    @State private var direction = StepDirection()
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 0) {
@@ -90,12 +109,17 @@ private struct ReadyOnboarding: View {
             }
             stepView
                 .id(state.step)
-                .transition(.asymmetric(insertion: .opacity.combined(with: .offset(x: 24)), removal: .opacity))
+                .transition(stepTransition)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .onboardingEdgeSwipe(enabled: edgeSwipeBack) {
             send(OnboardingEventBack.shared)
         }
+    }
+
+    private var stepTransition: AnyTransition {
+        direction.forward = forward
+        return .step(direction, reduceMotion: reduceMotion)
     }
 
     private var showsTopBar: Bool {

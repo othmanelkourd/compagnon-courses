@@ -81,11 +81,12 @@ internal object OnboardingFixtures {
                 categoryId = "fruits-legumes",
                 title = "Fruits et légumes",
                 items = listOf(
-                    ProductChipUi("banane", "Bananes", checked = true),
-                    ProductChipUi("tomate", "Tomates", checked = false),
+                    ProductChipUi("banane", "Bananes", checked = true, imageKey = "banana"),
+                    ProductChipUi("tomate", "Tomates", checked = false, imageKey = "tomato"),
                 ),
                 total = 44,
                 expanded = false,
+                imageKey = "green_apple",
             ),
         ),
         results = emptyList(),
@@ -96,8 +97,8 @@ internal object OnboardingFixtures {
 
     val recurringStep = RecurringStepUi(
         rows = listOf(
-            RecurringRowUi("baguette", "Baguette", CadenceChoice.WEEK),
-            RecurringRowUi("couches", "Couches", CadenceChoice.TWO_WEEKS),
+            RecurringRowUi("baguette", "Baguette", CadenceChoice.WEEK, imageKey = "baguette_bread"),
+            RecurringRowUi("couches", "Couches", CadenceChoice.TWO_WEEKS, imageKey = "safety_pin"),
         ),
         adding = false,
         query = "",

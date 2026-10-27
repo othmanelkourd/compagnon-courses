@@ -56,8 +56,9 @@ struct Hint: View {
 
 // MARK: - Checkboxes
 
-/// Case à cocher: 26, « ronde » (suggestions) or « carrée » (radius 8, Ma liste). Checked: Basilic with a white
-/// check; empty: 2 pt Contour case border. The caller gives it a 48 touch area.
+/// Case à cocher: 26, « ronde » or « carrée » (radius 8, Ma liste). Checked: Basilic with a white check; empty: 2 pt
+/// Contour case border. The box fills (150 ms) and its check draws itself (motion 4). The caller gives it a 48 touch
+/// area.
 struct Checkbox: View {
     enum Shape { case round, square }
 
@@ -69,20 +70,19 @@ struct Checkbox: View {
     var body: some View {
         let radius: CGFloat = shape == .round ? 13 : 8
         ZStack {
+            RoundedRectangle(cornerRadius: radius)
+                .strokeBorder(Palette.checkboxBorder, lineWidth: 2)
             if checked {
                 RoundedRectangle(cornerRadius: radius)
                     .fill(fill)
-                IconView(.check, size: 16, weight: .heavy)
-                    .foregroundStyle(Palette.surface)
-            } else {
-                RoundedRectangle(cornerRadius: radius)
-                    .strokeBorder(Palette.checkboxBorder, lineWidth: 2)
+                    .transition(.opacity)
+                DrawnCheck(size: 16, lineWidth: 2)
             }
         }
         .frame(width: 26, height: 26)
         .frame(width: Target.checkbox, height: Target.checkbox)
         .contentShape(.rect)
-        .animation(.snappy(duration: 0.15), value: checked)
+        .animation(Motion.standard(Motion.Duration.quick), value: checked)
     }
 }
 
@@ -406,40 +406,62 @@ struct BlockSection<Content: View>: View {
 
 // MARK: - Progress
 
-/// The segments of the questionnaire: 5 high, 3 apart, radius 3; Basilic up to `filled`, Segment vide after.
+/// The segments of the questionnaire: 5 high, 3 apart, radius 3; Basilic up to `filled`, Segment vide after. A segment
+/// reached fills from its left end (motion 6, 400 ms); it fades in with « Réduire les animations ».
 struct ProgressSegments: View {
     let total: Int
     let filled: Int
     /// 3 between the 12 segments of the questionnaire, 4 between the 4 of the onboarding.
     var spacing: CGFloat = 3
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         HStack(spacing: spacing) {
             ForEach(0..<max(total, 1), id: \.self) { index in
+                let on = index < filled
                 RoundedRectangle(cornerRadius: 3)
-                    .fill(index < filled ? Palette.basil : Palette.segmentEmpty)
+                    .fill(Palette.segmentEmpty)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 3)
+                            .fill(Palette.basil)
+                            .scaleEffect(x: on || reduceMotion ? 1 : 0, anchor: .leading)
+                            .opacity(on ? 1 : 0)
+                    }
+                    .clipShape(.rect(cornerRadius: 3))
                     .frame(height: 5)
             }
         }
-        .animation(.snappy, value: filled)
+        .animation(reduceMotion ? Motion.fade : Motion.standard(Motion.Duration.ample), value: filled)
     }
 }
 
-/// A 6 high bar (list progress), Basilic over Trait.
+/// A 6 high bar (list progress), Basilic over Trait. It fills from empty when it appears (after 300 ms, as in the
+/// mockups), then follows `fraction` (motion 6); no movement with « Réduire les animations ».
 struct ProgressBar: View {
     let fraction: Double
 
+    @State private var appeared = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
+        let shown = appeared || reduceMotion ? min(max(fraction, 0), 1) : 0
         GeometryReader { proxy in
             ZStack(alignment: .leading) {
                 Capsule().fill(Palette.line)
                 Capsule()
                     .fill(Palette.basil)
-                    .frame(width: proxy.size.width * min(max(fraction, 0), 1))
+                    .frame(width: proxy.size.width * shown)
             }
         }
         .frame(height: 6)
-        .animation(.snappy, value: fraction)
+        .animation(reduceMotion ? nil : Motion.standard(Motion.Duration.ample), value: fraction)
+        .onAppear {
+            guard !appeared else { return }
+            withAnimation(reduceMotion ? nil : Motion.standard(Motion.Duration.ample).delay(0.3)) {
+                appeared = true
+            }
+        }
     }
 }
 
@@ -465,7 +487,7 @@ struct QuestionTopBar<MenuContent: View>: View {
                         .textStyle(.counter)
                         .foregroundStyle(Palette.ink)
                         .monospacedDigit()
-                        .contentTransition(.numericText())
+                        .rollingNumber(current)
                     ProgressSegments(total: total, filled: current)
                 }
                 .frame(maxWidth: .infinity)

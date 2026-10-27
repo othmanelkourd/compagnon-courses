@@ -55,12 +55,15 @@ import com.compagnon.courses.android.R
 import com.compagnon.courses.android.ui.components.AddRow
 import com.compagnon.courses.android.ui.components.AppIcons
 import com.compagnon.courses.android.ui.components.BlockDivider
+import com.compagnon.courses.android.ui.components.DrawnCheck
 import com.compagnon.courses.android.ui.components.GradientBottomBar
 import com.compagnon.courses.android.ui.components.ListBlock
 import com.compagnon.courses.android.ui.components.Overline
 import com.compagnon.courses.android.ui.components.SearchField
 import com.compagnon.courses.android.ui.components.TextActionButton
+import com.compagnon.courses.android.ui.components.bounceOnChange
 import com.compagnon.courses.android.ui.components.softShadow
+import com.compagnon.courses.android.ui.illustration.Illustration
 import com.compagnon.courses.android.ui.theme.CompagnonColors
 import com.compagnon.courses.android.ui.theme.CompagnonShapes
 import com.compagnon.courses.android.ui.theme.CompagnonSpacing
@@ -68,6 +71,7 @@ import com.compagnon.courses.android.ui.theme.CompagnonType
 import com.compagnon.courses.feature.onboarding.CadenceChoice
 import com.compagnon.courses.feature.onboarding.EssentialsAisleUi
 import com.compagnon.courses.feature.onboarding.OnboardingEvent
+import com.compagnon.courses.feature.onboarding.OnboardingStep
 import com.compagnon.courses.feature.onboarding.OnboardingUiState
 import com.compagnon.courses.feature.onboarding.ProductChipUi
 import com.compagnon.courses.feature.onboarding.RecurringRowUi
@@ -120,6 +124,7 @@ internal fun EssentialsStep(state: OnboardingUiState.Ready, onEvent: (Onboarding
                     stringResource(R.string.onboarding_continue)
                 },
                 saving = state.saving,
+                count = essentials.checkedCount.takeIf { hasCatalog },
                 onClick = { onEvent(OnboardingEvent.Next) },
             )
         },
@@ -129,6 +134,7 @@ internal fun EssentialsStep(state: OnboardingUiState.Ready, onEvent: (Onboarding
                 overline = null,
                 title = stringResource(R.string.onboarding_section_essentials),
                 text = stringResource(R.string.onboarding_essentials_text),
+                titleImageKey = OnboardingTexts.stepImage(OnboardingStep.ESSENTIALS),
                 modifier = Modifier.padding(start = CompagnonSpacing.Screen, end = CompagnonSpacing.Screen, top = 24.dp),
             )
         }
@@ -210,12 +216,16 @@ private fun ChipFlow(chips: List<ProductChipUi>, onToggle: (String) -> Unit) {
     }
 }
 
-/** A product of the essentials grid: a 44 pill that toggles. */
+/**
+ * A product of the essentials grid: a 44 pill that toggles, its 24 image, its name and, when checked, a tick that
+ * draws itself after the name; it « pops » when toggled.
+ */
 @Composable
 private fun ProductChip(chip: ProductChipUi, onToggle: () -> Unit) {
     val ink = if (chip.checked) CompagnonColors.BasilDark else CompagnonColors.Ink
     Row(
         modifier = Modifier
+            .bounceOnChange(chip.checked)
             .height(44.dp)
             .clip(CompagnonShapes.Pill)
             .background(if (chip.checked) CompagnonColors.BasilLight else CompagnonColors.Surface)
@@ -225,12 +235,13 @@ private fun ProductChip(chip: ProductChipUi, onToggle: () -> Unit) {
                 shape = CompagnonShapes.Pill,
             )
             .toggleable(value = chip.checked, role = Role.Checkbox, onValueChange = { onToggle() })
-            .padding(horizontal = 14.dp),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+            .padding(start = 10.dp, end = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(7.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (chip.checked) Icon(AppIcons.Check, contentDescription = null, tint = ink, modifier = Modifier.size(15.dp))
+        Illustration(key = chip.imageKey, size = 24.dp, pop = false)
         Text(text = chip.name, style = CompagnonType.Secondary.copy(fontWeight = FontWeight.SemiBold), color = ink)
+        if (chip.checked) DrawnCheck(color = ink, strokeWidth = 3.2f, modifier = Modifier.size(14.dp))
     }
 }
 
@@ -273,8 +284,9 @@ private fun CatalogMissing(onRetry: () -> Unit) {
 }
 
 /**
- * `Onboarding-Recurring`: one row per product with a 3-segment selector (Semaine, 2 semaines, Mois) and a small
- * [✕]; « + Ajouter un produit » opens a search field whose results add a product. « Continuer » at the bottom.
+ * `Onboarding-Recurring`: one row per product (its image, its name) with a 3-segment selector (Semaine,
+ * 2 semaines, Mois) and a small [✕]; « + Ajouter un produit » opens a search field whose results add a product.
+ * « Continuer » at the bottom.
  */
 @Composable
 internal fun RecurringStep(state: OnboardingUiState.Ready, onEvent: (OnboardingEvent) -> Unit) {
@@ -293,6 +305,7 @@ internal fun RecurringStep(state: OnboardingUiState.Ready, onEvent: (OnboardingE
                 overline = stringResource(R.string.onboarding_section_rhythm),
                 title = stringResource(R.string.onboarding_recurring_title),
                 text = stringResource(R.string.onboarding_recurring_text),
+                imageKey = OnboardingTexts.stepImage(OnboardingStep.RECURRING),
                 modifier = Modifier.padding(start = CompagnonSpacing.Screen, end = CompagnonSpacing.Screen, top = 24.dp),
             )
         }
@@ -347,7 +360,8 @@ private fun RecurringRow(row: RecurringRowUi, onEvent: (OnboardingEvent) -> Unit
             .padding(start = 16.dp, end = 14.dp, top = 4.dp, bottom = 14.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Illustration(key = row.imageKey, size = 26.dp, plate = 36.dp, pop = false)
             Text(text = row.name, style = CompagnonType.ListRow, color = CompagnonColors.Ink, modifier = Modifier.weight(1f))
             // The small [✕] « Retirer »: a 44 target, the icon in Encre discrète.
             val removeLabel = stringResource(R.string.onboarding_recurring_remove, row.name)
@@ -437,6 +451,9 @@ private fun AddRecurringSearch(state: OnboardingUiState.Ready, onEvent: (Onboard
                 detail = null,
                 onClick = { onEvent(OnboardingEvent.AddRecurring(result.productId)) },
                 onClickLabel = addLabel,
+                imageKey = result.imageKey,
+                imageSize = 26.dp,
+                plateSize = 36.dp,
             )
         }
         TextActionButton(

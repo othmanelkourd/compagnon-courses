@@ -33,9 +33,16 @@ internal object QuestionFixtures {
         ),
         isSameAsLastTime = true,
         reason = ReasonUi(kind = ReasonKind.DUE, daysSinceLast = 9, intervalDays = 8, usualQuantity = "2 bouteilles"),
+        imageKey = "glass_of_milk",
     )
 
-    val cleaningGate = CategoryGateUi(categoryId = "entretien", name = "Entretien", question = null, productCount = 12)
+    val cleaningGate = CategoryGateUi(
+        categoryId = "entretien",
+        name = "Entretien",
+        question = null,
+        productCount = 12,
+        imageKey = "broom",
+    )
 
     val suggested = listOf(
         SuggestedItemUi(
@@ -44,6 +51,7 @@ internal object QuestionFixtures {
             checked = true,
             quantity = QuantityStepper(QuantityChoice(QuantityValue(2_000, "piece"), "2 baguettes"), true, true),
             reason = ReasonUi(ReasonKind.STAPLE),
+            imageKey = "baguette_bread",
         ),
         SuggestedItemUi(
             productId = "oeufs",
@@ -51,17 +59,25 @@ internal object QuestionFixtures {
             checked = false,
             quantity = QuantityStepper(QuantityChoice(QuantityValue(6_000, "egg"), "6 œufs"), true, true),
             reason = null,
+            imageKey = "egg",
         ),
     )
 
     val reviewItems = listOf(
-        ReviewItemUi("lait-demi-ecreme", "Lait demi-écrémé", bottles(2), ItemOrigin.CARD),
-        ReviewItemUi("pain", "Baguette", QuantityChoice(QuantityValue(2_000, "piece"), "2 baguettes"), ItemOrigin.SUGGESTED),
+        ReviewItemUi("lait-demi-ecreme", "Lait demi-écrémé", bottles(2), ItemOrigin.CARD, imageKey = "glass_of_milk"),
+        ReviewItemUi(
+            "pain",
+            "Baguette",
+            QuantityChoice(QuantityValue(2_000, "piece"), "2 baguettes"),
+            ItemOrigin.SUGGESTED,
+            imageKey = "baguette_bread",
+        ),
     )
 
     val pastaResult = ProductSearchResultUi(
         productId = "pates",
         name = "Pâtes",
         quantity = QuantityChoice(QuantityValue(500, "kilogram"), "500 g"),
+        imageKey = "spaghetti",
     )
 }

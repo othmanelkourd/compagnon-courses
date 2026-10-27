@@ -37,7 +37,8 @@ import com.compagnon.courses.android.ui.theme.CompagnonType
 
 /**
  * « Bouton principal »: Basilic, white 18 / 700 text, radius 18, at least 56 high; Basilic foncé while pressed.
- * [leadingIcon] / [trailingIcon] are optional.
+ * [leadingIcon] / [trailingIcon] are optional. [count], the number in [text] (« Ajouter 13 articles »), rolls when
+ * it changes.
  */
 @Composable
 internal fun PrimaryButton(
@@ -48,6 +49,7 @@ internal fun PrimaryButton(
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     minHeight: Dp = 56.dp,
+    count: Int? = null,
 ) {
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
@@ -65,7 +67,7 @@ internal fun PrimaryButton(
         minHeight = minHeight,
         modifier = modifier,
     ) {
-        ButtonContent(text, Color.White, leadingIcon, trailingIcon, iconStroke = 20.dp)
+        ButtonContent(text, Color.White, leadingIcon, trailingIcon, iconStroke = 20.dp, count = count)
     }
 }
 
@@ -116,6 +118,8 @@ private fun ButtonFrame(
 ) {
     Row(
         modifier = modifier
+            // The big buttons shrink to 0.98 while pressed (animation 8).
+            .pressScale(interaction)
             .heightIn(min = minHeight)
             .clip(CompagnonShapes.Button)
             .background(background)
@@ -141,9 +145,14 @@ private fun ButtonContent(
     leadingIcon: ImageVector?,
     trailingIcon: ImageVector?,
     iconStroke: Dp,
+    count: Int? = null,
 ) {
     if (leadingIcon != null) Icon(leadingIcon, contentDescription = null, tint = color, modifier = Modifier.size(iconStroke))
-    Text(text = text, style = CompagnonType.ButtonPrimary, color = color, textAlign = TextAlign.Center)
+    if (count != null) {
+        AnimatedCounter(text = text, count = count, style = CompagnonType.ButtonPrimary, color = color, textAlign = TextAlign.Center)
+    } else {
+        Text(text = text, style = CompagnonType.ButtonPrimary, color = color, textAlign = TextAlign.Center)
+    }
     if (trailingIcon != null) Icon(trailingIcon, contentDescription = null, tint = color, modifier = Modifier.size(iconStroke))
 }
 

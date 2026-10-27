@@ -12,6 +12,9 @@ import SwiftUI
 final class OnboardingModel {
     private(set) var state: any OnboardingUiState = OnboardingUiStateLoading.shared
 
+    /// The last step change went forward (the next step slides in from the trailing edge), or back.
+    private(set) var forward = true
+
     /// The current screen, or `nil` while loading.
     var ready: OnboardingUiStateReady? {
         state as? OnboardingUiStateReady
@@ -29,9 +32,14 @@ final class OnboardingModel {
     func observe() async {
         let viewModel = resolveViewModel()
         for await newState in viewModel.state {
-            let stepChanged = (newState as? OnboardingUiStateReady)?.step != ready?.step
-            // A new step slides in; changes within a step (a stepper, a chip) are not animated here.
-            withAnimation(stepChanged ? .snappy(duration: 0.28) : nil) {
+            let newStep = (newState as? OnboardingUiStateReady)?.step
+            let stepChanged = newStep != ready?.step
+            // A new step slides in (its transition brings its own timing); changes within a step (a stepper, a chip)
+            // are not animated here.
+            withAnimation(stepChanged ? Motion.standard() : nil) {
+                if stepChanged, let newStep, let oldStep = ready?.step {
+                    forward = newStep.order >= oldStep.order
+                }
                 state = newState
             }
         }
@@ -52,5 +60,22 @@ final class OnboardingModel {
 
     isolated deinit {
         owner.clear()
+    }
+}
+
+extension OnboardingStep {
+    /// Position in the onboarding: « Mon foyer » comes before its sections, the recap last.
+    var order: Int {
+        switch self {
+        case .welcome: 0
+        case .overview: 1
+        case .household: 2
+        case .diet: 3
+        case .avoid: 4
+        case .essentials: 5
+        case .recurring: 6
+        case .rhythm: 7
+        case .recap: 8
+        }
     }
 }

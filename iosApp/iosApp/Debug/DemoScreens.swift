@@ -35,7 +35,9 @@
         }
 
         static func fromLaunchArguments(_ defaults: UserDefaults = .standard) -> DemoScreen? {
-            defaults.string(forKey: "DemoScreen").flatMap(DemoScreen.init(rawValue:))
+            // « list-empty » and « gate-items » are accepted too, the names of the mockups.
+            let aliases = ["list-empty": "listEmpty", "gate-items": "gateItems"]
+            return defaults.string(forKey: "DemoScreen").flatMap { DemoScreen(rawValue: aliases[$0] ?? $0) }
         }
     }
 
@@ -113,33 +115,39 @@
                 UnitOptionUi(unit: "piece", label: "À la pièce", selected: false),
             ],
             isSameAsLastTime: false,
-            reason: reason(.staple)
+            reason: reason(.staple),
+            imageKey: "tomato"
         )
 
         static func suggestedItem(
-            _ id: String, _ name: String, _ label: String, checked: Bool, reason: ReasonUi?, canDecrement: Bool = true
+            _ id: String, _ name: String, _ label: String, checked: Bool, reason: ReasonUi?, imageKey: String, canDecrement: Bool = true
         ) -> SuggestedItemUi {
             let quantity = QuantityStepper(selected: quantity(1000, "piece", label), canDecrement: canDecrement, canIncrement: true)
-            return SuggestedItemUi(productId: id, name: name, checked: checked, quantity: quantity, reason: reason)
+            return SuggestedItemUi(productId: id, name: name, checked: checked, quantity: quantity, reason: reason, imageKey: imageKey)
         }
 
-        /// « Probablement nécessaire »: the staples of the catalog, « Banane » unchecked.
-        static let staples: [(String, String)] = [
-            ("Oignon", "0,5\u{00A0}kg"), ("Banane", "4\u{00A0}bananes"), ("Œuf", "6\u{00A0}œufs"),
-            ("Beurre doux", "1\u{00A0}plaquette"), ("Sel fin", "1\u{00A0}paquet"), ("Poivre noir", "1\u{00A0}pot"),
-            ("Pâtes courtes", "1\u{00A0}paquet"), ("Moutarde", "1\u{00A0}pot"), ("Dentifrice", "1\u{00A0}tube"),
-            ("Déodorant", "1\u{00A0}déodorant"), ("Liquide vaisselle", "1\u{00A0}flacon"), ("Éponge", "1\u{00A0}pack"),
-            ("Papier toilette", "1\u{00A0}pack"), ("Sac poubelle", "1\u{00A0}rouleau"), ("Essuie-tout", "1\u{00A0}pack"),
+        /// « Probablement nécessaire »: the staples of the catalog, « Banane » unchecked, with the images the shared
+        /// `Illustrations` gives them.
+        static let staples: [(name: String, label: String, imageKey: String)] = [
+            ("Oignon", "0,5\u{00A0}kg", "onion"), ("Banane", "4\u{00A0}bananes", "banana"), ("Œuf", "6\u{00A0}œufs", "egg"),
+            ("Beurre doux", "1\u{00A0}plaquette", "butter"), ("Sel fin", "1\u{00A0}paquet", "salt"), ("Poivre noir", "1\u{00A0}pot", "salt"),
+            ("Pâtes courtes", "1\u{00A0}paquet", "spaghetti"), ("Moutarde", "1\u{00A0}pot", "jar"), ("Dentifrice", "1\u{00A0}tube", "toothbrush"),
+            ("Déodorant", "1\u{00A0}déodorant", "lotion_bottle"), ("Liquide vaisselle", "1\u{00A0}flacon", "bubbles"),
+            ("Éponge", "1\u{00A0}pack", "sponge"), ("Papier toilette", "1\u{00A0}pack", "roll_of_paper"),
+            ("Sac poubelle", "1\u{00A0}rouleau", "wastebasket"), ("Essuie-tout", "1\u{00A0}pack", "roll_of_paper"),
         ]
 
-        static let suggestedItems = staples.map { name, label in
+        static let suggestedItems = staples.map { staple in
             // As in the real session, only « Banane » and « Œuf » are above their smallest quantity.
-            suggestedItem(name, name, label, checked: name != "Banane", reason: reason(.staple), canDecrement: ["Banane", "Œuf"].contains(name))
+            suggestedItem(
+                staple.name, staple.name, staple.label, checked: staple.name != "Banane", reason: reason(.staple),
+                imageKey: staple.imageKey, canDecrement: ["Banane", "Œuf"].contains(staple.name)
+            )
         }
 
         static let gate = CategoryGateUi(
             categoryId: "fruits-legumes", name: "Fruits et légumes",
-            question: "Besoin de quelque chose en fruits et légumes\u{00A0}?", productCount: 38
+            question: "Besoin de quelque chose en fruits et légumes\u{00A0}?", productCount: 38, imageKey: "green_apple"
         )
 
         static func question(_ screen: DemoScreen) -> any QuestionUiState {
@@ -161,10 +169,10 @@
                 QuestionUiStateGateItems(
                     gate: gate,
                     items: [
-                        suggestedItem("sponges", "Éponges", "1 paquet", checked: false, reason: nil),
-                        suggestedItem("dish", "Liquide vaisselle", "1 flacon", checked: true, reason: nil),
-                        suggestedItem("bags", "Sacs poubelle", "1 rouleau", checked: false, reason: nil),
-                        suggestedItem("tablets", "Pastilles lave-vaisselle", "30 pastilles lave-vaisselle", checked: false, reason: nil),
+                        suggestedItem("sponges", "Éponges", "1 paquet", checked: false, reason: nil, imageKey: "sponge"),
+                        suggestedItem("dish", "Liquide vaisselle", "1 flacon", checked: true, reason: nil, imageKey: "bubbles"),
+                        suggestedItem("bags", "Sacs poubelle", "1 rouleau", checked: false, reason: nil, imageKey: "wastebasket"),
+                        suggestedItem("tablets", "Pastilles lave-vaisselle", "30 pastilles lave-vaisselle", checked: false, reason: nil, imageKey: "broom"),
                     ],
                     checkedCount: 1,
                     progress: QuestionProgress(answered: 11, total: 12),
@@ -172,10 +180,16 @@
                 )
             case .review:
                 QuestionUiStateReview(
-                    items: staples.filter { $0.0 != "Banane" }.map { name, label in
-                        ReviewItemUi(productId: name, name: name, quantity: quantity(1000, "piece", label), origin: .suggested)
+                    items: staples.filter { $0.name != "Banane" }.map { staple in
+                        ReviewItemUi(
+                            productId: staple.name, name: staple.name, quantity: quantity(1000, "piece", staple.label), origin: .suggested,
+                            imageKey: staple.imageKey
+                        )
                     } + [
-                        ReviewItemUi(productId: "tomate-de-saison", name: "Tomate de saison", quantity: quantity(1000, "kilogram", "1\u{00A0}kg"), origin: .card),
+                        ReviewItemUi(
+                            productId: "tomate-de-saison", name: "Tomate de saison", quantity: quantity(1000, "kilogram", "1\u{00A0}kg"),
+                            origin: .card, imageKey: "tomato"
+                        ),
                     ],
                     searchQuery: "",
                     searchResults: [],
@@ -185,41 +199,42 @@
             case .done:
                 QuestionUiStateDone(itemsAdded: 15, abandoned: false)
             default:
-                QuestionUiStateCard(card: tomatoesCard, progress: QuestionProgress(answered: 4, total: 12), canUndo: true)
+                // Carrots come next: the card behind shows them.
+                QuestionUiStateCard(card: tomatoesCard, progress: QuestionProgress(answered: 4, total: 12), canUndo: true, nextImageKey: "carrot")
             }
         }
 
-        static func item(_ id: String, _ name: String, _ quantity: String?, checked: Bool = false) -> ListItemUi {
-            ListItemUi(id: id, name: name, quantityLabel: quantity, checked: checked, productId: id, isFreeText: quantity == nil)
+        static func item(_ id: String, _ name: String, _ quantity: String?, _ imageKey: String, checked: Bool = false) -> ListItemUi {
+            ListItemUi(id: id, name: name, quantityLabel: quantity, checked: checked, productId: id, isFreeText: quantity == nil, imageKey: imageKey)
         }
 
         static let list = ShoppingListUiStateLoaded(
             sections: [
                 ListSectionUi(categoryId: "fruits-legumes", title: "Fruits et légumes", items: [
-                    item("oignon", "Oignon", "0,5\u{00A0}kg"),
-                    item("tomate", "Tomate de saison", "1\u{00A0}kg"),
+                    item("oignon", "Oignon", "0,5\u{00A0}kg", "onion"),
+                    item("tomate", "Tomate de saison", "1\u{00A0}kg", "tomato"),
                 ]),
                 ListSectionUi(categoryId: "cremerie", title: "Crèmerie", items: [
-                    item("beurre", "Beurre doux", "1\u{00A0}plaquette"),
-                    item("oeuf", "Œuf", "6\u{00A0}œufs", checked: true),
+                    item("beurre", "Beurre doux", "1\u{00A0}plaquette", "butter"),
+                    item("oeuf", "Œuf", "6\u{00A0}œufs", "egg", checked: true),
                 ]),
                 ListSectionUi(categoryId: "epicerie-salee", title: "Épicerie salée", items: [
-                    item("sel", "Sel fin", "1\u{00A0}paquet"),
-                    item("poivre", "Poivre noir", "1\u{00A0}pot"),
-                    item("pates", "Pâtes courtes", "1\u{00A0}paquet"),
+                    item("sel", "Sel fin", "1\u{00A0}paquet", "salt"),
+                    item("poivre", "Poivre noir", "1\u{00A0}pot", "salt"),
+                    item("pates", "Pâtes courtes", "1\u{00A0}paquet", "spaghetti"),
                 ]),
                 ListSectionUi(categoryId: "hygiene", title: "Hygiène et beauté", items: [
-                    item("dentifrice", "Dentifrice", "1\u{00A0}tube"),
-                    item("deodorant", "Déodorant", "1\u{00A0}déodorant"),
+                    item("dentifrice", "Dentifrice", "1\u{00A0}tube", "toothbrush"),
+                    item("deodorant", "Déodorant", "1\u{00A0}déodorant", "lotion_bottle"),
                 ]),
                 ListSectionUi(categoryId: "entretien", title: "Entretien de la maison", items: [
-                    item("vaisselle", "Liquide vaisselle", "1\u{00A0}flacon"),
-                    item("eponge", "Éponge", "1\u{00A0}pack"),
+                    item("vaisselle", "Liquide vaisselle", "1\u{00A0}flacon", "bubbles"),
+                    item("eponge", "Éponge", "1\u{00A0}pack", "sponge"),
                 ]),
                 ListSectionUi(categoryId: "papier", title: "Papier et emballages", items: [
-                    item("papier", "Papier toilette", "1\u{00A0}pack"),
-                    item("sacs", "Sac poubelle", "1\u{00A0}rouleau"),
-                    item("essuie", "Essuie-tout", "1\u{00A0}pack"),
+                    item("papier", "Papier toilette", "1\u{00A0}pack", "roll_of_paper"),
+                    item("sacs", "Sac poubelle", "1\u{00A0}rouleau", "wastebasket"),
+                    item("essuie", "Essuie-tout", "1\u{00A0}pack", "roll_of_paper"),
                 ]),
             ],
             itemCount: 14,
@@ -245,27 +260,28 @@
             essentials: 14, recurring: 4, horizonDays: 7, onboarded: true
         )
 
-        static func chip(_ name: String, _ checked: Bool) -> ProductChipUi {
-            ProductChipUi(productId: name, name: name, checked: checked)
+        static func chip(_ name: String, _ checked: Bool, _ imageKey: String) -> ProductChipUi {
+            ProductChipUi(productId: name, name: name, checked: checked, imageKey: imageKey)
         }
 
         static let essentialsAisles = [
             EssentialsAisleUi(categoryId: "fruits-legumes", title: "Fruits et légumes", items: [
-                chip("Bananes", true), chip("Pommes", true), chip("Oignons", true), chip("Pommes de terre", true),
-                chip("Tomates", false), chip("Carottes", false),
-            ], total: 44, expanded: false),
+                chip("Bananes", true, "banana"), chip("Pommes", true, "red_apple"), chip("Oignons", true, "onion"),
+                chip("Pommes de terre", true, "potato"), chip("Tomates", false, "tomato"), chip("Carottes", false, "carrot"),
+            ], total: 44, expanded: false, imageKey: "green_apple"),
             EssentialsAisleUi(categoryId: "boulangerie", title: "Boulangerie", items: [
-                chip("Baguette", true), chip("Pain de mie", false), chip("Brioche", false),
-            ], total: 12, expanded: false),
+                chip("Baguette", true, "baguette_bread"), chip("Pain de mie", false, "bread"), chip("Brioche", false, "bread"),
+            ], total: 12, expanded: false, imageKey: "baguette_bread"),
             EssentialsAisleUi(categoryId: "epicerie-salee", title: "Épicerie salée", items: [
-                chip("Riz", true), chip("Pâtes", true), chip("Huile d'olive", true), chip("Sel fin", false),
-            ], total: 48, expanded: false),
+                chip("Riz", true, "cooked_rice"), chip("Pâtes", true, "spaghetti"), chip("Huile d'olive", true, "olive"),
+                chip("Sel fin", false, "salt"),
+            ], total: 48, expanded: false, imageKey: "canned_food"),
             EssentialsAisleUi(categoryId: "bebe", title: "Bébé", items: [
-                chip("Couches", true), chip("Lait infantile", true), chip("Petits pots", false),
-            ], total: 9, expanded: false),
+                chip("Couches", true, "safety_pin"), chip("Lait infantile", true, "baby_bottle"), chip("Petits pots", false, "jar"),
+            ], total: 9, expanded: false, imageKey: "baby_bottle"),
             EssentialsAisleUi(categoryId: "animaux", title: "Animaux", items: [
-                chip("Croquettes chat", true), chip("Litière", true),
-            ], total: 8, expanded: false),
+                chip("Croquettes chat", true, "cat"), chip("Litière", true, "cat"),
+            ], total: 8, expanded: false, imageKey: "paw_prints"),
         ]
 
         static func onboarding(_ step: OnboardingStep) -> OnboardingUiStateReady {
@@ -292,9 +308,9 @@
                 ),
                 recurring: RecurringStepUi(
                     rows: [
-                        RecurringRowUi(productId: "baguette", name: "Baguette", cadence: .week),
-                        RecurringRowUi(productId: "couches", name: "Couches", cadence: .twoWeeks),
-                        RecurringRowUi(productId: "croquettes", name: "Croquettes chat", cadence: .month),
+                        RecurringRowUi(productId: "baguette", name: "Baguette", cadence: .week, imageKey: "baguette_bread"),
+                        RecurringRowUi(productId: "couches", name: "Couches", cadence: .twoWeeks, imageKey: "safety_pin"),
+                        RecurringRowUi(productId: "croquettes", name: "Croquettes chat", cadence: .month, imageKey: "cat"),
                     ],
                     adding: false, query: "", results: []
                 ),

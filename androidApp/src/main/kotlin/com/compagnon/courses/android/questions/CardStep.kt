@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,13 +28,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
@@ -42,6 +53,7 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.compagnon.courses.android.R
 import com.compagnon.courses.android.ui.components.AppIcons
@@ -62,12 +74,16 @@ import com.compagnon.courses.android.ui.components.SecondaryButton
 import com.compagnon.courses.android.ui.components.TextActionButton
 import com.compagnon.courses.android.ui.components.resolve
 import com.compagnon.courses.android.ui.components.softShadow
+import com.compagnon.courses.android.ui.illustration.Illustration
+import com.compagnon.courses.android.ui.illustration.LeafPattern
+import com.compagnon.courses.android.ui.illustration.PatternLeaf
 import com.compagnon.courses.android.ui.theme.CompagnonColors
 import com.compagnon.courses.android.ui.theme.CompagnonShapes
 import com.compagnon.courses.android.ui.theme.CompagnonSpacing
 import com.compagnon.courses.android.ui.theme.CompagnonType
 import com.compagnon.courses.feature.questionflow.NuancedAnswer
 import com.compagnon.courses.feature.questionflow.ProductCardUi
+import com.compagnon.courses.feature.questionflow.QuantityValue
 import com.compagnon.courses.feature.questionflow.QuestionEvent
 import com.compagnon.courses.feature.questionflow.QuestionUiState
 import com.compagnon.courses.feature.questionflow.UnitOptionUi
@@ -76,24 +92,45 @@ import kotlinx.coroutines.launch
 /** Quick quantities per row: three on one row as in the mockup, four on two rows (same rule on iOS). */
 internal fun presetColumns(count: Int): Int = if (count == 4) 2 else count.coerceIn(1, 3)
 
+/** The image banner of a product card: [height] high with an [image] of that size. */
+internal data class CardBannerSize(val height: Dp, val image: Dp)
+
+/**
+ * The card's image banner for the system font scale: 100 high with an 84 image, smaller (72 / 56) with a larger
+ * font, and gone beyond 1.45 so that the name, the question and the quantities keep the room (same on iOS).
+ */
+internal fun cardBannerSize(fontScale: Float): CardBannerSize? = when {
+    fontScale <= 1.15f -> CardBannerSize(height = 100.dp, image = 84.dp)
+    fontScale <= 1.45f -> CardBannerSize(height = 72.dp, image = 56.dp)
+    else -> null
+}
+
 /**
  * A full-screen product card: « Il vous faut du lait ? ». Swipe right or « Oui · 2 bouteilles » = yes with the
  * stepper's quantity, a preset = yes with that quantity, swipe left or « Non » = no, « Plus d'options » = the
- * nuanced answers. The answer buttons sit at the bottom, under the thumb, « Annuler » at the bottom left.
+ * nuanced answers. Every answer makes the card fly off while the next one, behind it with its image
+ * ([QuestionUiState.Card.nextImageKey]), comes forward. The answer buttons sit at the bottom, under the thumb,
+ * « Annuler » at the bottom left. [popImage]: the product's image pops in (not when it was already on the card
+ * behind).
  */
 @Composable
-internal fun CardStep(state: QuestionUiState.Card, onEvent: (QuestionEvent) -> Unit) {
+internal fun CardStep(state: QuestionUiState.Card, onEvent: (QuestionEvent) -> Unit, popImage: Boolean = true) {
     val card = state.card
     var showOptions by rememberSaveable(card.productId) { mutableStateOf(false) }
     val yesLabel = stringResource(R.string.answer_yes)
     val noLabel = stringResource(R.string.answer_no)
+    val cardState = key(state.stepKey()) { rememberAnswerCardState() }
+    val banner = cardBannerSize(LocalDensity.current.fontScale)
+    // Where the banner sits in the card, so that the card behind shows the next image at the same place.
+    var bannerTop by remember { mutableStateOf<Dp?>(null) }
+    val answerYes = { quantity: QuantityValue? -> cardState.answer(yes = true) { onEvent(QuestionEvent.Yes(quantity)) } }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .navigationBarsPadding()
             .padding(horizontal = CompagnonSpacing.Screen)
-            .padding(top = 20.dp, bottom = CompagnonSpacing.Bottom),
+            .padding(top = 14.dp, bottom = CompagnonSpacing.Bottom),
     ) {
         key(state.stepKey()) {
             SwipeableAnswerCard(
@@ -101,19 +138,30 @@ internal fun CardStep(state: QuestionUiState.Card, onEvent: (QuestionEvent) -> U
                 noLabel = noLabel,
                 onYes = { onEvent(QuestionEvent.Yes()) },
                 onNo = { onEvent(QuestionEvent.No) },
+                state = cardState,
+                behind = state.nextImageKey?.let { next ->
+                    { NextCardPreview(imageKey = next, banner = banner, bannerTop = bannerTop) }
+                },
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
             ) {
-                ProductCardBody(card = card, onEvent = onEvent)
+                ProductCardBody(
+                    card = card,
+                    banner = banner,
+                    popImage = popImage,
+                    onBannerTop = { bannerTop = it },
+                    onPreset = answerYes,
+                    onEvent = onEvent,
+                )
             }
         }
         SwipeHints(modifier = Modifier.padding(top = 4.dp))
         AnswerButtons(
             noText = noLabel,
             yesText = stringResource(R.string.answer_yes_with_quantity, card.quantity.selected.label),
-            onYes = { onEvent(QuestionEvent.Yes()) },
-            onNo = { onEvent(QuestionEvent.No) },
+            onYes = { answerYes(null) },
+            onNo = { cardState.answer(yes = false) { onEvent(QuestionEvent.No) } },
             modifier = Modifier.padding(top = 16.dp),
             noIcon = AppIcons.Close,
             yesIcon = AppIcons.Check,
@@ -134,6 +182,7 @@ internal fun CardStep(state: QuestionUiState.Card, onEvent: (QuestionEvent) -> U
     if (showOptions) {
         NuancedAnswersSheet(
             productName = card.name,
+            imageKey = card.imageKey,
             onAnswer = { answer ->
                 showOptions = false
                 onEvent(QuestionEvent.Nuanced(answer))
@@ -144,10 +193,20 @@ internal fun CardStep(state: QuestionUiState.Card, onEvent: (QuestionEvent) -> U
 }
 
 @Composable
-private fun ProductCardBody(card: ProductCardUi, onEvent: (QuestionEvent) -> Unit) {
+private fun ProductCardBody(
+    card: ProductCardUi,
+    banner: CardBannerSize?,
+    popImage: Boolean,
+    onBannerTop: (Dp) -> Unit,
+    onPreset: (QuantityValue) -> Unit,
+    onEvent: (QuestionEvent) -> Unit,
+) {
+    val density = LocalDensity.current
+    var bodyCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .onPlaced { bodyCoordinates = it }
             .padding(start = 22.dp, end = 22.dp, top = 24.dp, bottom = 22.dp),
     ) {
         // The product and its context scroll when long (large font); the quantity controls stay at the bottom.
@@ -171,24 +230,39 @@ private fun ProductCardBody(card: ProductCardUi, onEvent: (QuestionEvent) -> Uni
                         Chip(text = stringResource(it.text), tone = if (it.watch) ChipTone.WATCH else ChipTone.POSITIVE)
                     }
                 }
-                Spacer(Modifier.height(18.dp))
+            }
+            if (banner != null) {
+                CardBanner(
+                    imageKey = card.imageKey,
+                    size = banner,
+                    pop = popImage,
+                    modifier = Modifier
+                        .padding(top = 14.dp)
+                        .onGloballyPositioned { coordinates ->
+                            val body = bodyCoordinates ?: return@onGloballyPositioned
+                            if (!body.isAttached || !coordinates.isAttached) return@onGloballyPositioned
+                            onBannerTop(with(density) { body.localPositionOf(coordinates, Offset.Zero).y.toDp() })
+                        },
+                )
             }
             Text(
                 text = card.name,
                 style = CompagnonType.ProductTitle,
                 color = CompagnonColors.Ink,
-                modifier = Modifier.semantics { heading() },
+                modifier = Modifier
+                    .padding(top = 14.dp)
+                    .semantics { heading() },
             )
             Text(
                 text = stringResource(R.string.card_question, card.needPhrase),
                 style = CompagnonType.Question,
                 color = CompagnonColors.InkSoft,
                 modifier = Modifier
-                    .padding(top = 10.dp)
+                    .padding(top = 8.dp)
                     .semantics { liveRegion = LiveRegionMode.Polite },
             )
             card.reason?.let { reason ->
-                Hint(text = QuestionTexts.reason(reason).resolve(), modifier = Modifier.padding(top = 14.dp))
+                Hint(text = QuestionTexts.reason(reason).resolve(), modifier = Modifier.padding(top = 12.dp))
             }
         }
 
@@ -216,7 +290,7 @@ private fun ProductCardBody(card: ProductCardUi, onEvent: (QuestionEvent) -> Uni
                                     selected = selected,
                                     subline = if (selected && card.isSameAsLastTime) usual else null,
                                     contentDescription = stringResource(R.string.answer_yes_with_quantity, preset.label),
-                                    onClick = { onEvent(QuestionEvent.Yes(preset.value)) },
+                                    onClick = { onPreset(preset.value) },
                                     modifier = Modifier.weight(1f),
                                 )
                             }
@@ -239,6 +313,67 @@ private fun ProductCardBody(card: ProductCardUi, onEvent: (QuestionEvent) -> Uni
     }
 }
 
+/** The leaves of the card banner (`Card.dc.html`), Basilic at 10 %. */
+private val BannerLeaves = listOf(
+    PatternLeaf(36f, 30f, -30f),
+    PatternLeaf(270f, 78f, 40f, 0.8f),
+    PatternLeaf(250f, 22f, -60f, 0.55f),
+)
+
+/**
+ * The banner between the aisle and the product name: Basilic clair, radius 22, leaves as a watermark, a white glow,
+ * and the product's image on its soft shadow.
+ */
+@Composable
+private fun CardBanner(imageKey: String, size: CardBannerSize, pop: Boolean, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(size.height)
+            .clip(RoundedCornerShape(22.dp))
+            .background(CompagnonColors.BasilLight)
+            .drawBehind {
+                val radius = 90.dp.toPx()
+                drawCircle(
+                    brush = Brush.radialGradient(
+                        colors = listOf(Color.White.copy(alpha = 0.85f), Color.White.copy(alpha = 0f)),
+                        center = center,
+                        radius = radius,
+                    ),
+                    radius = radius,
+                )
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        LeafPattern(
+            leaves = BannerLeaves,
+            width = 306.dp,
+            height = 112.dp,
+            color = CompagnonColors.Basil.copy(alpha = 0.10f),
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .wrapContentSize(Alignment.TopStart, unbounded = true),
+        )
+        Illustration(key = imageKey, size = size.image, groundShadow = true, pop = pop, popDelayMillis = if (pop) 160 else 0)
+    }
+}
+
+/**
+ * The card behind: the next question's image in a banner placed like this card's ([bannerTop] in the card), so that
+ * it is already in place when the card comes forward. A plain card without a banner (large font).
+ */
+@Composable
+private fun NextCardPreview(imageKey: String, banner: CardBannerSize?, bannerTop: Dp?) {
+    if (banner == null) return
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 22.dp, end = 22.dp, top = bannerTop ?: 64.dp),
+    ) {
+        CardBanner(imageKey = imageKey, size = banner, pop = false)
+    }
+}
+
 /** « Au poids | À la pièce »: Surface douce track, the selected unit on a white pill. */
 @Composable
 private fun UnitSelector(units: List<UnitOptionUi>, onSelect: (String) -> Unit) {
@@ -252,7 +387,7 @@ private fun UnitSelector(units: List<UnitOptionUi>, onSelect: (String) -> Unit) 
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         units.forEach { option ->
-            val shape = androidx.compose.foundation.shape.RoundedCornerShape(11.dp)
+            val shape = RoundedCornerShape(11.dp)
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -354,13 +489,14 @@ private fun NuancedAnswer.icon(): ImageVector = when (this) {
 }
 
 /**
- * « Plus d'options »: a Material bottom sheet with a handle, the product, a help sentence, [✕], and the six
- * nuanced answers in two groups (« Il m'en reste », « Pas maintenant »).
+ * « Plus d'options »: a Material bottom sheet with a handle, the product's image and name, a help sentence, [✕],
+ * and the six nuanced answers in two groups (« Il m'en reste », « Pas maintenant »).
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NuancedAnswersSheet(
     productName: String,
+    imageKey: String,
     onAnswer: (NuancedAnswer) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -382,7 +518,7 @@ private fun NuancedAnswersSheet(
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .size(width = 40.dp, height = 5.dp)
-                    .clip(androidx.compose.foundation.shape.RoundedCornerShape(3.dp))
+                    .clip(RoundedCornerShape(3.dp))
                     .background(CompagnonColors.LineStrong),
             )
         },
@@ -399,6 +535,13 @@ private fun NuancedAnswersSheet(
                     .padding(start = 6.dp, end = 0.dp, top = 14.dp, bottom = 12.dp),
                 verticalAlignment = Alignment.Top,
             ) {
+                Illustration(
+                    key = imageKey,
+                    size = 36.dp,
+                    plate = 52.dp,
+                    popDelayMillis = 120,
+                    modifier = Modifier.padding(end = 12.dp),
+                )
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
                         text = productName,

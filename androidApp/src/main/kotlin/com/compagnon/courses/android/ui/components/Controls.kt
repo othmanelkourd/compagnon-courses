@@ -1,5 +1,8 @@
 package com.compagnon.courses.android.ui.components
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,11 +21,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -42,46 +51,71 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.compagnon.courses.android.R
 import com.compagnon.courses.android.ui.theme.CompagnonColors
+import com.compagnon.courses.android.ui.theme.CompagnonMotion
 import com.compagnon.courses.android.ui.theme.CompagnonShapes
 import com.compagnon.courses.android.ui.theme.CompagnonType
+import com.compagnon.courses.android.ui.theme.LocalReduceMotion
 
 /**
  * The questionnaire progress: [total] segments of 5, [gap] apart (3 in the questionnaire, 4 in the onboarding),
- * filled (Basilic) up to the question [current].
+ * filled (Basilic) up to the question [current]. Animation 6: a segment fills from the left when it is reached
+ * (standard 400) instead of jumping; at once with « Réduire les animations ».
  */
 @Composable
 internal fun ProgressSegments(current: Int, total: Int, modifier: Modifier = Modifier, gap: Dp = 3.dp) {
+    val reduceMotion = LocalReduceMotion.current
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(gap)) {
         repeat(total) { index ->
+            val fill by animateFloatAsState(
+                targetValue = if (index < current) 1f else 0f,
+                animationSpec = if (reduceMotion) snap() else CompagnonMotion.standard(CompagnonMotion.AMPLE),
+                label = "segment fill",
+            )
             Box(
                 modifier = Modifier
                     .weight(1f)
                     .height(5.dp)
                     .clip(RoundedCornerShape(3.dp))
-                    .background(if (index < current) CompagnonColors.Basil else CompagnonColors.SegmentEmpty),
+                    .background(CompagnonColors.SegmentEmpty)
+                    .drawBehind { drawRect(CompagnonColors.Basil, size = size.copy(width = size.width * fill)) },
             )
         }
     }
 }
 
-/** A thin progress bar (« Ma liste »): Trait track, Basilic fill. */
+/**
+ * A thin progress bar (« Ma liste »): Trait track, Basilic fill. Animation 6: the fill grows to a new [fraction]
+ * (standard 400); [fillOnAppear] also fills it from 0 when it appears, after 300 ms (home card, list). At once with
+ * « Réduire les animations ».
+ */
 @Composable
-internal fun ProgressBar(fraction: Float, modifier: Modifier = Modifier, height: Dp = 6.dp) {
+internal fun ProgressBar(fraction: Float, modifier: Modifier = Modifier, height: Dp = 6.dp, fillOnAppear: Boolean = false) {
+    val reduceMotion = LocalReduceMotion.current
+    val target = fraction.coerceIn(0f, 1f)
+    val fill = remember { Animatable(if (fillOnAppear && !reduceMotion) 0f else target) }
+    val appeared = remember { booleanArrayOf(false) }
+    LaunchedEffect(target, reduceMotion) {
+        val first = !appeared[0]
+        appeared[0] = true
+        when {
+            reduceMotion -> fill.snapTo(target)
+            first && fillOnAppear -> fill.animateTo(target, CompagnonMotion.standard(CompagnonMotion.AMPLE, delayMillis = 300))
+            else -> fill.animateTo(target, CompagnonMotion.standard(CompagnonMotion.AMPLE))
+        }
+    }
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(height)
             .clip(RoundedCornerShape(height / 2))
-            .background(CompagnonColors.Line),
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(fraction.coerceIn(0f, 1f))
-                .height(height)
-                .clip(RoundedCornerShape(height / 2))
-                .background(CompagnonColors.Basil),
-        )
-    }
+            .background(CompagnonColors.Line)
+            .drawBehind {
+                val width = size.width * fill.value
+                if (width > 0f) {
+                    drawRoundRect(CompagnonColors.Basil, size = size.copy(width = width), cornerRadius = CornerRadius(size.height / 2f))
+                }
+            },
+    )
 }
 
 /**
@@ -167,28 +201,43 @@ internal fun Chip(text: String, tone: ChipTone, modifier: Modifier = Modifier) {
 /**
  * « Case à cocher », drawn only (the row around it toggles): « ronde » (26, suggestions) or « carrée » (radius 8,
  * Ma liste). Checked: Basilic with a white tick (Contour case when not [enabled]: « déjà exclu par le régime »);
- * empty: Contour case border of 2. It sits in a 48 box.
+ * empty: Contour case border of 2. It sits in a 48 box. Animation 4: the box fills (quick) and the tick draws itself
+ * when it gets checked.
  */
 @Composable
 internal fun CheckMark(checked: Boolean, round: Boolean, modifier: Modifier = Modifier, enabled: Boolean = true) {
     val shape: Shape = if (round) CircleShape else CompagnonShapes.Checkbox
+    val reduceMotion = LocalReduceMotion.current
+    val fill by animateFloatAsState(
+        targetValue = if (checked) 1f else 0f,
+        animationSpec = CompagnonMotion.standard(CompagnonMotion.QUICK),
+        label = "checkbox fill",
+    )
     Box(modifier = modifier.size(48.dp), contentAlignment = Alignment.Center) {
-        if (checked) {
-            Box(
-                modifier = Modifier
-                    .size(if (round) 28.dp else 26.dp)
-                    .clip(shape)
-                    .background(if (enabled) CompagnonColors.Basil else CompagnonColors.CheckboxOutline),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(AppIcons.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
-            }
-        } else {
+        if (fill < 1f) {
             Box(
                 modifier = Modifier
                     .size(26.dp)
                     .border(2.dp, CompagnonColors.CheckboxOutline, shape),
             )
+        }
+        if (fill > 0f) {
+            Box(
+                modifier = Modifier
+                    .size(if (round) 28.dp else 26.dp)
+                    .graphicsLayer {
+                        alpha = fill
+                        if (!reduceMotion) {
+                            scaleX = 0.8f + 0.2f * fill
+                            scaleY = 0.8f + 0.2f * fill
+                        }
+                    }
+                    .clip(shape)
+                    .background(if (enabled) CompagnonColors.Basil else CompagnonColors.CheckboxOutline),
+                contentAlignment = Alignment.Center,
+            ) {
+                DrawnCheck(color = Color.White, visible = checked, modifier = Modifier.size(16.dp))
+            }
         }
     }
 }

@@ -1,8 +1,9 @@
 import Shared
 import SwiftUI
 
-/// « Besoin de quelque chose en Entretien ? » (mockup `Gate`): a dark card answered like a product card (swipe
-/// or buttons). Product examples are left out: the state does not give them.
+/// « Besoin de quelque chose en Entretien ? » (mockup `Gate`): a dark card with the aisle's image and the leaf
+/// pattern, answered like a product card (swipe or buttons). Product examples are left out: the state does not give
+/// them.
 struct CategoryGateScreen: View {
     let gate: CategoryGateUi
     let canUndo: Bool
@@ -68,10 +69,17 @@ struct CategoryGateScreen: View {
     private var content: some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack(alignment: .center) {
-                IconView(.basket, size: 32, weight: .regular)
-                    .foregroundStyle(Palette.surface)
-                    .frame(width: 64, height: 64)
-                    .background(Palette.surface.opacity(0.12), in: .rect(cornerRadius: 20))
+                // The aisle's image in a glowing disc.
+                Illustration(gate.imageKey, size: 60, delay: 0.12)
+                    .rotationEffect(.degrees(-8))
+                    .frame(width: 88, height: 88)
+                    .background {
+                        EllipticalGradient(
+                            colors: [Palette.surface.opacity(0.22), Palette.surface.opacity(0.06)],
+                            endRadiusFraction: 0.5
+                        )
+                        .clipShape(.circle)
+                    }
                 Spacer(minLength: 8)
                 Overline(text: Text("Tout un rayon"), color: Palette.surface.opacity(0.8))
             }
@@ -89,6 +97,10 @@ struct CategoryGateScreen: View {
         }
         .padding(EdgeInsets(top: 26, leading: 22, bottom: 24, trailing: 22))
         .frame(maxWidth: .infinity, alignment: .leading)
+        .background(alignment: .topTrailing) {
+            LeafPattern.gateCard
+        }
+        .clipShape(.rect(cornerRadius: Radius.card))
         .cardBackground(Palette.darkCard, radius: Radius.card, elevation: .darkCard)
     }
 

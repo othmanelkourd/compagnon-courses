@@ -10,7 +10,7 @@ struct QuestionnaireScreen: View {
     @State private var model = QuestionSessionModel()
 
     var body: some View {
-        QuestionContent(state: model.state, send: model.send, onShowList: onShowList, onClose: onClose)
+        QuestionContent(state: model.state, change: model.change, send: model.send, onShowList: onShowList, onClose: onClose)
             .task {
                 await model.observe()
             }
@@ -30,6 +30,8 @@ struct QuestionnaireScreen: View {
 /// « Annuler » at the bottom left.
 struct QuestionContent: View {
     let state: any QuestionUiState
+    /// How the state was reached: the direction of the step transition, or the pile of cards.
+    var change: QuestionStepChange = .forward
     let send: (any QuestionEvent) -> Void
     var onShowList: () -> Void = {}
     var onClose: () -> Void = {}
@@ -37,6 +39,8 @@ struct QuestionContent: View {
     var showsCardOptions = false
 
     @State private var confirmsAbandon = false
+    @State private var direction = StepDirection()
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         let step = QuestionStep(state)
@@ -68,6 +72,16 @@ struct QuestionContent: View {
         }
     }
 
+    /// The next question slides in (from the leading edge when going back); after a card, the next card's screen
+    /// cross-fades over the pile, which has already moved.
+    private var stepTransition: AnyTransition {
+        direction.forward = change != .backward
+        return switch change {
+        case .forward, .backward: .step(direction, reduceMotion: reduceMotion)
+        case .nextCard: AnyTransition.opacity.animation(reduceMotion ? Motion.fade : Motion.standard())
+        }
+    }
+
     @ViewBuilder
     private var screen: some View {
         switch onEnum(of: state) {
@@ -78,7 +92,7 @@ struct QuestionContent: View {
         case .meta(let meta):
             MetaQuestionView(question: meta.question, canUndo: meta.canUndo, send: send)
                 .id(meta.question.kind)
-                .transition(.cardStep)
+                .transition(stepTransition)
         case .suggested(let suggested):
             ItemChecklistView(
                 title: Text("Probablement nécessaire"),
@@ -88,15 +102,22 @@ struct QuestionContent: View {
                 canUndo: suggested.canUndo,
                 send: send
             )
-            .transition(.cardStep)
+            .transition(stepTransition)
         case .card(let card):
-            ProductCardScreen(card: card.card, canUndo: card.canUndo, send: send, showsOptionsInitially: showsCardOptions)
-                .id(card.card.productId)
-                .transition(.cardStep)
+            ProductCardScreen(
+                card: card.card,
+                nextImageKey: card.nextImageKey,
+                canUndo: card.canUndo,
+                send: send,
+                imagePops: change != .nextCard,
+                showsOptionsInitially: showsCardOptions
+            )
+            .id(card.card.productId)
+            .transition(stepTransition)
         case .gate(let gate):
             CategoryGateScreen(gate: gate.gate, canUndo: gate.canUndo, send: send)
                 .id(gate.gate.categoryId)
-                .transition(.cardStep)
+                .transition(stepTransition)
         case .gateItems(let items):
             ItemChecklistView(
                 title: Text(verbatim: items.gate.name),
@@ -107,25 +128,19 @@ struct QuestionContent: View {
                 send: send
             )
             .id(items.gate.categoryId)
-            .transition(.cardStep)
+            .transition(stepTransition)
         case .review(let review):
             ReviewView(review: review, send: send)
-                .transition(.cardStep)
+                .transition(stepTransition)
         case .done(let done):
             SessionDoneView(done: done, onShowList: onShowList, onClose: onClose)
-                .transition(.opacity)
+                .transition(AnyTransition.opacity.animation(Motion.fade))
         case .error(let error):
             SessionErrorView(error: error, send: send)
         }
     }
 }
 
-extension AnyTransition {
-    /// The next question comes in from slightly behind; the previous one (already swiped away) fades out.
-    static var cardStep: AnyTransition {
-        .asymmetric(insertion: .scale(scale: 0.94).combined(with: .opacity), removal: .opacity)
-    }
-}
 
 /// What the top bar needs from any state.
 struct QuestionStep {

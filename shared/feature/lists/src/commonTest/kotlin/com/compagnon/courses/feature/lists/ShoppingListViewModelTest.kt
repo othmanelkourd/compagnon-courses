@@ -15,6 +15,7 @@ import com.compagnon.courses.core.model.CategoryId
 import com.compagnon.courses.core.model.ProductId
 import com.compagnon.courses.core.model.Quantity
 import com.compagnon.courses.core.model.UnitCode
+import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.core.testing.MockCatalogServer
 import com.compagnon.courses.core.testing.SeedCatalog
 import com.compagnon.courses.core.testing.TestClock
@@ -97,12 +98,15 @@ class ShoppingListViewModelTest {
             while (loaded.itemCount < 3) loaded = assertIs(awaitItem())
             assertEquals(listOf("Fruits et légumes", "Crèmerie", null), loaded.sections.map { it.title })
             assertEquals("Pomme", loaded.sections[0].items.single().name)
+            assertEquals("red_apple", loaded.sections[0].items.single().imageKey)
+            assertEquals("glass_of_milk", loaded.sections[1].items.single().imageKey)
             assertEquals("1,5${nbsp}kg", loaded.sections[0].items.single().quantityLabel)
             assertEquals("2${nbsp}bouteilles", loaded.sections[1].items.single().quantityLabel)
             val other = loaded.sections[2].items.single()
             assertEquals("piles AAA", other.name)
             assertTrue(other.isFreeText)
             assertNull(other.quantityLabel)
+            assertEquals(Illustrations.Screen.FREE_TEXT, other.imageKey)
             assertEquals(3, loaded.remainingCount)
             cancelAndIgnoreRemainingEvents()
         }
@@ -182,6 +186,7 @@ class ShoppingListViewModelTest {
         val eggs = results.first { it.productId == id("oeufs").value }
         assertEquals("Œuf", eggs.name)
         assertEquals("6${nbsp}œufs", eggs.quantityLabel)
+        assertEquals("egg", eggs.imageKey)
 
         viewModel.onEvent(ShoppingListEvent.AddProduct(eggs.productId))
         advanceUntilIdle()

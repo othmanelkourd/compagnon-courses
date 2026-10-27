@@ -10,10 +10,12 @@ import com.compagnon.courses.core.model.UnitCode
 import com.compagnon.courses.core.model.UnitPolicy
 import com.compagnon.courses.core.model.format.QuantityFormatter
 import com.compagnon.courses.core.model.format.capitalizedFirst
+import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.engine.CardKind
 import com.compagnon.courses.engine.DomainError
 import com.compagnon.courses.engine.DraftSource
 import com.compagnon.courses.engine.MetaKey
+import com.compagnon.courses.engine.PlannedQuestion
 import com.compagnon.courses.engine.Progress
 import com.compagnon.courses.engine.ProposedItem
 import com.compagnon.courses.engine.QuantityAdvisor
@@ -65,7 +67,16 @@ internal class QuestionUiMapper(private val session: SessionData, locale: String
                 val items = state.items.map { suggestedItem(it, selection) }
                 QuestionUiState.Suggested(items, items.count { it.checked }, progress, canUndo)
             }
-            is SessionState.Asking -> QuestionUiState.Card(card(state, selection), progress, canUndo)
+            is SessionState.Asking -> QuestionUiState.Card(
+                card = card(state, selection),
+                progress = progress,
+                canUndo = canUndo,
+                nextImageKey = when (val next = state.session.remainingQuestions.firstOrNull()) {
+                    is PlannedQuestion.Card -> imageOf(next.item.product)
+                    is PlannedQuestion.Gate -> Illustrations.forCategory(next.category.slug)
+                    null -> null
+                },
+            )
             is SessionState.CategoryGate -> QuestionUiState.Gate(gate(state.gate.category, state.gate.items.size), progress, canUndo)
             is SessionState.GateItems -> {
                 val items = state.gate.items.map { suggestedItem(it, selection) }
@@ -84,17 +95,21 @@ internal class QuestionUiMapper(private val session: SessionData, locale: String
                         name = draft.product.displayName,
                         quantity = choice(draft.quantity, draft.product),
                         origin = draft.source.toUi(),
+                        imageKey = imageOf(draft.product),
                     )
                 },
                 searchQuery = selection.searchQuery,
                 searchResults = selection.searchResults.mapNotNull { product ->
-                    defaultQuantity(product)?.let { ProductSearchResultUi(product.id.value, product.displayName, choice(it, product)) }
+                    defaultQuantity(product)?.let { ProductSearchResultUi(product.id.value, product.displayName, choice(it, product), imageOf(product)) }
                 },
                 progress = progress,
                 canUndo = canUndo,
             )
         }
     }
+
+    /** The illustration of [product], or its aisle's. */
+    fun imageOf(product: Product): String = Illustrations.forProduct(product.slug, categories[product.categoryId]?.slug)
 
     /** The quantity « Autre chose ? » adds for [product]: its usual or proposed quantity. */
     fun defaultQuantity(product: Product): Quantity? =
@@ -143,6 +158,7 @@ internal class QuestionUiMapper(private val session: SessionData, locale: String
             checked = item.productId in selection.checked,
             quantity = stepper(policy, quantity, item.product),
             reason = item.reasons.firstOrNull()?.toUi(),
+            imageKey = imageOf(item.product),
         )
     }
 
@@ -179,6 +195,7 @@ internal class QuestionUiMapper(private val session: SessionData, locale: String
             },
             isSameAsLastTime = proposal.isSameAsLastTime && quantity == proposal.quantity,
             reason = item.reasons.firstOrNull()?.toUi(),
+            imageKey = imageOf(product),
         )
     }
 
@@ -187,6 +204,7 @@ internal class QuestionUiMapper(private val session: SessionData, locale: String
         name = category.name,
         question = category.gateQuestion,
         productCount = productCount,
+        imageKey = Illustrations.forCategory(category.slug),
     )
 
     private fun ReasonCode.toUi(): ReasonUi = when (this) {
