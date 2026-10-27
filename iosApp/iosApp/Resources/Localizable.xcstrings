@@ -521,6 +521,46 @@
         }
       }
     },
+    "%lld produits sur l'appareil" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld product on this device"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld products on this device"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld produit sur l'appareil"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld produits sur l'appareil"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld questions" : {
       "localizations" : {
         "en" : {
@@ -1392,16 +1432,6 @@
         }
       }
     },
-    "Chargement du catalogue…" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading the catalog…"
-          }
-        }
-      }
-    },
     "Chargement…" : {
       "localizations" : {
         "en" : {
@@ -2022,56 +2052,6 @@
         }
       }
     },
-    "Hors ligne · %lld produits sur l'appareil" : {
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Offline · %lld product on this device"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Offline · %lld products on this device"
-                }
-              }
-            }
-          }
-        },
-        "fr" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Hors ligne · %lld produit sur l'appareil"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Hors ligne · %lld produits sur l'appareil"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "Hors ligne : connectez-vous pour télécharger le catalogue" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Offline: connect to download the catalog"
-          }
-        }
-      }
-    },
     "Il en restait un peu la dernière fois" : {
       "localizations" : {
         "en" : {
@@ -2222,22 +2202,34 @@
         }
       }
     },
-    "Le catalogue n'est pas encore sur l'appareil. Connectez-vous à internet pour le télécharger." : {
+    "Le catalogue n'a pas pu être enregistré sur l'appareil. Libérez de l'espace, puis réessayez." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The catalog is not on this device yet. Connect to the internet to download it."
+            "value" : "The catalog could not be saved on this device. Free up some space, then try again."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le catalogue n'a pas pu être enregistré sur l'appareil. Libérez de l'espace, puis réessayez."
           }
         }
       }
     },
-    "Le catalogue n'est pas encore sur l'appareil. Connectez-vous à internet, ou passez cette étape." : {
+    "Le catalogue n'a pas pu être enregistré sur l'appareil. Réessayez, ou passez cette étape." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The catalog is not on this device yet. Connect to the internet, or skip this step."
+            "value" : "The catalog could not be saved on this device. Try again, or skip this step."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le catalogue n'a pas pu être enregistré sur l'appareil. Réessayez, ou passez cette étape."
           }
         }
       }
@@ -2582,16 +2574,6 @@
         }
       }
     },
-    "Pas encore de catalogue sur l'appareil" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No catalog on this device yet"
-          }
-        }
-      }
-    },
     "Pas maintenant" : {
       "localizations" : {
         "en" : {
@@ -2768,6 +2750,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preparing the questions…"
+          }
+        }
+      }
+    },
+    "Préparation du catalogue…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing the catalog…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Préparation du catalogue…"
           }
         }
       }

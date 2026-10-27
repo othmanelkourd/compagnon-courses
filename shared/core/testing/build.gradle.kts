@@ -15,6 +15,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            api(projects.shared.core.catalogBundle)
             api(projects.shared.core.database)
             api(projects.shared.core.network)
             api(libs.ktor.client.mock)

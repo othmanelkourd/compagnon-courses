@@ -4,8 +4,11 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import co.touchlab.kermit.Logger
 import com.compagnon.courses.contract.CatalogChangesDto
+import com.compagnon.courses.contract.CatalogSnapshotDto
+import com.compagnon.courses.contract.ContractJson
 import com.compagnon.courses.contract.CatalogVersionDto
 import com.compagnon.courses.contract.ErrorCode
+import com.compagnon.courses.core.catalogbundle.BundledCatalog
 import com.compagnon.courses.core.database.CompagnonDatabase
 import com.compagnon.courses.core.model.Catalog
 import com.compagnon.courses.core.model.Product
@@ -95,9 +98,27 @@ sealed interface SyncResult {
     ) : SyncResult
 }
 
+/** The catalog shipped in the app, per (country, locale); null when that projection is not bundled. */
+interface BundledCatalogSource {
+    /** The server release it was projected from, without reading it. */
+    fun version(country: String, locale: String): Long?
+
+    /** The projection, as `/v1/catalog/snapshot` serves it. */
+    fun snapshot(country: String, locale: String): CatalogSnapshotDto?
+
+    /** The catalog of `:shared:core:catalog-bundle`. */
+    object App : BundledCatalogSource {
+        override fun version(country: String, locale: String): Long? =
+            if (BundledCatalog.contains(country, locale)) BundledCatalog.VERSION else null
+
+        override fun snapshot(country: String, locale: String): CatalogSnapshotDto? =
+            BundledCatalog.json(country, locale)?.let { ContractJson.decodeFromString(CatalogSnapshotDto.serializer(), it) }
+    }
+}
+
 /**
- * The local copy of the published catalog, offline first: the app always reads the local tables, and [sync]
- * brings them up to date.
+ * The local copy of the published catalog, offline first: the app always reads the local tables. [installBundled]
+ * writes the catalog shipped in the app (ADR-012), and [sync] brings the tables up to date with the server.
  *
  * Sync: `version` → unchanged, nothing to do; otherwise `changes?since=` (every page) applied in one
  * transaction; on 410, on first run or for another (country, locale), the `snapshot` replaces everything.
@@ -109,9 +130,34 @@ class CatalogRepository(
     private val api: CatalogApi,
     private val clock: Clock = Clock.System,
     private val context: CoroutineContext = Dispatchers.Default,
+    private val bundled: BundledCatalogSource = BundledCatalogSource.App,
 ) {
     private val store = CatalogStore(database)
     private val syncMutex = Mutex()
+
+    /**
+     * Writes the catalog bundled in the app for ([country], [locale]) when the device has none for that projection,
+     * or an older release (an app update ships a newer one); a newer release already synced is kept. True when it
+     * was written. Never throws: a storage failure keeps the previous catalog and returns false.
+     */
+    suspend fun installBundled(country: String, locale: String): Boolean = syncMutex.withLock {
+        try {
+            withContext(context) {
+                val version = bundled.version(country, locale) ?: return@withContext false
+                val local = store.stateFor(country, locale)
+                if (local != null && local.version >= version) return@withContext false
+                val snapshot = bundled.snapshot(country, locale) ?: return@withContext false
+                database.transaction { store.replaceWith(snapshot, etag = null, syncedAt = clock.now().toEpochMilliseconds()) }
+                log.i { "Bundled catalog release ${snapshot.version} installed for $country/$locale" }
+                true
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            log.e(e) { "The bundled catalog could not be stored for $country/$locale" }
+            false
+        }
+    }
 
     /** Syncs the local catalog with the published one for ([country], [locale]). Concurrent calls run one by one. */
     suspend fun sync(country: String, locale: String): SyncResult = syncMutex.withLock {

@@ -14,6 +14,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(projects.shared.core.database)
+            implementation(projects.shared.core.catalogBundle)
             api(projects.shared.core.network)
             api(projects.shared.engine)
             api(libs.kotlinx.coroutines.core)

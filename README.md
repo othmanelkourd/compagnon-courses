@@ -38,6 +38,7 @@ courses/
 │  └─ openapi/openapi.json      # exporté par le serveur, versionné
 ├─ shared/
 │  ├─ core/model/               # :shared:core:model       unités, Quantity (sans Double), entités, mappers DTO → domaine, clés d'images
+│  ├─ core/catalog-bundle/      # :shared:core:catalog-bundle  catalogue embarqué (release 1, fr-FR et en), généré par catalog-content/tools/bundle.py
 │  ├─ core/network/             # :shared:core:network     client Ktor, CatalogApi, NetworkError
 │  ├─ core/database/            # :shared:core:database    SQLDelight : schéma, migrations (databases/n.db)
 │  ├─ core/data/                # :shared:core:data        dépôts : catalogue, foyer (« Mon foyer »), listes, séances

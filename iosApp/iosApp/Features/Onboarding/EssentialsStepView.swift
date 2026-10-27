@@ -73,7 +73,7 @@ struct EssentialsStepView: View {
             HStack(spacing: 12) {
                 ProgressView()
                     .tint(Palette.basil)
-                Text("Chargement du catalogue…")
+                Text("Préparation du catalogue…")
                     .textStyle(.body)
                     .foregroundStyle(Palette.inkSoft)
             }
@@ -82,7 +82,7 @@ struct EssentialsStepView: View {
             .accessibilityElement(children: .combine)
         } else if essentials.catalogMissing {
             VStack(spacing: 16) {
-                Text("Le catalogue n'est pas encore sur l'appareil. Connectez-vous à internet, ou passez cette étape.")
+                Text("Le catalogue n'a pas pu être enregistré sur l'appareil. Réessayez, ou passez cette étape.")
                     .textStyle(.bodyCompact)
                     .foregroundStyle(Palette.inkSoft)
                     .multilineTextAlignment(.center)

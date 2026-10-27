@@ -3,14 +3,15 @@ package com.compagnon.courses.feature.catalog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.compagnon.courses.core.data.CatalogCheck
 import com.compagnon.courses.core.data.CatalogRepository
+import com.compagnon.courses.core.data.CatalogUpdater
 import com.compagnon.courses.core.data.LocalCatalogStatus
 import com.compagnon.courses.core.data.RemoteCatalogVersion
 import com.compagnon.courses.core.data.SyncFailure
 import com.compagnon.courses.core.data.SyncMethod
 import com.compagnon.courses.core.data.SyncResult
 import kotlin.coroutines.cancellation.CancellationException
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,12 +20,16 @@ import kotlinx.coroutines.launch
 
 /**
  * Catalog status: what the server publishes for [country] ([state]) and the local, offline copy ([sync]).
- * Creating it syncs the local catalog for ([country], [locale]); [CatalogStatusEvent.Refresh] syncs again.
+ *
+ * It does not sync by itself: the [CatalogUpdater] installs the bundled catalog and checks the server at app launch
+ * (creating this ViewModel starts it, if the app did not); this ViewModel shows the outcome of the last check, and
+ * [CatalogStatusEvent.Refresh] checks again.
  *
  * Failures are values ([CatalogStatusUiState.Error], [CatalogSyncOutcome]); this ViewModel never throws.
  */
 class CatalogStatusViewModel(
     private val catalog: CatalogRepository,
+    private val updater: CatalogUpdater,
     private val country: String,
     private val locale: String,
 ) : ViewModel() {
@@ -34,57 +39,54 @@ class CatalogStatusViewModel(
 
     private val _sync = MutableStateFlow(CatalogSyncUiState())
 
-    /** The local catalog and its last sync. */
+    /** The local catalog and the last check of the server. */
     val sync: StateFlow<CatalogSyncUiState> = _sync.asStateFlow()
-
-    private var syncJob: Job? = null
 
     init {
         viewModelScope.launch {
             try {
-                catalog.observeStatus().collect { local -> _sync.update { it.withLocal(local) } }
+                catalog.observeStatus().collect { local -> _sync.update { it.withLocal(local).withCheck(updater.check.value) } }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                log.e(e) { "Local catalog status could not be read" }
+                log.e(e) { "Local catalog status could not be read for $country/$locale" }
             }
         }
-        load()
+        viewModelScope.launch {
+            updater.check.collect { check ->
+                _sync.update { it.withCheck(check) }
+                val result = check.result
+                // Loading until the first check ends; a later check keeps showing the last outcome until it ends.
+                if (!check.running && result != null) _state.value = result.toState()
+            }
+        }
+        updater.start()
     }
 
     fun onEvent(event: CatalogStatusEvent) {
         when (event) {
-            CatalogStatusEvent.Refresh -> load()
-        }
-    }
-
-    private fun load() {
-        if (syncJob?.isActive == true) return
-        _state.value = CatalogStatusUiState.Loading
-        _sync.update { it.copy(syncing = true) }
-        syncJob = viewModelScope.launch {
-            val result = try {
-                catalog.sync(country, locale)
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                // CatalogRepository.sync returns failures as values: anything else is a bug, but must not crash.
-                log.e(e) { "Unexpected failure while syncing the catalog for $country/$locale" }
-                null
-            }
-            _state.value = when {
-                result == null -> CatalogStatusUiState.Error(message = CatalogStatusMessages.UNEXPECTED, retryable = true)
-                result.remote != null -> checkNotNull(result.remote).toLoadedState()
-                result is SyncResult.Failed && result.networkError != null -> checkNotNull(result.networkError).toErrorState()
-                else -> CatalogStatusUiState.Error(message = CatalogStatusMessages.UNEXPECTED, retryable = true)
-            }
-            _sync.update { it.copy(syncing = false, lastOutcome = result?.toOutcome() ?: CatalogSyncOutcome.FAILED_NETWORK) }
+            CatalogStatusEvent.Refresh -> updater.checkNow()
         }
     }
 
     private companion object {
         val log = Logger.withTag("CatalogStatusViewModel")
     }
+}
+
+/**
+ * « Mise à jour du catalogue… » only while the device has no catalog yet: with a local catalog, a check runs
+ * quietly and the line keeps saying what the device holds.
+ */
+private fun CatalogSyncUiState.withCheck(check: CatalogCheck): CatalogSyncUiState = copy(
+    syncing = check.running && localVersion == null,
+    lastOutcome = check.result?.toOutcome(),
+)
+
+private fun SyncResult.toState(): CatalogStatusUiState = when {
+    remote != null -> checkNotNull(remote).toLoadedState()
+    this is SyncResult.Failed && networkError != null -> checkNotNull(networkError).toErrorState()
+    else -> CatalogStatusUiState.Error(message = CatalogStatusMessages.UNEXPECTED, retryable = true)
 }
 
 internal fun RemoteCatalogVersion.toLoadedState(): CatalogStatusUiState.Loaded =

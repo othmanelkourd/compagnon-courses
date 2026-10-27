@@ -20,6 +20,17 @@ Répartition des produits par rayon : fruits et légumes 44 · boulangerie 12 ·
 
 V0 a ajouté 117 produits aux 196 du Sprint 0 : herbes fraîches et épices, surgelés, petit-déjeuner, spécialités régionales courantes (cassoulet, piment d’Espelette, chicorée, reblochon, pastis, galettes bretonnes et de sarrasin), produits utiles aux foyers halal (merguez, blanc de dinde, saucisses de volaille, agneau) ou végétariens (tofu, falafels, galettes végétales, boisson et desserts au soja, lentilles corail), et consommables du foyer. Aucun slug existant n'a changé.
 
+## Catalogue embarqué dans les apps
+
+Les apps embarquent la release 1, c'est-à-dire ce dossier, projetée sur (FR, fr-FR) et (FR, en) comme `/v1/catalog/snapshot` ([ADR-012](../docs/adr/012-catalogue-embarque.md)). **Après toute modification de ce dossier**, régénérez-la :
+
+```
+python3 catalog-content/tools/bundle.py          # écrit shared/core/catalog-bundle/.../BundledSnapshots.kt
+python3 catalog-content/tools/bundle.py --check  # échoue si le fichier n'est plus à jour (CI)
+```
+
+`CatalogBundleParityTest` (server/app) vérifie que le résultat est identique à ce que le serveur publie pour la release 1.
+
 ## Format
 
 Règles communes :

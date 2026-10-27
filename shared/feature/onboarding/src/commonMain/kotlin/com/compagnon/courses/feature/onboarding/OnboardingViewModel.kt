@@ -190,7 +190,7 @@ class OnboardingViewModel(
             render()
             val loaded = try {
                 catalog.catalog() ?: run {
-                    catalog.sync(scope.country, scope.locale)
+                    catalog.installBundled(scope.country, scope.locale)
                     catalog.catalog()
                 }
             } catch (e: CancellationException) {

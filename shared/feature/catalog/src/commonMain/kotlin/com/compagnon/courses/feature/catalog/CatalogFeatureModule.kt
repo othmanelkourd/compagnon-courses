@@ -8,7 +8,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 /**
- * Koin definitions of the catalog feature. Requires `dataModule(...)` (CatalogRepository, CatalogScope).
+ * Koin definitions of the catalog feature. Requires `dataModule(...)` (CatalogRepository, CatalogUpdater, CatalogScope).
  *
  * The country is a parameter: `koinViewModel<CatalogStatusViewModel> { parametersOf("FR") }` on Android,
  * `CatalogStatusViewModelProvider` on iOS; the locale is the one of the [CatalogScope]. Hidden from Swift,
@@ -18,6 +18,6 @@ import org.koin.dsl.module
 @HiddenFromObjC
 val catalogFeatureModule: Module = module {
     viewModel { (country: String) ->
-        CatalogStatusViewModel(catalog = get(), country = country, locale = get<CatalogScope>().locale)
+        CatalogStatusViewModel(catalog = get(), updater = get(), country = country, locale = get<CatalogScope>().locale)
     }
 }

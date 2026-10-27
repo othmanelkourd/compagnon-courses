@@ -2,6 +2,8 @@ package com.compagnon.courses.feature.catalog
 
 import app.cash.turbine.ReceiveTurbine
 import com.compagnon.courses.core.data.CatalogRepository
+import com.compagnon.courses.core.data.CatalogScope
+import com.compagnon.courses.core.data.CatalogUpdater
 import com.compagnon.courses.core.database.createDatabase
 import com.compagnon.courses.core.network.CatalogApi
 import com.compagnon.courses.core.testing.createInMemoryDriver
@@ -15,6 +17,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import kotlinx.coroutines.test.TestScope
 
 internal const val VERSION_JSON: String = """
 {
@@ -74,3 +77,16 @@ internal suspend fun ReceiveTurbine<CatalogStatusUiState>.awaitSettled(): Catalo
         if (item != CatalogStatusUiState.Loading) return item
     }
 }
+
+/**
+ * The status ViewModel over [repository], with its own [CatalogUpdater] for ([country], [locale]) running in the
+ * test's background scope (the app's one lives as long as the app).
+ */
+internal fun TestScope.statusViewModel(
+    repository: CatalogRepository,
+    country: String = "FR",
+    locale: String = "fr-FR",
+): CatalogStatusViewModel = CatalogStatusViewModel(repository, updater(repository, country, locale), country, locale)
+
+internal fun TestScope.updater(repository: CatalogRepository, country: String = "FR", locale: String = "fr-FR"): CatalogUpdater =
+    CatalogUpdater(repository, CatalogScope(country, locale), backgroundScope)

@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.compagnon.courses.core.model.AddedVia
 import com.compagnon.courses.core.model.Quantity
 import com.compagnon.courses.core.model.UnitCode
+import com.compagnon.courses.core.data.BundledCatalogSource
 import com.compagnon.courses.core.data.HouseholdSetup
 import com.compagnon.courses.core.model.AgeBand
 import com.compagnon.courses.core.model.illustration.Illustrations
@@ -36,8 +37,11 @@ class QuestionSessionViewModelTest {
     @AfterTest
     fun tearDown() = Dispatchers.resetMain()
 
-    private fun test(block: suspend TestScope.(TestDevice) -> Unit) = runTest(main) {
-        val device = TestDevice(StandardTestDispatcher(testScheduler))
+    private fun test(
+        bundled: BundledCatalogSource = BundledCatalogSource.App,
+        block: suspend TestScope.(TestDevice) -> Unit,
+    ) = runTest(main) {
+        val device = TestDevice(StandardTestDispatcher(testScheduler), bundled)
         try {
             block(device)
         } finally {
@@ -70,21 +74,21 @@ class QuestionSessionViewModelTest {
     }
 
     @Test
-    fun syncsTheCatalogFirstWhenThereIsNone() = test { device ->
+    fun theFirstSessionStartsOfflineFromTheBundledCatalog() = test { device ->
+        device.server.offline = true
         val viewModel = device.newViewModel()
 
         assertIs<QuestionUiState.Meta>(viewModel.awaitSettled())
-        assertTrue(device.server.requests.any { it.startsWith("/v1/catalog/snapshot") })
+        assertEquals(emptyList(), device.server.requests)
     }
 
     @Test
-    fun offlineWithoutCatalogIsARetryableError() = test { device ->
-        device.server.offline = true
+    fun noCatalogAtAllIsARetryableError() = test(bundled = NoBundledCatalog) { device ->
         val viewModel = device.newViewModel()
 
         assertEquals(QuestionUiState.Error(QuestionErrorKind.NO_CATALOG, retryable = true), viewModel.awaitSettled())
 
-        device.server.offline = false
+        device.sync()
         viewModel.onEvent(QuestionEvent.Retry)
         assertIs<QuestionUiState.Meta>(viewModel.awaitSettled())
     }
@@ -179,27 +183,26 @@ class QuestionSessionViewModelTest {
         advanceUntilIdle()
 
         // Each card shows its product; the card behind shows the next question (a product or an aisle).
+        // A plain loop: Kotlin/Native misreads variables captured by `repeat` across suspension points.
         val cardImages = mutableMapOf<String, String>()
-        var afterCard = false
-        var expectedNext: String? = null
-        repeat(30) {
+        var previous: QuestionUiState.Card? = null
+        var steps = 0
+        while (steps++ < 30) {
             val current = viewModel.state.value
-            if (afterCard) {
-                when (current) {
-                    is QuestionUiState.Card -> assertEquals(expectedNext, current.card.imageKey)
-                    is QuestionUiState.Gate -> assertEquals(expectedNext, current.gate.imageKey)
-                    else -> assertEquals(null, expectedNext, "$current")
-                }
+            val shown: String? = when (current) {
+                is QuestionUiState.Card -> current.card.imageKey
+                is QuestionUiState.Gate -> current.gate.imageKey
+                else -> null
             }
-            afterCard = current is QuestionUiState.Card
+            previous?.let { assertEquals(it.nextImageKey, shown, "after ${it.card.name}: $current") }
+            previous = current as? QuestionUiState.Card
             when (current) {
                 is QuestionUiState.Card -> {
                     cardImages[current.card.productId] = current.card.imageKey
-                    expectedNext = current.nextImageKey
                     viewModel.onEvent(QuestionEvent.No)
                 }
                 is QuestionUiState.Gate -> viewModel.onEvent(QuestionEvent.AnswerGate(yes = false))
-                else -> return@repeat
+                else -> break
             }
             advanceUntilIdle()
         }

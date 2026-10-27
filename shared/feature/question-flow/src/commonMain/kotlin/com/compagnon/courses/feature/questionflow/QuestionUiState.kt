@@ -77,7 +77,7 @@ sealed interface QuestionUiState {
 }
 
 enum class QuestionErrorKind {
-    /** No local catalog and the sync failed (offline on first launch). */
+    /** No local catalog: the bundled one could not be written on the device (storage full…). */
     NO_CATALOG,
 
     /** The engine could not plan the session. */

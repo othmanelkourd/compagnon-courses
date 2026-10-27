@@ -181,13 +181,4 @@ class CatalogRepositoryTest {
         assertEquals(emptyList(), data.catalog.search("%"))
         assertEquals(3, data.catalog.search("e", limit = 3).size)
     }
-
-    private suspend fun CatalogRepository.observeStatusNow(): LocalCatalogStatus? {
-        var status: LocalCatalogStatus? = null
-        observeStatus().test {
-            status = awaitItem()
-            cancelAndIgnoreRemainingEvents()
-        }
-        return status
-    }
 }

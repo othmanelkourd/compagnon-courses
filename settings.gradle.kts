@@ -36,6 +36,7 @@ include(":contract:api-contract")
 
 // Kotlin Multiplatform client code
 include(":shared:core:model")
+include(":shared:core:catalog-bundle")
 include(":shared:core:network")
 include(":shared:core:database")
 include(":shared:core:data")

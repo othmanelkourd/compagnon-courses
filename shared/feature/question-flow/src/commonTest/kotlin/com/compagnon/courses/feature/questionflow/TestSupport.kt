@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.compagnon.courses.contract.CatalogSnapshotDto
+import com.compagnon.courses.core.data.BundledCatalogSource
 import com.compagnon.courses.core.data.CatalogRepository
 import com.compagnon.courses.core.data.CatalogScope
 import com.compagnon.courses.core.data.HouseholdRepository
@@ -27,12 +29,12 @@ internal class SequentialIds : IdGenerator {
 }
 
 /** One device: an in-memory database, the repositories, a fake server and a clock. */
-internal class TestDevice(context: CoroutineContext) {
+internal class TestDevice(context: CoroutineContext, bundled: BundledCatalogSource = BundledCatalogSource.App) {
     val database: CompagnonDatabase = createDatabase(createInMemoryDriver())
     val server = MockCatalogServer()
     val clock = TestClock()
     private val ids = SequentialIds()
-    val catalog = CatalogRepository(database, server.api, clock, context)
+    val catalog = CatalogRepository(database, server.api, clock, context, bundled)
     val households = HouseholdRepository(database, "FR", clock, context)
     val lists = ShoppingListRepository(database, ids, clock, context)
     val questions = QuestionRepository(database, households, ids, clock, context)
@@ -75,3 +77,10 @@ internal fun TestDevice.watch(vararg slugs: String) {
 /** The first state that is neither loading nor committing (waits for real-thread work such as HTTP). */
 internal suspend fun QuestionSessionViewModel.awaitSettled(): QuestionUiState =
     state.first { it != QuestionUiState.Loading && it != QuestionUiState.Committing }
+
+/** An app without a bundled catalog: only the server can provide one. */
+internal object NoBundledCatalog : BundledCatalogSource {
+    override fun version(country: String, locale: String): Long? = null
+
+    override fun snapshot(country: String, locale: String): CatalogSnapshotDto? = null
+}

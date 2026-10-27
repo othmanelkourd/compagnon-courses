@@ -2,6 +2,7 @@ package com.compagnon.courses.android
 
 import android.app.Application
 import com.compagnon.courses.core.data.CatalogScope
+import com.compagnon.courses.core.data.CatalogUpdater
 import com.compagnon.courses.core.network.NetworkConfig
 import com.compagnon.courses.shared.sharedModules
 import java.util.Locale
@@ -14,7 +15,7 @@ class CompagnonApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        startKoin {
+        val koin = startKoin {
             androidLogger(if (BuildConfig.DEBUG) Level.INFO else Level.ERROR)
             androidContext(this@CompagnonApplication)
             modules(
@@ -29,7 +30,9 @@ class CompagnonApplication : Application() {
                     CatalogScope.forDevice(Locale.getDefault().toLanguageTag()),
                 ),
             )
-        }
+        }.koin
+        // The bundled catalog is installed, then the server's latest release is checked, in the background.
+        koin.get<CatalogUpdater>().start()
     }
 
     private companion object {

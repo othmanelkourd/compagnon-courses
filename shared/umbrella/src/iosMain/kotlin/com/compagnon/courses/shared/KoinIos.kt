@@ -1,6 +1,7 @@
 package com.compagnon.courses.shared
 
 import com.compagnon.courses.core.data.CatalogScope
+import com.compagnon.courses.core.data.CatalogUpdater
 import com.compagnon.courses.core.network.NetworkConfig
 import kotlin.experimental.ExperimentalNativeApi
 import org.koin.core.Koin
@@ -27,11 +28,12 @@ fun doInitKoin(baseUrl: String, appVersion: String) {
 /**
  * Same as `doInitKoin(baseUrl:appVersion:)`, with the catalog locale chosen from the device language
  * (`Locale.current.identifier`: `fr_FR`, `en_GB`…): French gets the French catalog, any other language English.
- * The catalog country stays `FR` until other markets launch.
+ * The catalog country stays `FR` until other markets launch. Starts the [CatalogUpdater]: the bundled catalog, then
+ * the check of the server's latest release.
  */
 @OptIn(ExperimentalNativeApi::class)
 fun doInitKoin(baseUrl: String, appVersion: String, deviceLanguage: String) {
-    startSharedKoin(
+    val koin = startSharedKoin(
         NetworkConfig(
             baseUrl = baseUrl,
             platform = IOS_PLATFORM,
@@ -40,6 +42,8 @@ fun doInitKoin(baseUrl: String, appVersion: String, deviceLanguage: String) {
         ),
         scope = CatalogScope.forDevice(deviceLanguage),
     )
+    // The bundled catalog is installed, then the server's latest release is checked, in the background.
+    koin.get<CatalogUpdater>().start()
 }
 
 /** Starts the global Koin application unless one is already running; [overrides] replace shared definitions (tests). */

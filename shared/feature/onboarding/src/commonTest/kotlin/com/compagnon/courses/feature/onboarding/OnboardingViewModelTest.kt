@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import app.cash.turbine.test
+import com.compagnon.courses.contract.CatalogSnapshotDto
+import com.compagnon.courses.core.data.BundledCatalogSource
 import com.compagnon.courses.core.data.CatalogRepository
 import com.compagnon.courses.core.data.CatalogScope
 import com.compagnon.courses.core.data.HouseholdRepository
@@ -49,12 +51,12 @@ class OnboardingViewModelTest {
     @AfterTest
     fun tearDown() = Dispatchers.resetMain()
 
-    private inner class Device(scope: TestScope) {
+    private inner class Device(scope: TestScope, bundled: BundledCatalogSource = BundledCatalogSource.App) {
         val context = StandardTestDispatcher(scope.testScheduler)
         val database = createDatabase(createInMemoryDriver())
         val server = MockCatalogServer()
         val clock = TestClock()
-        val catalog = CatalogRepository(database, server.api, clock, context)
+        val catalog = CatalogRepository(database, server.api, clock, context, bundled)
         val households = HouseholdRepository(database, "FR", clock, context)
         val store = ViewModelStore()
 
@@ -69,8 +71,12 @@ class OnboardingViewModelTest {
         )[AppGateViewModel::class]
     }
 
-    private fun test(sync: Boolean = true, block: suspend TestScope.(Device) -> Unit) = runTest(main) {
-        val device = Device(this)
+    private fun test(
+        sync: Boolean = true,
+        bundled: BundledCatalogSource = BundledCatalogSource.App,
+        block: suspend TestScope.(Device) -> Unit,
+    ) = runTest(main) {
+        val device = Device(this, bundled)
         try {
             if (sync) device.catalog.sync("FR", "fr-FR")
             block(device)
@@ -280,15 +286,26 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun theEssentialsWaitForTheCatalogWhenItIsMissing() = test(sync = false) { device ->
+    fun theEssentialsComeFromTheBundledCatalogOffline() = test(sync = false) { device ->
         device.server.offline = true
         val viewModel = device.onboarding()
         advanceUntilIdle()
         send(viewModel, OnboardingEvent.Start, OnboardingEvent.Next, OnboardingEvent.Next, OnboardingEvent.Next)
-        // The mock HTTP engine runs on a real thread: wait for the state rather than for the test scheduler.
+
+        val essentials = (viewModel.state.first { (it as? OnboardingUiState.Ready)?.essentials?.checkedCount ?: 0 > 0 } as OnboardingUiState.Ready).essentials
+        assertFalse(essentials.catalogMissing)
+        assertTrue(essentials.aisles.isNotEmpty())
+        assertEquals(emptyList(), device.server.requests)
+    }
+
+    @Test
+    fun theEssentialsCanBeRetriedWhenNoCatalogCouldBeWritten() = test(sync = false, bundled = NoBundledCatalog) { device ->
+        val viewModel = device.onboarding()
+        advanceUntilIdle()
+        send(viewModel, OnboardingEvent.Start, OnboardingEvent.Next, OnboardingEvent.Next, OnboardingEvent.Next)
         viewModel.state.first { (it as? OnboardingUiState.Ready)?.essentials?.catalogMissing == true }
 
-        device.server.offline = false
+        device.catalog.sync("FR", "fr-FR")
         send(viewModel, OnboardingEvent.Retry)
 
         val essentials = (viewModel.state.first { (it as? OnboardingUiState.Ready)?.essentials?.checkedCount ?: 0 > 0 } as OnboardingUiState.Ready).essentials
@@ -326,4 +343,11 @@ class OnboardingViewModelTest {
 
         assertIs<AppGateUiState.Ready>(gate.state.value)
     }
+}
+
+/** An app without a bundled catalog (or a device that cannot store it): only the server can provide one. */
+private object NoBundledCatalog : BundledCatalogSource {
+    override fun version(country: String, locale: String): Long? = null
+
+    override fun snapshot(country: String, locale: String): CatalogSnapshotDto? = null
 }

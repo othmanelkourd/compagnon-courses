@@ -127,8 +127,8 @@ data class EssentialsAisleUi(
 /**
  * The essentials step.
  *
- * @property catalogLoading the catalog is being downloaded (first launch without a catalog yet).
- * @property catalogMissing the catalog could not be downloaded: the step can be skipped or retried.
+ * @property catalogLoading the bundled catalog is being written (first launch, before the app's own start does it).
+ * @property catalogMissing the bundled catalog could not be written on the device: the step can be skipped or retried.
  * @property results search results when [query] is not blank (they replace the aisles).
  * @property checkedCount « Continuer · 14 essentiels ».
  */

@@ -54,9 +54,8 @@
     <string name="catalog_syncing">Mise à jour du catalogue…</string>
     <!-- %1$s: product count summary (catalog_product_count). -->
     <string name="catalog_footer_ready">Catalogue à jour · %1$s</string>
-    <string name="catalog_footer_offline">Hors ligne · %1$s sur l\'appareil</string>
-    <string name="catalog_local_none">Pas encore de catalogue sur l\'appareil</string>
-    <string name="catalog_outcome_offline_none">Hors ligne : connectez-vous pour télécharger le catalogue</string>
+    <string name="catalog_footer_offline">%1$s sur l\'appareil</string>
+    <string name="catalog_local_none">Préparation du catalogue…</string>
     <string name="catalog_outcome_storage_failed">Le catalogue n\'a pas pu être enregistré sur l\'appareil</string>
     <!-- %1$s: count, already formatted for the locale. "many" is used for exact millions ("1 000 000 de produits"). -->
     <plurals name="catalog_product_count">
@@ -81,7 +80,7 @@
     <string name="question_loading">Préparation des questions…</string>
     <string name="question_committing">Ajout à votre liste…</string>
     <string name="question_error_no_catalog_title">Catalogue indisponible</string>
-    <string name="question_error_no_catalog">Le catalogue n\'est pas encore sur l\'appareil. Connectez-vous à internet pour le télécharger.</string>
+    <string name="question_error_no_catalog">Le catalogue n\'a pas pu être enregistré sur l\'appareil. Libérez de l\'espace, puis réessayez.</string>
     <string name="question_error_planning_title">Questions indisponibles</string>
     <string name="question_error_planning">Les questions n\'ont pas pu être préparées.</string>
     <string name="question_error_storage_title">Enregistrement impossible</string>
@@ -419,8 +418,8 @@
         <item quantity="many">Continuer · %d de essentiels</item>
         <item quantity="other">Continuer · %d essentiels</item>
     </plurals>
-    <string name="onboarding_catalog_loading">Chargement du catalogue…</string>
-    <string name="onboarding_catalog_missing">Le catalogue n\'est pas encore sur l\'appareil. Connectez-vous à internet, ou passez cette étape.</string>
+    <string name="onboarding_catalog_loading">Préparation du catalogue…</string>
+    <string name="onboarding_catalog_missing">Le catalogue n\'a pas pu être enregistré sur l\'appareil. Réessayez, ou passez cette étape.</string>
 
     <!-- Onboarding step 4: recurring products and rhythm -->
     <string name="onboarding_recurring_title">Ce que vous rachetez souvent</string>

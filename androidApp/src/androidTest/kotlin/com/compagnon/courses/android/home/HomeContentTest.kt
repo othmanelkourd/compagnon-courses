@@ -163,14 +163,14 @@ class HomeContentTest {
     }
 
     @Test
-    fun offlineWithoutCatalogTellsTheUserToConnect() {
-        setContent(sync = CatalogSyncUiState(lastOutcome = CatalogSyncOutcome.FAILED_NETWORK))
+    fun theFirstLaunchPreparesTheBundledCatalog() {
+        setContent(sync = CatalogSyncUiState())
 
-        composeRule.onNodeWithText(composeRule.string(R.string.catalog_outcome_offline_none), substring = true).assertExists()
+        composeRule.onNodeWithText(composeRule.string(R.string.catalog_local_none), substring = true).assertExists()
     }
 
     @Test
-    fun offlineWithACatalogSaysItIsUsed() {
+    fun anUnreachableServerSaysTheDeviceCatalogIsUsed() {
         setContent(sync = synced.copy(lastOutcome = CatalogSyncOutcome.FAILED_NETWORK))
 
         composeRule.onNodeWithText(composeRule.string(R.string.catalog_footer_offline, products()), substring = true).assertExists()

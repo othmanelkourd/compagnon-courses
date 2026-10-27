@@ -151,7 +151,7 @@ class QuestionSessionViewModel(
     private suspend fun startNew() {
         var setup = questions.planningSetup(SessionMode.QUICK, clock.now(), random.nextLong())
         if (setup == null) {
-            catalog.sync(scope.country, scope.locale)
+            catalog.installBundled(scope.country, scope.locale)
             setup = questions.planningSetup(SessionMode.QUICK, clock.now(), random.nextLong())
         }
         if (setup == null) {

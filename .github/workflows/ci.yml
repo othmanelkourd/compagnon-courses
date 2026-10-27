@@ -1,5 +1,5 @@
 # CI of the monorepo (Sprint 0).
-#   jvm        : JVM tests of the contract, the shared modules and the server + debug APK
+#   jvm        : bundled catalog up to date, JVM tests of the contract, the shared modules and the server + debug APK
 #   ios        : Kotlin/Native tests on the iOS simulator + Xcode build (only when shared or iOS code changes)
 #   backoffice : npm ci, typecheck, unit tests (Vitest), build
 #   openapi    : contract/openapi/openapi.json (and the generated TS types, once versioned) must be up to date
@@ -66,6 +66,9 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
+      # The catalog bundled in the apps (ADR-012) must follow catalog-content/.
+      - name: Catalogue embarqué à jour
+        run: python3 catalog-content/tools/bundle.py --check
       - uses: actions/setup-java@v6
         with:
           distribution: ${{ env.JAVA_DISTRIBUTION }}

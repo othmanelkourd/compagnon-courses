@@ -358,7 +358,7 @@ struct SessionErrorView: View {
 
     private var description: Text {
         switch error.kind {
-        case .noCatalog: Text("Le catalogue n'est pas encore sur l'appareil. Connectez-vous à internet pour le télécharger.")
+        case .noCatalog: Text("Le catalogue n'a pas pu être enregistré sur l'appareil. Libérez de l'espace, puis réessayez.")
         case .planningFailed: Text("Les questions n'ont pas pu être préparées.")
         case .storageFailed: Text("La séance n'a pas pu être enregistrée sur l'appareil.")
         }

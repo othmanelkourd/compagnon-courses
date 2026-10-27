@@ -46,7 +46,8 @@ struct CatalogStatusFooter: View {
 
     private var tone: Tone {
         if sync.syncing { return .syncing }
-        if sync.lastOutcome == .failedStorage || sync.localVersion == nil { return .problem }
+        if sync.localVersion == nil { return .syncing }
+        if sync.lastOutcome == .failedStorage { return .problem }
         if sync.lastOutcome == .failedNetwork { return .offline }
         return .ready
     }
@@ -60,13 +61,12 @@ struct CatalogStatusFooter: View {
             return Text("Le catalogue n'a pas pu être enregistré sur l'appareil")
         }
         if sync.localVersion == nil {
-            if sync.lastOutcome == .failedNetwork {
-                return Text("Hors ligne\u{00A0}: connectez-vous pour télécharger le catalogue")
-            }
-            return Text("Pas encore de catalogue sur l'appareil")
+            // The bundled catalog is being written (first launch): a moment, never the network.
+            return Text("Préparation du catalogue…")
         }
         if sync.lastOutcome == .failedNetwork {
-            return Text("Hors ligne · \(count) produits sur l'appareil")
+            // The server did not answer: the device's catalog is used as is.
+            return Text("\(count) produits sur l'appareil")
         }
         return Text("Catalogue à jour · \(count) produits")
     }
@@ -83,7 +83,7 @@ struct CatalogStatusFooter: View {
     .background(Palette.canvas)
 }
 
-#Preview("Hors ligne") {
+#Preview("Serveur injoignable") {
     CatalogStatusFooter(
         sync: CatalogSyncUiState(
             syncing: false, localVersion: KotlinLong(value: 2), lastSyncedAt: "2026-10-20T08:30:00Z",

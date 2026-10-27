@@ -58,7 +58,7 @@ class CatalogFeatureModuleTest {
         viewModel.state.test {
             assertEquals(loadedVersion1, awaitSettled())
         }
-        assertEquals("FR", engine.requestHistory.first().url.parameters["country"])
+        assertEquals("FR", engine.requestHistory.first { it.url.encodedPath == "/v1/catalog/version" }.url.parameters["country"])
         // ViewModel definitions are not singletons: each screen gets its own instance.
         assertNotSame(viewModel, app.koin.get<CatalogStatusViewModel> { parametersOf("FR") })
         app.close()

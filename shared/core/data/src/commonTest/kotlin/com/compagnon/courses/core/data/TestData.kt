@@ -1,5 +1,6 @@
 package com.compagnon.courses.core.data
 
+import app.cash.turbine.test
 import com.compagnon.courses.contract.CatalogChangesDto
 import com.compagnon.courses.contract.CatalogDeleteDto
 import com.compagnon.courses.contract.CatalogUpsertsDto
@@ -46,3 +47,13 @@ fun changes(
     hasMore: Boolean = false,
     upserts: CatalogUpsertsDto = CatalogUpsertsDto(products = products),
 ): CatalogChangesDto = CatalogChangesDto(from, to, upserts, deletes, hasMore)
+
+/** The local catalog status now (the first value of [CatalogRepository.observeStatus]). */
+suspend fun CatalogRepository.observeStatusNow(): LocalCatalogStatus? {
+    var status: LocalCatalogStatus? = null
+    observeStatus().test {
+        status = awaitItem()
+        cancelAndIgnoreRemainingEvents()
+    }
+    return status
+}
