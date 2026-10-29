@@ -1,15 +1,15 @@
 package com.compagnon.courses.core.data
 
 import co.touchlab.kermit.Logger
-import kotlin.coroutines.cancellation.CancellationException
-import kotlin.experimental.ExperimentalObjCRefinement
-import kotlin.native.HiddenFromObjC
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.experimental.ExperimentalObjCRefinement
+import kotlin.native.HiddenFromObjC
 
 /**
  * The last check of the server's catalog: [running] while it runs; [result] of the last one that ended, null
@@ -81,7 +81,9 @@ class CatalogUpdater(
         }
         _check.value = CatalogCheck(running = false, result = result ?: previous.result)
         when (result) {
-            is SyncResult.Updated -> log.i { "Catalog updated from ${result.fromVersion} to ${result.toVersion} (${result.method})" }
+            is SyncResult.Updated -> log.i {
+                "Catalog updated from ${result.fromVersion} to ${result.toVersion} (${result.method})"
+            }
             is SyncResult.Failed -> log.i { "Catalog check failed (${result.failure}): the local catalog is kept" }
             else -> Unit
         }

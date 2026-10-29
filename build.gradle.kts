@@ -10,4 +10,6 @@ plugins {
     alias(libs.plugins.skie) apply false
     alias(libs.plugins.mokkery) apply false
     alias(libs.plugins.sqldelight) apply false
+    alias(libs.plugins.kover) apply false
+    alias(libs.plugins.detekt) apply false
 }

@@ -51,7 +51,12 @@ internal class QuestionUiMapper(private val session: SessionData, locale: String
     fun initialSelection(state: SessionState): LocalSelection {
         val subject = SessionLog.subjectOf(state)
         return when (state) {
-            is SessionState.Suggested -> LocalSelection(subject, checked = state.items.filter { it.preChecked }.mapTo(HashSet()) { it.productId })
+            is SessionState.Suggested -> LocalSelection(
+                subject,
+                checked = state.items.filter {
+                    it.preChecked
+                }.mapTo(HashSet()) { it.productId },
+            )
             is SessionState.GateItems -> LocalSelection(subject)
             is SessionState.Asking -> LocalSelection(subject, cardQuantity = state.card.item.proposal.quantity)
             else -> LocalSelection(subject)
@@ -100,7 +105,9 @@ internal class QuestionUiMapper(private val session: SessionData, locale: String
                 },
                 searchQuery = selection.searchQuery,
                 searchResults = selection.searchResults.mapNotNull { product ->
-                    defaultQuantity(product)?.let { ProductSearchResultUi(product.id.value, product.displayName, choice(it, product), imageOf(product)) }
+                    defaultQuantity(product)?.let {
+                        ProductSearchResultUi(product.id.value, product.displayName, choice(it, product), imageOf(product))
+                    }
                 },
                 progress = progress,
                 canUndo = canUndo,

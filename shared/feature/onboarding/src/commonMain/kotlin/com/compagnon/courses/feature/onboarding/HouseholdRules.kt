@@ -28,7 +28,12 @@ internal fun PetKind.toUi(): PetChoice = PetChoice.valueOf(name)
  * The products a household may choose as essentials or recurring products: available, with a unit, not
  * excluded by its diet or avoidances; baby products with a baby, pet products with a pet.
  */
-internal class Eligibility(diet: Diet, avoid: Set<Avoidance>, private val hasBaby: Boolean, private val hasPet: Boolean) {
+internal class Eligibility(
+    diet: Diet,
+    avoid: Set<Avoidance>,
+    private val hasBaby: Boolean,
+    private val hasPet: Boolean,
+) {
     private val excluded = DietaryTags.excludedBy(diet, avoid)
 
     fun accepts(product: Product): Boolean =
@@ -100,7 +105,10 @@ internal fun summaryOf(setup: HouseholdSetup, catalog: Catalog?, onboarded: Bool
 }
 
 /** The saved household as a [HouseholdSetup] (essentials and cadences read separately). */
-internal fun Household.toSetup(essentials: Set<ProductId>, cadences: Map<ProductId, Int>): HouseholdSetup = HouseholdSetup(
+internal fun Household.toSetup(
+    essentials: Set<ProductId>,
+    cadences: Map<ProductId, Int>,
+): HouseholdSetup = HouseholdSetup(
     adults = profile.adults,
     children = profile.children,
     pets = profile.pets.mapTo(LinkedHashSet()) { it.kind },

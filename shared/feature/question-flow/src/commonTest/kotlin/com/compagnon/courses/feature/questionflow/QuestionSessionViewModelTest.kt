@@ -1,14 +1,22 @@
 package com.compagnon.courses.feature.questionflow
 
 import app.cash.turbine.test
-import com.compagnon.courses.core.model.AddedVia
-import com.compagnon.courses.core.model.Quantity
-import com.compagnon.courses.core.model.UnitCode
 import com.compagnon.courses.core.data.BundledCatalogSource
 import com.compagnon.courses.core.data.HouseholdSetup
+import com.compagnon.courses.core.model.AddedVia
 import com.compagnon.courses.core.model.AgeBand
+import com.compagnon.courses.core.model.Quantity
+import com.compagnon.courses.core.model.UnitCode
 import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.core.testing.SeedCatalog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -18,14 +26,6 @@ import kotlin.test.assertIs
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class QuestionSessionViewModelTest {

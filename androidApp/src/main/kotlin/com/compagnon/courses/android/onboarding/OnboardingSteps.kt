@@ -298,7 +298,13 @@ internal fun HouseholdStep(state: OnboardingUiState.Ready, onEvent: (OnboardingE
  * the image). It « pops » when toggled.
  */
 @Composable
-private fun ToggleTile(text: String, imageKey: String, checked: Boolean, onToggle: () -> Unit, modifier: Modifier = Modifier) {
+private fun ToggleTile(
+    text: String,
+    imageKey: String,
+    checked: Boolean,
+    onToggle: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val ink = if (checked) CompagnonColors.BasilDark else CompagnonColors.Ink
     Row(
         modifier = modifier

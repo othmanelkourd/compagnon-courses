@@ -18,13 +18,13 @@ import com.compagnon.courses.engine.SessionData
 import com.compagnon.courses.engine.SessionId
 import com.compagnon.courses.engine.SessionMode
 import com.compagnon.courses.engine.SessionStats
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.experimental.ExperimentalObjCRefinement
 import kotlin.native.HiddenFromObjC
 import kotlin.time.Clock
 import kotlin.time.Instant
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 /** Everything a session is planned from, and the catalog version it was planned on. */
 data class PlanningSetup(

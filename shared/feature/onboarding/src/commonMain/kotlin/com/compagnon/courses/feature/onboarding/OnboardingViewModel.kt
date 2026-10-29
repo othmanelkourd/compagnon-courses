@@ -15,12 +15,12 @@ import com.compagnon.courses.core.model.ProductId
 import com.compagnon.courses.core.model.format.capitalizedFirst
 import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.engine.SessionContext
-import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * The onboarding « Mon foyer » (`design/maquette/Onboarding-*.dc.html`): four steps (household, diet and
@@ -77,7 +77,8 @@ class OnboardingViewModel(
     private var saved: HouseholdSetup? = null
     private var onboarded = false
     private var draft: Draft? = null
-    private var screen = Screen(if (mode == OnboardingMode.FIRST_RUN) OnboardingStep.WELCOME else OnboardingStep.OVERVIEW, null)
+    private var screen =
+        Screen(if (mode == OnboardingMode.FIRST_RUN) OnboardingStep.WELCOME else OnboardingStep.OVERVIEW, null)
     private var loadedCatalog: Catalog? = null
     private var products: Map<ProductId, Product> = emptyMap()
     private var catalogLoading = false
@@ -352,8 +353,11 @@ class OnboardingViewModel(
         recurringSearch?.cancel()
         screen = screen.copy(addingRecurring = false, recurringQuery = "", recurringResults = emptyList())
         update { current ->
-            if (id in current.cadences) current
-            else current.copy(cadences = current.cadences + (id to nearestCadence(product.market.typicalRepurchaseDays)))
+            if (id in current.cadences) {
+                current
+            } else {
+                current.copy(cadences = current.cadences + (id to nearestCadence(product.market.typicalRepurchaseDays)))
+            }
         }
     }
 
@@ -468,7 +472,9 @@ class OnboardingViewModel(
     private fun resetToSaved() {
         val reference = saved ?: return
         val rhythm = draft?.rhythm
-        draft = reference.toDraft().let { if (rhythm != null && rhythmChoiceOf(it.horizonDays) == RhythmChoice.OTHER) it.copy(rhythm = rhythm) else it }
+        draft = reference.toDraft().let {
+            if (rhythm != null && rhythmChoiceOf(it.horizonDays) == RhythmChoice.OTHER) it.copy(rhythm = rhythm) else it
+        }
         touched.clear()
     }
 
@@ -599,6 +605,7 @@ class OnboardingViewModel(
             hasBaby = babies > 0,
             hasPet = pets.isNotEmpty(),
         )
+
         // Products no longer allowed by the diet (changed after choosing them) are dropped.
         fun allowed(id: ProductId) = products[id]?.let(eligibility::accepts) ?: true
         return HouseholdSetup(

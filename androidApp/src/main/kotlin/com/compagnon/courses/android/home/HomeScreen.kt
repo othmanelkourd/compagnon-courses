@@ -67,10 +67,10 @@ import com.compagnon.courses.feature.catalog.CatalogSyncUiState
 import com.compagnon.courses.feature.lists.ShoppingListUiState
 import com.compagnon.courses.feature.lists.ShoppingListViewModel
 import com.compagnon.courses.feature.onboarding.HouseholdSummaryUi
-import java.time.LocalDate
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+import java.time.LocalDate
 
 /**
  * « Accueil »: « Faire le point » (a question session), « Ma liste » with its count, « Mon foyer » with the

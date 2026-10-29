@@ -42,7 +42,9 @@ class SchemaTest {
         database.shoppingListQueries.insertList("l", null, 0)
         database.shoppingListQueries.insertItem("a", "l", "p", null, 1000, "kilogram", 1, "manual", 0)
         database.shoppingListQueries.insertItem("b", "l", null, "piles", null, null, 2, "manual", 0)
-        assertFailsWith<Exception> { database.shoppingListQueries.insertItem("c", "l", "p2", "both", 1, "piece", 3, "manual", 0) }
+        assertFailsWith<Exception> {
+            database.shoppingListQueries.insertItem("c", "l", "p2", "both", 1, "piece", 3, "manual", 0)
+        }
         assertFailsWith<Exception> { database.shoppingListQueries.insertItem("d", "l", "p3", null, 1000, null, 4, "manual", 0) }
     }
 
@@ -50,7 +52,9 @@ class SchemaTest {
     fun onlyOneOpenLinePerProduct() {
         database.shoppingListQueries.insertList("l", null, 0)
         database.shoppingListQueries.insertItem("a", "l", "p", null, 1000, "kilogram", 1, "manual", 0)
-        assertFailsWith<Exception> { database.shoppingListQueries.insertItem("b", "l", "p", null, 1000, "kilogram", 2, "manual", 0) }
+        assertFailsWith<Exception> {
+            database.shoppingListQueries.insertItem("b", "l", "p", null, 1000, "kilogram", 2, "manual", 0)
+        }
         // A checked (or deleted) line no longer blocks a new one.
         database.shoppingListQueries.setChecked(5, "a")
         database.shoppingListQueries.insertItem("c", "l", "p", null, 1000, "kilogram", 3, "manual", 0)

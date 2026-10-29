@@ -215,7 +215,9 @@ internal fun ShoppingListContent(
                         confirmComplete = false
                         onEvent(ShoppingListEvent.CompleteList)
                     },
-                ) { Text(stringResource(R.string.list_complete_confirm), style = CompagnonType.ButtonText, color = CompagnonColors.Basil) }
+                ) {
+                    Text(stringResource(R.string.list_complete_confirm), style = CompagnonType.ButtonText, color = CompagnonColors.Basil)
+                }
             },
             dismissButton = {
                 TextButton(onClick = { confirmComplete = false }) {
@@ -461,19 +463,21 @@ private fun LoadedList(
                 }
             }
 
-            if (typed.isEmpty()) items(state.sections, key = { "section:${it.categoryId}" }) { section ->
-                SectionBlock(
-                    title = section.title ?: stringResource(R.string.list_section_other),
-                    modifier = blockPadding.then(Modifier.animateItem()),
-                ) {
-                    // A checked line goes down to the end of its section (animation 7), the others close up.
-                    LookaheadScope {
-                        Column {
-                            section.items.forEachIndexed { index, item ->
-                                key(item.id) {
-                                    Column(modifier = Modifier.animateBounds(this@LookaheadScope, boundsTransform = rowMove)) {
-                                        if (index > 0) BlockDivider()
-                                        SwipeToDeleteRow(item = item, onEvent = onEvent)
+            if (typed.isEmpty()) {
+                items(state.sections, key = { "section:${it.categoryId}" }) { section ->
+                    SectionBlock(
+                        title = section.title ?: stringResource(R.string.list_section_other),
+                        modifier = blockPadding.then(Modifier.animateItem()),
+                    ) {
+                        // A checked line goes down to the end of its section (animation 7), the others close up.
+                        LookaheadScope {
+                            Column {
+                                section.items.forEachIndexed { index, item ->
+                                    key(item.id) {
+                                        Column(modifier = Modifier.animateBounds(this@LookaheadScope, boundsTransform = rowMove)) {
+                                            if (index > 0) BlockDivider()
+                                            SwipeToDeleteRow(item = item, onEvent = onEvent)
+                                        }
                                     }
                                 }
                             }

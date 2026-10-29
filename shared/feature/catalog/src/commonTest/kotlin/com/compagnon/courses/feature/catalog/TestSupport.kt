@@ -6,8 +6,8 @@ import com.compagnon.courses.core.data.CatalogScope
 import com.compagnon.courses.core.data.CatalogUpdater
 import com.compagnon.courses.core.database.createDatabase
 import com.compagnon.courses.core.network.CatalogApi
-import com.compagnon.courses.core.testing.createInMemoryDriver
 import com.compagnon.courses.core.network.createHttpClient
+import com.compagnon.courses.core.testing.createInMemoryDriver
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
 import io.ktor.client.engine.mock.respond

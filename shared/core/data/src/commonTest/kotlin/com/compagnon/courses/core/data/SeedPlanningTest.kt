@@ -10,12 +10,12 @@ import com.compagnon.courses.engine.QuestionPlanner
 import com.compagnon.courses.engine.ScoredProduct
 import com.compagnon.courses.engine.SessionMode
 import com.compagnon.courses.engine.Tier
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
 
 /**
  * The budget allocation on the real seed (312 products, FR), cold start, default household
@@ -127,7 +127,8 @@ class SeedPlanningTest {
         val (plan, scored) = data.planFor(HouseholdSetup(adults = 1, diet = Diet.VEGAN))
         println("vegan alone: ${plan.describe()}")
 
-        val forbidden = setOf(DietaryTags.MEAT, DietaryTags.FISH, DietaryTags.LACTOSE, DietaryTags.EGGS, DietaryTags.BABY, DietaryTags.PET)
+        val forbidden =
+            setOf(DietaryTags.MEAT, DietaryTags.FISH, DietaryTags.LACTOSE, DietaryTags.EGGS, DietaryTags.BABY, DietaryTags.PET)
         assertTrue(scored.none { item -> item.product.tags.any { it in forbidden } })
         assertTrue(plan.cards.size >= 4, "only ${plan.cards.size} cards: ${plan.describe()}")
     }
@@ -167,7 +168,13 @@ class SeedPlanningTest {
         val (first, firstScores) = data.planFor(null, seed = 1)
         val others = (2L..6L).map { data.planFor(null, seed = it) }
 
-        assertTrue(others.any { (plan, _) -> plan.cards.map { it.item.productId }.toSet() != first.cards.map { it.item.productId }.toSet() })
+        assertTrue(
+            others.any { (plan, _) ->
+                plan.cards.map {
+                    it.item.productId
+                }.toSet() != first.cards.map { it.item.productId }.toSet()
+            },
+        )
         others.forEach { (_, scores) ->
             assertEquals(firstScores.associate { it.product.id to it.tier }, scores.associate { it.product.id to it.tier })
         }
@@ -183,7 +190,6 @@ class SeedPlanningTest {
         assertEquals(emptySet(), DietaryTags.ALL - tags)
     }
 }
-
 
 private val QuestionPlan.cards: List<PlannedQuestion.Card> get() = questions.filterIsInstance<PlannedQuestion.Card>()
 

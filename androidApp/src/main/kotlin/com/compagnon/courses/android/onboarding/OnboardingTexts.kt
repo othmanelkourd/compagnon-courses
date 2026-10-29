@@ -210,7 +210,9 @@ internal object OnboardingTexts {
     )
 
     /** « 14 produits ». */
-    fun essentialsSummary(summary: HouseholdSummaryUi): UiText = UiText.Plural(R.plurals.household_essentials, summary.essentials)
+    fun essentialsSummary(
+        summary: HouseholdSummaryUi,
+    ): UiText = UiText.Plural(R.plurals.household_essentials, summary.essentials)
 
     /** « Courses chaque semaine · 4 récurrents » (no recurring part when there is none). */
     fun rhythmSummary(summary: HouseholdSummaryUi): UiText = UiText.Joined(

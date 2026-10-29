@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MaxLineLength:SchemaTest.kt:SchemaTest$"INSERT INTO household_product_pref (product_id, never_ask, watch, ask_every_days) VALUES ('milk', 1, 0, 10)"</ID>
+    <ID>MaxLineLength:SchemaTest.kt:SchemaTest$"store_category_order, excluded_tags, updated_at) VALUES (1, 3, '[\"BABY\"]', 'FR', 'METRIC', 14, '[]', "</ID>
+    <ID>MaxLineLength:SchemaTest.kt:SchemaTest$assertFailsWith&lt;Exception&gt; { database.shoppingListQueries.insertItem("d", "l", "p3", null, 1000, null, 4, "manual", 0) }</ID>
+  </CurrentIssues>
+</SmellBaseline>

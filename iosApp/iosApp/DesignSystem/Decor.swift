@@ -93,14 +93,14 @@ struct LeafPattern: View {
         Leaf(x: 180, y: 34, rotation: 28),
         Leaf(x: 118, y: 18, rotation: -24, scale: 0.7),
         Leaf(x: 214, y: 108, rotation: 64, scale: 0.8),
-        Leaf(x: 150, y: 90, rotation: -8, scale: 0.55),
+        Leaf(x: 150, y: 90, rotation: -8, scale: 0.55)
     ], color: Palette.surface.opacity(0.12))
 
     /// The band of the product card (306 × 112, from the top left corner), Basilic at 10 %.
     static let cardBand = LeafPattern(size: CGSize(width: 306, height: 112), leaves: [
         Leaf(x: 36, y: 30, rotation: -30),
         Leaf(x: 270, y: 78, rotation: 40, scale: 0.8),
-        Leaf(x: 250, y: 22, rotation: -60, scale: 0.55),
+        Leaf(x: 250, y: 22, rotation: -60, scale: 0.55)
     ], color: Palette.basil.opacity(0.10))
 
     /// The dark aisle card (350 × 200, from the top right corner), white at 8 %.
@@ -108,14 +108,14 @@ struct LeafPattern: View {
         Leaf(x: 300, y: 40, rotation: 30),
         Leaf(x: 240, y: 120, rotation: -20, scale: 0.75),
         Leaf(x: 330, y: 150, rotation: 70, scale: 0.6),
-        Leaf(x: 200, y: 30, rotation: -50, scale: 0.5),
+        Leaf(x: 200, y: 30, rotation: -50, scale: 0.5)
     ], color: Palette.surface.opacity(0.08))
 
     /// The welcome screen (250 × 230, 40 below the top right corner), Basilic at 9 %.
     static let welcome = LeafPattern(size: CGSize(width: 250, height: 230), leaves: [
         Leaf(x: 40, y: 40, rotation: -30),
         Leaf(x: 222, y: 196, rotation: 50, scale: 0.8),
-        Leaf(x: 120, y: 210, rotation: -70, scale: 0.6),
+        Leaf(x: 120, y: 210, rotation: -70, scale: 0.6)
     ], color: Palette.basil.opacity(0.09))
 }
 

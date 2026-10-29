@@ -9,6 +9,8 @@ import com.compagnon.courses.engine.SessionMode
 import com.compagnon.courses.engine.SessionReducer
 import com.compagnon.courses.engine.SessionState
 import com.compagnon.courses.engine.Transition
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -16,8 +18,6 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
 
 class QuestionRepositoryTest {
     private val reducer = SessionReducer()
@@ -140,7 +140,12 @@ class QuestionRepositoryTest {
         assertNull(data.questions.openSession())
         val yes = committing.session.answers.first { it.kind == AnswerKind.YES && it.subject is AnswerSubject.Item }
         val yesId = (yes.subject as AnswerSubject.Item).productId
-        assertEquals(yes.quantity, data.database.householdQueries.selectPref(yesId.value).executeAsOne().usual_qty_milli?.let { com.compagnon.courses.core.model.Quantity(it, yes.quantity!!.unit) })
+        assertEquals(
+            yes.quantity,
+            data.database.householdQueries.selectPref(yesId.value).executeAsOne().usual_qty_milli?.let {
+                com.compagnon.courses.core.model.Quantity(it, yes.quantity!!.unit)
+            },
+        )
         noProduct?.let { id ->
             if (committing.session.answers.any { it.kind == AnswerKind.NO && it.subject == AnswerSubject.Item(id) }) {
                 val stats = data.database.householdQueries.selectStats(id.value).executeAsOne()
@@ -161,7 +166,9 @@ class QuestionRepositoryTest {
         while (transition.state is SessionState.Meta) {
             val meta = transition.state as SessionState.Meta
             transition = reducer.reduce(meta, SessionEvent.MetaAnswered(meta.question.key, meta.question.prefilled))
-            transition.effects.filterIsInstance<SessionEffect.PersistAnswer>().forEach { answers += AnswerRecord(it.answer, false, data.clock.now) }
+            transition.effects.filterIsInstance<SessionEffect.PersistAnswer>().forEach {
+                answers += AnswerRecord(it.answer, false, data.clock.now)
+            }
         }
         val abort = reducer.reduce(transition.state, SessionEvent.Abort)
         val stats = assertIs<SessionEffect.Abandon>(abort.effects.single()).stats

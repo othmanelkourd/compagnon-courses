@@ -4,7 +4,6 @@ import app.cash.turbine.test
 import com.compagnon.courses.core.data.CatalogScope
 import com.compagnon.courses.core.network.HEADER_PLATFORM
 import com.compagnon.courses.core.network.NetworkConfig
-import com.compagnon.courses.core.network.createHttpClient
 import com.compagnon.courses.core.testing.MockCatalogServer
 import com.compagnon.courses.feature.catalog.CatalogStatusUiState
 import com.compagnon.courses.feature.lists.ShoppingListUiState
@@ -15,13 +14,6 @@ import com.compagnon.courses.feature.onboarding.OnboardingUiState
 import com.compagnon.courses.feature.questionflow.QuestionUiState
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
-import kotlin.coroutines.cancellation.CancellationException
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
-import kotlin.test.assertNotSame
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,8 +24,14 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.koin.core.context.stopKoin
-import org.koin.dsl.module
 import org.koin.mp.KoinPlatform
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertNotSame
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class KoinIosTest {

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.compagnon.courses.core.data.CatalogRepository
 import com.compagnon.courses.core.data.HouseholdRepository
-import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 sealed interface AppGateUiState {
     /** Reading the household: a plain background. */

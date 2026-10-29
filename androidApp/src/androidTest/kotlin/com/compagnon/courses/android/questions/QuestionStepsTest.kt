@@ -144,7 +144,8 @@ class QuestionStepsTest {
 
     @Test
     fun aMetaQuickAnswerIsOneTap() {
-        val question = MetaQuestionUi(MetaQuestionKind.HORIZON_DAYS, value = 7, min = 1, max = 31, choices = listOf(3, 7, 14))
+        val question =
+            MetaQuestionUi(MetaQuestionKind.HORIZON_DAYS, value = 7, min = 1, max = 31, choices = listOf(3, 7, 14))
         setState(QuestionUiState.Meta(question, QuestionProgress(0, 10), canUndo = false))
 
         composeRule.onNodeWithText(composeRule.string(R.string.meta_horizon_title)).assertIsDisplayed()
@@ -169,7 +170,8 @@ class QuestionStepsTest {
 
     @Test
     fun skippingAMetaQuestionKeepsItsPrefilledValue() {
-        val question = MetaQuestionUi(MetaQuestionKind.PERSONS, value = 2, min = 1, max = 12, choices = listOf(1, 2, 3, 4, 5, 6))
+        val question =
+            MetaQuestionUi(MetaQuestionKind.PERSONS, value = 2, min = 1, max = 12, choices = listOf(1, 2, 3, 4, 5, 6))
         setState(QuestionUiState.Meta(question, QuestionProgress(1, 10), canUndo = true))
 
         composeRule.onNode(hasContentDescription(composeRule.string(R.string.meta_increase))).performClick()

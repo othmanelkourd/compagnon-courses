@@ -49,12 +49,12 @@ import com.compagnon.courses.android.ui.theme.CompagnonMotion
 import com.compagnon.courses.android.ui.theme.CompagnonShapes
 import com.compagnon.courses.android.ui.theme.CompagnonType
 import com.compagnon.courses.android.ui.theme.LocalReduceMotion
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.roundToInt
 
 /** Where a swipeable card rests: thrown left (no), in the middle, or thrown right (yes). */
 internal enum class SwipeAnswer { NO, UNDECIDED, YES }
@@ -221,8 +221,14 @@ internal fun SwipeableAnswerCard(
             )
             .semantics {
                 customActions = listOf(
-                    CustomAccessibilityAction(yesLabel) { state.answer(yes = true) { currentOnYes() }; true },
-                    CustomAccessibilityAction(noLabel) { state.answer(yes = false) { currentOnNo() }; true },
+                    CustomAccessibilityAction(yesLabel) {
+                        state.answer(yes = true) { currentOnYes() }
+                        true
+                    },
+                    CustomAccessibilityAction(noLabel) {
+                        state.answer(yes = false) { currentOnNo() }
+                        true
+                    },
                 )
             }
             .testTag(SWIPE_CARD_TAG),

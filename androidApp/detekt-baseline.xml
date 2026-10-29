@@ -1,0 +1,161 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:CardStep.kt:@Composable private fun ProductCardBody</ID>
+    <ID>CyclomaticComplexMethod:Controls.kt:@Composable internal fun QuantityChoiceTile</ID>
+    <ID>CyclomaticComplexMethod:IllustrationRes.kt:@DrawableRes fun illustrationRes: Int?</ID>
+    <ID>CyclomaticComplexMethod:OnboardingScreen.kt:@Composable internal fun OnboardingContent</ID>
+    <ID>CyclomaticComplexMethod:QuestionTexts.kt:QuestionTexts$fun reason: UiText</ID>
+    <ID>CyclomaticComplexMethod:ShoppingListScreen.kt:@Composable private fun LoadedList</ID>
+    <ID>CyclomaticComplexMethod:SwipeableAnswerCard.kt:@Composable internal fun SwipeableAnswerCard</ID>
+    <ID>LongMethod:IllustrationRes.kt:@DrawableRes fun illustrationRes: Int?</ID>
+    <ID>MatchingDeclarationName:BigChoiceQuestion.kt:BigChoice</ID>
+    <ID>MatchingDeclarationName:Color.kt:CompagnonColors</ID>
+    <ID>MatchingDeclarationName:Motion.kt:CompagnonMotion</ID>
+    <ID>MatchingDeclarationName:QuestionStateExtensions.kt:ProgressPosition</ID>
+    <ID>MatchingDeclarationName:SearchField.kt:FieldIcon</ID>
+    <ID>MaxLineLength:AppIcons.kt:AppIcons$lineIcon("Lock", "M7 11h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z", "M8 11V8a4 4 0 0 1 8 0v3")</ID>
+    <ID>MaxLineLength:Blocks.kt:/** « Bloc de liste »: Surface, Trait border, radius 20 (24 for the onboarding blocks); rows separated by [BlockDivider]. */</ID>
+    <ID>MaxLineLength:Buttons.kt:AnimatedCounter(text = text, count = count, style = CompagnonType.ButtonPrimary, color = color, textAlign = TextAlign.Center)</ID>
+    <ID>MaxLineLength:Buttons.kt:if (leadingIcon != null) Icon(leadingIcon, contentDescription = null, tint = color, modifier = Modifier.size(iconStroke))</ID>
+    <ID>MaxLineLength:Buttons.kt:if (leadingIcon != null) Icon(leadingIcon, contentDescription = null, tint = tint, modifier = Modifier.size(18.dp))</ID>
+    <ID>MaxLineLength:Buttons.kt:if (trailingIcon != null) Icon(trailingIcon, contentDescription = null, tint = color, modifier = Modifier.size(iconStroke))</ID>
+    <ID>MaxLineLength:Buttons.kt:if (trailingIcon != null) Icon(trailingIcon, contentDescription = null, tint = tint, modifier = Modifier.size(16.dp))</ID>
+    <ID>MaxLineLength:CardStep.kt:Icon(AppIcons.ArrowBack, contentDescription = null, tint = CompagnonColors.InkSoft, modifier = Modifier.size(14.dp))</ID>
+    <ID>MaxLineLength:CardStep.kt:Icon(AppIcons.ArrowForward, contentDescription = null, tint = CompagnonColors.InkSoft, modifier = Modifier.size(14.dp))</ID>
+    <ID>MaxLineLength:CardStep.kt:Illustration(key = imageKey, size = size.image, groundShadow = true, pop = pop, popDelayMillis = if (pop) 160 else 0)</ID>
+    <ID>MaxLineLength:CardStep.kt:Text(text = stringResource(R.string.options_hint), style = CompagnonType.Secondary, color = CompagnonColors.InkSoft)</ID>
+    <ID>MaxLineLength:CardStep.kt:contentDescription = stringResource(R.string.answer_yes_with_quantity, preset.label)</ID>
+    <ID>MaxLineLength:CardStep.kt:val answerYes = { quantity: QuantityValue? -&gt; cardState.answer(yes = true) { onEvent(QuestionEvent.Yes(quantity)) } }</ID>
+    <ID>MaxLineLength:CardStepTest.kt:CardStepTest$composeRule.onNodeWithContentDescription(composeRule.string(R.string.question_progress_spoken, 8, 12)).assertExists()</ID>
+    <ID>MaxLineLength:CardStepTest.kt:CardStepTest$composeRule.onNodeWithText(composeRule.string(R.string.card_question, "du lait demi-écrémé")).assertIsDisplayed()</ID>
+    <ID>MaxLineLength:CardStepTest.kt:CardStepTest$state: QuestionUiState.Card = QuestionUiState.Card(milkCard, QuestionProgress(7, 12), canUndo = true, nextImageKey = "egg")</ID>
+    <ID>MaxLineLength:CatalogFooter.kt:Icon(AppIcons.Check, contentDescription = null, tint = CompagnonColors.Basil, modifier = Modifier.size(16.dp))</ID>
+    <ID>MaxLineLength:CatalogFooter.kt:Icon(AppIcons.Info, contentDescription = null, tint = CompagnonColors.InkSoft, modifier = Modifier.size(16.dp))</ID>
+    <ID>MaxLineLength:CatalogFooter.kt:Icon(AppIcons.Info, contentDescription = null, tint = CompagnonColors.TomatoText, modifier = Modifier.size(16.dp))</ID>
+    <ID>MaxLineLength:CatalogFooter.kt:color = if (footer.tone == CatalogFooterTone.PROBLEM) CompagnonColors.TomatoText else CompagnonColors.InkSoft</ID>
+    <ID>MaxLineLength:CatalogFooter.kt:pluralStringResource(R.plurals.catalog_product_count, sync.productCount, formatCount(sync.productCount, locale))</ID>
+    <ID>MaxLineLength:CatalogFormatting.kt:sync.localVersion == null -&gt; CatalogFooterText(CatalogFooterTone.SYNCING, R.string.catalog_local_none, withProducts = false)</ID>
+    <ID>MaxLineLength:CatalogSyncTextTest.kt:CatalogSyncTextTest$.</ID>
+    <ID>MaxLineLength:Controls.kt:drawRoundRect(CompagnonColors.Basil, size = size.copy(width = width), cornerRadius = CornerRadius(size.height / 2f))</ID>
+    <ID>MaxLineLength:Controls.kt:first &amp;&amp; fillOnAppear -&gt; fill.animateTo(target, CompagnonMotion.standard(CompagnonMotion.AMPLE, delayMillis = 300))</ID>
+    <ID>MaxLineLength:Controls.kt:width = 36.dp</ID>
+    <ID>MaxLineLength:Controls.kt:width = 44.dp</ID>
+    <ID>MaxLineLength:Decor.kt:anchor.center = screen.localPositionOf(coordinates, Offset(coordinates.size.width / 2f, coordinates.size.height / 2f))</ID>
+    <ID>MaxLineLength:Decor.kt:colors = listOf(CompagnonColors.BasilLight.copy(alpha = alpha), CompagnonColors.BasilLight.copy(alpha = 0f))</ID>
+    <ID>MaxLineLength:HomeContentTest.kt:HomeContentTest$composeRule.onNode(hasText(footerReady(), substring = true) and hasClickLabel(composeRule.string(R.string.catalog_sync_now)))</ID>
+    <ID>MaxLineLength:HomeContentTest.kt:HomeContentTest$composeRule.onNodeWithText(composeRule.string(R.string.catalog_footer_offline, products()), substring = true).assertExists()</ID>
+    <ID>MaxLineLength:HomeContentTest.kt:HomeContentTest$return composeRule.activity.resources.getQuantityString(R.plurals.catalog_product_count, 312, formatCount(312, locale))</ID>
+    <ID>MaxLineLength:HomeScreen.kt:.</ID>
+    <ID>MaxLineLength:HomeScreen.kt:HouseholdCard(household = household, onClick = onOpenHousehold, modifier = Modifier.riseIn(index = 3))</ID>
+    <ID>MaxLineLength:HomeScreen.kt:Icon(AppIcons.ChevronRight, contentDescription = null, tint = CompagnonColors.InkMuted, modifier = Modifier.size(20.dp))</ID>
+    <ID>MaxLineLength:IllustrationTest.kt:IllustrationTest$LeafPattern(leaves = listOf(PatternLeaf(20f, 20f, 30f)), width = 40.dp, height = 40.dp, color = Color.Black)</ID>
+    <ID>MaxLineLength:IllustrationTest.kt:IllustrationTest$SuggestionRow(name = "Baguette", reason = null, imageKey = "baguette_bread", checked = false, onToggle = {}) {}</ID>
+    <ID>MaxLineLength:IllustrationTest.kt:IllustrationTest$badge = HeroBadge(size = 44.dp, border = 4.dp, tick = 22.dp, offset = DpOffset((-4).dp, (-6).dp))</ID>
+    <ID>MaxLineLength:ListSteps.kt:Box</ID>
+    <ID>MaxLineLength:ListSteps.kt:ChipFlow(essentials.results, onToggle = { onEvent(OnboardingEvent.ToggleEssential(it)) })</ID>
+    <ID>MaxLineLength:ListSteps.kt:Icon(AppIcons.Add, contentDescription = null, tint = CompagnonColors.Basil, modifier = Modifier.size(20.dp))</ID>
+    <ID>MaxLineLength:ListSteps.kt:Icon(AppIcons.Close, contentDescription = null, tint = CompagnonColors.InkMuted, modifier = Modifier.size(18.dp))</ID>
+    <ID>MaxLineLength:ListSteps.kt:Text(text = row.name, style = CompagnonType.ListRow, color = CompagnonColors.Ink, modifier = Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:ListSteps.kt:essentials.catalogMissing -&gt; item(key = "missing") { CatalogMissing(onRetry = { onEvent(OnboardingEvent.Retry) }) }</ID>
+    <ID>MaxLineLength:ListSteps.kt:modifier = Modifier.padding(start = CompagnonSpacing.Screen, end = CompagnonSpacing.Screen, top = 24.dp)</ID>
+    <ID>MaxLineLength:ListSteps.kt:pluralStringResource(R.plurals.onboarding_essentials_continue, essentials.checkedCount, essentials.checkedCount)</ID>
+    <ID>MaxLineLength:ListSteps.kt:style = CompagnonType.Help.copy(fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold)</ID>
+    <ID>MaxLineLength:MetaStep.kt:onStep = { increment -&gt; value = (value + if (increment) 1 else -1).coerceIn(question.min, question.max) }</ID>
+    <ID>MaxLineLength:MetaStep.kt:var value by rememberSaveable(question.kind) { mutableIntStateOf(question.value.coerceIn(question.min, question.max)) }</ID>
+    <ID>MaxLineLength:OnboardingFixtures.kt:OnboardingFixtures$household = HouseholdStepUi(adults = 2, babies = 1, children = 1, teens = 0, pets = listOf(PetChoice.CAT), maxMembers = 12)</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt:.</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt:BackHandler</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt:Column</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt:Crossfade</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt:Icon(AppIcons.Info, contentDescription = null, tint = CompagnonColors.TomatoText, modifier = Modifier.size(18.dp))</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt:OnboardingStep.RECAP -&gt; RecapStep(step, onEvent, celebrate = !celebrated, onCelebrated = { celebrated = true })</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt:TextActionButton(text = stringResource(R.string.action_retry), onClick = onRetry, color = CompagnonColors.TomatoText)</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt:horizontalArrangement = Arrangement.spacedBy(6.dp, if (centered) Alignment.CenterHorizontally else Alignment.Start)</ID>
+    <ID>MaxLineLength:OnboardingSteps.kt:.</ID>
+    <ID>MaxLineLength:OnboardingSteps.kt:DietOption(diet = diet, selected = diet == state.diet, onClick = { onEvent(OnboardingEvent.SelectDiet(diet)) })</ID>
+    <ID>MaxLineLength:OnboardingSteps.kt:PrivacyNote(text = stringResource(R.string.onboarding_diet_private), modifier = Modifier.padding(bottom = 14.dp))</ID>
+    <ID>MaxLineLength:OnboardingSteps.kt:PrivacyNote(text = stringResource(R.string.onboarding_private), modifier = Modifier.padding(bottom = 14.dp))</ID>
+    <ID>MaxLineLength:OnboardingSteps.kt:Text(text = stringResource(OnboardingTexts.avoidLabel(option.choice)), style = CompagnonType.ListRow)</ID>
+    <ID>MaxLineLength:OnboardingSteps.kt:Text(text = stringResource(OnboardingTexts.dietHint(diet)), style = CompagnonType.Caption, color = CompagnonColors.InkSoft)</ID>
+    <ID>MaxLineLength:OnboardingSteps.kt:Text(text = stringResource(OnboardingTexts.sectionTitle(section)), style = CompagnonType.ListRow)</ID>
+    <ID>MaxLineLength:OnboardingSteps.kt:Text(text = stringResource(R.string.onboarding_welcome_text), style = CompagnonType.Body, color = CompagnonColors.InkSoft)</ID>
+    <ID>MaxLineLength:OnboardingSteps.kt:text = pluralStringResource(R.plurals.onboarding_household_continue, household.persons, household.persons)</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$assertEquals(listOf(OnboardingEvent.RemoveRecurring("baguette"), OnboardingEvent.AddingRecurring(open = true)), events)</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$assertEquals(listOf(OnboardingEvent.ToggleAvoid(AvoidChoice.GLUTEN), OnboardingEvent.NothingToAvoid), events)</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$assertEquals(listOf(OnboardingEvent.ToggleEssential("tomate"), OnboardingEvent.ExpandAisle("fruits-legumes")), events)</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNode(hasText(composeRule.string(R.string.avoid_alcohol)) and isToggleable()).assertIsOn().assertIsNotEnabled()</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNode(hasText(composeRule.string(R.string.avoid_gluten)) and isToggleable()).assertIsOff().performClick()</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNode(hasText(composeRule.string(R.string.diet_halal_hint)), useUnmergedTree = true).assertIsDisplayed()</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNode(hasText(composeRule.string(R.string.onboarding_pet_cat)) and isToggleable(), useUnmergedTree = false)</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNodeWithContentDescription(composeRule.string(R.string.onboarding_member_less, teens)).assertIsNotEnabled()</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNodeWithContentDescription(composeRule.string(R.string.onboarding_member_more, babies)).performClick()</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNodeWithContentDescription(composeRule.string(R.string.onboarding_recurring_remove, "Baguette")).performClick()</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNodeWithText(composeRule.string(R.string.onboarding_avoid_locked, halal), substring = true).assertIsDisplayed()</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.runOnIdle { assertEquals(listOf(OnboardingEvent.SetCadence("baguette", CadenceChoice.MONTH)), events) }</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$listOf(OnboardingEvent.SelectRhythm(RhythmChoice.MONTH), OnboardingEvent.StepRhythm(increment = true), OnboardingEvent.Next)</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$setState(ready(OnboardingStep.ESSENTIALS, essentials = essentialsStep.copy(aisles = emptyList(), checkedCount = 0, catalogMissing = true)))</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$setState(ready(OnboardingStep.RECURRING, recurring = OnboardingFixtures.recurringStep.copy(rows = OnboardingFixtures.recurringStep.rows.take(1))))</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$val babies = composeRule.string(R.string.onboarding_babies).lowercase(composeRule.activity.resources.configuration.locales[0])</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$val halal = composeRule.string(R.string.diet_halal).lowercase(composeRule.activity.resources.configuration.locales[0])</ID>
+    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$val teens = composeRule.string(R.string.onboarding_teens).lowercase(composeRule.activity.resources.configuration.locales[0])</ID>
+    <ID>MaxLineLength:OnboardingTexts.kt:OnboardingTexts$/** « Continuer · 1 à éviter » when the person checked a box themselves (not the ones of the diet), else « Continuer ». */</ID>
+    <ID>MaxLineLength:OnboardingTexts.kt:OnboardingTexts$return if (chosen &gt; 0) UiText.Res(R.string.onboarding_avoid_continue, listOf(chosen)) else UiText.Res(R.string.onboarding_continue)</ID>
+    <ID>MaxLineLength:OnboardingTextsTest.kt:OnboardingTextsTest$UiText.Joined(listOf(UiText.Res(R.string.household_rhythm_week), UiText.Plural(R.plurals.household_recurring, 4)))</ID>
+    <ID>MaxLineLength:OnboardingTextsTest.kt:OnboardingTextsTest$assertEquals(OnboardingTexts.foodSummary(summary), OnboardingTexts.sectionSummary(HouseholdSection.FOOD, summary))</ID>
+    <ID>MaxLineLength:OnboardingTextsTest.kt:OnboardingTextsTest$assertEquals(OnboardingTexts.householdSummary(summary), OnboardingTexts.sectionSummary(HouseholdSection.HOUSEHOLD, summary))</ID>
+    <ID>MaxLineLength:OnboardingTextsTest.kt:OnboardingTextsTest$assertEquals(OnboardingTexts.rhythmSummary(summary), OnboardingTexts.sectionSummary(HouseholdSection.RHYTHM, summary))</ID>
+    <ID>MaxLineLength:OnboardingTextsTest.kt:OnboardingTextsTest$assertEquals(UiText.Plural(R.plurals.household_essentials, 14), OnboardingTexts.sectionSummary(HouseholdSection.ESSENTIALS, summary))</ID>
+    <ID>MaxLineLength:QuestionStateExtensionsTest.kt:QuestionStateExtensionsTest$QuestionUiState.GateItems(CategoryGateUi("menage", "Entretien", null, 4, "broom"), emptyList(), 0, progress, false)</ID>
+    <ID>MaxLineLength:QuestionStepsTest.kt:QuestionStepsTest$QuestionnaireContent(state = state, onEvent = { events += it }, onClose = {}, onOpenList = { openedList++ })</ID>
+    <ID>MaxLineLength:QuestionStepsTest.kt:QuestionStepsTest$composeRule.onNodeWithText(composeRule.overline(composeRule.string(R.string.origin_suggested))).assertIsDisplayed()</ID>
+    <ID>MaxLineLength:QuestionStepsTest.kt:QuestionStepsTest$composeRule.onNodeWithText(composeRule.string(R.string.meta_continue, composeRule.plural(R.plurals.meta_guests, 3))).performClick()</ID>
+    <ID>MaxLineLength:QuestionStepsTest.kt:QuestionStepsTest$composeRule.runOnIdle { assertEquals(listOf(QuestionEvent.ToggleItem("pain"), QuestionEvent.ConfirmItems), events) }</ID>
+    <ID>MaxLineLength:QuestionStepsTest.kt:QuestionStepsTest$listOf(QuestionEvent.AnswerGate(yes = true), QuestionEvent.AnswerGate(yes = false), QuestionEvent.AnswerGate(yes = false))</ID>
+    <ID>MaxLineLength:QuestionStepsTest.kt:QuestionStepsTest$setState(QuestionUiState.Gate(cleaningGate.copy(question = "Des produits ménagers ?"), progress, canUndo = true))</ID>
+    <ID>MaxLineLength:QuestionStepsTest.kt:QuestionStepsTest$setState(QuestionUiState.Review(reviewItems, "pât", listOf(pastaResult), QuestionProgress(10, 10), canUndo = true))</ID>
+    <ID>MaxLineLength:QuestionTexts.kt:QuestionTexts$kind == MetaQuestionKind.GUESTS &amp;&amp; value == 0 -&gt; MetaChoiceTexts(UiText.Res(R.string.meta_guests_none), unit = null)</ID>
+    <ID>MaxLineLength:QuestionTexts.kt:QuestionTexts$listOf(UiText.Plural(R.plurals.reason_due_every, interval), UiText.Plural(R.plurals.reason_due_last_short, days))</ID>
+    <ID>MaxLineLength:QuestionTexts.kt:QuestionTexts$reason.householdSize?.let { UiText.Plural(R.plurals.reason_prior_household, it) } ?: UiText.Res(R.string.reason_prior)</ID>
+    <ID>MaxLineLength:QuestionTexts.kt:QuestionTexts$reason.weeksSinceLast?.let { UiText.Plural(R.plurals.reason_radar_weeks, it) } ?: UiText.Res(R.string.reason_radar)</ID>
+    <ID>MaxLineLength:QuestionTextsTest.kt:QuestionTextsTest$CategoryGateUi(categoryId = "entretien", name = "Entretien", question = null, productCount = 12, imageKey = "broom")</ID>
+    <ID>MaxLineLength:QuestionTextsTest.kt:QuestionTextsTest$assertEquals(CardBadge(R.string.card_badge_radar, watch = false), QuestionTexts.cardBadge(card.copy(kind = ProductCardKind.RADAR)))</ID>
+    <ID>MaxLineLength:QuestionTextsTest.kt:QuestionTextsTest$assertEquals(CardBadge(R.string.card_badge_watch, watch = true), QuestionTexts.cardBadge(card.copy(kind = ProductCardKind.WATCH)))</ID>
+    <ID>MaxLineLength:QuestionTextsTest.kt:QuestionTextsTest$assertEquals(MetaChoiceTexts(UiText.Res(R.string.meta_guests_none), unit = null), QuestionTexts.metaChoice(MetaQuestionKind.GUESTS, 0))</ID>
+    <ID>MaxLineLength:QuestionTextsTest.kt:QuestionTextsTest$assertEquals(UiText.Res(R.string.reason_cadence_month), QuestionTexts.reason(ReasonUi(ReasonKind.CADENCE, intervalDays = 30)))</ID>
+    <ID>MaxLineLength:QuestionTextsTest.kt:QuestionTextsTest$assertEquals(UiText.Res(R.string.reason_cadence_week), QuestionTexts.reason(ReasonUi(ReasonKind.CADENCE, intervalDays = 7)))</ID>
+    <ID>MaxLineLength:QuestionnaireScreen.kt:.</ID>
+    <ID>MaxLineLength:QuestionnaireScreen.kt:Text(stringResource(R.string.action_cancel), style = CompagnonType.ButtonText, color = CompagnonColors.Ink)</ID>
+    <ID>MaxLineLength:QuestionnaireScreen.kt:badge = HeroBadge(size = 44.dp, border = 4.dp, tick = 22.dp, offset = DpOffset((-4).dp, (-6).dp))</ID>
+    <ID>MaxLineLength:QuestionnaireScreen.kt:text = { Text(stringResource(R.string.question_end_questions), style = CompagnonType.ListRow) }</ID>
+    <ID>MaxLineLength:ReviewStep.kt:Icon(AppIcons.Check, contentDescription = null, tint = CompagnonColors.Basil, modifier = Modifier.size(18.dp))</ID>
+    <ID>MaxLineLength:ReviewStep.kt:ListBlock</ID>
+    <ID>MaxLineLength:ReviewStep.kt:Row</ID>
+    <ID>MaxLineLength:ReviewStep.kt:modifier = Modifier.padding(start = CompagnonSpacing.Block, end = CompagnonSpacing.Block, top = 16.dp)</ID>
+    <ID>MaxLineLength:ReviewStep.kt:modifier = Modifier.padding(start = CompagnonSpacing.Screen, end = CompagnonSpacing.Screen, top = 16.dp)</ID>
+    <ID>MaxLineLength:SearchField.kt:Icon(AppIcons.Close, contentDescription = null, tint = CompagnonColors.InkSoft, modifier = Modifier.size(18.dp))</ID>
+    <ID>MaxLineLength:SearchField.kt:Text(text = placeholder, style = CompagnonType.Body, color = CompagnonColors.InkMuted, maxLines = 1)</ID>
+    <ID>MaxLineLength:ShoppingListContentTest.kt:ShoppingListContentTest$"1"</ID>
+    <ID>MaxLineLength:ShoppingListContentTest.kt:ShoppingListContentTest$ListItemUi("2", "Beurre doux", "250 g", checked = true, productId = "beurre", isFreeText = false, imageKey = "butter")</ID>
+    <ID>MaxLineLength:ShoppingListContentTest.kt:ShoppingListContentTest$searchResults = listOf(ProductSuggestionUi(productId = "pates", name = "Pâtes", quantityLabel = "500 g", imageKey = "spaghetti"))</ID>
+    <ID>MaxLineLength:ShoppingListScreen.kt:.</ID>
+    <ID>MaxLineLength:ShoppingListScreen.kt:Column</ID>
+    <ID>MaxLineLength:ShoppingListScreen.kt:CompagnonIconButton(icon = AppIcons.ChevronLeft, contentDescription = stringResource(R.string.done_back_home), onClick = onBack)</ID>
+    <ID>MaxLineLength:ShoppingListScreen.kt:Icon(AppIcons.Info, contentDescription = null, tint = CompagnonColors.TomatoText, modifier = Modifier.size(36.dp))</ID>
+    <ID>MaxLineLength:ShoppingListScreen.kt:ListBlock</ID>
+    <ID>MaxLineLength:ShoppingListScreen.kt:Text(stringResource(R.string.action_cancel), style = CompagnonType.ButtonText, color = CompagnonColors.Ink)</ID>
+    <ID>MaxLineLength:ShoppingListScreen.kt:Text(stringResource(R.string.list_complete_confirm), style = CompagnonType.ButtonText, color = CompagnonColors.Basil)</ID>
+    <ID>MaxLineLength:ShoppingListScreen.kt:currentOnEvent(if (result == SnackbarResult.ActionPerformed) ShoppingListEvent.Undo else ShoppingListEvent.DismissUndo)</ID>
+    <ID>MaxLineLength:SummarySteps.kt:.</ID>
+    <ID>MaxLineLength:SummarySteps.kt:Icon(AppIcons.ChevronRight, contentDescription = null, tint = CompagnonColors.InkMuted, modifier = Modifier.size(20.dp))</ID>
+    <ID>MaxLineLength:SummarySteps.kt:Text(text = stringResource(R.string.household_text), style = CompagnonType.BodyCompact, color = CompagnonColors.InkSoft)</ID>
+    <ID>MaxLineLength:SummarySteps.kt:Text(text = stringResource(R.string.onboarding_recap_text), style = CompagnonType.Body, color = CompagnonColors.InkSoft)</ID>
+    <ID>MaxLineLength:SummarySteps.kt:text = stringResource(if (state.saving) R.string.onboarding_saving else R.string.onboarding_start_session)</ID>
+    <ID>MaxLineLength:SwipeableAnswerCard.kt:.</ID>
+    <ID>TooManyFunctions:Blocks.kt:com.compagnon.courses.android.ui.components.Blocks.kt</ID>
+    <ID>TooManyFunctions:CardStep.kt:com.compagnon.courses.android.questions.CardStep.kt</ID>
+    <ID>TooManyFunctions:OnboardingTexts.kt:OnboardingTexts</ID>
+    <ID>TooManyFunctions:QuestionTexts.kt:QuestionTexts</ID>
+  </CurrentIssues>
+</SmellBaseline>

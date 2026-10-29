@@ -7,6 +7,10 @@ kotlin = "2.4.20"
 agp = "9.2.1"
 skie = "0.10.15"
 mokkery = "3.5.1"
+# Code coverage (engine: >= 90 % of lines, V0 exit criterion).
+kover = "0.9.11"
+# Lint: detekt 2 (1.23.x stops at Kotlin 2.0.21) with the ktlint rules (wrapper). Alpha, does not block the build.
+detekt = "2.0.0-alpha.6"
 
 # Android SDK levels (read by the build-logic convention plugins).
 # compileSdk 37: Compose 1.12 (BOM 2026.09.00), lifecycle-*-compose 2.11 and OkHttp 5.5 (Ktor 3.6) require it
@@ -59,6 +63,8 @@ smiley4-schemaKenerator = "2.6.0"
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-composeCompilerGradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+detekt-gradlePlugin = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+detekt-rules-ktlintWrapper = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
 
 # --- Kotlin ---
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -169,6 +175,8 @@ android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.
 skie = { id = "co.touchlab.skie", version.ref = "skie" }
 mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 
 # Convention plugins from build-logic (no version: they come from the included build)
 compagnon-kmp-library = { id = "compagnon.kmp.library" }

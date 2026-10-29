@@ -19,7 +19,6 @@ import com.compagnon.courses.core.model.format.QuantityFormatter
 import com.compagnon.courses.core.model.format.capitalizedFirst
 import com.compagnon.courses.core.model.illustration.Illustrations
 import com.compagnon.courses.engine.QuantityAdvisor
-import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +26,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * The active shopping list: items grouped by category in the household's store order, check / uncheck,
@@ -153,7 +153,13 @@ class ShoppingListViewModel(
             try {
                 block()
                 local.value = local.value.copy(
-                    undo = if (undo != null) undo else if (clearsUndo) null else local.value.undo,
+                    undo = if (undo != null) {
+                        undo
+                    } else if (clearsUndo) {
+                        null
+                    } else {
+                        local.value.undo
+                    },
                     error = null,
                 )
             } catch (e: CancellationException) {
@@ -171,7 +177,8 @@ class ShoppingListViewModel(
         val formatter = QuantityFormatter(units, catalog?.locale ?: DEFAULT_LOCALE)
         val products = catalog?.products?.associateBy { it.id }.orEmpty()
         val categories = catalog?.categories.orEmpty()
-        val order = storeOrder(categories.sortedWith(compareBy({ it.position }, { it.id.value })).map { it.id }, snapshot.household)
+        val order =
+            storeOrder(categories.sortedWith(compareBy({ it.position }, { it.id.value })).map { it.id }, snapshot.household)
         val byCategory = snapshot.list.items.groupBy { item -> item.productId?.let { products[it]?.categoryId } }
         val names = categories.associate { it.id to it.name }
         val slugs = categories.associate { it.id to it.slug }
@@ -213,7 +220,14 @@ class ShoppingListViewModel(
         )
     }
 
-    private fun nameOf(item: ListItem, product: Product? = item.productId?.let { id -> latest?.catalog?.products?.firstOrNull { it.id == id } }): String =
+    private fun nameOf(
+        item: ListItem,
+        product: Product? = item.productId?.let { id ->
+            latest?.catalog?.products?.firstOrNull {
+                it.id == id
+            }
+        },
+    ): String =
         item.freeText ?: product?.name?.text?.capitalizedFirst() ?: item.productId?.value.orEmpty()
 
     private companion object {
@@ -228,6 +242,9 @@ class ShoppingListViewModel(
         }
 
         /** The default unit policy's first preset (or its step). */
-        fun defaultQuantity(product: Product, units: UnitCatalog) = QuantityAdvisor(units).propose(product, null)?.quantity
+        fun defaultQuantity(
+            product: Product,
+            units: UnitCatalog,
+        ) = QuantityAdvisor(units).propose(product, null)?.quantity
     }
 }

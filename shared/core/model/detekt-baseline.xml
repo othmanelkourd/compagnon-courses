@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ComplexCondition:ExactMath.kt:ExactMath$(b != 0L &amp;&amp; result / b != a) || (a == Long.MIN_VALUE &amp;&amp; b == -1L)</ID>
+    <ID>CyclomaticComplexMethod:ExactMath.kt:ExactMath$fun multiplyDivide: Long</ID>
+    <ID>MaxLineLength:QuantityFormatterTest.kt:QuantityFormatterTest$forms = if (language == "fr") mapOf("one" to "bouteille", "other" to "bouteilles") else mapOf("one" to "bottle", "other" to "bottles")</ID>
+    <ID>MaxLineLength:QuantityFormatterTest.kt:QuantityFormatterTest$forms = if (language == "fr") mapOf("one" to "pièce", "other" to "pièces") else mapOf("one" to "piece", "other" to "pieces")</ID>
+    <ID>ReturnCount:ExactMath.kt:internal fun parseDecimal: ParsedDecimal?</ID>
+    <ID>ReturnCount:Quantity.kt:Quantity.Companion$fun parseOrNull: Quantity?</ID>
+    <ID>ReturnCount:Units.kt:UnitCatalog$fun factor: Rational?</ID>
+    <ID>ReturnCount:Units.kt:UnitCatalog$private fun resolve: Resolved?</ID>
+    <ID>TooManyFunctions:ContractMappers.kt:com.compagnon.courses.core.model.mapping.ContractMappers.kt</ID>
+    <ID>TooManyFunctions:Units.kt:UnitCatalog</ID>
+  </CurrentIssues>
+</SmellBaseline>

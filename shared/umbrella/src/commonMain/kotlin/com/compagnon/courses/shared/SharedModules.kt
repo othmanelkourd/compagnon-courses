@@ -8,9 +8,9 @@ import com.compagnon.courses.feature.catalog.catalogFeatureModule
 import com.compagnon.courses.feature.lists.listsFeatureModule
 import com.compagnon.courses.feature.onboarding.onboardingFeatureModule
 import com.compagnon.courses.feature.questionflow.questionFlowModule
+import org.koin.core.module.Module
 import kotlin.experimental.ExperimentalObjCRefinement
 import kotlin.native.HiddenFromObjC
-import org.koin.core.module.Module
 
 /**
  * Every Koin module of the shared code, for `startKoin { androidContext(app); modules(sharedModules(config, scope)) }`

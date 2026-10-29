@@ -84,7 +84,9 @@ internal object SessionLog {
     }
 
     /** The persisted form of [event], or null for events that are not persisted (start, commit results…). */
-    fun encode(event: SessionEvent): String? = toStored(event)?.let { json.encodeToString(StoredEvent.serializer(), it) }
+    fun encode(
+        event: SessionEvent,
+    ): String? = toStored(event)?.let { json.encodeToString(StoredEvent.serializer(), it) }
 
     /** The reducer event, or null when [payload] is unreadable (newer app version, corrupted row). */
     fun decode(payload: String): SessionEvent? = try {

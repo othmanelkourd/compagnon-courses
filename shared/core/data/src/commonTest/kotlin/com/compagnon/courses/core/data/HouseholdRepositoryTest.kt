@@ -2,20 +2,20 @@ package com.compagnon.courses.core.data
 
 import com.compagnon.courses.core.model.AgeBand
 import com.compagnon.courses.core.model.Avoidance
+import com.compagnon.courses.core.model.CategoryId
 import com.compagnon.courses.core.model.Diet
 import com.compagnon.courses.core.model.PetKind
-import com.compagnon.courses.engine.SessionMode
-import com.compagnon.courses.core.model.CategoryId
 import com.compagnon.courses.core.model.TagId
+import com.compagnon.courses.engine.SessionMode
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
 
 class HouseholdRepositoryTest {
 

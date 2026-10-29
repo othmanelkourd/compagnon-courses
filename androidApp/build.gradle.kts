@@ -41,6 +41,13 @@ android {
         buildConfig = true
     }
 
+    lint {
+        // Any new warning fails `lintDebug`; the existing ones are listed in lint-baseline.xml.
+        abortOnError = true
+        warningsAsErrors = true
+        baseline = file("lint-baseline.xml")
+    }
+
     androidResources {
         // French is the default (unqualified) language, English lives in values-en (see res/resources.properties).
         // Drops the other languages shipped by libraries and publishes both locales to the per-app language

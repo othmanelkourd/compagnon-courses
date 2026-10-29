@@ -52,7 +52,9 @@ internal object AppIcons {
     val ChevronRight: ImageVector by lazy { lineIcon("ChevronRight", "m9 6 6 6-6 6", autoMirror = true) }
 
     /** `chevron_left` (back to the home screen). */
-    val ChevronLeft: ImageVector by lazy { lineIcon("ChevronLeft", "m15 18-6-6 6-6", strokeWidth = 2.2f, autoMirror = true) }
+    val ChevronLeft: ImageVector by lazy {
+        lineIcon("ChevronLeft", "m15 18-6-6 6-6", strokeWidth = 2.2f, autoMirror = true)
+    }
 
     /** `expand_more` (« Plus d'options »). */
     val ChevronDown: ImageVector by lazy { lineIcon("ChevronDown", "m6 9 6 6 6-6", strokeWidth = 2.2f) }

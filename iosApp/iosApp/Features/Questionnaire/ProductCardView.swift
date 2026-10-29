@@ -440,12 +440,12 @@ struct NuancedAnswersSheet: View {
                 group(Text("Il m'en reste"), [
                     (.littleLeft, .stock, .littleLeft, "Il en reste un peu", "On vous la repose la prochaine fois"),
                     (.enoughForAWeek, .stock, .calendarWeek, "J'en ai pour une semaine", "On ne demande plus avant 7 jours"),
-                    (.enoughForAMonth, .stock, .calendarMonth, "J'en ai pour un mois", "On ne demande plus avant 30 jours"),
+                    (.enoughForAMonth, .stock, .calendarMonth, "J'en ai pour un mois", "On ne demande plus avant 30 jours")
                 ])
                 group(Text("Pas maintenant"), [
                     (.later, .pause, .clock, "Plus tard", "Reposée à la fin du questionnaire"),
                     (.notThisTime, .pause, .minus, "Pas cette fois", "Sans changer vos habitudes"),
-                    (.never, .stop, .nosign, "Je n'en achète plus", "Ne plus jamais demander"),
+                    (.never, .stop, .nosign, "Je n'en achète plus", "Ne plus jamais demander")
                 ])
             }
             .padding(.horizontal, Spacing.block)

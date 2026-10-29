@@ -66,7 +66,7 @@ struct HomeContent: View {
             // Two halos: top right, and a fainter one bottom left (mockup `Main`).
             HaloBackground(spots: [
                 HaloSpot(alignment: .topTrailing, x: 150, y: -170, size: 440),
-                HaloSpot(alignment: .bottomLeading, x: -180, y: 200, size: 420, opacity: 0.7),
+                HaloSpot(alignment: .bottomLeading, x: -180, y: 200, size: 420, opacity: 0.7)
             ])
         }
         .toolbar(.hidden, for: .navigationBar)

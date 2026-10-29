@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:QuestionRepositoryTest.kt:QuestionRepositoryTest$@Test fun commitWritesTheListTheAnswersAndTheStatsTogether</ID>
+    <ID>LongMethod:QuestionRepositoryTest.kt:QuestionRepositoryTest$@Test fun commitWritesTheListTheAnswersAndTheStatsTogether</ID>
+    <ID>LoopWithTooManyJumpStatements:QuestionRepository.kt:QuestionRepository$for</ID>
+    <ID>MaxLineLength:BundledCatalogTest.kt:BundledCatalogTest$assertEquals("pomme bio", assertNotNull(data.catalog.catalog()).products.first { it.slug == "pommes" }.name.text)</ID>
+    <ID>MaxLineLength:BundledCatalogTest.kt:BundledCatalogTest$assertEquals("pomme reinette", assertNotNull(updated.catalog()).products.first { it.slug == "pommes" }.name.text)</ID>
+    <ID>MaxLineLength:BundledCatalogTest.kt:BundledCatalogTest$products = SeedCatalog.snapshot.products.map { if (it.slug == "pommes") it.copy(name = "pomme reinette") else it }</ID>
+    <ID>MaxLineLength:BundledCatalogTest.kt:BundledCatalogTest$val renamed = seedProduct("pommes").copy(name = "pomme bio", forms = mapOf("one" to "pomme bio", "other" to "pommes bio"))</ID>
+    <ID>MaxLineLength:BundledCatalogTest.kt:BundledCatalogTest.FixedBundle$override fun snapshot: CatalogSnapshotDto?</ID>
+    <ID>MaxLineLength:CatalogRepository.kt:BundledCatalogSource.App$BundledCatalog.json(country, locale)?.let { ContractJson.decodeFromString(CatalogSnapshotDto.serializer(), it) }</ID>
+    <ID>MaxLineLength:CatalogRepository.kt:CatalogRepository$database.transaction { store.replaceWith(snapshot, etag = null, syncedAt = clock.now().toEpochMilliseconds()) }</ID>
+    <ID>MaxLineLength:CatalogRepositoryTest.kt:CatalogRepositoryTest$data.server.changes[1] = changes(1, 2, deletes = listOf(CatalogDeleteDto("product", SeedCatalog.productId("bananes"))), hasMore = true)</ID>
+    <ID>MaxLineLength:CatalogRepositoryTest.kt:CatalogRepositoryTest$data.server.changes[2] = changes(2, 3, deletes = listOf(CatalogDeleteDto("product", SeedCatalog.productId("pommes"))))</ID>
+    <ID>MaxLineLength:CatalogRepositoryTest.kt:CatalogRepositoryTest$val renamed = seedProduct("pommes").copy(name = "pomme bio", forms = mapOf("one" to "pomme bio", "other" to "pommes bio"))</ID>
+    <ID>MaxLineLength:CatalogScope.kt:CatalogScope$require(country.length == 2 &amp;&amp; country.all { it in 'A'..'Z' }) { "country must be an upper-case ISO code: $country" }</ID>
+    <ID>MaxLineLength:CatalogStore.kt:CatalogStore$fun stateFor: Catalog_state?</ID>
+    <ID>MaxLineLength:HouseholdRepository.kt:HouseholdRepository$.</ID>
+    <ID>MaxLineLength:HouseholdRepository.kt:HouseholdRepository$avoid = strings(avoid).mapNotNullTo(LinkedHashSet()) { name -&gt; Avoidance.entries.firstOrNull { it.name == name } }</ID>
+    <ID>MaxLineLength:HouseholdRepository.kt:HouseholdRepository$system = MeasurementSystem.entries.firstOrNull { it.name == measurement_system } ?: MeasurementSystem.METRIC</ID>
+    <ID>MaxLineLength:HouseholdRepositoryTest.kt:HouseholdRepositoryTest$data.households.saveSetup(HouseholdSetup(adults = 2, essentials = setOf(baguette), cadences = mapOf(baguette to 2)))</ID>
+    <ID>MaxLineLength:HouseholdRepositoryTest.kt:HouseholdRepositoryTest$data.households.saveSetup(first.copy(adults = 3, essentials = setOf(seedProductId("bananes")), cadences = emptyMap()))</ID>
+    <ID>MaxLineLength:HouseholdRepositoryTest.kt:HouseholdRepositoryTest$profile = it.profile.copy(adults = 1, children = listOf(AgeBand.BABY, AgeBand.TEEN), excludedTags = setOf(TagId("contains-pork")))</ID>
+    <ID>MaxLineLength:HouseholdRepositoryTest.kt:HouseholdRepositoryTest$stats.put(baguette, assertNotNull(stats.get(baguette)).copy(watch = true, nPurchases = 1, lastAt = data.clock.now))</ID>
+    <ID>MaxLineLength:QuestionRepository.kt:QuestionRepository$val updated = predictor.onAnswer(current, product, answer.kind, now, household, answer.quantity, answer.value)</ID>
+    <ID>MaxLineLength:QuestionRepositoryTest.kt:QuestionRepositoryTest$if (redo is SessionState.Asking) send(SessionEvent.Yes(redo.card.item.proposal.quantity)) else send(SessionEvent.Finish)</ID>
+    <ID>MaxLineLength:QuestionRepositoryTest.kt:QuestionRepositoryTest$send(SessionEvent.SuggestedConfirmed(kept = suggested.items.filter { it.preChecked }.map { it.productId }.toSet()))</ID>
+    <ID>MaxLineLength:QuestionRepositoryTest.kt:QuestionRepositoryTest$sessionStats = com.compagnon.courses.engine.SessionStats(asked = 5, answered = 5, itemsAdded = committing.drafts.size, abandoned = false)</ID>
+    <ID>MaxLineLength:QuestionRepositoryTest.kt:QuestionRepositoryTest$while (state is SessionState.Meta) send(SessionEvent.MetaAnswered((state as SessionState.Meta).question.key, (state as SessionState.Meta).question.prefilled))</ID>
+    <ID>MaxLineLength:SeedPlanningTest.kt:SeedPlanningTest$assertEquals(firstScores.associate { it.product.id to it.tier }, scores.associate { it.product.id to it.tier })</ID>
+    <ID>MaxLineLength:SeedPlanningTest.kt:SeedPlanningTest$assertTrue(plan.everyProposed().none { DietaryTags.PORK in it.product.tags || DietaryTags.ALCOHOL in it.product.tags })</ID>
+    <ID>MaxLineLength:SeedPlanningTest.kt:SeedPlanningTest$private suspend</ID>
+    <ID>MaxLineLength:SeedPlanningTest.kt:SeedPlanningTest$setOf(DietaryTags.MEAT, DietaryTags.FISH, DietaryTags.LACTOSE, DietaryTags.EGGS, DietaryTags.BABY, DietaryTags.PET)</ID>
+    <ID>ReturnCount:CatalogRepository.kt:CatalogRepository$private suspend fun deltaPages: List&lt;CatalogChangesDto&gt;?</ID>
+    <ID>ReturnCount:CatalogRepository.kt:CatalogRepository$private suspend fun syncTo: SyncResult</ID>
+    <ID>ReturnCount:ListStore.kt:ListStore$fun setChecked</ID>
+    <ID>ReturnCount:ListStore.kt:ListStore$private fun merge: Quantity</ID>
+    <ID>ReturnCount:ListStore.kt:ListStore$private fun mergeIntoOpenLine: Boolean</ID>
+    <ID>ReturnCount:ListStore.kt:private fun List_item.quantity: Quantity?</ID>
+    <ID>TooGenericExceptionCaught:CatalogRepository.kt:CatalogRepository$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:CatalogUpdater.kt:CatalogUpdater$e: Exception</ID>
+    <ID>TooManyFunctions:CatalogStore.kt:CatalogStore</ID>
+    <ID>TooManyFunctions:HouseholdRepository.kt:HouseholdRepository</ID>
+    <ID>TooManyFunctions:ListStore.kt:ListStore</ID>
+  </CurrentIssues>
+</SmellBaseline>

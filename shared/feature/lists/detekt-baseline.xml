@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:ShoppingListViewModel.kt:ShoppingListViewModel$private fun render: ShoppingListUiState.Loaded</ID>
+    <ID>MaxLineLength:ShoppingListViewModel.kt:ShoppingListViewModel$ProductSuggestionUi(product.id.value, product.name.text.capitalizedFirst(), formatter.format(quantity, product), imageOf(product))</ID>
+    <ID>MaxLineLength:ShoppingListViewModel.kt:ShoppingListViewModel$combine</ID>
+    <ID>MaxLineLength:ShoppingListViewModel.kt:ShoppingListViewModel$imageKey = if (item.freeText != null || product == null) Illustrations.Screen.FREE_TEXT else imageOf(product)</ID>
+    <ID>MaxLineLength:ShoppingListViewModel.kt:ShoppingListViewModel$storeOrder(categories.sortedWith(compareBy({ it.position }, { it.id.value })).map { it.id }, snapshot.household)</ID>
+    <ID>TooGenericExceptionCaught:ShoppingListViewModel.kt:ShoppingListViewModel$e: Exception</ID>
+  </CurrentIssues>
+</SmellBaseline>

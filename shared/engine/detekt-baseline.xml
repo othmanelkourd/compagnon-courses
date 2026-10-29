@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ComplexCondition:QuestionPlanner.kt:Allocator$cards.size &lt; cardCount &amp;&amp; (candidate.watch || maxCardsPerCategory == null || inCategory &lt; maxCardsPerCategory)</ID>
+    <ID>CyclomaticComplexMethod:NeedScorer.kt:NeedScorer$fun score: NeedScore</ID>
+    <ID>CyclomaticComplexMethod:QuantityAdvisor.kt:QuantityAdvisor$private fun quickChoices: List&lt;Quantity&gt;</ID>
+    <ID>CyclomaticComplexMethod:QuestionPlanner.kt:Allocator$fun allocate: Allocation</ID>
+    <ID>CyclomaticComplexMethod:QuestionPlanner.kt:QuestionPlanner$fun plan: QuestionPlan</ID>
+    <ID>CyclomaticComplexMethod:QuestionPlanner.kt:QuestionPlanner$private fun eligibleProducts: List&lt;Product&gt;</ID>
+    <ID>CyclomaticComplexMethod:SessionPropertiesTest.kt:RandomEvents$fun next: SessionEvent</ID>
+    <ID>CyclomaticComplexMethod:SessionReducer.kt:SessionReducer$fun reduce: Transition</ID>
+    <ID>CyclomaticComplexMethod:SessionReducer.kt:SessionReducer$private fun interactive: Transition</ID>
+    <ID>LongMethod:QuestionPlanner.kt:QuestionPlanner$fun plan: QuestionPlan</ID>
+    <ID>LoopWithTooManyJumpStatements:QuantityAdvisor.kt:QuantityAdvisor$while</ID>
+    <ID>MaxLineLength:NeedScorerTest.kt:NeedScorerTest$assertEquals(0.35, scorer.score(unknown, ProductStats(essential = true), chosen, context(), MarketSignals.NONE, NOW).probability, 1e-9)</ID>
+    <ID>MaxLineLength:PlannerPropertiesTest.kt:PlannerPropertiesTest$.</ID>
+    <ID>MaxLineLength:PlannerPropertiesTest.kt:PlannerPropertiesTest$assertEquals(tiers, planner.score(world.input.copy(seed = otherSeed)).associate { it.product.id to it.tier })</ID>
+    <ID>MaxLineLength:PredictorTest.kt:PredictorTest$assertEquals(NOW + 30.days, predictor.onAnswer(null, milk, AnswerKind.HAVE_ENOUGH, NOW, household, days = 30).snoozeUntil)</ID>
+    <ID>MaxLineLength:PredictorTest.kt:PredictorTest$val third = predictor.onPurchase(second, apples, Quantity.of(1, KILOGRAM), NOW + 20.days, UNITS, PurchaseSource.IMPLICIT)</ID>
+    <ID>MaxLineLength:PredictorTest.kt:PredictorTest$val updated = predictor.onAnswer(stats, milk, AnswerKind.YES, NOW, household(), quantity = Quantity.of(6, BOTTLE))</ID>
+    <ID>MaxLineLength:QuestionPlanner.kt:Allocator$if</ID>
+    <ID>MaxLineLength:QuestionPlannerTest.kt:QuestionPlannerTest$assertEquals(listOf("couches", "croquettes", "lait"), asked(household(), mapOf(diapers to boughtDaysAgo(3), kibble to ProductStats(userCadenceDays = 30))))</ID>
+    <ID>MaxLineLength:QuestionPlannerTest.kt:QuestionPlannerTest$assertEquals(listOf("jambon", "riz", "saumon"), asked(Diet.OMNIVORE, setOf(Avoidance.GLUTEN, Avoidance.LACTOSE)))</ID>
+    <ID>MaxLineLength:QuestionPlannerTest.kt:QuestionPlannerTest$return (plan.askedProducts.map { it.product.slug } + plan.deferred.map { it.value.removePrefix("prod-") }).sorted()</ID>
+    <ID>ReturnCount:NeedScorer.kt:NeedScorer$fun estimatedInterval: Double?</ID>
+    <ID>ReturnCount:Predictor.kt:Predictor$fun baseQuantity: Double?</ID>
+    <ID>ReturnCount:QuantityAdvisor.kt:QuantityAdvisor$fun propose: QuantityProposal?</ID>
+    <ID>ReturnCount:QuantityAdvisor.kt:QuantityAdvisor$private fun historyBase: Quantity?</ID>
+    <ID>ReturnCount:SessionPropertiesTest.kt:RandomEvents$fun next: SessionEvent</ID>
+    <ID>ReturnCount:SessionReducer.kt:SessionReducer$private fun addOther: Transition</ID>
+    <ID>ReturnCount:SessionReducer.kt:SessionReducer$private fun confirm: Transition</ID>
+    <ID>ReturnCount:SessionReducer.kt:SessionReducer$private fun onCard: Transition</ID>
+    <ID>ReturnCount:SessionReducer.kt:SessionReducer$private fun onMeta: Transition</ID>
+    <ID>TooManyFunctions:SessionReducer.kt:SessionReducer</ID>
+  </CurrentIssues>
+</SmellBaseline>

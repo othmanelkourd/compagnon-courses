@@ -27,11 +27,6 @@ import io.ktor.client.engine.mock.respond
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.headersOf
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -43,6 +38,11 @@ import org.koin.core.module.Module
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
 internal const val VERSION_JSON: String =
     """{"country":"FR","version":7,"publishedAt":"2026-10-24T08:30:00Z","locales":["fr-FR","fr","en"],"categoryCount":18,"productCount":120}"""
@@ -132,7 +132,14 @@ class SharedModulesTest {
         val ready = assertIs<OnboardingUiState.Ready>(onboarding.state.first { it is OnboardingUiState.Ready })
         assertEquals(OnboardingStep.WELCOME, ready.step)
         val edit = app.koin.get<OnboardingViewModel> { parametersOf(OnboardingMode.EDIT) }
-        assertEquals(OnboardingStep.OVERVIEW, assertIs<OnboardingUiState.Ready>(edit.state.first { it is OnboardingUiState.Ready }).step)
+        assertEquals(
+            OnboardingStep.OVERVIEW,
+            assertIs<OnboardingUiState.Ready>(
+                edit.state.first {
+                    it is OnboardingUiState.Ready
+                },
+            ).step,
+        )
         app.close()
     }
 }

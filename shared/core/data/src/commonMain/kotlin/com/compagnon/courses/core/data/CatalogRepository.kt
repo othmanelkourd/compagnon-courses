@@ -5,8 +5,8 @@ import app.cash.sqldelight.coroutines.mapToOneOrNull
 import co.touchlab.kermit.Logger
 import com.compagnon.courses.contract.CatalogChangesDto
 import com.compagnon.courses.contract.CatalogSnapshotDto
-import com.compagnon.courses.contract.ContractJson
 import com.compagnon.courses.contract.CatalogVersionDto
+import com.compagnon.courses.contract.ContractJson
 import com.compagnon.courses.contract.ErrorCode
 import com.compagnon.courses.core.catalogbundle.BundledCatalog
 import com.compagnon.courses.core.database.CompagnonDatabase
@@ -14,12 +14,6 @@ import com.compagnon.courses.core.model.Catalog
 import com.compagnon.courses.core.model.Product
 import com.compagnon.courses.core.network.CatalogApi
 import com.compagnon.courses.core.network.NetworkError
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.cancellation.CancellationException
-import kotlin.experimental.ExperimentalObjCRefinement
-import kotlin.native.HiddenFromObjC
-import kotlin.time.Clock
-import kotlin.time.Instant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -28,6 +22,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.experimental.ExperimentalObjCRefinement
+import kotlin.native.HiddenFromObjC
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 /** What the server publishes for a country (`/v1/catalog/version`). */
 data class RemoteCatalogVersion(

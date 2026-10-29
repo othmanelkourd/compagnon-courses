@@ -3,11 +3,11 @@ package com.compagnon.courses.shared
 import com.compagnon.courses.core.data.CatalogScope
 import com.compagnon.courses.core.data.CatalogUpdater
 import com.compagnon.courses.core.network.NetworkConfig
-import kotlin.experimental.ExperimentalNativeApi
 import org.koin.core.Koin
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.mp.KoinPlatform
+import kotlin.experimental.ExperimentalNativeApi
 
 /** Value of the `X-Platform` header sent by the iOS app. */
 internal const val IOS_PLATFORM: String = "ios"

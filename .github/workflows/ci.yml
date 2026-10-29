@@ -83,10 +83,13 @@ jobs:
           :contract:api-contract:jvmTest
           :shared:core:model:jvmTest
           :shared:engine:jvmTest
+          :shared:engine:koverVerify
+          detekt
           :shared:core:network:jvmTest
           :shared:feature:catalog:jvmTest
           :server:app:test
           :androidApp:assembleDebug
+          :androidApp:lintDebug
       - name: Rapports de tests
         if: failure()
         uses: actions/upload-artifact@v7
@@ -177,6 +180,7 @@ jobs:
         env:
           SIMULATOR_UDID: ${{ steps.simulator.outputs.udid }}
         # A Run Script build phase of the Xcode project calls ./gradlew :shared:umbrella:embedAndSignAppleFrameworkForXcode.
+        # -skipPackagePluginValidation: trusts the SwiftLint build tool plugin (Xcode asks once on a workstation).
         run: >-
           xcodebuild
           -project iosApp/iosApp.xcodeproj
@@ -185,6 +189,7 @@ jobs:
           -sdk iphonesimulator
           -destination "platform=iOS Simulator,id=${SIMULATOR_UDID}"
           -derivedDataPath build/ios-derived
+          -skipPackagePluginValidation
           build
       - name: Rapports de tests
         if: failure()

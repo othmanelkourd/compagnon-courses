@@ -18,11 +18,6 @@ import com.compagnon.courses.core.model.ProductId
 import com.compagnon.courses.core.model.TagId
 import com.compagnon.courses.engine.MetaKey
 import com.compagnon.courses.engine.SessionContext
-import kotlin.coroutines.CoroutineContext
-import kotlin.experimental.ExperimentalObjCRefinement
-import kotlin.native.HiddenFromObjC
-import kotlin.time.Clock
-import kotlin.time.Instant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -31,6 +26,11 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
+import kotlin.coroutines.CoroutineContext
+import kotlin.experimental.ExperimentalObjCRefinement
+import kotlin.native.HiddenFromObjC
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 /**
  * The household as the app knows it.

@@ -553,7 +553,7 @@ struct BottomFade: View {
         LinearGradient(
             stops: [
                 .init(color: Palette.canvas.opacity(0), location: 0),
-                .init(color: Palette.canvas, location: 0.28),
+                .init(color: Palette.canvas, location: 0.28)
             ],
             startPoint: .top,
             endPoint: .bottom

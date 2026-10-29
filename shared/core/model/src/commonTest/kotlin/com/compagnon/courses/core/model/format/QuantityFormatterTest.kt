@@ -1,5 +1,6 @@
 package com.compagnon.courses.core.model.format
 
+import com.compagnon.courses.core.model.Availability
 import com.compagnon.courses.core.model.CategoryId
 import com.compagnon.courses.core.model.CycleClass
 import com.compagnon.courses.core.model.Dimension
@@ -7,7 +8,6 @@ import com.compagnon.courses.core.model.LocalizedName
 import com.compagnon.courses.core.model.Product
 import com.compagnon.courses.core.model.ProductId
 import com.compagnon.courses.core.model.ProductMarket
-import com.compagnon.courses.core.model.Availability
 import com.compagnon.courses.core.model.Quantity
 import com.compagnon.courses.core.model.Rational
 import com.compagnon.courses.core.model.UnitCatalog

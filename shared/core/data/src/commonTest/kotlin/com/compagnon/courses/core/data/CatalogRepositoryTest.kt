@@ -6,6 +6,8 @@ import com.compagnon.courses.contract.CatalogUpsertsDto
 import com.compagnon.courses.contract.CategoryDto
 import com.compagnon.courses.core.model.CategoryId
 import com.compagnon.courses.core.testing.SeedCatalog
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -13,8 +15,6 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.hours
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
 
 class CatalogRepositoryTest {
 
@@ -177,7 +177,11 @@ class CatalogRepositoryTest {
         assertTrue(data.catalog.search("crème").any { it.slug.startsWith("creme") })
         assertEquals(emptyList(), data.catalog.search("  "))
         // Search results carry their tags (diet and allergen filters rely on them).
-        assertTrue(com.compagnon.courses.core.model.TagId("contains-lactose") in data.catalog.search("lait entier").first { it.slug == "lait-entier" }.tags)
+        assertTrue(
+            com.compagnon.courses.core.model.TagId("contains-lactose") in data.catalog.search("lait entier").first {
+                it.slug == "lait-entier"
+            }.tags,
+        )
         assertEquals(emptyList(), data.catalog.search("%"))
         assertEquals(3, data.catalog.search("e", limit = 3).size)
     }

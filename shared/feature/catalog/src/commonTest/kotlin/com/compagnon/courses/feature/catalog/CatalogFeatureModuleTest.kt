@@ -1,19 +1,14 @@
 package com.compagnon.courses.feature.catalog
 
-import app.cash.turbine.test
 import app.cash.sqldelight.db.SqlDriver
+import app.cash.turbine.test
 import com.compagnon.courses.core.data.dataModule
 import com.compagnon.courses.core.network.NetworkConfig
-import com.compagnon.courses.core.testing.createInMemoryDriver
 import com.compagnon.courses.core.network.createHttpClient
 import com.compagnon.courses.core.network.networkModule
+import com.compagnon.courses.core.testing.createInMemoryDriver
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotSame
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -23,6 +18,11 @@ import kotlinx.coroutines.test.setMain
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotSame
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CatalogFeatureModuleTest {
@@ -58,7 +58,12 @@ class CatalogFeatureModuleTest {
         viewModel.state.test {
             assertEquals(loadedVersion1, awaitSettled())
         }
-        assertEquals("FR", engine.requestHistory.first { it.url.encodedPath == "/v1/catalog/version" }.url.parameters["country"])
+        assertEquals(
+            "FR",
+            engine.requestHistory.first {
+                it.url.encodedPath == "/v1/catalog/version"
+            }.url.parameters["country"],
+        )
         // ViewModel definitions are not singletons: each screen gets its own instance.
         assertNotSame(viewModel, app.koin.get<CatalogStatusViewModel> { parametersOf("FR") })
         app.close()

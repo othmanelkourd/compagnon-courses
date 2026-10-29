@@ -24,10 +24,6 @@ import com.compagnon.courses.engine.SessionReducer
 import com.compagnon.courses.engine.SessionState
 import com.compagnon.courses.engine.SessionStats
 import com.compagnon.courses.engine.Transition
-import kotlin.coroutines.cancellation.CancellationException
-import kotlin.random.Random
-import kotlin.time.Clock
-import kotlin.time.Instant
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.channels.Channel
@@ -39,6 +35,10 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.random.Random
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 /**
  * Drives one question session: the engine's [SessionReducer] and `QuestionPlanner` over the local catalog,

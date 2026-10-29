@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MaxLineLength:CatalogFeatureModule.kt:*</ID>
+    <ID>MaxLineLength:CatalogStatusMessages.kt:CatalogStatusMessages$const val SERVER_UNAVAILABLE: String = "Le service est momentanément indisponible. Réessayez dans quelques instants."</ID>
+    <ID>MaxLineLength:CatalogStatusViewModel.kt:CatalogStatusViewModel$catalog.observeStatus().collect { local -&gt; _sync.update { it.withLocal(local).withCheck(updater.check.value) } }</ID>
+    <ID>MaxLineLength:CatalogStatusViewModel.kt:is SyncResult.Failed -&gt; if (failure == SyncFailure.STORAGE) CatalogSyncOutcome.FAILED_STORAGE else CatalogSyncOutcome.FAILED_NETWORK</ID>
+    <ID>MaxLineLength:CatalogStatusViewModelTest.kt:CatalogStatusViewModelTest$assertEquals(CatalogStatusUiState.Error(CatalogStatusMessages.CONNECTIVITY, retryable = true), awaitSettled())</ID>
+    <ID>MaxLineLength:CatalogStatusViewModelTest.kt:CatalogStatusViewModelTest$assertEquals(CatalogStatusUiState.Error(CatalogStatusMessages.SERVER_UNAVAILABLE, retryable = true), awaitSettled())</ID>
+    <ID>MaxLineLength:CatalogStatusViewModelTest.kt:CatalogStatusViewModelTest$assertEquals(CatalogStatusUiState.Error(CatalogStatusMessages.UNEXPECTED_RESPONSE, retryable = false), awaitSettled())</ID>
+    <ID>MaxLineLength:CatalogStatusViewModelTest.kt:CatalogStatusViewModelTest$assertEquals(CatalogStatusUiState.Error(CatalogStatusMessages.httpError(400), retryable = false), awaitSettled())</ID>
+    <ID>MaxLineLength:CatalogSyncViewModelTest.kt:CatalogSyncViewModelTest$CatalogRepository(createDatabase(createInMemoryDriver()), server.api, TestClock(), StandardTestDispatcher(testScheduler))</ID>
+    <ID>MaxLineLength:CatalogSyncViewModelTest.kt:CatalogSyncViewModelTest$CatalogRepository(createDatabase(createInMemoryDriver()), server.api, clock, StandardTestDispatcher(testScheduler))</ID>
+    <ID>MaxLineLength:CatalogSyncViewModelTest.kt:CatalogSyncViewModelTest$assertEquals(CatalogSyncOutcome.UPDATED_WITH_CHANGES, viewModel.sync.first { it.localVersion == 2L }.lastOutcome)</ID>
+    <ID>MaxLineLength:CatalogSyncViewModelTest.kt:CatalogSyncViewModelTest$server.changes[1] = com.compagnon.courses.contract.CatalogChangesDto(1, 2, com.compagnon.courses.contract.CatalogUpsertsDto(), emptyList(), hasMore = false)</ID>
+    <ID>MaxLineLength:TestSupport.kt:internal</ID>
+    <ID>TooGenericExceptionCaught:CatalogStatusViewModel.kt:CatalogStatusViewModel$e: Exception</ID>
+  </CurrentIssues>
+</SmellBaseline>

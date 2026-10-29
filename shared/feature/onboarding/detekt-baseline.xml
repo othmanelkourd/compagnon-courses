@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:OnboardingViewModel.kt:OnboardingViewModel$fun onEvent</ID>
+    <ID>LongMethod:OnboardingViewModel.kt:OnboardingViewModel$fun onEvent</ID>
+    <ID>LongMethod:OnboardingViewModelTest.kt:OnboardingViewModelTest$@Test fun theFirstRunWalksThroughTheFourStepsAndSavesOnce</ID>
+    <ID>MaxLineLength:AppGateViewModel.kt:AppGateViewModel$emit(AppGateUiState.Ready(summaryOf(com.compagnon.courses.core.data.HouseholdSetup(adults = 2), null, onboarded = false)))</ID>
+    <ID>MaxLineLength:AppGateViewModel.kt:AppGateViewModel$summaryOf(household.toSetup(essentials, cadences), catalog, onboarded = household.onboardedAt != null)</ID>
+    <ID>MaxLineLength:OnboardingViewModel.kt:OnboardingViewModel$Illustrations.forProduct(product.slug, loadedCatalog?.categories?.firstOrNull { it.id == product.categoryId }?.slug)</ID>
+    <ID>MaxLineLength:OnboardingViewModel.kt:OnboardingViewModel$go(if (mode == OnboardingMode.FIRST_RUN) OnboardingStep.WELCOME else OnboardingStep.OVERVIEW, returnTo = null)</ID>
+    <ID>MaxLineLength:OnboardingViewModel.kt:OnboardingViewModel$if (mode != OnboardingMode.FIRST_RUN || current.cadences.isNotEmpty() || saved?.cadences.orEmpty().isNotEmpty()) return</ID>
+    <ID>MaxLineLength:OnboardingViewModel.kt:OnboardingViewModel$is OnboardingEvent.RemoveRecurring -&gt; update { it.copy(cadences = it.cadences - ProductId(event.productId)) }</ID>
+    <ID>MaxLineLength:OnboardingViewModel.kt:OnboardingViewModel$products[id]?.let { ProductChipUi(id.value, nameOf(it), checked = id in current.cadences, imageKey = imageOf(it)) }</ID>
+    <ID>MaxLineLength:OnboardingViewModel.kt:OnboardingViewModel$screen = screen.copy(expanded = if (event.categoryId in expanded) expanded - event.categoryId else expanded + event.categoryId)</ID>
+    <ID>MaxLineLength:OnboardingViewModel.kt:OnboardingViewModel$step == OnboardingStep.HOUSEHOLD &amp;&amp; draft!!.let { it.adults + it.babies + it.children + it.teens } &lt; 1 -&gt; Unit</ID>
+    <ID>MaxLineLength:OnboardingViewModel.kt:OnboardingViewModel$val days = (current.horizonDays + if (event.increment) 1 else -1).coerceIn(1, SessionContext.MAX_HORIZON_DAYS)</ID>
+    <ID>MaxLineLength:OnboardingViewModelTest.kt:OnboardingViewModelTest$HouseholdSetup(adults = 1, diet = Diet.VEGAN, essentials = setOf(id("bananes")), cadences = mapOf(id("baguette") to 14))</ID>
+    <ID>MaxLineLength:OnboardingViewModelTest.kt:OnboardingViewModelTest$fun</ID>
+    <ID>MaxLineLength:OnboardingViewModelTest.kt:OnboardingViewModelTest$send(viewModel, OnboardingEvent.Back, OnboardingEvent.Back, OnboardingEvent.SelectDiet(DietChoice.VEGETARIAN), OnboardingEvent.Next, OnboardingEvent.Next)</ID>
+    <ID>MaxLineLength:OnboardingViewModelTest.kt:OnboardingViewModelTest$send(viewModel, OnboardingEvent.Edit(HouseholdSection.FOOD), OnboardingEvent.SelectDiet(DietChoice.OMNIVORE), OnboardingEvent.Back)</ID>
+    <ID>MaxLineLength:OnboardingViewModelTest.kt:OnboardingViewModelTest$send(viewModel, OnboardingEvent.RemoveRecurring(id("baguette").value), OnboardingEvent.Next, OnboardingEvent.Next)</ID>
+    <ID>MaxLineLength:OnboardingViewModelTest.kt:OnboardingViewModelTest$send(viewModel, OnboardingEvent.Start, OnboardingEvent.Next, OnboardingEvent.Next, OnboardingEvent.ToggleAvoid(AvoidChoice.LACTOSE), OnboardingEvent.Next)</ID>
+    <ID>MaxLineLength:OnboardingViewModelTest.kt:OnboardingViewModelTest$send(viewModel, OnboardingEvent.ToggleAvoid(AvoidChoice.LACTOSE), OnboardingEvent.ToggleAvoid(AvoidChoice.ALCOHOL), OnboardingEvent.Next)</ID>
+    <ID>ReturnCount:OnboardingViewModel.kt:OnboardingViewModel$private fun prefillRecurring</ID>
+    <ID>TooGenericExceptionCaught:AppGateViewModel.kt:AppGateViewModel$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:OnboardingViewModel.kt:OnboardingViewModel$e: Exception</ID>
+    <ID>TooManyFunctions:OnboardingViewModel.kt:OnboardingViewModel : ViewModel</ID>
+  </CurrentIssues>
+</SmellBaseline>

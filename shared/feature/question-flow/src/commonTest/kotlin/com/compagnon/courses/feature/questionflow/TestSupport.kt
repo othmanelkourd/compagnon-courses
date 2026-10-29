@@ -19,9 +19,9 @@ import com.compagnon.courses.core.model.Product
 import com.compagnon.courses.core.testing.MockCatalogServer
 import com.compagnon.courses.core.testing.TestClock
 import com.compagnon.courses.core.testing.createInMemoryDriver
+import kotlinx.coroutines.flow.first
 import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
-import kotlinx.coroutines.flow.first
 
 internal class SequentialIds : IdGenerator {
     private var next = 0

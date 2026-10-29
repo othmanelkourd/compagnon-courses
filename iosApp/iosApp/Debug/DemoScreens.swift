@@ -107,12 +107,12 @@
             presets: [
                 quantity(500, "kilogram", "0,5\u{00A0}kg"),
                 quantity(1000, "kilogram", "1\u{00A0}kg"),
-                quantity(1500, "kilogram", "1,5\u{00A0}kg"),
+                quantity(1500, "kilogram", "1,5\u{00A0}kg")
             ],
             quantity: QuantityStepper(selected: quantity(500, "kilogram", "0,5\u{00A0}kg"), canDecrement: false, canIncrement: true),
             units: [
                 UnitOptionUi(unit: "kilogram", label: "Au poids", selected: true),
-                UnitOptionUi(unit: "piece", label: "À la pièce", selected: false),
+                UnitOptionUi(unit: "piece", label: "À la pièce", selected: false)
             ],
             isSameAsLastTime: false,
             reason: reason(.staple),
@@ -134,7 +134,7 @@
             ("Pâtes courtes", "1\u{00A0}paquet", "spaghetti"), ("Moutarde", "1\u{00A0}pot", "jar"), ("Dentifrice", "1\u{00A0}tube", "toothbrush"),
             ("Déodorant", "1\u{00A0}déodorant", "lotion_bottle"), ("Liquide vaisselle", "1\u{00A0}flacon", "bubbles"),
             ("Éponge", "1\u{00A0}pack", "sponge"), ("Papier toilette", "1\u{00A0}pack", "roll_of_paper"),
-            ("Sac poubelle", "1\u{00A0}rouleau", "wastebasket"), ("Essuie-tout", "1\u{00A0}pack", "roll_of_paper"),
+            ("Sac poubelle", "1\u{00A0}rouleau", "wastebasket"), ("Essuie-tout", "1\u{00A0}pack", "roll_of_paper")
         ]
 
         static let suggestedItems = staples.map { staple in
@@ -172,7 +172,7 @@
                         suggestedItem("sponges", "Éponges", "1 paquet", checked: false, reason: nil, imageKey: "sponge"),
                         suggestedItem("dish", "Liquide vaisselle", "1 flacon", checked: true, reason: nil, imageKey: "bubbles"),
                         suggestedItem("bags", "Sacs poubelle", "1 rouleau", checked: false, reason: nil, imageKey: "wastebasket"),
-                        suggestedItem("tablets", "Pastilles lave-vaisselle", "30 pastilles lave-vaisselle", checked: false, reason: nil, imageKey: "broom"),
+                        suggestedItem("tablets", "Pastilles lave-vaisselle", "30 pastilles lave-vaisselle", checked: false, reason: nil, imageKey: "broom")
                     ],
                     checkedCount: 1,
                     progress: QuestionProgress(answered: 11, total: 12),
@@ -189,7 +189,7 @@
                         ReviewItemUi(
                             productId: "tomate-de-saison", name: "Tomate de saison", quantity: quantity(1000, "kilogram", "1\u{00A0}kg"),
                             origin: .card, imageKey: "tomato"
-                        ),
+                        )
                     ],
                     searchQuery: "",
                     searchResults: [],
@@ -212,30 +212,30 @@
             sections: [
                 ListSectionUi(categoryId: "fruits-legumes", title: "Fruits et légumes", items: [
                     item("oignon", "Oignon", "0,5\u{00A0}kg", "onion"),
-                    item("tomate", "Tomate de saison", "1\u{00A0}kg", "tomato"),
+                    item("tomate", "Tomate de saison", "1\u{00A0}kg", "tomato")
                 ]),
                 ListSectionUi(categoryId: "cremerie", title: "Crèmerie", items: [
                     item("beurre", "Beurre doux", "1\u{00A0}plaquette", "butter"),
-                    item("oeuf", "Œuf", "6\u{00A0}œufs", "egg", checked: true),
+                    item("oeuf", "Œuf", "6\u{00A0}œufs", "egg", checked: true)
                 ]),
                 ListSectionUi(categoryId: "epicerie-salee", title: "Épicerie salée", items: [
                     item("sel", "Sel fin", "1\u{00A0}paquet", "salt"),
                     item("poivre", "Poivre noir", "1\u{00A0}pot", "salt"),
-                    item("pates", "Pâtes courtes", "1\u{00A0}paquet", "spaghetti"),
+                    item("pates", "Pâtes courtes", "1\u{00A0}paquet", "spaghetti")
                 ]),
                 ListSectionUi(categoryId: "hygiene", title: "Hygiène et beauté", items: [
                     item("dentifrice", "Dentifrice", "1\u{00A0}tube", "toothbrush"),
-                    item("deodorant", "Déodorant", "1\u{00A0}déodorant", "lotion_bottle"),
+                    item("deodorant", "Déodorant", "1\u{00A0}déodorant", "lotion_bottle")
                 ]),
                 ListSectionUi(categoryId: "entretien", title: "Entretien de la maison", items: [
                     item("vaisselle", "Liquide vaisselle", "1\u{00A0}flacon", "bubbles"),
-                    item("eponge", "Éponge", "1\u{00A0}pack", "sponge"),
+                    item("eponge", "Éponge", "1\u{00A0}pack", "sponge")
                 ]),
                 ListSectionUi(categoryId: "papier", title: "Papier et emballages", items: [
                     item("papier", "Papier toilette", "1\u{00A0}pack", "roll_of_paper"),
                     item("sacs", "Sac poubelle", "1\u{00A0}rouleau", "wastebasket"),
-                    item("essuie", "Essuie-tout", "1\u{00A0}pack", "roll_of_paper"),
-                ]),
+                    item("essuie", "Essuie-tout", "1\u{00A0}pack", "roll_of_paper")
+                ])
             ],
             itemCount: 14,
             remainingCount: 13,
@@ -267,21 +267,21 @@
         static let essentialsAisles = [
             EssentialsAisleUi(categoryId: "fruits-legumes", title: "Fruits et légumes", items: [
                 chip("Bananes", true, "banana"), chip("Pommes", true, "red_apple"), chip("Oignons", true, "onion"),
-                chip("Pommes de terre", true, "potato"), chip("Tomates", false, "tomato"), chip("Carottes", false, "carrot"),
+                chip("Pommes de terre", true, "potato"), chip("Tomates", false, "tomato"), chip("Carottes", false, "carrot")
             ], total: 44, expanded: false, imageKey: "green_apple"),
             EssentialsAisleUi(categoryId: "boulangerie", title: "Boulangerie", items: [
-                chip("Baguette", true, "baguette_bread"), chip("Pain de mie", false, "bread"), chip("Brioche", false, "bread"),
+                chip("Baguette", true, "baguette_bread"), chip("Pain de mie", false, "bread"), chip("Brioche", false, "bread")
             ], total: 12, expanded: false, imageKey: "baguette_bread"),
             EssentialsAisleUi(categoryId: "epicerie-salee", title: "Épicerie salée", items: [
                 chip("Riz", true, "cooked_rice"), chip("Pâtes", true, "spaghetti"), chip("Huile d'olive", true, "olive"),
-                chip("Sel fin", false, "salt"),
+                chip("Sel fin", false, "salt")
             ], total: 48, expanded: false, imageKey: "canned_food"),
             EssentialsAisleUi(categoryId: "bebe", title: "Bébé", items: [
-                chip("Couches", true, "safety_pin"), chip("Lait infantile", true, "baby_bottle"), chip("Petits pots", false, "jar"),
+                chip("Couches", true, "safety_pin"), chip("Lait infantile", true, "baby_bottle"), chip("Petits pots", false, "jar")
             ], total: 9, expanded: false, imageKey: "baby_bottle"),
             EssentialsAisleUi(categoryId: "animaux", title: "Animaux", items: [
-                chip("Croquettes chat", true, "cat"), chip("Litière", true, "cat"),
-            ], total: 8, expanded: false, imageKey: "paw_prints"),
+                chip("Croquettes chat", true, "cat"), chip("Litière", true, "cat")
+            ], total: 8, expanded: false, imageKey: "paw_prints")
         ]
 
         static func onboarding(_ step: OnboardingStep) -> OnboardingUiStateReady {
@@ -301,7 +301,7 @@
                     AvoidOptionUi(choice: .lactose, checked: true, locked: false),
                     AvoidOptionUi(choice: .nuts, checked: false, locked: false),
                     AvoidOptionUi(choice: .eggs, checked: false, locked: false),
-                    AvoidOptionUi(choice: .alcohol, checked: true, locked: true),
+                    AvoidOptionUi(choice: .alcohol, checked: true, locked: true)
                 ],
                 essentials: EssentialsStepUi(
                     query: "", aisles: essentialsAisles, results: [], checkedCount: 14, catalogLoading: false, catalogMissing: false
@@ -310,7 +310,7 @@
                     rows: [
                         RecurringRowUi(productId: "baguette", name: "Baguette", cadence: .week, imageKey: "baguette_bread"),
                         RecurringRowUi(productId: "couches", name: "Couches", cadence: .twoWeeks, imageKey: "safety_pin"),
-                        RecurringRowUi(productId: "croquettes", name: "Croquettes chat", cadence: .month, imageKey: "cat"),
+                        RecurringRowUi(productId: "croquettes", name: "Croquettes chat", cadence: .month, imageKey: "cat")
                     ],
                     adding: false, query: "", results: []
                 ),

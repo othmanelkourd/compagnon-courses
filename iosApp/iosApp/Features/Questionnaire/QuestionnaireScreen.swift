@@ -141,7 +141,6 @@ struct QuestionContent: View {
     }
 }
 
-
 /// What the top bar needs from any state.
 struct QuestionStep {
     let progress: QuestionProgress?

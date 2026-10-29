@@ -20,6 +20,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.plugin.compose")
             }
+            configureQuality()
 
             val javaVersion = JavaVersion.toVersion(jvmToolchainVersion)
             extensions.configure<ApplicationExtension> {

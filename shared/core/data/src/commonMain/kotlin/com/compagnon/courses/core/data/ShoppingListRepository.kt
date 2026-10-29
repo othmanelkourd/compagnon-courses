@@ -13,11 +13,6 @@ import com.compagnon.courses.core.model.PurchaseSource
 import com.compagnon.courses.core.model.Quantity
 import com.compagnon.courses.core.model.ShoppingList
 import com.compagnon.courses.engine.Predictor
-import kotlin.coroutines.CoroutineContext
-import kotlin.experimental.ExperimentalObjCRefinement
-import kotlin.native.HiddenFromObjC
-import kotlin.time.Clock
-import kotlin.time.Instant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -28,6 +23,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
+import kotlin.experimental.ExperimentalObjCRefinement
+import kotlin.native.HiddenFromObjC
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 /**
  * The household's active shopping list, offline only in V0. There is always exactly one active list: it is

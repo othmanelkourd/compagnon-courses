@@ -28,7 +28,8 @@ class PredictorTest {
         policies = listOf(policy(BOTTLE), policy(LITER, isDefault = false)),
         packages = listOf(PackageFormat(BOTTLE, Quantity.of(1, LITER), typical = true)),
     )
-    private val apples = product("pommes", dimension = Dimension.MASS, policies = listOf(policy(KILOGRAM, "0.5", listOf("1"))))
+    private val apples =
+        product("pommes", dimension = Dimension.MASS, policies = listOf(policy(KILOGRAM, "0.5", listOf("1"))))
 
     @Test
     fun firstPurchaseStartsTheHistoryInTheBaseUnit() {

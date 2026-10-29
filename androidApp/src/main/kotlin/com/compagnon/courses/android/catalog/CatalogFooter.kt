@@ -39,7 +39,8 @@ internal fun CatalogFooter(sync: CatalogSyncUiState, onRefresh: () -> Unit, modi
     val footer = catalogFooter(sync)
     val locale = currentLocale()
     val text = if (footer.withProducts) {
-        val products = pluralStringResource(R.plurals.catalog_product_count, sync.productCount, formatCount(sync.productCount, locale))
+        val products =
+            pluralStringResource(R.plurals.catalog_product_count, sync.productCount, formatCount(sync.productCount, locale))
         stringResource(footer.text, products)
     } else {
         stringResource(footer.text)

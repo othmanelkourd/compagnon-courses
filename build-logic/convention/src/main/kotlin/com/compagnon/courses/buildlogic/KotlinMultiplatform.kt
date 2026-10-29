@@ -18,6 +18,7 @@ internal fun Project.configureKotlinMultiplatform(withJvm: Boolean) {
         apply("org.jetbrains.kotlin.multiplatform")
         apply("com.android.kotlin.multiplatform.library")
     }
+    configureQuality()
 
     val kotlin = extensions.getByType<KotlinMultiplatformExtension>()
     kotlin.jvmToolchain(jvmToolchainVersion)

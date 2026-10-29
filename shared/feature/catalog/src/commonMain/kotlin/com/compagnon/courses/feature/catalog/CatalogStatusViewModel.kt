@@ -11,12 +11,12 @@ import com.compagnon.courses.core.data.RemoteCatalogVersion
 import com.compagnon.courses.core.data.SyncFailure
 import com.compagnon.courses.core.data.SyncMethod
 import com.compagnon.courses.core.data.SyncResult
-import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Catalog status: what the server publishes for [country] ([state]) and the local, offline copy ([sync]).

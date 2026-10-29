@@ -89,7 +89,12 @@ internal fun ProgressSegments(current: Int, total: Int, modifier: Modifier = Mod
  * « Réduire les animations ».
  */
 @Composable
-internal fun ProgressBar(fraction: Float, modifier: Modifier = Modifier, height: Dp = 6.dp, fillOnAppear: Boolean = false) {
+internal fun ProgressBar(
+    fraction: Float,
+    modifier: Modifier = Modifier,
+    height: Dp = 6.dp,
+    fillOnAppear: Boolean = false,
+) {
     val reduceMotion = LocalReduceMotion.current
     val target = fraction.coerceIn(0f, 1f)
     val fill = remember { Animatable(if (fillOnAppear && !reduceMotion) 0f else target) }

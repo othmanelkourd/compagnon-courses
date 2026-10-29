@@ -5,11 +5,11 @@ import com.compagnon.courses.core.data.CatalogScope
 import com.compagnon.courses.core.data.CatalogUpdater
 import com.compagnon.courses.core.network.NetworkConfig
 import com.compagnon.courses.shared.sharedModules
-import java.util.Locale
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
+import java.util.Locale
 
 class CompagnonApplication : Application() {
 

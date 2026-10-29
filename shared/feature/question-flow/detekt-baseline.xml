@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:FullSessionIntegrationTest.kt:FullSessionIntegrationTest$@Test fun aQuickSessionOnTheSeedFillsTheList</ID>
+    <ID>CyclomaticComplexMethod:QuestionSessionViewModel.kt:QuestionSessionViewModel$fun onEvent</ID>
+    <ID>CyclomaticComplexMethod:SessionLog.kt:SessionLog$private fun StoredEvent.toEvent: SessionEvent?</ID>
+    <ID>CyclomaticComplexMethod:SessionLog.kt:SessionLog$private fun toStored: StoredEvent?</ID>
+    <ID>LongMethod:FullSessionIntegrationTest.kt:FullSessionIntegrationTest$@Test fun aQuickSessionOnTheSeedFillsTheList</ID>
+    <ID>MaxLineLength:QuestionSessionViewModel.kt:QuestionSessionViewModel$apply(reducer.reduce(SessionState.Idle, SessionEvent.Start(id, setup.input, list)), event = null, persist = false)</ID>
+    <ID>MaxLineLength:QuestionSessionViewModel.kt:QuestionSessionViewModel$is SessionState.Completed -&gt; QuestionUiState.Done(itemsAdded = current.drafts.size, abandoned = current.stats.abandoned)</ID>
+    <ID>MaxLineLength:QuestionSessionViewModel.kt:QuestionSessionViewModel$selection = selection.copy(edits = selection.edits + (productId to next), checked = selection.checked + productId)</ID>
+    <ID>MaxLineLength:QuestionSessionViewModel.kt:QuestionSessionViewModel$transition = reducer.reduce(current, SessionEvent.CommitFailed(DomainError.StorageFailed("interrupted")))</ID>
+    <ID>MaxLineLength:QuestionSessionViewModel.kt:QuestionSessionViewModel$val checked = if (productId in selection.checked) selection.checked - productId else selection.checked + productId</ID>
+    <ID>MaxLineLength:QuestionSessionViewModelTest.kt:QuestionSessionViewModelTest$assertTrue(assertNotNull(product.policyFor(quantity.unit)).isAllowed(quantity), "$quantity for ${product.slug}")</ID>
+    <ID>MaxLineLength:QuestionSessionViewModelTest.kt:QuestionSessionViewModelTest$assertTrue(next is QuestionUiState.Card || next is QuestionUiState.Gate || next is QuestionUiState.Review, "$next")</ID>
+    <ID>MaxLineLength:QuestionSessionViewModelTest.kt:QuestionSessionViewModelTest$assertTrue(option.label.startsWith("Au ") || option.label.startsWith("À ") || option.label.startsWith("En "), option.label)</ID>
+    <ID>MaxLineLength:QuestionUiMapper.kt:QuestionUiMapper$ProductSearchResultUi(product.id.value, product.displayName, choice(it, product), imageOf(product))</ID>
+    <ID>MaxLineLength:QuestionUiMapper.kt:QuestionUiMapper$is SessionState.CategoryGate -&gt; QuestionUiState.Gate(gate(state.gate.category, state.gate.items.size), progress, canUndo)</ID>
+    <ID>MaxLineLength:QuestionUiMapper.kt:QuestionUiMapper.Companion$policy.presets.ifEmpty { (0L until 3L).map { policy.quantityOf(policy.minSteps + it) }.filter(policy::isAllowed) }</ID>
+    <ID>MaxLineLength:QuestionUiState.kt:QuestionUiState.Suggested$/** The T1 screen « Probablement nécessaire »: pre-checked items, validated in one tap ([QuestionEvent.ConfirmItems]). */</ID>
+    <ID>MaxLineLength:SessionLog.kt:SessionLog$edits = edits.entries.mapNotNull { (id, quantity) -&gt; quantity.toQuantity()?.let { ProductId(id) to it } }.toMap()</ID>
+    <ID>MaxLineLength:SessionLog.kt:SessionLog$is StoredEvent.Meta -&gt; MetaKey.entries.firstOrNull { it.name == key }?.let { SessionEvent.MetaAnswered(it, value) }</ID>
+    <ID>ReturnCount:QuestionSessionViewModel.kt:QuestionSessionViewModel$private fun addOther</ID>
+    <ID>ReturnCount:QuestionSessionViewModel.kt:QuestionSessionViewModel$private fun stepCard</ID>
+    <ID>ReturnCount:QuestionSessionViewModel.kt:QuestionSessionViewModel$private fun stepItem</ID>
+    <ID>TooGenericExceptionCaught:QuestionSessionViewModel.kt:QuestionSessionViewModel$e: Exception</ID>
+    <ID>TooManyFunctions:QuestionSessionViewModel.kt:QuestionSessionViewModel : ViewModel</ID>
+    <ID>TooManyFunctions:QuestionUiMapper.kt:QuestionUiMapper</ID>
+  </CurrentIssues>
+</SmellBaseline>

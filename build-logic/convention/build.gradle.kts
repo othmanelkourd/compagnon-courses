@@ -14,6 +14,7 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.kotlin.composeCompilerGradlePlugin)
+    compileOnly(libs.detekt.gradlePlugin)
 }
 
 tasks.validatePlugins {

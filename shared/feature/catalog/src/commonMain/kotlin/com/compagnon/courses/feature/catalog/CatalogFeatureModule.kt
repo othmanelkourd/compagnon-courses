@@ -1,11 +1,11 @@
 package com.compagnon.courses.feature.catalog
 
 import com.compagnon.courses.core.data.CatalogScope
-import kotlin.experimental.ExperimentalObjCRefinement
-import kotlin.native.HiddenFromObjC
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+import kotlin.experimental.ExperimentalObjCRefinement
+import kotlin.native.HiddenFromObjC
 
 /**
  * Koin definitions of the catalog feature. Requires `dataModule(...)` (CatalogRepository, CatalogUpdater, CatalogScope).

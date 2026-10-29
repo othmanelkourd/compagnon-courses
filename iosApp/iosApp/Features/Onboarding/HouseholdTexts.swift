@@ -163,7 +163,7 @@ enum HouseholdTexts {
         [
             String(localized: "\(Int(summary.persons)) personnes"),
             dietLabel(summary.diet),
-            String(localized: "\(Int(summary.essentials)) essentiels"),
+            String(localized: "\(Int(summary.essentials)) essentiels")
         ].joined(separator: separator)
     }
 

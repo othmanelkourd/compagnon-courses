@@ -4,6 +4,11 @@ import com.compagnon.courses.contract.CatalogSnapshotDto
 import com.compagnon.courses.core.model.Quantity
 import com.compagnon.courses.core.model.UnitCode
 import com.compagnon.courses.core.testing.SeedCatalog
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -11,11 +16,6 @@ import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runTest
 
 class BundledCatalogTest {
 
@@ -167,7 +167,10 @@ class BundledCatalogTest {
     private fun TestScope.updater(data: TestData) = CatalogUpdater(data.catalog, CatalogScope.DEFAULT, backgroundScope)
 
     private class FixedBundle(private val snapshot: CatalogSnapshotDto) : BundledCatalogSource {
-        override fun version(country: String, locale: String): Long? = snapshot.version.takeIf { locale == snapshot.locale }
+        override fun version(
+            country: String,
+            locale: String,
+        ): Long? = snapshot.version.takeIf { locale == snapshot.locale }
 
         override fun snapshot(country: String, locale: String): CatalogSnapshotDto? = snapshot.takeIf { locale == it.locale }
     }

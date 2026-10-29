@@ -5,6 +5,8 @@ import com.compagnon.courses.core.model.AddedVia
 import com.compagnon.courses.core.model.ListStatus
 import com.compagnon.courses.core.model.Quantity
 import com.compagnon.courses.core.model.UnitCode
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -13,8 +15,6 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runTest
 
 class ShoppingListRepositoryTest {
     private val bottle = UnitCode("bottle")

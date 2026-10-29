@@ -65,14 +65,17 @@ class QuestionTextsTest {
     @Test
     fun everyReasonKindHasItsOwnText() {
         // A declared rhythm always comes with its interval (the shared mapper sets it).
-        val texts = ReasonKind.entries.map { QuestionTexts.reason(ReasonUi(it, intervalDays = if (it == ReasonKind.CADENCE) 7 else null)) }
+        val texts = ReasonKind.entries.map {
+            QuestionTexts.reason(ReasonUi(it, intervalDays = if (it == ReasonKind.CADENCE) 7 else null))
+        }
 
         assertEquals(ReasonKind.entries.size, texts.toSet().size)
     }
 
     @Test
     fun gateUsesTheCatalogQuestionElseTheFallback() {
-        val gate = CategoryGateUi(categoryId = "entretien", name = "Entretien", question = null, productCount = 12, imageKey = "broom")
+        val gate =
+            CategoryGateUi(categoryId = "entretien", name = "Entretien", question = null, productCount = 12, imageKey = "broom")
 
         assertEquals(UiText.Res(R.string.gate_question_fallback, listOf("Entretien")), QuestionTexts.gateQuestion(gate))
         assertEquals(
