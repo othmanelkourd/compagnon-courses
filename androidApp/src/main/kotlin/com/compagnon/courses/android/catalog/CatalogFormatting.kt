@@ -42,6 +42,8 @@ internal fun catalogFooter(sync: CatalogSyncUiState): CatalogFooterText = when {
         CatalogFooterText(CatalogFooterTone.PROBLEM, R.string.catalog_outcome_storage_failed, withProducts = false)
     // The bundled catalog is being written (first launch): a moment, never the network.
     sync.localVersion == null -> CatalogFooterText(CatalogFooterTone.SYNCING, R.string.catalog_local_none, withProducts = false)
+    // A build without server: the catalog of the app, as is.
+    !sync.canCheck -> CatalogFooterText(CatalogFooterTone.READY, R.string.catalog_footer_offline, withProducts = true)
     // The server did not answer: the device's catalog is used as is.
     sync.lastOutcome == CatalogSyncOutcome.FAILED_NETWORK ->
         CatalogFooterText(CatalogFooterTone.OFFLINE, R.string.catalog_footer_offline, withProducts = true)

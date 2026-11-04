@@ -15,19 +15,20 @@ import kotlin.time.Clock
 /**
  * Koin definitions of the local data: [CatalogScope], [Clock], [IdGenerator], [CompagnonDatabase], the
  * repositories and the [CatalogUpdater] (started by the apps at launch). Requires a [SqlDriver] (one per platform,
- * see `:shared:umbrella`) and `networkModule(...)`.
+ * see `:shared:umbrella`) and `networkModule(...)`; without server, the catalog API is absent and the repository
+ * works from the bundled catalog only.
  */
 @OptIn(ExperimentalObjCRefinement::class)
 @HiddenFromObjC
 fun dataModule(scope: CatalogScope = CatalogScope.DEFAULT): Module = module {
-    single { scope }
     single<Clock> { Clock.System }
     single<IdGenerator> { UuidV7Generator }
     single { createDatabase(get<SqlDriver>()) }
-    single { CatalogRepository(database = get(), api = get(), clock = get()) }
+    single { CatalogRepository(database = get(), api = getOrNull(), clock = get()) }
     single {
-        CatalogUpdater(catalog = get(), scope = get(), appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default))
+        CatalogUpdater(catalog = get(), scope = scope, appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default))
     }
+    factory { get<CatalogUpdater>().currentScope }
     single { HouseholdRepository(database = get(), country = get<CatalogScope>().country, clock = get()) }
     single { ShoppingListRepository(database = get(), ids = get(), clock = get()) }
     single { QuestionRepository(database = get(), households = get(), ids = get(), clock = get()) }

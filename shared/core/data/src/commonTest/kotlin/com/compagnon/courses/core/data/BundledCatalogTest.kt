@@ -1,6 +1,7 @@
 package com.compagnon.courses.core.data
 
 import com.compagnon.courses.contract.CatalogSnapshotDto
+import com.compagnon.courses.core.model.Catalog
 import com.compagnon.courses.core.model.Quantity
 import com.compagnon.courses.core.model.UnitCode
 import com.compagnon.courses.core.testing.SeedCatalog
@@ -8,6 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -31,7 +33,7 @@ class BundledCatalogTest {
         assertEquals(19, catalog.categories.size)
         assertEquals("fr-FR", catalog.locale)
         assertEquals("du lait demi-écrémé", catalog.products.first { it.slug == "lait-demi-ecreme" }.needPhrase)
-        assertEquals(1L, data.catalog.observeStatusNow()?.version)
+        assertEquals(SeedCatalog.release, data.catalog.observeStatusNow()?.version)
         assertEquals(emptyList(), data.server.requests)
     }
 
@@ -64,14 +66,15 @@ class BundledCatalogTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
         data.catalog.installBundled("FR", "fr-FR")
         val renamed = seedProduct("pommes").copy(name = "pomme bio", forms = mapOf("one" to "pomme bio", "other" to "pommes bio"))
-        data.server.version = SeedCatalog.version(2)
-        data.server.changes[1] = changes(from = 1, to = 2, products = listOf(renamed))
+        val release = SeedCatalog.release
+        data.server.version = SeedCatalog.version(release + 1)
+        data.server.changes[release] = changes(from = release, to = release + 1, products = listOf(renamed))
 
         val result = assertIs<SyncResult.Updated>(data.syncSeed())
 
         assertEquals(SyncMethod.DELTA, result.method)
         assertFalse(data.catalog.installBundled("FR", "fr-FR"))
-        assertEquals(2L, data.catalog.observeStatusNow()?.version)
+        assertEquals(SeedCatalog.release + 1, data.catalog.observeStatusNow()?.version)
         assertEquals("pomme bio", assertNotNull(data.catalog.catalog()).products.first { it.slug == "pommes" }.name.text)
     }
 
@@ -82,15 +85,15 @@ class BundledCatalogTest {
         data.catalog.installBundled("FR", "fr-FR")
         val milk = seedProductId("lait-demi-ecreme")
         data.lists.addProduct(milk, Quantity.of(2, UnitCode("bottle")))
-        val release3 = SeedCatalog.snapshot.copy(
-            version = 3,
+        val newer = SeedCatalog.snapshot.copy(
+            version = SeedCatalog.release + 2,
             products = SeedCatalog.snapshot.products.map { if (it.slug == "pommes") it.copy(name = "pomme reinette") else it },
         )
-        val updated = CatalogRepository(data.database, data.server.api, data.clock, context, FixedBundle(release3))
+        val updated = CatalogRepository(data.database, data.server.api, data.clock, context, FixedBundle(newer))
 
         assertTrue(updated.installBundled("FR", "fr-FR"))
 
-        assertEquals(3L, data.catalog.observeStatusNow()?.version)
+        assertEquals(SeedCatalog.release + 2, data.catalog.observeStatusNow()?.version)
         assertEquals("pomme reinette", assertNotNull(updated.catalog()).products.first { it.slug == "pommes" }.name.text)
         assertEquals(listOf(milk), data.lists.activeList().items.map { it.productId })
     }
@@ -133,14 +136,15 @@ class BundledCatalogTest {
     fun theUpdaterAppliesANewerReleaseAtLaunch() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
         val renamed = seedProduct("pommes").copy(name = "pomme bio", forms = mapOf("one" to "pomme bio", "other" to "pommes bio"))
-        data.server.version = SeedCatalog.version(2)
-        data.server.changes[1] = changes(from = 1, to = 2, products = listOf(renamed))
+        val release = SeedCatalog.release
+        data.server.version = SeedCatalog.version(release + 1)
+        data.server.changes[release] = changes(from = release, to = release + 1, products = listOf(renamed))
 
         val updater = updater(data)
         updater.start()
 
         val updated = assertIs<SyncResult.Updated>(updater.check.first { it.result != null }.result)
-        assertEquals(1L, updated.fromVersion)
+        assertEquals(SeedCatalog.release, updated.fromVersion)
         assertEquals(SyncMethod.DELTA, updated.method)
         assertEquals("pomme bio", assertNotNull(data.catalog.catalog()).products.first { it.slug == "pommes" }.name.text)
     }
@@ -163,6 +167,74 @@ class BundledCatalogTest {
         advanceUntilIdle()
         assertIs<SyncResult.UpToDate>(updater.check.first { it.result is SyncResult.UpToDate }.result)
     }
+
+    @Test
+    fun aBuildWithoutServerOnlyInstallsTheBundledCatalog() = runTest {
+        val data = TestData(StandardTestDispatcher(testScheduler))
+        val context = StandardTestDispatcher(testScheduler)
+        val catalog = CatalogRepository(data.database, api = null, clock = data.clock, context = context)
+        val updater = CatalogUpdater(catalog, CatalogScope.DEFAULT, backgroundScope)
+
+        assertFalse(updater.checksServer)
+        updater.start()
+        updater.awaitInstalled()
+        updater.checkNow()
+        advanceUntilIdle()
+
+        assertEquals(312, assertNotNull(catalog.catalog()).products.size)
+        assertEquals(CatalogCheck(), updater.check.value)
+        assertIs<SyncResult.Failed>(catalog.sync("FR", "fr-FR"))
+        assertEquals(emptyList(), data.server.requests)
+    }
+
+    @Test
+    fun aLanguageChangeInstallsTheCatalogOfTheNewLanguageWhileTheAppRuns() = runTest {
+        val data = TestData(StandardTestDispatcher(testScheduler))
+        val context = StandardTestDispatcher(testScheduler)
+        val catalog = CatalogRepository(data.database, api = null, clock = data.clock, context = context)
+        val updater = CatalogUpdater(catalog, CatalogScope.forDevice("en-US"), backgroundScope)
+        updater.awaitInstalled()
+        assertEquals("semi-skimmed milk", assertNotNull(catalog.catalog()).milk.name.text)
+
+        updater.switchTo(CatalogScope.forDevice("fr-FR"))
+        catalog.observeStatus().first { it?.locale == "fr-FR" }
+
+        assertEquals("fr-FR", updater.currentScope.locale)
+        assertEquals("lait demi-écrémé", assertNotNull(catalog.catalog()).milk.name.text)
+    }
+
+    @Test
+    fun aLanguageChangeChecksTheServerForTheNewLanguage() = runTest {
+        val data = TestData(StandardTestDispatcher(testScheduler))
+        data.server.offline = true
+        val updater = updater(data)
+        updater.start()
+        updater.check.first { it.result != null }
+
+        data.server.offline = false
+        updater.switchTo(CatalogScope.forDevice("en-US"))
+
+        assertIs<SyncResult.UpToDate>(updater.check.first { it.result is SyncResult.UpToDate }.result)
+        assertEquals("en", assertNotNull(data.catalog.catalog()).locale)
+    }
+
+    @Test
+    fun aConfigurationChangeInTheSameLanguageDoesNothing() = runTest {
+        val data = TestData(StandardTestDispatcher(testScheduler))
+        data.server.offline = true
+        val updater = updater(data)
+        updater.start()
+        updater.check.first { it.result != null }
+
+        data.server.offline = false
+        updater.switchTo(CatalogScope.DEFAULT)
+        runCurrent()
+
+        assertFalse(updater.check.value.running)
+        assertIs<SyncResult.Failed>(updater.check.value.result)
+    }
+
+    private val Catalog.milk get() = products.first { it.slug == "lait-demi-ecreme" }
 
     private fun TestScope.updater(data: TestData) = CatalogUpdater(data.catalog, CatalogScope.DEFAULT, backgroundScope)
 

@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <uses-permission android:name="android.permission.INTERNET" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
-        No local user data in Sprint 0, so no backup: allowBackup="false" covers Android 11 and lower (where
-        fullBackupContent would be ignored anyway), the extraction rules cover Android 12+ (cloud and device transfer).
-        Revisit with the local list (V0).
+        Backup of the user data (lists, history, household), the only copy in a build without server (ADR-013):
+        backup_rules.xml for Android 11 and lower, data_extraction_rules.xml for Android 12+.
     -->
     <application
         android:name=".CompagnonApplication"
-        android:allowBackup="false"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_rules"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Compagnon"
-        tools:ignore="DataExtractionRules">
+        android:theme="@style/Theme.Compagnon">
 
         <activity
             android:name=".MainActivity"

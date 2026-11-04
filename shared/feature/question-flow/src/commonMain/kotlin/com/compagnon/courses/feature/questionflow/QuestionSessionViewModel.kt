@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.cancellation.CancellationException
@@ -91,6 +92,11 @@ class QuestionSessionViewModel(
             }
         }
         start(resume = true)
+        viewModelScope.launch {
+            catalog.observeLocale()
+                .catch { e -> log.w(e) { "The catalog language could not be observed" } }
+                .collect { catalogLocale -> enqueue { if (catalogLocale != locale) reloadOpenSession() } }
+        }
     }
 
     fun onEvent(event: QuestionEvent) {
@@ -197,6 +203,16 @@ class QuestionSessionViewModel(
         render()
         if (engine is SessionState.Committing && pendingCommit != null) commit(pendingCommit)
         return true
+    }
+
+    /**
+     * The phone language changed while this ViewModel lives (Android keeps it): the open session is replayed on the
+     * new catalog, with the same ids. Queued after the pending writes, so that no saved event is missing.
+     */
+    private fun reloadOpenSession() {
+        if (engine !is SessionState.Interactive) return
+        engine = SessionState.Idle
+        start(resume = true)
     }
 
     private fun begin(id: SessionId, list: ListId?, setup: PlanningSetup) {

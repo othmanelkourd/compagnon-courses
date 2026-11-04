@@ -5,7 +5,7 @@ import SwiftUI
 struct CompagnonApp: App {
     init() {
         let configuration = AppConfiguration.load()
-        // Starts the shared Koin graph (database, HTTP client, repositories, ViewModels) before any view exists.
+        // Starts the shared Koin graph (database, HTTP client in Debug, repositories, ViewModels) before any view exists.
         // The device language picks the catalog locale (French, otherwise English).
         doInitKoin(
             baseUrl: configuration.apiBaseURL,

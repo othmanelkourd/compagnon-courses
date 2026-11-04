@@ -254,6 +254,30 @@ class QuestionSessionViewModelTest {
     }
 
     @Test
+    fun aLanguageChangeKeepsTheSessionAndShowsTheNewLanguage() = test { device ->
+        device.sync()
+        device.watch("pommes", "lait-demi-ecreme", "yaourts-nature")
+        val viewModel = device.newViewModel()
+        advanceUntilIdle()
+        viewModel.answerMetas(values = listOf(10, 3, 1))
+        viewModel.onEvent(QuestionEvent.ConfirmItems)
+        advanceUntilIdle()
+        viewModel.skipToCard { true }
+        viewModel.onEvent(QuestionEvent.Yes())
+        advanceUntilIdle()
+        val french = assertIs<QuestionUiState.Card>(viewModel.state.value)
+
+        device.catalog.installBundled("FR", "en")
+        advanceUntilIdle()
+
+        val english = assertIs<QuestionUiState.Card>(viewModel.state.value)
+        assertEquals(french.progress, english.progress)
+        assertEquals(french.card.productId, english.card.productId)
+        assertNotEquals(french.card.name, english.card.name)
+        assertEquals("en", assertNotNull(device.catalog.catalog()).locale)
+    }
+
+    @Test
     fun abandoningAddsNothingAndTheNextSessionStartsAfresh() = test { device ->
         device.sync()
         val viewModel = device.newViewModel()

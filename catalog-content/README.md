@@ -14,6 +14,7 @@ Ce dossier contient le catalogue de départ lu par l'importeur du serveur (`serv
 | `units.json` | 33 unités : masse, volume, comptage et conditionnements |
 | `storage-zones.json` | 9 zones de rangement (ordre de la « tournée de la maison ») |
 | `categories.json` | 19 rayons de premier niveau, avec leur question porte |
+| `release.json` | Numéro de la release du catalogue, embarquée dans les apps et publiée par le serveur |
 | `products.json` | 313 produits génériques (alimentaire et non alimentaire), marché FR, avec leurs tags de régime et d'allergènes |
 
 Répartition des produits par rayon : fruits et légumes 44 · boulangerie 12 · crèmerie 20 · fromages 13 · boucherie et volaille 14 · charcuterie et traiteur 15 · poissonnerie 8 · surgelés 13 · épicerie salée 48 · petit-déjeuner 18 · épicerie sucrée 17 · apéritif 8 · eaux, jus et sodas 9 · vins, bières et alcools 10 · hygiène et beauté 19 · entretien 19 · papier et emballages 9 · bébé 9 · animaux 8.
@@ -22,14 +23,16 @@ V0 a ajouté 117 produits aux 196 du Sprint 0 : herbes fraîches et épices, sur
 
 ## Catalogue embarqué dans les apps
 
-Les apps embarquent la release 1, c'est-à-dire ce dossier, projetée sur (FR, fr-FR) et (FR, en) comme `/v1/catalog/snapshot` ([ADR-012](../docs/adr/012-catalogue-embarque.md)). **Après toute modification de ce dossier**, régénérez-la :
+Les apps embarquent ce dossier, projeté sur (FR, fr-FR) et (FR, en) comme `/v1/catalog/snapshot` ([ADR-012](../docs/adr/012-catalogue-embarque.md)), sous le numéro de release de `release.json`.
+
+**Après toute modification de ce dossier livrée dans une version de l'app**, incrémentez `release.json`. Sinon les appareils qui ont déjà cette release gardent leur ancienne copie : la version publiée n'a pas de serveur pour la mettre à jour ([ADR-013](../docs/adr/013-version-sans-connexion.md)). Régénérez ensuite le catalogue embarqué :
 
 ```
 python3 catalog-content/tools/bundle.py          # écrit shared/core/catalog-bundle/.../BundledSnapshots.kt
 python3 catalog-content/tools/bundle.py --check  # échoue si le fichier n'est plus à jour (CI)
 ```
 
-`CatalogBundleParityTest` (server/app) vérifie que le résultat est identique à ce que le serveur publie pour la release 1.
+Le serveur publie ce dossier sous le même numéro. `CatalogBundleParityTest` (server/app) vérifie que le résultat est identique à ce qu'il publie.
 
 ## Format
 

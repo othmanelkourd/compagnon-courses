@@ -303,6 +303,24 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun aLanguageChangeRenamesTheEssentialsAndKeepsTheAnswers() = test { device ->
+        val viewModel = device.onboarding()
+        advanceUntilIdle()
+        send(viewModel, OnboardingEvent.Start, OnboardingEvent.Next, OnboardingEvent.Next, OnboardingEvent.Next)
+        val milk = SeedCatalog.productId("lait-demi-ecreme")
+        fun essentials() = assertNotNull(viewModel.ready().essentials)
+        fun name() = essentials().aisles.flatMap { it.items }.first { it.productId == milk }.name
+        val french = name()
+        val checked = essentials().checkedCount
+
+        device.catalog.installBundled("FR", "en")
+        advanceUntilIdle()
+
+        assertTrue(french != name(), "still $french")
+        assertEquals(checked, essentials().checkedCount)
+    }
+
+    @Test
     fun theEssentialsCanBeRetriedWhenNoCatalogCouldBeWritten() = test(sync = false, bundled = NoBundledCatalog) { device ->
         val viewModel = device.onboarding()
         advanceUntilIdle()

@@ -25,6 +25,7 @@ Monorepo de « Compagnon de courses », une application mobile qui prépare la l
 - [Services locaux (Docker, optionnel)](#services-locaux-docker-optionnel)
 - [CI et dépendances](#ci-et-dépendances)
 - [Conventions](#conventions)
+- [Publication](#publication)
 - [Documentation](#documentation)
 
 ## Structure
@@ -38,7 +39,7 @@ courses/
 │  └─ openapi/openapi.json      # exporté par le serveur, versionné
 ├─ shared/
 │  ├─ core/model/               # :shared:core:model       unités, Quantity (sans Double), entités, mappers DTO → domaine, clés d'images
-│  ├─ core/catalog-bundle/      # :shared:core:catalog-bundle  catalogue embarqué (release 1, fr-FR et en), généré par catalog-content/tools/bundle.py
+│  ├─ core/catalog-bundle/      # :shared:core:catalog-bundle  catalogue embarqué (release de catalog-content/release.json, fr-FR et en), généré par catalog-content/tools/bundle.py
 │  ├─ core/network/             # :shared:core:network     client Ktor, CatalogApi, NetworkError
 │  ├─ core/database/            # :shared:core:database    SQLDelight : schéma, migrations (databases/n.db)
 │  ├─ core/data/                # :shared:core:data        dépôts : catalogue, foyer (« Mon foyer »), listes, séances
@@ -47,13 +48,16 @@ courses/
 │  ├─ feature/question-flow/    # :shared:feature:question-flow  QuestionSessionViewModel
 │  ├─ feature/lists/            # :shared:feature:lists    ShoppingListViewModel
 │  ├─ feature/onboarding/       # :shared:feature:onboarding  AppGateViewModel, OnboardingViewModel (« Mon foyer »)
+│  ├─ feature/about/            # :shared:feature:about    « À propos » : licences open source (générées), liens publics
 │  └─ umbrella/                 # :shared:umbrella         graphe Koin, framework iOS « Shared » (SKIE appliqué ici seulement)
 ├─ androidApp/                  # :androidApp              app Compose (com.ocimio.courses)
 ├─ iosApp/                      # iosApp.xcodeproj         app SwiftUI (com.ocimio.courses)
 ├─ server/app/                  # :server:app              serveur Ktor, Flyway, Exposed, import du seed
 ├─ backoffice/                  # Vite + React + TypeScript + react-admin (npm)
 ├─ catalog-content/             # seed éditorial du catalogue (JSON)
-├─ design/                      # charte, textes, maquette, icône (brand/), images 3D (illustrations/), polices
+├─ design/                      # charte, textes, maquette, icône (brand/), images 3D (illustrations/), polices, licences (licenses/)
+├─ store/                       # fiches des stores, captures, image de mise en avant, politique de confidentialité (docs/PUBLICATION.md)
+├─ config/detekt/detekt.yml     # règles detekt + ktlint (baselines par module : detekt-baseline.xml)
 ├─ infra/
 │  ├─ docker/compose.yml        # PostgreSQL 18, Mailpit, stockage S3 (RustFS) en local
 │  └─ tofu/                     # OpenTofu (en attente de l'ADR-007)
@@ -196,6 +200,10 @@ Tests JVM (contrat, modèle, moteur, réseau, ViewModel, serveur avec PostgreSQL
 | `./gradlew :shared:feature:catalog:iosSimulatorArm64Test` | Tests du ViewModel sur le simulateur iOS (macOS uniquement) |
 | `./gradlew :androidApp:assembleDebug` | Compilation de l'app Android |
 | `cd backoffice && npm run typecheck && npm run build` | Typage et build du backoffice (`npm test` pour les tests Vitest) |
+| `./gradlew :shared:engine:koverVerify` | Couverture du moteur ≥ 90 % des lignes (`koverHtmlReport` montre ce qui manque) |
+| `./gradlew detekt` | Lint Kotlin (detekt + ktlint) ; `-Pdetekt.autoCorrect` corrige la mise en forme, `detektBaseline` accepte les alertes existantes |
+| `./gradlew :androidApp:lintDebug` | Android Lint, tout nouvel avertissement est bloquant (`lint-baseline.xml`) |
+| SwiftLint | À chaque build Xcode (plugin `SwiftLintPlugins`, `iosApp/.swiftlint.yml`) |
 
 Les rapports de tests sont dans `<module>/build/reports/tests/`.
 
@@ -237,8 +245,8 @@ RustFS remplace MinIO, dont l'édition communautaire n'est plus distribuée qu'e
 
 | Job | Contenu |
 |---|---|
-| `jvm` (ubuntu, JDK 17) | Tests JVM de tous les modules + `:androidApp:assembleDebug` |
-| `ios` (macos-26) | `:shared:feature:catalog:iosSimulatorArm64Test` + build Xcode ; seulement si `shared/`, `iosApp/`, le contrat ou la configuration Gradle changent |
+| `jvm` (ubuntu, JDK 17) | Catalogue embarqué et licences à jour, tests JVM, couverture du moteur (`koverVerify`, ≥ 90 %), `detekt`, `:androidApp:assembleDebug` et `lintDebug` |
+| `ios` (macos-26) | `:shared:feature:catalog:iosSimulatorArm64Test` + build Xcode (avec SwiftLint) ; seulement si `shared/`, `iosApp/`, le contrat ou la configuration Gradle changent |
 | `backoffice` (Node 22) | `npm ci`, `npm run typecheck`, tests Vitest, `npm run build` |
 | `openapi` | Régénère `contract/openapi/openapi.json` et les types TypeScript du backoffice (`backoffice/src/api/schema.d.ts`), et échoue en cas de différence |
 
@@ -252,6 +260,10 @@ SKIE est lié à une version exacte de Kotlin, la montée se valide depuis le ta
 - **Style** : [`.editorconfig`](.editorconfig) ; Kotlin selon les conventions officielles (`kotlin.code.style=official`).
 - **Code partagé** : pas de `Double` pour les quantités ; erreurs réseau typées (`NetworkError`) ; les ViewModels exposent un `StateFlow` d'état et ne lèvent jamais d'exception.
 - **Secrets** : aucun secret dans le dépôt. Les identifiants présents (`courses`/`courses`, etc.) sont des valeurs de dev, signalées comme telles.
+
+## Publication
+
+La première version publiée n'a pas de serveur ([ADR-013](docs/adr/013-version-sans-connexion.md)). Comptes, clé d'upload, numéros de version et envoi aux stores : [docs/PUBLICATION.md](docs/PUBLICATION.md). Les textes et visuels des fiches sont dans [`store/`](store/).
 
 ## Documentation
 

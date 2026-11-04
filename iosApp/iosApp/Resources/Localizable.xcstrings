@@ -1301,6 +1301,16 @@
         }
       }
     },
+    "Catalogue" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalog"
+          }
+        }
+      }
+    },
     "Catalogue indisponible" : {
       "comment" : "Title of the error state.",
       "localizations" : {
@@ -2264,6 +2274,26 @@
         }
       }
     },
+    "Licences open source" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open-source licenses"
+          }
+        }
+      }
+    },
+    "Lire la licence" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read the license"
+          }
+        }
+      }
+    },
     "Liste indisponible" : {
       "localizations" : {
         "en" : {
@@ -2280,6 +2310,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "My list"
+          }
+        }
+      }
+    },
+    "Masquer la licence" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide the license"
           }
         }
       }
@@ -2420,6 +2460,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Not checked"
+          }
+        }
+      }
+    },
+    "Nous écrire" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact us"
+          }
+        }
+      }
+    },
+    "Ocimio utilise ces composants open source. Merci à leurs auteurs." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocimio uses these open-source components. Thanks to their authors."
           }
         }
       }
@@ -2670,6 +2730,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Later"
+          }
+        }
+      }
+    },
+    "Politique de confidentialité" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy policy"
           }
         }
       }
@@ -3377,6 +3447,16 @@
         }
       }
     },
+    "Tout reste sur votre téléphone : Ocimio n'a pas de compte, ne se connecte pas à internet et ne collecte aucune donnée. Vos listes et votre historique font partie de la sauvegarde de votre téléphone." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Everything stays on your phone: Ocimio has no account, never goes online and collects no data. Your lists and history are part of your phone's backup."
+          }
+        }
+      }
+    },
     "Tout un rayon" : {
       "localizations" : {
         "en" : {
@@ -3527,6 +3607,16 @@
         }
       }
     },
+    "Version %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@"
+          }
+        }
+      }
+    },
     "Voir ma liste" : {
       "localizations" : {
         "en" : {
@@ -3553,6 +3643,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "See all (%lld)"
+          }
+        }
+      }
+    },
+    "Vos données" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your data"
           }
         }
       }
@@ -3864,6 +3964,16 @@
         }
       }
     },
+    "version %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "version %lld"
+          }
+        }
+      }
+    },
     "« %@ » supprimé" : {
       "localizations" : {
         "en" : {
@@ -3880,6 +3990,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Something new"
+          }
+        }
+      }
+    },
+    "À propos" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        }
+      }
+    },
+    "À propos d'Ocimio" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About Ocimio"
           }
         }
       }

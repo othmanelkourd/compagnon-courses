@@ -524,4 +524,21 @@
         <item quantity="many">%d de essentiels</item>
         <item quantity="other">%d essentiels</item>
     </plurals>
+
+    <!-- À propos, licences (ADR-013) -->
+    <string name="about_open">À propos d\'Ocimio</string>
+    <string name="about_title">À propos</string>
+    <string name="about_version">Version %1$s (%2$s)</string>
+    <string name="about_data_title">Vos données</string>
+    <string name="about_data_body">Tout reste sur votre téléphone : Ocimio n\'a pas de compte, ne se connecte pas à internet et ne collecte aucune donnée. Vos listes et votre historique font partie de la sauvegarde de votre téléphone.</string>
+    <string name="about_catalog_title">Catalogue</string>
+    <string name="about_catalog_body">%1$s · version %2$s</string>
+    <string name="about_more_title">Plus</string>
+    <string name="about_privacy">Politique de confidentialité</string>
+    <string name="about_contact">Nous écrire</string>
+    <string name="about_licenses">Licences open source</string>
+    <string name="licenses_title">Licences open source</string>
+    <string name="licenses_intro">Ocimio utilise ces composants open source. Merci à leurs auteurs.</string>
+    <string name="licenses_show_text">Lire la licence</string>
+    <string name="licenses_hide_text">Masquer la licence</string>
 </resources>

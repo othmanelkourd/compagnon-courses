@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import app.cash.turbine.test
-import com.compagnon.courses.core.data.SyncResult
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CompletableDeferred
@@ -21,7 +20,7 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -162,7 +161,7 @@ class CatalogStatusViewModelTest {
             expectNoEvents()
         }
         // The check belongs to the app, not to the home screen: it ends even when the screen is gone.
-        assertIs<SyncResult.UpToDate>(updater.check.first { it.result != null }.result)
+        assertNotNull(updater.check.first { it.result != null }.result)
     }
 
     @Test

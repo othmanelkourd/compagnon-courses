@@ -19,6 +19,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -93,6 +94,12 @@ class OnboardingViewModel(
 
     init {
         load()
+        // The phone language changed while this ViewModel lives (Android keeps it): the answers keep their ids.
+        viewModelScope.launch {
+            catalog.observeLocale()
+                .catch { e -> log.w(e) { "The catalog language could not be observed" } }
+                .collect { locale -> if (loadedCatalog?.locale?.let { it != locale } == true) loadCatalog() }
+        }
     }
 
     fun onEvent(event: OnboardingEvent) {

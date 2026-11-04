@@ -18,10 +18,11 @@ internal const val IOS_PLATFORM: String = "ios"
  *
  * HTTP logging is on in Debug frameworks only.
  *
- * @param baseUrl API root, e.g. `http://localhost:8080` in the simulator.
+ * @param baseUrl API root, e.g. `http://localhost:8080` in the simulator; nil in a build without server (ADR-013,
+ *   Release): the app then never goes online.
  * @param appVersion the app's `CFBundleShortVersionString`, sent as `X-App-Version`.
  */
-fun doInitKoin(baseUrl: String, appVersion: String) {
+fun doInitKoin(baseUrl: String?, appVersion: String) {
     doInitKoin(baseUrl = baseUrl, appVersion = appVersion, deviceLanguage = CatalogScope.DEFAULT.locale)
 }
 
@@ -29,10 +30,10 @@ fun doInitKoin(baseUrl: String, appVersion: String) {
  * Same as `doInitKoin(baseUrl:appVersion:)`, with the catalog locale chosen from the device language
  * (`Locale.current.identifier`: `fr_FR`, `en_GB`…): French gets the French catalog, any other language English.
  * The catalog country stays `FR` until other markets launch. Starts the [CatalogUpdater]: the bundled catalog, then
- * the check of the server's latest release.
+ * the check of the server's latest release (when there is a server).
  */
 @OptIn(ExperimentalNativeApi::class)
-fun doInitKoin(baseUrl: String, appVersion: String, deviceLanguage: String) {
+fun doInitKoin(baseUrl: String?, appVersion: String, deviceLanguage: String) {
     val koin = startSharedKoin(
         NetworkConfig(
             baseUrl = baseUrl,

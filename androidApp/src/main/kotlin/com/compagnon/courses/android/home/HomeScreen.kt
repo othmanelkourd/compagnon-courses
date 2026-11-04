@@ -46,6 +46,8 @@ import com.compagnon.courses.android.catalog.CatalogFooter
 import com.compagnon.courses.android.catalog.currentLocale
 import com.compagnon.courses.android.onboarding.OnboardingTexts
 import com.compagnon.courses.android.ui.components.AppIcons
+import com.compagnon.courses.android.ui.components.CompagnonIconButton
+import com.compagnon.courses.android.ui.components.IconButtonStyle
 import com.compagnon.courses.android.ui.components.ProgressBar
 import com.compagnon.courses.android.ui.components.pressScale
 import com.compagnon.courses.android.ui.components.resolve
@@ -83,6 +85,7 @@ fun HomeScreen(
     onOpenList: () -> Unit,
     onOpenHousehold: () -> Unit,
     modifier: Modifier = Modifier,
+    onOpenAbout: () -> Unit = {},
     scope: CatalogScope = koinInject(),
     catalogViewModel: CatalogStatusViewModel = koinViewModel { parametersOf(scope.country) },
     listViewModel: ShoppingListViewModel = koinViewModel(),
@@ -97,6 +100,7 @@ fun HomeScreen(
         onOpenList = onOpenList,
         onOpenHousehold = onOpenHousehold,
         onRefresh = { catalogViewModel.onEvent(CatalogStatusEvent.Refresh) },
+        onOpenAbout = onOpenAbout,
         modifier = modifier,
     )
 }
@@ -116,6 +120,7 @@ internal fun HomeContent(
     modifier: Modifier = Modifier,
     household: HouseholdSummaryUi? = null,
     onOpenHousehold: () -> Unit = {},
+    onOpenAbout: () -> Unit = {},
     today: LocalDate = LocalDate.now(),
 ) {
     Box(
@@ -143,17 +148,25 @@ internal fun HomeContent(
                 val locale = currentLocale()
                 val pattern = stringResource(R.string.home_date_pattern)
                 val date = remember(today, pattern, locale) { formatHomeDate(today, pattern, locale) }
-                Column(modifier = Modifier.riseIn(index = 0), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(
-                        text = date,
-                        style = CompagnonType.Secondary.copy(fontWeight = FontWeight.Medium),
-                        color = CompagnonColors.InkSoft,
-                    )
-                    Text(
-                        text = stringResource(R.string.home_headline),
-                        style = CompagnonType.ScreenTitleLarge,
-                        color = CompagnonColors.Ink,
-                        modifier = Modifier.semantics { heading() },
+                Row(modifier = Modifier.riseIn(index = 0), verticalAlignment = Alignment.Top) {
+                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text(
+                            text = date,
+                            style = CompagnonType.Secondary.copy(fontWeight = FontWeight.Medium),
+                            color = CompagnonColors.InkSoft,
+                        )
+                        Text(
+                            text = stringResource(R.string.home_headline),
+                            style = CompagnonType.ScreenTitleLarge,
+                            color = CompagnonColors.Ink,
+                            modifier = Modifier.semantics { heading() },
+                        )
+                    }
+                    CompagnonIconButton(
+                        icon = AppIcons.Info,
+                        contentDescription = stringResource(R.string.about_open),
+                        onClick = onOpenAbout,
+                        style = IconButtonStyle.SOFT,
                     )
                 }
                 StartSessionCard(onClick = onStartSession, modifier = Modifier.riseIn(index = 1))

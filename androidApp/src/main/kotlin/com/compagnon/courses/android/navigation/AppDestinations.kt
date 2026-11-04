@@ -19,6 +19,14 @@ data object ShoppingListKey : NavKey
 @Serializable
 data object HouseholdKey : NavKey
 
+/** « À propos »: version, catalog, data, links. Opened from the home screen. */
+@Serializable
+data object AboutKey : NavKey
+
+/** « Licences open source », opened from « À propos ». */
+@Serializable
+data object LicensesKey : NavKey
+
 /**
  * Back stack moves of the app, kept free of Compose so they are unit tested. The stack always keeps [HomeKey]
  * at its root.
@@ -48,6 +56,16 @@ internal object AppNavigation {
     fun leaveHousehold(backStack: MutableList<NavKey>, startSession: Boolean) {
         if (backStack.size > 1 && backStack.last() == HouseholdKey) backStack.removeAt(backStack.lastIndex)
         if (startSession) startSession(backStack)
+    }
+
+    /** Opens « À propos », unless it is already on top. */
+    fun openAbout(backStack: MutableList<NavKey>) {
+        if (backStack.lastOrNull() != AboutKey) backStack += AboutKey
+    }
+
+    /** Opens the licenses, unless they are already on top. */
+    fun openLicenses(backStack: MutableList<NavKey>) {
+        if (backStack.lastOrNull() != LicensesKey) backStack += LicensesKey
     }
 
     /** Goes back one screen; the root stays. Returns false when there was nothing to pop. */

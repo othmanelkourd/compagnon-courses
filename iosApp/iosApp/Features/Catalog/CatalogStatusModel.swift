@@ -19,11 +19,18 @@ final class CatalogStatusModel {
         lastSyncedAt: nil,
         productCount: 0,
         categoryCount: 0,
-        lastOutcome: nil
+        lastOutcome: nil,
+        canCheck: true
     )
 
+    /// A check is running. Without server (`sync.canCheck` false), the server state never loads: never busy.
     var isBusy: Bool {
-        sync.syncing || state is CatalogStatusUiStateLoading
+        sync.syncing || (sync.canCheck && state is CatalogStatusUiStateLoading)
+    }
+
+    /// Whether the catalog can be checked again (pull to refresh, tap on the line).
+    var canRefresh: Bool {
+        sync.canCheck
     }
 
     @ObservationIgnored private let country: String

@@ -324,7 +324,7 @@
 
         static let catalogSync = CatalogSyncUiState(
             syncing: false, localVersion: KotlinLong(value: 3), lastSyncedAt: "2026-10-24T08:30:00Z",
-            productCount: 312, categoryCount: 18, lastOutcome: .upToDate
+            productCount: 312, categoryCount: 18, lastOutcome: nil, canCheck: false
         )
     }
 

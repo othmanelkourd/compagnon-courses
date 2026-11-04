@@ -7,6 +7,9 @@ enum AppRoute: Hashable {
     case list
     /// « Mon foyer »: the onboarding in edit mode, one model per visit.
     case household
+    /// « À propos », then « Licences open source ».
+    case about
+    case licenses
 }
 
 /// The root: a plain background while the household is read, the first-run onboarding on the first launch, then the
@@ -65,7 +68,8 @@ struct RootView: View {
                 household: household,
                 onStartSession: { path.append(.questionnaire) },
                 onOpenList: { path.append(.list) },
-                onOpenHousehold: { path.append(.household) }
+                onOpenHousehold: { path.append(.household) },
+                onOpenAbout: { path.append(.about) }
             )
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
@@ -84,6 +88,10 @@ struct RootView: View {
                             }
                         }
                     }
+                case .about:
+                    AboutView(catalogSync: catalog.sync, onOpenLicenses: { path.append(.licenses) })
+                case .licenses:
+                    LicensesView()
                 }
             }
         }

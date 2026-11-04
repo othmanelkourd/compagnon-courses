@@ -3,6 +3,7 @@ package com.compagnon.courses.shared
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.turbine.test
 import com.compagnon.courses.core.data.CatalogScope
+import com.compagnon.courses.core.data.CatalogUpdater
 import com.compagnon.courses.core.network.CatalogApi
 import com.compagnon.courses.core.network.NetworkConfig
 import com.compagnon.courses.core.network.createHttpClient
@@ -42,7 +43,9 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 
 internal const val VERSION_JSON: String =
     """{"country":"FR","version":7,"publishedAt":"2026-10-24T08:30:00Z","locales":["fr-FR","fr","en"],"categoryCount":18,"productCount":120}"""
@@ -92,6 +95,22 @@ class SharedModulesTest {
     }
 
     @Test
+    fun aBuildWithoutServerWorksFromTheBundledCatalog() = runTest {
+        val config = NetworkConfig(baseUrl = null, platform = "android", appVersion = "1.0.0")
+        val inMemory = module { single<SqlDriver> { createInMemoryDriver() } }
+        val app = koinApplication { modules(sharedModules(config, CatalogScope.forDevice("fr-FR")) + inMemory) }
+
+        assertNull(app.koin.getOrNull<CatalogApi>())
+        assertNull(app.koin.getOrNull<HttpClient>())
+        val updater = app.koin.get<CatalogUpdater>()
+        assertFalse(updater.checksServer)
+        updater.awaitInstalled()
+        val questions = app.koin.get<QuestionSessionViewModel>()
+        assertIs<QuestionUiState.Meta>(questions.state.first { it != QuestionUiState.Loading })
+        app.close()
+    }
+
+    @Test
     fun sharedGraphProvidesTheQuestionFlowAndTheListOverTheSameDatabase() = runTest {
         val config = NetworkConfig(baseUrl = "http://api.test", platform = "android", appVersion = "0.1.0")
         val server = MockCatalogServer()
@@ -115,6 +134,8 @@ class SharedModulesTest {
         val loaded = assertIs<ShoppingListUiState.Loaded>(list.state.first { it != ShoppingListUiState.Loading })
         assertEquals(0, loaded.itemCount)
         assertEquals("fr-FR", app.koin.get<CatalogScope>().locale)
+        app.koin.get<CatalogUpdater>().switchTo(CatalogScope.forDevice("en-US"))
+        assertEquals("en", app.koin.get<CatalogScope>().locale)
         app.close()
     }
 

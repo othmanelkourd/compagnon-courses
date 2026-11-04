@@ -69,6 +69,8 @@ jobs:
       # The catalog bundled in the apps (ADR-012) must follow catalog-content/.
       - name: Catalogue embarqué à jour
         run: python3 catalog-content/tools/bundle.py --check
+      - name: Licences open source à jour
+        run: python3 design/licenses/notices.py --check
       - uses: actions/setup-java@v6
         with:
           distribution: ${{ env.JAVA_DISTRIBUTION }}

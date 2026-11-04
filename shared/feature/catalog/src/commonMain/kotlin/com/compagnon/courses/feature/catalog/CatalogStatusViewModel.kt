@@ -23,7 +23,8 @@ import kotlin.coroutines.cancellation.CancellationException
  *
  * It does not sync by itself: the [CatalogUpdater] installs the bundled catalog and checks the server at app launch
  * (creating this ViewModel starts it, if the app did not); this ViewModel shows the outcome of the last check, and
- * [CatalogStatusEvent.Refresh] checks again.
+ * [CatalogStatusEvent.Refresh] checks again. Without server ([CatalogSyncUiState.canCheck] false), [state] stays
+ * [CatalogStatusUiState.Loading] and only [sync] is meaningful.
  *
  * Failures are values ([CatalogStatusUiState.Error], [CatalogSyncOutcome]); this ViewModel never throws.
  */
@@ -37,7 +38,7 @@ class CatalogStatusViewModel(
     private val _state = MutableStateFlow<CatalogStatusUiState>(CatalogStatusUiState.Loading)
     val state: StateFlow<CatalogStatusUiState> = _state.asStateFlow()
 
-    private val _sync = MutableStateFlow(CatalogSyncUiState())
+    private val _sync = MutableStateFlow(CatalogSyncUiState(canCheck = updater.checksServer))
 
     /** The local catalog and the last check of the server. */
     val sync: StateFlow<CatalogSyncUiState> = _sync.asStateFlow()

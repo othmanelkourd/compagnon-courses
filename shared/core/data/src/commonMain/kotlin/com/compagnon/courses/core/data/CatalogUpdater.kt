@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.experimental.ExperimentalObjCRefinement
@@ -21,7 +22,10 @@ data class CatalogCheck(val running: Boolean = false, val result: SyncResult? = 
  * Keeps the local catalog ready and current for the whole app (ADR-012). [start], once at launch: writes the catalog
  * bundled in the app when the device has none (or an older release), then asks the server for its latest release
  * and applies it when it is newer (`changes`, or the snapshot). A server that does not answer leaves the local catalog
- * as it is: the app never waits for the network.
+ * as it is: the app never waits for the network. [switchTo] does the same for another language while the app runs.
+ *
+ * In a build without server ([CatalogRepository.hasServer] false, ADR-013), it only installs the bundled catalog:
+ * no check ever runs and [check] stays at its initial value.
  *
  * Its jobs run in [appScope], which outlives the screens.
  */
@@ -29,26 +33,40 @@ data class CatalogCheck(val running: Boolean = false, val result: SyncResult? = 
 @HiddenFromObjC
 class CatalogUpdater(
     private val catalog: CatalogRepository,
-    private val scope: CatalogScope,
+    scope: CatalogScope,
     private val appScope: CoroutineScope,
 ) {
+    private val scopes = MutableStateFlow(scope)
     private val started = MutableStateFlow(false)
     private val installed = CompletableDeferred<Unit>()
 
     private val _check = MutableStateFlow(CatalogCheck())
     val check: StateFlow<CatalogCheck> = _check.asStateFlow()
 
-    /** Installs the bundled catalog if needed, then checks the server. Later calls do nothing. */
+    /** Whether the server can be checked at all: false in a build without server. */
+    val checksServer: Boolean get() = catalog.hasServer
+
+    /** The projection the app works with now: it follows [switchTo]. */
+    val currentScope: CatalogScope get() = scopes.value
+
+    /**
+     * Installs the bundled catalog if needed, then checks the server, and again after each [switchTo]; a new scope
+     * replaces the work still running for the previous one. Later calls do nothing.
+     */
     fun start() {
         if (!started.compareAndSet(expect = false, update = true)) return
         appScope.launch {
-            try {
+            scopes.collectLatest { scope ->
                 catalog.installBundled(scope.country, scope.locale)
-            } finally {
                 installed.complete(Unit)
+                if (checksServer) runCheck()
             }
-            runCheck()
         }
+    }
+
+    /** Moves the app to [scope] (the device language changed while the process lives); the same scope does nothing. */
+    fun switchTo(scope: CatalogScope) {
+        scopes.value = scope
     }
 
     /** Returns once the bundled catalog is installed (or was not needed); starts the updater if needed. */
@@ -57,9 +75,10 @@ class CatalogUpdater(
         installed.await()
     }
 
-    /** Checks the server again (« Mise à jour » on the catalog line); ignored while a check runs. */
+    /** Checks the server again (« Mise à jour » on the catalog line); ignored while a check runs, or without server. */
     fun checkNow() {
         if (!started.value) return start()
+        if (!checksServer) return
         appScope.launch {
             installed.await()
             runCheck()
@@ -69,6 +88,7 @@ class CatalogUpdater(
     private suspend fun runCheck() {
         val previous = _check.value
         if (previous.running || !_check.compareAndSet(previous, previous.copy(running = true))) return
+        val scope = currentScope
         val result = try {
             catalog.sync(scope.country, scope.locale)
         } catch (e: CancellationException) {

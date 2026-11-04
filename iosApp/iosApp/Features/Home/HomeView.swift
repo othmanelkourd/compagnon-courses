@@ -10,6 +10,7 @@ struct HomeView: View {
     let onStartSession: () -> Void
     let onOpenList: () -> Void
     let onOpenHousehold: () -> Void
+    let onOpenAbout: () -> Void
 
     var body: some View {
         HomeContent(
@@ -20,10 +21,23 @@ struct HomeView: View {
             onStartSession: onStartSession,
             onOpenList: onOpenList,
             onOpenHousehold: onOpenHousehold,
-            onRefreshCatalog: catalog.refresh
+            onRefreshCatalog: catalog.refresh,
+            onOpenAbout: onOpenAbout
         )
-        .refreshable {
+        .refreshable(enabled: catalog.canRefresh) {
             await catalog.refreshAndWait()
+        }
+    }
+}
+
+private extension View {
+    /// `.refreshable(action:)` only when `enabled`: a build without server has nothing to refresh.
+    @ViewBuilder
+    func refreshable(enabled: Bool, action: @escaping @Sendable () async -> Void) -> some View {
+        if enabled {
+            refreshable(action: action)
+        } else {
+            self
         }
     }
 }
@@ -38,6 +52,7 @@ struct HomeContent: View {
     let onOpenList: () -> Void
     let onOpenHousehold: () -> Void
     var onRefreshCatalog: () -> Void = {}
+    var onOpenAbout: () -> Void = {}
 
     var body: some View {
         GeometryReader { proxy in
@@ -73,16 +88,19 @@ struct HomeContent: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(verbatim: Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)).capitalizedFirstLetter)
-                .font(.custom(FontName.figtreeMedium, size: 15, relativeTo: .subheadline))
-                .foregroundStyle(Palette.inkSoft)
-            Text("Prêt pour les courses\u{00A0}?")
-                .textStyle(.screenTitleLarge)
-                .foregroundStyle(Palette.ink)
-                .accessibilityAddTraits(.isHeader)
+        HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(verbatim: Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)).capitalizedFirstLetter)
+                    .font(.custom(FontName.figtreeMedium, size: 15, relativeTo: .subheadline))
+                    .foregroundStyle(Palette.inkSoft)
+                Text("Prêt pour les courses\u{00A0}?")
+                    .textStyle(.screenTitleLarge)
+                    .foregroundStyle(Palette.ink)
+                    .accessibilityAddTraits(.isHeader)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            IconButton(icon: .info, label: Text("À propos d'Ocimio"), variant: .soft, action: onOpenAbout)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -127,13 +128,21 @@ interface BundledCatalogSource {
 @HiddenFromObjC
 class CatalogRepository(
     private val database: CompagnonDatabase,
-    private val api: CatalogApi,
+    private val api: CatalogApi?,
     private val clock: Clock = Clock.System,
     private val context: CoroutineContext = Dispatchers.Default,
     private val bundled: BundledCatalogSource = BundledCatalogSource.App,
 ) {
     private val store = CatalogStore(database)
     private val syncMutex = Mutex()
+
+    /**
+     * False in a build without server (ADR-013): the catalog only comes from the app ([installBundled]), and [sync]
+     * fails at once without any request.
+     */
+    val hasServer: Boolean get() = api != null
+
+    private val server: CatalogApi get() = checkNotNull(api) { "This build has no catalog server" }
 
     /**
      * Writes the catalog bundled in the app for ([country], [locale]) when the device has none for that projection,
@@ -161,8 +170,9 @@ class CatalogRepository(
 
     /** Syncs the local catalog with the published one for ([country], [locale]). Concurrent calls run one by one. */
     suspend fun sync(country: String, locale: String): SyncResult = syncMutex.withLock {
+        if (api == null) return@withLock SyncResult.Failed(SyncFailure.CONNECTIVITY, retryable = false, remote = null)
         val remote = try {
-            api.version(country).toRemote()
+            server.version(country).toRemote()
         } catch (e: CancellationException) {
             throw e
         } catch (e: NetworkError) {
@@ -203,7 +213,7 @@ class CatalogRepository(
                 return SyncResult.Updated(local.version, toVersion, SyncMethod.DELTA, remote)
             }
         }
-        val snapshot = api.taggedSnapshot(country, locale)
+        val snapshot = server.taggedSnapshot(country, locale)
         withContext(context) {
             database.transaction { store.replaceWith(snapshot.value, snapshot.etag, now) }
         }
@@ -219,7 +229,7 @@ class CatalogRepository(
         var from = since
         while (pages.size < MAX_DELTA_PAGES) {
             val page = try {
-                api.changes(from, country, locale)
+                server.changes(from, country, locale)
             } catch (e: NetworkError.Http) {
                 if (e.status == HTTP_GONE || e.problem?.code == ErrorCode.SNAPSHOT_REQUIRED) return null
                 throw e
@@ -265,6 +275,9 @@ class CatalogRepository(
         }
         .distinctUntilChanged()
         .flowOn(context)
+
+    /** The locale of the local catalog, then each new one: another language replaced the tables. */
+    fun observeLocale(): Flow<String> = observeStatus().mapNotNull { it?.locale }.distinctUntilChanged()
 
     /** Products whose name (any plural form) matches [query], accents and case ignored; prefix matches first. */
     suspend fun search(query: String, limit: Int = DEFAULT_SEARCH_LIMIT): List<Product> =

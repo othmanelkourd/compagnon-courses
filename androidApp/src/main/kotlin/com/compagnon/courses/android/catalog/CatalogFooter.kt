@@ -32,7 +32,7 @@ import java.util.Locale
 
 /**
  * The catalog at the foot of the home screen: « ✓ Catalogue à jour · 312 produits », or the sync / offline state.
- * Tapping it syncs the catalog again (not while a sync runs).
+ * Tapping it syncs the catalog again (not while a sync runs, nor in a build without server).
  */
 @Composable
 internal fun CatalogFooter(sync: CatalogSyncUiState, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
@@ -49,11 +49,18 @@ internal fun CatalogFooter(sync: CatalogSyncUiState, onRefresh: () -> Unit, modi
         modifier = modifier
             .heightIn(min = 48.dp)
             .clip(CompagnonShapes.Small)
-            .clickable(
-                enabled = !sync.syncing,
-                role = Role.Button,
-                onClickLabel = stringResource(R.string.catalog_sync_now),
-                onClick = onRefresh,
+            .then(
+                // A build without server: a plain line, not a button.
+                if (sync.canCheck) {
+                    Modifier.clickable(
+                        enabled = !sync.syncing,
+                        role = Role.Button,
+                        onClickLabel = stringResource(R.string.catalog_sync_now),
+                        onClick = onRefresh,
+                    )
+                } else {
+                    Modifier
+                },
             )
             .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite }
             .padding(horizontal = 12.dp, vertical = 8.dp),

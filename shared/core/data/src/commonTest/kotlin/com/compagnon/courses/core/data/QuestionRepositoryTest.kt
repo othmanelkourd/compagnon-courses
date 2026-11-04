@@ -1,6 +1,7 @@
 package com.compagnon.courses.core.data
 
 import com.compagnon.courses.core.model.AddedVia
+import com.compagnon.courses.core.testing.SeedCatalog
 import com.compagnon.courses.engine.AnswerKind
 import com.compagnon.courses.engine.AnswerSubject
 import com.compagnon.courses.engine.SessionEffect
@@ -39,7 +40,7 @@ class QuestionRepositoryTest {
         assertEquals(2, setup.input.context.persons)
         assertEquals(7, setup.input.context.horizonDays)
         assertEquals(42, setup.input.seed)
-        assertEquals(1, setup.catalogVersion)
+        assertEquals(SeedCatalog.release, setup.catalogVersion)
         assertEquals("fr-FR", setup.locale)
     }
 

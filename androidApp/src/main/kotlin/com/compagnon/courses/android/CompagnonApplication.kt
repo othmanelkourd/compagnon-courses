@@ -1,6 +1,7 @@
 package com.compagnon.courses.android
 
 import android.app.Application
+import android.content.res.Configuration
 import com.compagnon.courses.core.data.CatalogScope
 import com.compagnon.courses.core.data.CatalogUpdater
 import com.compagnon.courses.core.network.NetworkConfig
@@ -12,6 +13,8 @@ import org.koin.core.logger.Level
 import java.util.Locale
 
 class CompagnonApplication : Application() {
+
+    private lateinit var catalogUpdater: CatalogUpdater
 
     override fun onCreate() {
         super.onCreate()
@@ -26,14 +29,24 @@ class CompagnonApplication : Application() {
                         appVersion = BuildConfig.VERSION_NAME,
                         enableLogging = BuildConfig.DEBUG,
                     ),
-                    // French devices get the regional French catalog, every other language the English one.
-                    CatalogScope.forDevice(Locale.getDefault().toLanguageTag()),
+                    deviceCatalogScope(),
                 ),
             )
         }.koin
-        // The bundled catalog is installed, then the server's latest release is checked, in the background.
-        koin.get<CatalogUpdater>().start()
+        // The bundled catalog is installed, then (debug builds, which have a server) the server's latest release is
+        // checked, in the background.
+        catalogUpdater = koin.get()
+        catalogUpdater.start()
     }
+
+    // Android keeps the process when the phone language changes: onCreate does not run again.
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        catalogUpdater.switchTo(deviceCatalogScope())
+    }
+
+    /** French devices get the regional French catalog, every other language the English one. */
+    private fun deviceCatalogScope() = CatalogScope.forDevice(Locale.getDefault().toLanguageTag())
 
     private companion object {
         /** Value of the `X-Platform` header. */

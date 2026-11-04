@@ -11,21 +11,42 @@ plugins {
 val debugApiBaseUrl: String = providers.gradleProperty("compagnon.apiBaseUrl")
     .getOrElse("http://10.0.2.2:8080")
 
-// TODO(ADR-007): real API host once hosting is decided. `.invalid` never resolves (RFC 2606).
-val releaseApiBaseUrl = "https://api.compagnon.invalid"
-
+// Release builds have no server (ADR-013): API_BASE_URL is null, the app never goes online and has no INTERNET
+// permission (declared in src/debug only, removed from the release by src/release/AndroidManifest.xml).
 fun buildConfigString(value: String): String {
     require(value.matches(Regex("""https?://[^\s"\\]+"""))) { "API base URL must be an http(s) URL, got '$value'" }
     return "\"$value\""
 }
+
+// The upload key of Google Play (Play App Signing signs the published app with its own key), from
+// ~/.gradle/gradle.properties, never from the repository: ocimio.upload.storeFile, ocimio.upload.storePassword,
+// ocimio.upload.keyAlias, ocimio.upload.keyPassword (docs/PUBLICATION.md). Without them, the release is signed with
+// the debug key: it installs on a test device, Google Play refuses it.
+val uploadKey: Map<String, String>? = listOf("storeFile", "storePassword", "keyAlias", "keyPassword")
+    .associateWith { providers.gradleProperty("ocimio.upload.$it").orNull }
+    .takeIf { values -> values.values.all { it != null } }
+    ?.mapValues { it.value.orEmpty() }
 
 android {
     namespace = "com.compagnon.courses.android"
 
     defaultConfig {
         applicationId = "com.ocimio.courses"
+        // Bump versionCode at every upload to the stores (CURRENT_PROJECT_VERSION on iOS); versionName is the
+        // version users see (MARKETING_VERSION on iOS).
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
+    }
+
+    signingConfigs {
+        if (uploadKey != null) {
+            create("upload") {
+                storeFile = file(uploadKey.getValue("storeFile"))
+                storePassword = uploadKey.getValue("storePassword")
+                keyAlias = uploadKey.getValue("keyAlias")
+                keyPassword = uploadKey.getValue("keyPassword")
+            }
+        }
     }
 
     buildTypes {
@@ -33,7 +54,11 @@ android {
             buildConfigField("String", "API_BASE_URL", buildConfigString(debugApiBaseUrl))
         }
         release {
-            buildConfigField("String", "API_BASE_URL", buildConfigString(releaseApiBaseUrl))
+            buildConfigField("String", "API_BASE_URL", "null")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.findByName("upload") ?: signingConfigs.getByName("debug")
         }
     }
 

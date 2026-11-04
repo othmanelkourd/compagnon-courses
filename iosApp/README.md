@@ -26,7 +26,7 @@ xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug 
 
 | Build setting | Debug | Release | Read by |
 |---|---|---|---|
-| `API_BASE_URL` | `http://localhost:8080` | `https://api.compagnon.invalid` (placeholder until hosting is decided, ADR-007) | Info.plist key `API_BASE_URL`, then `AppConfiguration` |
+| `API_BASE_URL` | `http://localhost:8080` | empty: no server, the app never goes online (ADR-013) | Info.plist key `API_BASE_URL`, then `AppConfiguration` |
 | `MARKETING_VERSION` | `0.1.0` | `0.1.0` | sent as `X-App-Version` |
 
 **Debug override of the base URL**: the user default `API_BASE_URL` wins over the build setting in Debug builds

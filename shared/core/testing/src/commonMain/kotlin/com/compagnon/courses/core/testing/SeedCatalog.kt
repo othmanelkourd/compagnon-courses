@@ -6,10 +6,16 @@ import com.compagnon.courses.contract.ContractJson
 import com.compagnon.courses.core.catalogbundle.BundledCatalog
 
 /**
- * The real seed, as the apps ship it (`BundledCatalog`): FR, fr-FR, release 1; 19 categories, 9 zones, 33 units,
- * 312 products. [english] is the same release in `en`.
+ * The real seed, as the apps ship it (`BundledCatalog`): FR, fr-FR, release [release]; 19 categories, 9 zones,
+ * 33 units, 312 products. [english] is the same release in `en`.
+ *
+ * Tests number the server's releases from [release] (`release + 1` is the next one), so that bumping
+ * `catalog-content/release.json` never breaks them.
  */
 object SeedCatalog {
+    /** The bundled release (`catalog-content/release.json`). */
+    val release: Long get() = BundledCatalog.VERSION
+
     val json: String get() = checkNotNull(BundledCatalog.json("FR", "fr-FR"))
 
     val snapshot: CatalogSnapshotDto by lazy { ContractJson.decodeFromString(CatalogSnapshotDto.serializer(), json) }
@@ -21,7 +27,7 @@ object SeedCatalog {
     /** The snapshot as release [version] (same content). */
     fun snapshot(version: Long): CatalogSnapshotDto = snapshot.copy(version = version)
 
-    fun version(version: Long = 1, snapshot: CatalogSnapshotDto = this.snapshot): CatalogVersionDto =
+    fun version(version: Long = release, snapshot: CatalogSnapshotDto = this.snapshot): CatalogVersionDto =
         CatalogVersionDto(
             country = snapshot.country,
             version = version,

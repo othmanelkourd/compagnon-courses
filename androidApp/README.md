@@ -42,7 +42,7 @@ Captures : `docs/images/design-android-*.png`.
   ./gradlew :androidApp:installDebug -Pcompagnon.apiBaseUrl=http://localhost:8080
   ```
 
-Le HTTP en clair n'est autorisé qu'en debug, et seulement pour `10.0.2.2` et `localhost` (`src/debug/res/xml/network_security_config.xml`). Le build release vise une URL provisoire (`https://api.compagnon.invalid`) en attendant l'hébergement (ADR-007).
+Le HTTP en clair n'est autorisé qu'en debug, et seulement pour `10.0.2.2` et `localhost` (`src/debug/res/xml/network_security_config.xml`). Le build release n'a pas de serveur (`API_BASE_URL` vaut `null`) ni de permission `INTERNET` : elle est déclarée dans `src/debug` et retirée de la release par `src/release/AndroidManifest.xml` (OkHttp l’ajoute). L’app publiée ne se connecte jamais (ADR-013).
 
 ## Tests
 

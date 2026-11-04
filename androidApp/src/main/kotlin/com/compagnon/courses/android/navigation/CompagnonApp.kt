@@ -16,6 +16,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.compagnon.courses.android.about.AboutScreen
+import com.compagnon.courses.android.about.LicensesScreen
 import com.compagnon.courses.android.home.HomeScreen
 import com.compagnon.courses.android.list.ShoppingListScreen
 import com.compagnon.courses.android.onboarding.OnboardingScreen
@@ -98,6 +100,7 @@ private fun AppNavDisplay(
                     onStartSession = { AppNavigation.startSession(backStack) },
                     onOpenList = { AppNavigation.showList(backStack) },
                     onOpenHousehold = { AppNavigation.openHousehold(backStack) },
+                    onOpenAbout = { AppNavigation.openAbout(backStack) },
                 )
             }
             entry<QuestionnaireKey> {
@@ -119,6 +122,12 @@ private fun AppNavDisplay(
                         AppNavigation.leaveHousehold(backStack, startSession = exit == OnboardingExit.START_SESSION)
                     },
                 )
+            }
+            entry<AboutKey> {
+                AboutScreen(onBack = goBack, onOpenLicenses = { AppNavigation.openLicenses(backStack) })
+            }
+            entry<LicensesKey> {
+                LicensesScreen(onBack = goBack)
             }
         },
     )
