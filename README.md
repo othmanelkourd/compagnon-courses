@@ -45,26 +45,6 @@ courses/
 └─ .github/workflows/ci.yml · renovate.json · .editorconfig
 ```
 
-L'app s'appelle **Ocimio**, d'après *Ocimum*, le nom botanique du basilic (domaine prévu : `ocimio` en .com, .fr et .app). Ses identifiants sur les stores sont `com.ocimio.courses` (`applicationId` Android et bundle id iOS) ; ils ne pourront plus changer après la première publication. Le package Kotlin `com.compagnon.courses` reste un nom interne, invisible des utilisateurs.
-
-## Prérequis
-
-| Outil | Version | Remarque |
-|---|---|---|
-| JDK | 17 | Corretto ou Temurin. Toutes les compilations utilisent `jvmToolchain(17)` |
-| Gradle | wrapper 9.7.1 | Toujours passer par `./gradlew` |
-| Android SDK | plateforme 37 (`compileSdk`), `targetSdk` 36, `minSdk` 26 | Chemin dans `local.properties` (`sdk.dir=…`, non versionné) ou `ANDROID_HOME` |
-| Xcode | 26.1 ou plus récent | macOS sur Apple Silicon ; app iOS 17+, framework construit pour `iosArm64` et `iosSimulatorArm64` |
-| Python | 3.9 ou plus récent | Générateurs du catalogue embarqué et des licences |
-
-Exemple de `local.properties` à la racine :
-
-```properties
-sdk.dir=/Users/<vous>/Library/Android/sdk
-```
-
-La première compilation iOS télécharge la chaîne Kotlin/Native (plus de 1 Go, dans `~/.konan`) : comptez plusieurs minutes.
-
 ## Lancer l'app Android
 
 Démarrer un émulateur Android (API 26 ou plus), ou brancher un téléphone, puis :
@@ -127,24 +107,3 @@ Les rapports de tests sont dans `<module>/build/reports/tests/`.
 
 [`renovate.json`](renovate.json) : mises à jour hebdomadaires, groupées par famille. Kotlin, SKIE et KSP sont groupés et **jamais automatiques** :
 SKIE est lié à une version exacte de Kotlin, la montée se valide depuis le tableau de bord Renovate puis dans une PR dédiée.
-
-## Conventions
-
-- **Versions** : uniquement dans `gradle/libs.versions.toml` (Kotlin 2.4.20 épinglé pour SKIE 0.10.15).
-- **Build** : les modules appliquent les plugins de convention de `build-logic` ; le namespace Android des bibliothèques KMP est dérivé du chemin du module.
-- **Style** : [`.editorconfig`](.editorconfig) ; Kotlin selon les conventions officielles (`kotlin.code.style=official`).
-- **Code partagé** : pas de `Double` pour les quantités ; les ViewModels exposent un `StateFlow` d'état et ne lèvent jamais d'exception.
-- **Hors ligne** : l'app ne déclare aucune permission réseau et ne contient aucun client HTTP.
-- **Secrets** : aucun secret dans le dépôt (la clé d'upload Android est lue dans `~/.gradle/gradle.properties`).
-
-## Publication
-
-La release Android est signée avec la clé d'upload Google Play, lue dans `~/.gradle/gradle.properties` (`ocimio.upload.storeFile`, `ocimio.upload.storePassword`, `ocimio.upload.keyAlias`, `ocimio.upload.keyPassword`) ; sans elle, elle est signée avec la clé de debug. Numéros de version : `versionCode` et `versionName` dans `androidApp/build.gradle.kts`, `MARKETING_VERSION` et `CURRENT_PROJECT_VERSION` dans le projet Xcode.
-
-## Documentation
-
-| Document | Contenu |
-|---|---|
-| [catalog-content/README.md](catalog-content/README.md) | Format du catalogue et règles éditoriales |
-| [androidApp/README.md](androidApp/README.md), [iosApp/README.md](iosApp/README.md) | Les deux apps |
-| [shared/engine/README.md](shared/engine/README.md), [shared/umbrella/README.md](shared/umbrella/README.md) | Moteur de questions, graphe Koin et framework iOS |
