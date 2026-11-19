@@ -61,17 +61,13 @@ import com.compagnon.courses.android.ui.theme.CompagnonColors
 import com.compagnon.courses.android.ui.theme.CompagnonShapes
 import com.compagnon.courses.android.ui.theme.CompagnonSpacing
 import com.compagnon.courses.android.ui.theme.CompagnonType
-import com.compagnon.courses.core.data.CatalogScope
 import com.compagnon.courses.core.model.illustration.Illustrations
-import com.compagnon.courses.feature.catalog.CatalogStatusEvent
+import com.compagnon.courses.feature.catalog.CatalogStatusUiState
 import com.compagnon.courses.feature.catalog.CatalogStatusViewModel
-import com.compagnon.courses.feature.catalog.CatalogSyncUiState
 import com.compagnon.courses.feature.lists.ShoppingListUiState
 import com.compagnon.courses.feature.lists.ShoppingListViewModel
 import com.compagnon.courses.feature.onboarding.HouseholdSummaryUi
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
 import java.time.LocalDate
 
 /**
@@ -86,20 +82,18 @@ fun HomeScreen(
     onOpenHousehold: () -> Unit,
     modifier: Modifier = Modifier,
     onOpenAbout: () -> Unit = {},
-    scope: CatalogScope = koinInject(),
-    catalogViewModel: CatalogStatusViewModel = koinViewModel { parametersOf(scope.country) },
+    catalogViewModel: CatalogStatusViewModel = koinViewModel(),
     listViewModel: ShoppingListViewModel = koinViewModel(),
 ) {
-    val sync by catalogViewModel.sync.collectAsStateWithLifecycle()
+    val catalog by catalogViewModel.state.collectAsStateWithLifecycle()
     val list by listViewModel.state.collectAsStateWithLifecycle()
     HomeContent(
-        sync = sync,
+        catalog = catalog,
         list = list,
         household = household,
         onStartSession = onStartSession,
         onOpenList = onOpenList,
         onOpenHousehold = onOpenHousehold,
-        onRefresh = { catalogViewModel.onEvent(CatalogStatusEvent.Refresh) },
         onOpenAbout = onOpenAbout,
         modifier = modifier,
     )
@@ -112,11 +106,10 @@ fun HomeScreen(
  */
 @Composable
 internal fun HomeContent(
-    sync: CatalogSyncUiState,
+    catalog: CatalogStatusUiState,
     list: ShoppingListUiState,
     onStartSession: () -> Unit,
     onOpenList: () -> Unit,
-    onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     household: HouseholdSummaryUi? = null,
     onOpenHousehold: () -> Unit = {},
@@ -176,8 +169,7 @@ internal fun HomeContent(
                 }
             }
             CatalogFooter(
-                sync = sync,
-                onRefresh = onRefresh,
+                catalog = catalog,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .riseIn(index = 4)
@@ -366,7 +358,7 @@ private fun ListCard(list: ShoppingListUiState, onOpenList: () -> Unit, modifier
     }
 }
 
-/** « Mon foyer »: house tile, « 4 personnes · Halal · 14 essentiels », chevron. */
+/** « Mon foyer »: house tile, « 4 personnes · Végétarien · 14 essentiels », chevron. */
 @Composable
 private fun HouseholdCard(household: HouseholdSummaryUi, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val interaction = remember { MutableInteractionSource() }

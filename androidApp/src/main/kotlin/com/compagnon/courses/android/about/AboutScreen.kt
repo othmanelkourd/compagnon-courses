@@ -48,26 +48,22 @@ import com.compagnon.courses.android.ui.components.SectionBlock
 import com.compagnon.courses.android.ui.theme.CompagnonColors
 import com.compagnon.courses.android.ui.theme.CompagnonSpacing
 import com.compagnon.courses.android.ui.theme.CompagnonType
-import com.compagnon.courses.core.data.CatalogScope
 import com.compagnon.courses.feature.about.AboutLinks
+import com.compagnon.courses.feature.catalog.CatalogStatusUiState
 import com.compagnon.courses.feature.catalog.CatalogStatusViewModel
-import com.compagnon.courses.feature.catalog.CatalogSyncUiState
-import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 /** « À propos »: the app and its version, the catalog of the device, what happens to the data, links and licenses. */
 @Composable
 internal fun AboutScreen(
     onBack: () -> Unit,
     onOpenLicenses: () -> Unit,
-    scope: CatalogScope = koinInject(),
-    catalogViewModel: CatalogStatusViewModel = koinViewModel { parametersOf(scope.country) },
+    catalogViewModel: CatalogStatusViewModel = koinViewModel(),
 ) {
-    val sync by catalogViewModel.sync.collectAsStateWithLifecycle()
+    val catalog by catalogViewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     AboutContent(
-        sync = sync,
+        catalog = catalog,
         versionName = BuildConfig.VERSION_NAME,
         versionCode = BuildConfig.VERSION_CODE,
         privacyPolicyUrl = AboutLinks.PRIVACY_POLICY_URL,
@@ -82,7 +78,7 @@ internal fun AboutScreen(
 /** Stateless « À propos »: a link row is hidden while its address is empty ([AboutLinks]). */
 @Composable
 internal fun AboutContent(
-    sync: CatalogSyncUiState,
+    catalog: CatalogStatusUiState,
     versionName: String,
     versionCode: Int,
     privacyPolicyUrl: String,
@@ -114,15 +110,15 @@ internal fun AboutContent(
                 modifier = Modifier.padding(16.dp),
             )
         }
-        if (sync.localVersion != null) {
+        if (catalog.version != null) {
             SectionBlock(title = stringResource(R.string.about_catalog_title)) {
                 val products = pluralStringResource(
                     R.plurals.catalog_product_count,
-                    sync.productCount,
-                    formatCount(sync.productCount, currentLocale()),
+                    catalog.productCount,
+                    formatCount(catalog.productCount, currentLocale()),
                 )
                 Text(
-                    text = stringResource(R.string.about_catalog_body, products, sync.localVersion.toString()),
+                    text = stringResource(R.string.about_catalog_body, products, catalog.version.toString()),
                     style = CompagnonType.BodyCompact,
                     color = CompagnonColors.Ink,
                     modifier = Modifier.padding(16.dp),

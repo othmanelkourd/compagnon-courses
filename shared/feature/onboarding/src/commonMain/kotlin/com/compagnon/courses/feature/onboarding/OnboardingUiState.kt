@@ -12,8 +12,8 @@ enum class OnboardingStep { WELCOME, OVERVIEW, HOUSEHOLD, DIET, AVOID, ESSENTIAL
 /** The four parts of the questionnaire, as listed on the welcome, recap and « Mon foyer » screens. */
 enum class HouseholdSection { HOUSEHOLD, FOOD, ESSENTIALS, RHYTHM }
 
-/** « Je mange de tout », « Sans porc », « Halal », « Pescétarien », « Végétarien », « Végan ». */
-enum class DietChoice { OMNIVORE, NO_PORK, HALAL, PESCATARIAN, VEGETARIAN, VEGAN }
+/** « Je mange de tout », « Pescétarien », « Végétarien », « Végan ». */
+enum class DietChoice { OMNIVORE, PESCATARIAN, VEGETARIAN, VEGAN }
 
 /** « Gluten », « Lactose », « Fruits à coque », « Œufs », « Alcool ». */
 enum class AvoidChoice { GLUTEN, LACTOSE, NUTS, EGGS, ALCOHOL }
@@ -103,7 +103,7 @@ data class HouseholdStepUi(
 }
 
 /**
- * One « à éviter » line. [locked]: already excluded by the diet (« Déjà exclu par le régime halal »), shown
+ * One « à éviter » line. [locked]: already excluded by the diet (« Déjà exclu par le régime végan »), shown
  * checked and disabled.
  */
 data class AvoidOptionUi(val choice: AvoidChoice, val checked: Boolean, val locked: Boolean)
@@ -160,7 +160,7 @@ data class RhythmStepUi(val days: Int, val choice: RhythmChoice, val maxDays: In
 
 /**
  * The household in a few words, for the recap, « Mon foyer » and its card on the home screen (formatted by the
- * apps: « 4 personnes · Halal · 14 essentiels »).
+ * apps: « 4 personnes · Végétarien · 14 essentiels »).
  *
  * @property onboarded false until the onboarding was saved or put off.
  */

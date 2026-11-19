@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.compagnon.courses.contract.CatalogSnapshotDto
+import com.compagnon.courses.core.catalogformat.CatalogSnapshotDto
 import com.compagnon.courses.core.data.BundledCatalogSource
 import com.compagnon.courses.core.data.CatalogRepository
 import com.compagnon.courses.core.data.CatalogScope
@@ -16,7 +16,6 @@ import com.compagnon.courses.core.database.CompagnonDatabase
 import com.compagnon.courses.core.database.createDatabase
 import com.compagnon.courses.core.model.Catalog
 import com.compagnon.courses.core.model.Product
-import com.compagnon.courses.core.testing.MockCatalogServer
 import com.compagnon.courses.core.testing.TestClock
 import com.compagnon.courses.core.testing.createInMemoryDriver
 import kotlinx.coroutines.flow.first
@@ -28,20 +27,23 @@ internal class SequentialIds : IdGenerator {
     override fun newId(): String = "id-${++next}"
 }
 
-/** One device: an in-memory database, the repositories, a fake server and a clock. */
-internal class TestDevice(context: CoroutineContext, bundled: BundledCatalogSource = BundledCatalogSource.App) {
+/** One device: an in-memory database, the repositories and a clock. */
+internal class TestDevice(
+    private val context: CoroutineContext,
+    bundled: BundledCatalogSource = BundledCatalogSource.App,
+) {
     val database: CompagnonDatabase = createDatabase(createInMemoryDriver())
-    val server = MockCatalogServer()
     val clock = TestClock()
     private val ids = SequentialIds()
-    val catalog = CatalogRepository(database, server.api, clock, context, bundled)
+    val catalog = CatalogRepository(database, clock, context, bundled)
     val households = HouseholdRepository(database, "FR", clock, context)
     val lists = ShoppingListRepository(database, ids, clock, context)
     val questions = QuestionRepository(database, households, ids, clock, context)
     private val store = ViewModelStore()
     private var created = 0
 
-    suspend fun sync() = catalog.sync("FR", "fr-FR")
+    /** Installs the catalog bundled in the app (FR, fr-FR), even when this device was given another bundle. */
+    suspend fun installSeed() = CatalogRepository(database, clock, context).installBundled("FR", "fr-FR")
 
     /** A new ViewModel, as a new screen (or a new process) would create it. */
     fun newViewModel(seed: Long = 7): QuestionSessionViewModel =
@@ -78,7 +80,7 @@ internal fun TestDevice.watch(vararg slugs: String) {
 internal suspend fun QuestionSessionViewModel.awaitSettled(): QuestionUiState =
     state.first { it != QuestionUiState.Loading && it != QuestionUiState.Committing }
 
-/** An app without a bundled catalog: only the server can provide one. */
+/** An app without a bundled catalog (or a device that cannot store it). */
 internal object NoBundledCatalog : BundledCatalogSource {
     override fun version(country: String, locale: String): Long? = null
 

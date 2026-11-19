@@ -1,4 +1,4 @@
-# Version catalog — single source of truth for every dependency and plugin of the monorepo.
+# Version catalog — single source of truth for every dependency and plugin of the project.
 # Kotlin, SKIE (and later KSP) must be bumped together: SKIE is tied to an exact Kotlin version.
 
 [versions]
@@ -13,8 +13,7 @@ kover = "0.9.11"
 detekt = "2.0.0-alpha.6"
 
 # Android SDK levels (read by the build-logic convention plugins).
-# compileSdk 37: Compose 1.12 (BOM 2026.09.00), lifecycle-*-compose 2.11 and OkHttp 5.5 (Ktor 3.6) require it
-# in their AAR metadata. targetSdk stays 36.
+# compileSdk 37: Compose 1.12 (BOM 2026.09.00) and lifecycle-*-compose 2.11 require it in their AAR metadata. targetSdk stays 36.
 android-compileSdk = "37"
 android-minSdk = "26"
 android-targetSdk = "36"
@@ -24,7 +23,6 @@ jvmToolchain = "17"
 kotlinx-serialization = "1.12.0"
 kotlinx-coroutines = "1.11.0"
 kotlinx-datetime = "0.8.0"
-ktor = "3.6.0"
 koin = "4.2.2"
 kermit = "2.2.0"
 # SQLDelight (local database of the apps). 2.4.1 is built with Kotlin 2.3.10, read fine by Kotlin 2.4.20.
@@ -42,21 +40,6 @@ junit4 = "4.13.2"
 # Tests
 turbine = "1.2.1"
 kotest = "6.2.6"
-
-# Server
-exposed = "1.6.0"
-flyway = "13.11.1"
-hikaricp = "7.1.0"
-postgresql = "42.7.14"
-logback = "1.6.5"
-embeddedPostgres = "2.2.2"
-# PostgreSQL binaries used by zonky embedded-postgres (its default is PG 14, amd64 only on macOS).
-embeddedPostgresBinaries = "18.6.0"
-# smiley4 ktor-openapi: 5.6.0, not 5.7.0. 5.7.0 pulls schema-kenerator-swagger 2.7.x, compiled against JDK 21
-# (calls java.util.List.removeFirst()) -> NoSuchMethodError on JDK 17 as soon as a schema is generated.
-# 5.6.0 + schema-kenerator 2.6.0 verified with Ktor 3.6.0 on JDK 17. Bump both together.
-smiley4-ktorOpenapi = "5.6.0"
-smiley4-schemaKenerator = "2.6.0"
 
 [libraries]
 # --- Gradle plugins on the build-logic classpath (compileOnly) ---
@@ -82,36 +65,6 @@ sqldelight-androidDriver = { module = "app.cash.sqldelight:android-driver", vers
 sqldelight-nativeDriver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 sqldelight-sqliteDriver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 
-# --- Ktor client ---
-ktor-bom = { module = "io.ktor:ktor-bom", version.ref = "ktor" }
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
-ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
-ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
-ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
-
-# --- Ktor server ---
-ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
-ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
-ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
-ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
-ktor-server-call-id = { module = "io.ktor:ktor-server-call-id", version.ref = "ktor" }
-ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
-ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
-ktor-server-default-headers = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" }
-ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
-
-# --- OpenAPI for Ktor (smiley4) ---
-smiley4-ktor-openapi = { module = "io.github.smiley4:ktor-openapi", version.ref = "smiley4-ktorOpenapi" }
-smiley4-ktor-swagger-ui = { module = "io.github.smiley4:ktor-swagger-ui", version.ref = "smiley4-ktorOpenapi" }
-# Needed on the compile classpath to configure `schemas { generator = SchemaGenerator.kotlinx() }`
-# (ktor-openapi only exposes them at runtime). The kotlinx generator honours @SerialName.
-smiley4-schemaKenerator-core = { module = "io.github.smiley4:schema-kenerator-core", version.ref = "smiley4-schemaKenerator" }
-smiley4-schemaKenerator-serialization = { module = "io.github.smiley4:schema-kenerator-serialization", version.ref = "smiley4-schemaKenerator" }
-smiley4-schemaKenerator-swagger = { module = "io.github.smiley4:schema-kenerator-swagger", version.ref = "smiley4-schemaKenerator" }
-
 # --- Koin ---
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -119,8 +72,6 @@ koin-coreViewmodel = { module = "io.insert-koin:koin-core-viewmodel", version.re
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
-koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
-koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 
 # --- AndroidX ---
@@ -148,25 +99,8 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 
-# --- Server: persistence and logging ---
-exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
-exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
-exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
-exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
-exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
-flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
-flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
-hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
-postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
-zonky-embeddedPostgres = { module = "io.zonky.test:embedded-postgres", version.ref = "embeddedPostgres" }
-zonky-postgresBinaries-bom = { module = "io.zonky.test.postgres:embedded-postgres-binaries-bom", version.ref = "embeddedPostgresBinaries" }
-zonky-postgresBinaries-darwinArm64 = { module = "io.zonky.test.postgres:embedded-postgres-binaries-darwin-arm64v8" }
-zonky-postgresBinaries-linuxAmd64 = { module = "io.zonky.test.postgres:embedded-postgres-binaries-linux-amd64" }
-
 [plugins]
 # Third-party plugins (declared `apply false` in the root build so every module shares one classloader)
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -182,4 +116,3 @@ detekt = { id = "dev.detekt", version.ref = "detekt" }
 compagnon-kmp-library = { id = "compagnon.kmp.library" }
 compagnon-kmp-mobile = { id = "compagnon.kmp.mobile" }
 compagnon-android-application = { id = "compagnon.android.application" }
-compagnon-jvm-server = { id = "compagnon.jvm.server" }

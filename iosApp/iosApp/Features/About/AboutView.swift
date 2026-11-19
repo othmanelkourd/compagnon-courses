@@ -4,7 +4,7 @@ import SwiftUI
 /// « À propos »: the app and its version, the catalog of the device, what happens to the data, links and licenses.
 /// Same content as Android's `AboutScreen`. A link row is hidden while its address is empty (`AboutLinks`).
 struct AboutView: View {
-    let catalogSync: CatalogSyncUiState
+    let catalogStatus: CatalogStatusUiState
     let onOpenLicenses: () -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -52,9 +52,9 @@ struct AboutView: View {
                     """))
             }
 
-            if let localVersion = catalogSync.localVersion {
+            if let localVersion = catalogStatus.version {
                 BlockSection(title: Text("Catalogue")) {
-                    TextBlock(text: Text("\(Int(catalogSync.productCount)) produits") + Text(verbatim: " · ")
+                    TextBlock(text: Text("\(Int(catalogStatus.productCount)) produits") + Text(verbatim: " · ")
                         + Text("version \(localVersion.int64Value)"))
                 }
             }

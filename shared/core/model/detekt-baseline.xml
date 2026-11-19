@@ -10,7 +10,7 @@
     <ID>ReturnCount:Quantity.kt:Quantity.Companion$fun parseOrNull: Quantity?</ID>
     <ID>ReturnCount:Units.kt:UnitCatalog$fun factor: Rational?</ID>
     <ID>ReturnCount:Units.kt:UnitCatalog$private fun resolve: Resolved?</ID>
-    <ID>TooManyFunctions:ContractMappers.kt:com.compagnon.courses.core.model.mapping.ContractMappers.kt</ID>
+    <ID>TooManyFunctions:CatalogMappers.kt:com.compagnon.courses.core.model.mapping.CatalogMappers.kt</ID>
     <ID>TooManyFunctions:Units.kt:UnitCatalog</ID>
   </CurrentIssues>
 </SmellBaseline>

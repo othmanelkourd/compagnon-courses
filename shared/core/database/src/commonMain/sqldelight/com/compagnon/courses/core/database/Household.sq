@@ -2,7 +2,7 @@
 -- children: JSON array of age bands (BABY, CHILD, TEEN); store_category_order: JSON array of category ids,
 -- first in the store first; excluded_tags: JSON array of tag slugs never asked about (stays on the device).
 -- Added in version 2 (onboarding « Mon foyer »), all on the device only: pets: JSON array of pet kinds (DOG, CAT,
--- OTHER); diet: OMNIVORE | NO_PORK | HALAL | PESCATARIAN | VEGETARIAN | VEGAN (GDPR art. 9); avoid: JSON array
+-- OTHER); diet: OMNIVORE | PESCATARIAN | VEGETARIAN | VEGAN (GDPR art. 9); avoid: JSON array
 -- of avoidances (GLUTEN, LACTOSE, NUTS, EGGS, ALCOHOL); essentials_chosen: 1 once the household chose its
 -- essentials (household_product_pref.household_staple replaces the catalog's is_staple); onboarded_at: first
 -- time the onboarding was saved, null until then.

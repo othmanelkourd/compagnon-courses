@@ -1,7 +1,7 @@
 # :shared:core:model
 
-Domain model shared by every client module (`docs/data-model.md` §5.4), plus the mappers from the API
-contract (`com.compagnon.courses.core.model.mapping`).
+Domain model shared by every client module, plus the mappers from the catalog
+format (`:shared:core:catalog-format`, `com.compagnon.courses.core.model.mapping`).
 
 - **Quantities are exact.** `Quantity(milli, unit)` stores thousandths of the unit (1.5 kg =
   `Quantity(1500, kilogram)`); `Quantity.parse("1.5", unit)` and `toDecimalString()` use the wire format of

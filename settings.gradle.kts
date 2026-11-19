@@ -31,13 +31,11 @@ rootProject.name = "courses"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-// API contract shared by the server and the clients
-include(":contract:api-contract")
 
 // Kotlin Multiplatform client code
+include(":shared:core:catalog-format")
 include(":shared:core:model")
 include(":shared:core:catalog-bundle")
-include(":shared:core:network")
 include(":shared:core:database")
 include(":shared:core:data")
 include(":shared:core:testing")
@@ -51,4 +49,3 @@ include(":shared:umbrella")
 
 // Apps
 include(":androidApp")
-include(":server:app")

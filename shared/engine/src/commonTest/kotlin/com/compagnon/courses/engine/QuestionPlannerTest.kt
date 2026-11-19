@@ -378,7 +378,7 @@ class QuestionPlannerTest {
 
     @Test
     fun theDietAndAvoidancesExcludeTheirTags() {
-        val ham = product("jambon", tags = setOf(DietaryTags.PORK, DietaryTags.MEAT))
+        val ham = product("jambon", tags = setOf(TagId("contains-pork"), DietaryTags.MEAT))
         val beer = product("biere", tags = setOf(DietaryTags.ALCOHOL, DietaryTags.GLUTEN))
         val salmon = product("saumon", tags = setOf(DietaryTags.FISH))
         val cheese = product("fromage", tags = setOf(DietaryTags.LACTOSE))
@@ -389,7 +389,7 @@ class QuestionPlannerTest {
             return (plan.askedProducts.map { it.product.slug } + plan.deferred.map { it.value.removePrefix("prod-") }).sorted()
         }
 
-        assertEquals(listOf("fromage", "riz", "saumon"), asked(Diet.HALAL))
+        assertEquals(listOf("fromage", "jambon", "riz", "saumon"), asked(Diet.OMNIVORE, setOf(Avoidance.ALCOHOL)))
         assertEquals(listOf("biere", "fromage", "riz", "saumon"), asked(Diet.PESCATARIAN))
         assertEquals(listOf("biere", "fromage", "riz"), asked(Diet.VEGETARIAN))
         assertEquals(listOf("biere", "riz"), asked(Diet.VEGAN))

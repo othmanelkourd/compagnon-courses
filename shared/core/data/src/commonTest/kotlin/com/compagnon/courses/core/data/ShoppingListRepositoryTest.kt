@@ -36,7 +36,7 @@ class ShoppingListRepositoryTest {
     @Test
     fun theSameProductInTheSameUnitIsSummed() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
 
         val first = data.lists.addProduct(milk, Quantity.of(2, bottle))
         val second = data.lists.addProduct(milk, Quantity.of(1, bottle), AddedVia.QUESTION_FLOW)
@@ -50,7 +50,7 @@ class ShoppingListRepositoryTest {
     @Test
     fun aConvertibleUnitIsConvertedThenSummed() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
 
         data.lists.addProduct(milk, Quantity.of(2, bottle))
         data.lists.addProduct(milk, Quantity.of(1, UnitCode.LITER))
@@ -65,7 +65,7 @@ class ShoppingListRepositoryTest {
     @Test
     fun anIncompatibleUnitReplacesTheQuantity() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
 
         data.lists.addProduct(apples, Quantity.of(1, UnitCode.KILOGRAM))
         data.lists.addProduct(apples, Quantity.of(6, UnitCode.PIECE))
@@ -76,7 +76,7 @@ class ShoppingListRepositoryTest {
     @Test
     fun aCheckedProductIsNotMergedIntoAgain() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val first = data.lists.addProduct(milk, Quantity.of(1, bottle))
         data.lists.setChecked(first, checked = true)
 
@@ -108,7 +108,7 @@ class ShoppingListRepositoryTest {
     @Test
     fun checkAndUncheck() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val id = data.lists.addProduct(milk, Quantity.of(1, bottle))
 
         data.lists.setChecked(id, checked = true)
@@ -120,7 +120,7 @@ class ShoppingListRepositoryTest {
     @Test
     fun deleteIsSoftAndCanBeUndone() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val id = data.lists.addProduct(milk, Quantity.of(2, bottle))
 
         data.lists.delete(id)
@@ -134,7 +134,7 @@ class ShoppingListRepositoryTest {
     @Test
     fun undoingADeleteMergesIntoALineAddedMeanwhile() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val deleted = data.lists.addProduct(milk, Quantity.of(2, bottle))
         data.lists.delete(deleted)
         val added = data.lists.addProduct(milk, Quantity.of(1, bottle))
@@ -149,7 +149,7 @@ class ShoppingListRepositoryTest {
     @Test
     fun completingTheListRecordsPurchasesAndCarriesUncheckedItemsOver() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val list = data.lists.activeList()
         val milkLine = data.lists.addProduct(milk, Quantity.of(2, bottle))
         data.lists.addProduct(apples, Quantity.of(1, UnitCode.KILOGRAM))
@@ -185,7 +185,7 @@ class ShoppingListRepositoryTest {
     @Test
     fun observeTheActiveList() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
 
         data.lists.observeActiveList().test {
             assertEquals(emptyList(), awaitItem().items)

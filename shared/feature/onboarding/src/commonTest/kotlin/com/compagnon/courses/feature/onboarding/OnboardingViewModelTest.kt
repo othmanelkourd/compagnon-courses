@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import app.cash.turbine.test
-import com.compagnon.courses.contract.CatalogSnapshotDto
+import com.compagnon.courses.core.catalogformat.CatalogSnapshotDto
 import com.compagnon.courses.core.data.BundledCatalogSource
 import com.compagnon.courses.core.data.CatalogRepository
 import com.compagnon.courses.core.data.CatalogScope
@@ -18,7 +18,6 @@ import com.compagnon.courses.core.model.Diet
 import com.compagnon.courses.core.model.PetKind
 import com.compagnon.courses.core.model.ProductId
 import com.compagnon.courses.core.model.illustration.Illustrations
-import com.compagnon.courses.core.testing.MockCatalogServer
 import com.compagnon.courses.core.testing.SeedCatalog
 import com.compagnon.courses.core.testing.TestClock
 import com.compagnon.courses.core.testing.createInMemoryDriver
@@ -54,9 +53,8 @@ class OnboardingViewModelTest {
     private inner class Device(scope: TestScope, bundled: BundledCatalogSource = BundledCatalogSource.App) {
         val context = StandardTestDispatcher(scope.testScheduler)
         val database = createDatabase(createInMemoryDriver())
-        val server = MockCatalogServer()
         val clock = TestClock()
-        val catalog = CatalogRepository(database, server.api, clock, context, bundled)
+        val catalog = CatalogRepository(database, clock, context, bundled)
         val households = HouseholdRepository(database, "FR", clock, context)
         val store = ViewModelStore()
 
@@ -78,7 +76,7 @@ class OnboardingViewModelTest {
     ) = runTest(main) {
         val device = Device(this, bundled)
         try {
-            if (sync) device.catalog.sync("FR", "fr-FR")
+            if (sync) device.catalog.installBundled("FR", "fr-FR")
             block(device)
         } finally {
             device.store.clear()
@@ -115,17 +113,17 @@ class OnboardingViewModelTest {
         )
         assertEquals(4, viewModel.ready().household.persons)
 
-        send(viewModel, OnboardingEvent.Next, OnboardingEvent.SelectDiet(DietChoice.HALAL), OnboardingEvent.Next)
+        send(viewModel, OnboardingEvent.Next, OnboardingEvent.SelectDiet(DietChoice.VEGETARIAN), OnboardingEvent.Next)
         val avoid = viewModel.ready()
         assertEquals(OnboardingStep.AVOID, avoid.step)
         assertEquals(2, avoid.stepNumber)
-        assertEquals(AvoidOptionUi(AvoidChoice.ALCOHOL, checked = true, locked = true), avoid.avoid.last())
+        assertTrue(avoid.avoid.none { it.locked }, "a vegetarian diet implies no avoidance")
 
-        send(viewModel, OnboardingEvent.ToggleAvoid(AvoidChoice.LACTOSE), OnboardingEvent.ToggleAvoid(AvoidChoice.ALCOHOL), OnboardingEvent.Next)
+        send(viewModel, OnboardingEvent.ToggleAvoid(AvoidChoice.LACTOSE), OnboardingEvent.Next)
         val essentials = viewModel.ready()
         assertEquals(OnboardingStep.ESSENTIALS, essentials.step)
         val chips = essentials.essentials.aisles.flatMap { it.items }
-        // Baby and cat starters are pre-checked; nothing with pork, alcohol or lactose is offered.
+        // Baby and cat starters are pre-checked; nothing with meat, fish or lactose is offered.
         assertTrue(chips.first { it.productId == id("couches").value }.checked)
         assertTrue(chips.first { it.productId == id("croquettes-chat").value }.checked)
         assertTrue(chips.none { it.productId == id("jambon-blanc").value })
@@ -155,7 +153,7 @@ class OnboardingViewModelTest {
         val recap = viewModel.ready()
         assertEquals(OnboardingStep.RECAP, recap.step)
         assertEquals(4, recap.summary.persons)
-        assertEquals(DietChoice.HALAL, recap.summary.diet)
+        assertEquals(DietChoice.VEGETARIAN, recap.summary.diet)
         assertEquals(listOf(AvoidChoice.LACTOSE), recap.summary.avoid)
         assertEquals(withoutBaguette, recap.summary.essentials)
         assertEquals(14, recap.summary.horizonDays)
@@ -163,7 +161,7 @@ class OnboardingViewModelTest {
         val saved = device.households.setup()
         assertEquals(listOf(AgeBand.BABY, AgeBand.CHILD), saved.children)
         assertEquals(setOf(PetKind.CAT), saved.pets)
-        assertEquals(Diet.HALAL, saved.diet)
+        assertEquals(Diet.VEGETARIAN, saved.diet)
         assertEquals(setOf(Avoidance.LACTOSE), saved.avoid)
         assertFalse(id("baguette") in assertNotNull(saved.essentials))
         assertEquals(7, saved.cadences!![id("baguette")])
@@ -286,8 +284,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun theEssentialsComeFromTheBundledCatalogOffline() = test(sync = false) { device ->
-        device.server.offline = true
+    fun theEssentialsComeFromTheBundledCatalog() = test(sync = false) { device ->
         val viewModel = device.onboarding()
         advanceUntilIdle()
         send(viewModel, OnboardingEvent.Start, OnboardingEvent.Next, OnboardingEvent.Next, OnboardingEvent.Next)
@@ -299,7 +296,6 @@ class OnboardingViewModelTest {
             ).essentials
         assertFalse(essentials.catalogMissing)
         assertTrue(essentials.aisles.isNotEmpty())
-        assertEquals(emptyList(), device.server.requests)
     }
 
     @Test
@@ -327,7 +323,7 @@ class OnboardingViewModelTest {
         send(viewModel, OnboardingEvent.Start, OnboardingEvent.Next, OnboardingEvent.Next, OnboardingEvent.Next)
         viewModel.state.first { (it as? OnboardingUiState.Ready)?.essentials?.catalogMissing == true }
 
-        device.catalog.sync("FR", "fr-FR")
+        CatalogRepository(device.database, device.clock, device.context).installBundled("FR", "fr-FR")
         send(viewModel, OnboardingEvent.Retry)
 
         val essentials = (
@@ -347,14 +343,14 @@ class OnboardingViewModelTest {
             assertEquals(AppGateUiState.NeedsOnboarding, awaitItem())
 
             // Saving does not switch by itself: the recap stays until the onboarding closes.
-            device.households.saveSetup(HouseholdSetup(adults = 3, diet = Diet.HALAL))
+            device.households.saveSetup(HouseholdSetup(adults = 3, diet = Diet.VEGETARIAN))
             advanceUntilIdle()
             expectNoEvents()
 
             gate.onEvent(AppGateEvent.OnboardingClosed)
             var ready = assertIs<AppGateUiState.Ready>(awaitItem())
             while (ready.summary.persons != 3) ready = assertIs(awaitItem())
-            assertEquals(DietChoice.HALAL, ready.summary.diet)
+            assertEquals(DietChoice.VEGETARIAN, ready.summary.diet)
             assertTrue(ready.summary.onboarded)
             assertTrue(ready.summary.essentials > 0)
             cancelAndIgnoreRemainingEvents()
@@ -371,7 +367,7 @@ class OnboardingViewModelTest {
     }
 }
 
-/** An app without a bundled catalog (or a device that cannot store it): only the server can provide one. */
+/** An app without a bundled catalog (or a device that cannot store it). */
 private object NoBundledCatalog : BundledCatalogSource {
     override fun version(country: String, locale: String): Long? = null
 

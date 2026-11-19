@@ -20,14 +20,14 @@ import org.junit.Test
 
 class OnboardingTextsTest {
 
-    /** The household of the mockups: 2 adults, a baby, a child, a cat; halal without lactose. */
+    /** The household of the mockups: 2 adults, a baby, a child, a cat; vegetarian without lactose. */
     private val summary = HouseholdSummaryUi(
         adults = 2,
         babies = 1,
         children = 1,
         teens = 0,
         pets = listOf(PetChoice.CAT),
-        diet = DietChoice.HALAL,
+        diet = DietChoice.VEGETARIAN,
         avoid = listOf(AvoidChoice.LACTOSE),
         essentials = 14,
         recurring = 4,
@@ -57,9 +57,9 @@ class OnboardingTextsTest {
 
     @Test
     fun foodIsTheDietThenTheProductsAvoided() {
-        // « Halal · sans lactose »; « Je mange de tout » alone when nothing is avoided.
+        // « Végétarien · sans lactose »; « Je mange de tout » alone when nothing is avoided.
         assertEquals(
-            UiText.Joined(listOf(UiText.Res(R.string.diet_halal), UiText.Res(R.string.household_avoid_lactose))),
+            UiText.Joined(listOf(UiText.Res(R.string.diet_vegetarian), UiText.Res(R.string.household_avoid_lactose))),
             OnboardingTexts.foodSummary(summary),
         )
         assertEquals(
@@ -86,12 +86,12 @@ class OnboardingTextsTest {
 
     @Test
     fun theHomeCardSaysPersonsDietAndEssentials() {
-        // « 4 personnes · Halal · 14 essentiels » (mockup `Main`).
+        // « 4 personnes · Végétarien · 14 essentiels » (mockup `Main`).
         assertEquals(
             UiText.Joined(
                 listOf(
                     UiText.Plural(R.plurals.home_household_persons, 4),
-                    UiText.Res(R.string.diet_halal),
+                    UiText.Res(R.string.diet_vegetarian),
                     UiText.Plural(R.plurals.home_household_essentials, 14),
                 ),
             ),
@@ -109,14 +109,14 @@ class OnboardingTextsTest {
 
     @Test
     fun theAvoidButtonCountsOnlyTheBoxesThePersonChecked() {
-        val halal = listOf(
-            AvoidOptionUi(AvoidChoice.LACTOSE, checked = true, locked = false),
-            AvoidOptionUi(AvoidChoice.NUTS, checked = false, locked = false),
-            AvoidOptionUi(AvoidChoice.ALCOHOL, checked = true, locked = true),
+        val vegan = listOf(
+            AvoidOptionUi(AvoidChoice.NUTS, checked = true, locked = false),
+            AvoidOptionUi(AvoidChoice.GLUTEN, checked = false, locked = false),
+            AvoidOptionUi(AvoidChoice.LACTOSE, checked = true, locked = true),
         )
-        assertEquals(UiText.Res(R.string.onboarding_avoid_continue, listOf(1)), OnboardingTexts.avoidContinue(halal))
+        assertEquals(UiText.Res(R.string.onboarding_avoid_continue, listOf(1)), OnboardingTexts.avoidContinue(vegan))
         // Only the diet's own exclusion: plain « Continuer ».
-        assertEquals(UiText.Res(R.string.onboarding_continue), OnboardingTexts.avoidContinue(halal.drop(1)))
+        assertEquals(UiText.Res(R.string.onboarding_continue), OnboardingTexts.avoidContinue(vegan.drop(1)))
     }
 
     @Test

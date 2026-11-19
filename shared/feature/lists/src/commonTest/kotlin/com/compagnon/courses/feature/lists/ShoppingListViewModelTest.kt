@@ -16,7 +16,6 @@ import com.compagnon.courses.core.model.ProductId
 import com.compagnon.courses.core.model.Quantity
 import com.compagnon.courses.core.model.UnitCode
 import com.compagnon.courses.core.model.illustration.Illustrations
-import com.compagnon.courses.core.testing.MockCatalogServer
 import com.compagnon.courses.core.testing.SeedCatalog
 import com.compagnon.courses.core.testing.TestClock
 import com.compagnon.courses.core.testing.createInMemoryDriver
@@ -55,9 +54,8 @@ class ShoppingListViewModelTest {
     private inner class Device(scope: TestScope) {
         val context = StandardTestDispatcher(scope.testScheduler)
         val database = createDatabase(createInMemoryDriver())
-        val server = MockCatalogServer()
         val clock = TestClock()
-        val catalog = CatalogRepository(database, server.api, clock, context)
+        val catalog = CatalogRepository(database, clock, context)
         val households = HouseholdRepository(database, "FR", clock, context)
         val lists = ShoppingListRepository(database, Ids(), clock, context)
         val store = ViewModelStore()
@@ -71,7 +69,7 @@ class ShoppingListViewModelTest {
     private fun test(block: suspend TestScope.(Device) -> Unit) = runTest(main) {
         val device = Device(this)
         try {
-            device.catalog.sync("FR", "fr-FR")
+            device.catalog.installBundled("FR", "fr-FR")
             block(device)
         } finally {
             device.store.clear()

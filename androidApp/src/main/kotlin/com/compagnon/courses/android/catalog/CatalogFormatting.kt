@@ -2,8 +2,7 @@ package com.compagnon.courses.android.catalog
 
 import androidx.annotation.StringRes
 import com.compagnon.courses.android.R
-import com.compagnon.courses.feature.catalog.CatalogSyncOutcome
-import com.compagnon.courses.feature.catalog.CatalogSyncUiState
+import com.compagnon.courses.feature.catalog.CatalogStatusUiState
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -13,17 +12,11 @@ internal fun formatCount(count: Int, locale: Locale): String =
 
 /** The look of the catalog footer of the home screen. */
 internal enum class CatalogFooterTone {
-    /** ✓ « Catalogue à jour · 312 produits ». */
+    /** ✓ « 312 produits sur l'appareil ». */
     READY,
 
-    /** A sync is running. */
-    SYNCING,
-
-    /** Offline, the catalog of the device is used. */
-    OFFLINE,
-
-    /** No usable catalog, or it could not be saved. */
-    PROBLEM,
+    /** The bundled catalog is being installed (first launch). */
+    PREPARING,
 }
 
 /**
@@ -35,17 +28,9 @@ internal data class CatalogFooterText(
     val withProducts: Boolean,
 )
 
-/** What the home footer says about the local catalog and its last sync. */
-internal fun catalogFooter(sync: CatalogSyncUiState): CatalogFooterText = when {
-    sync.syncing -> CatalogFooterText(CatalogFooterTone.SYNCING, R.string.catalog_syncing, withProducts = false)
-    sync.lastOutcome == CatalogSyncOutcome.FAILED_STORAGE ->
-        CatalogFooterText(CatalogFooterTone.PROBLEM, R.string.catalog_outcome_storage_failed, withProducts = false)
+/** What the home footer says about the catalog of the device. */
+internal fun catalogFooter(catalog: CatalogStatusUiState): CatalogFooterText = when {
     // The bundled catalog is being written (first launch): a moment, never the network.
-    sync.localVersion == null -> CatalogFooterText(CatalogFooterTone.SYNCING, R.string.catalog_local_none, withProducts = false)
-    // A build without server: the catalog of the app, as is.
-    !sync.canCheck -> CatalogFooterText(CatalogFooterTone.READY, R.string.catalog_footer_offline, withProducts = true)
-    // The server did not answer: the device's catalog is used as is.
-    sync.lastOutcome == CatalogSyncOutcome.FAILED_NETWORK ->
-        CatalogFooterText(CatalogFooterTone.OFFLINE, R.string.catalog_footer_offline, withProducts = true)
-    else -> CatalogFooterText(CatalogFooterTone.READY, R.string.catalog_footer_ready, withProducts = true)
+    !catalog.ready -> CatalogFooterText(CatalogFooterTone.PREPARING, R.string.catalog_local_none, withProducts = false)
+    else -> CatalogFooterText(CatalogFooterTone.READY, R.string.catalog_footer_offline, withProducts = true)
 }

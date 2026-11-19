@@ -67,7 +67,7 @@ class HouseholdRepositoryTest {
             adults = 2,
             children = listOf(AgeBand.BABY, AgeBand.CHILD),
             pets = setOf(PetKind.CAT),
-            diet = Diet.HALAL,
+            diet = Diet.VEGETARIAN,
             avoid = setOf(Avoidance.LACTOSE),
             essentials = setOf(seedProductId("baguette"), seedProductId("bananes")),
             cadences = mapOf(seedProductId("baguette") to 7, seedProductId("couches") to 14),
@@ -84,7 +84,7 @@ class HouseholdRepositoryTest {
         assertEquals(4, household.profile.size)
         assertTrue(household.profile.customEssentials)
         assertEquals(
-            setOf("contains-pork", "contains-alcohol", "contains-lactose"),
+            setOf("contains-meat", "contains-fish", "contains-lactose"),
             household.profile.effectiveExcludedTags.map { it.value }.toSet(),
         )
         assertEquals(setup.essentials, data.households.observeEssentials().first())
@@ -131,7 +131,7 @@ class HouseholdRepositoryTest {
     @Test
     fun savingTheHouseholdClosesTheOpenSession() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val setup = assertNotNull(data.questions.planningSetup(SessionMode.QUICK, data.clock.now, seed = 1))
         data.questions.startSession(setup, data.lists.activeListId())
         assertNotNull(data.questions.openSession())

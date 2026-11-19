@@ -1,31 +1,17 @@
 package com.compagnon.courses.core.data
 
-import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.coroutines.cancellation.CancellationException
 import kotlin.experimental.ExperimentalObjCRefinement
 import kotlin.native.HiddenFromObjC
 
 /**
- * The last check of the server's catalog: [running] while it runs; [result] of the last one that ended, null
- * before the first.
- */
-data class CatalogCheck(val running: Boolean = false, val result: SyncResult? = null)
-
-/**
- * Keeps the local catalog ready and current for the whole app (ADR-012). [start], once at launch: writes the catalog
- * bundled in the app when the device has none (or an older release), then asks the server for its latest release
- * and applies it when it is newer (`changes`, or the snapshot). A server that does not answer leaves the local catalog
- * as it is: the app never waits for the network. [switchTo] does the same for another language while the app runs.
- *
- * In a build without server ([CatalogRepository.hasServer] false, ADR-013), it only installs the bundled catalog:
- * no check ever runs and [check] stays at its initial value.
+ * Keeps the local catalog ready for the whole app (ADR-012). [start], once at launch: writes the catalog bundled in
+ * the app when the device has none (or an older release). [switchTo] does the same for another language while the
+ * app runs.
  *
  * Its jobs run in [appScope], which outlives the screens.
  */
@@ -40,18 +26,12 @@ class CatalogUpdater(
     private val started = MutableStateFlow(false)
     private val installed = CompletableDeferred<Unit>()
 
-    private val _check = MutableStateFlow(CatalogCheck())
-    val check: StateFlow<CatalogCheck> = _check.asStateFlow()
-
-    /** Whether the server can be checked at all: false in a build without server. */
-    val checksServer: Boolean get() = catalog.hasServer
-
     /** The projection the app works with now: it follows [switchTo]. */
     val currentScope: CatalogScope get() = scopes.value
 
     /**
-     * Installs the bundled catalog if needed, then checks the server, and again after each [switchTo]; a new scope
-     * replaces the work still running for the previous one. Later calls do nothing.
+     * Installs the bundled catalog if needed, and again after each [switchTo]; a new scope replaces the install still
+     * running for the previous one. Later calls do nothing.
      */
     fun start() {
         if (!started.compareAndSet(expect = false, update = true)) return
@@ -59,7 +39,6 @@ class CatalogUpdater(
             scopes.collectLatest { scope ->
                 catalog.installBundled(scope.country, scope.locale)
                 installed.complete(Unit)
-                if (checksServer) runCheck()
             }
         }
     }
@@ -73,43 +52,5 @@ class CatalogUpdater(
     suspend fun awaitInstalled() {
         start()
         installed.await()
-    }
-
-    /** Checks the server again (« Mise à jour » on the catalog line); ignored while a check runs, or without server. */
-    fun checkNow() {
-        if (!started.value) return start()
-        if (!checksServer) return
-        appScope.launch {
-            installed.await()
-            runCheck()
-        }
-    }
-
-    private suspend fun runCheck() {
-        val previous = _check.value
-        if (previous.running || !_check.compareAndSet(previous, previous.copy(running = true))) return
-        val scope = currentScope
-        val result = try {
-            catalog.sync(scope.country, scope.locale)
-        } catch (e: CancellationException) {
-            _check.value = previous
-            throw e
-        } catch (e: Exception) {
-            // sync returns failures as values: anything else is a bug, but must not crash the app.
-            log.e(e) { "Unexpected failure while checking the catalog for ${scope.country}/${scope.locale}" }
-            null
-        }
-        _check.value = CatalogCheck(running = false, result = result ?: previous.result)
-        when (result) {
-            is SyncResult.Updated -> log.i {
-                "Catalog updated from ${result.fromVersion} to ${result.toVersion} (${result.method})"
-            }
-            is SyncResult.Failed -> log.i { "Catalog check failed (${result.failure}): the local catalog is kept" }
-            else -> Unit
-        }
-    }
-
-    private companion object {
-        val log = Logger.withTag("CatalogUpdater")
     }
 }

@@ -1,15 +1,15 @@
 package com.compagnon.courses.core.data
 
-import com.compagnon.courses.contract.CatalogSnapshotDto
-import com.compagnon.courses.contract.CategoryDto
-import com.compagnon.courses.contract.ContractJson
-import com.compagnon.courses.contract.CycleClassDto
-import com.compagnon.courses.contract.DimensionDto
-import com.compagnon.courses.contract.PackageDto
-import com.compagnon.courses.contract.ProductDto
-import com.compagnon.courses.contract.StorageZoneDto
-import com.compagnon.courses.contract.UnitDto
-import com.compagnon.courses.contract.UnitPolicyDto
+import com.compagnon.courses.core.catalogformat.CatalogJson
+import com.compagnon.courses.core.catalogformat.CatalogSnapshotDto
+import com.compagnon.courses.core.catalogformat.CategoryDto
+import com.compagnon.courses.core.catalogformat.CycleClassDto
+import com.compagnon.courses.core.catalogformat.DimensionDto
+import com.compagnon.courses.core.catalogformat.PackageDto
+import com.compagnon.courses.core.catalogformat.ProductDto
+import com.compagnon.courses.core.catalogformat.StorageZoneDto
+import com.compagnon.courses.core.catalogformat.UnitDto
+import com.compagnon.courses.core.catalogformat.UnitPolicyDto
 import com.compagnon.courses.core.database.Catalog_category
 import com.compagnon.courses.core.database.Catalog_product
 import com.compagnon.courses.core.database.Catalog_state
@@ -30,8 +30,8 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 
 /**
- * Blocking access to the local catalog tables. Rows keep the contract DTO shape (JSON columns for the nested
- * lists), so that reading them back reuses the contract → domain mappers. Callers run it off the main thread,
+ * Blocking access to the local catalog tables. Rows keep the catalog DTO shape (JSON columns for the nested
+ * lists), so that reading them back reuses the DTO → domain mappers. Callers run it off the main thread,
  * inside a transaction when they write.
  */
 internal class CatalogStore(private val database: CompagnonDatabase) {
@@ -43,7 +43,7 @@ internal class CatalogStore(private val database: CompagnonDatabase) {
     fun stateFor(country: String, locale: String): Catalog_state? = state.selectFor(country, locale).executeAsOneOrNull()
 
     /** Replaces the whole local catalog with [snapshot]. */
-    fun replaceWith(snapshot: CatalogSnapshotDto, etag: String?, syncedAt: Long) {
+    fun replaceWith(snapshot: CatalogSnapshotDto, installedAt: Long) {
         catalog.deleteAllProducts()
         catalog.deleteAllTags()
         catalog.deleteAllCategories()
@@ -54,7 +54,7 @@ internal class CatalogStore(private val database: CompagnonDatabase) {
         snapshot.categories.forEach(::upsertCategory)
         snapshot.storageZones.forEach(::upsertZone)
         snapshot.products.forEach(::upsertProduct)
-        state.upsert(snapshot.country, snapshot.locale, snapshot.version, etag, syncedAt)
+        state.upsert(snapshot.country, snapshot.locale, snapshot.version, installedAt)
     }
 
     fun upsertUnit(dto: UnitDto) = catalog.upsertUnit(
@@ -92,8 +92,8 @@ internal class CatalogStore(private val database: CompagnonDatabase) {
             typicalRepurchaseDays = dto.typicalRepurchaseDays?.toLong(),
             householdPenetration = dto.householdPenetration,
             isQuestionCandidate = dto.isQuestionCandidate.toLong(),
-            unitPolicies = ContractJson.encodeToString(POLICIES, dto.unitPolicies),
-            packages = ContractJson.encodeToString(PACKAGES, dto.packages),
+            unitPolicies = CatalogJson.encodeToString(POLICIES, dto.unitPolicies),
+            packages = CatalogJson.encodeToString(PACKAGES, dto.packages),
             searchText = searchTextOf(dto),
         )
         catalog.deleteTagsOf(dto.id)
@@ -101,23 +101,6 @@ internal class CatalogStore(private val database: CompagnonDatabase) {
     }
 
     /** Applies one tombstone; [entity] is `category`, `zone`, `unit` or `product`. Unknown entities are ignored. */
-    fun delete(entity: String, id: String) {
-        when (entity) {
-            "category" -> catalog.deleteCategory(id)
-            "zone", "storage_zone", "storageZone" -> catalog.deleteStorageZone(id)
-            "unit" -> catalog.deleteUnit(id)
-            "product" -> {
-                catalog.deleteProduct(id)
-                catalog.deleteTagsOf(id)
-            }
-        }
-    }
-
-    fun setState(country: String, locale: String, version: Long, etag: String?, syncedAt: Long) =
-        state.upsert(country, locale, version, etag, syncedAt)
-
-    fun touch(country: String, locale: String, syncedAt: Long) = state.touch(syncedAt, country, locale)
-
     fun productCount(): Long = catalog.countProducts().executeAsOne()
 
     fun categoryCount(): Long = catalog.countCategories().executeAsOne()
@@ -220,8 +203,8 @@ internal class CatalogStore(private val database: CompagnonDatabase) {
             typicalRepurchaseDays = typical_repurchase_days?.toInt(),
             householdPenetration = household_penetration,
             isQuestionCandidate = is_question_candidate != 0L,
-            unitPolicies = ContractJson.decodeFromString(POLICIES, unit_policies),
-            packages = ContractJson.decodeFromString(PACKAGES, packages),
+            unitPolicies = CatalogJson.decodeFromString(POLICIES, unit_policies),
+            packages = CatalogJson.decodeFromString(PACKAGES, packages),
         )
     } catch (_: IllegalArgumentException) {
         // SerializationException is an IllegalArgumentException: a corrupted JSON column skips the product.
@@ -233,10 +216,10 @@ internal class CatalogStore(private val database: CompagnonDatabase) {
         val POLICIES = ListSerializer(UnitPolicyDto.serializer())
         val PACKAGES = ListSerializer(PackageDto.serializer())
 
-        fun encodeForms(forms: Map<String, String>): String = ContractJson.encodeToString(FORMS, forms)
+        fun encodeForms(forms: Map<String, String>): String = CatalogJson.encodeToString(FORMS, forms)
 
         fun decodeForms(json: String): Map<String, String> = try {
-            ContractJson.decodeFromString(FORMS, json)
+            CatalogJson.decodeFromString(FORMS, json)
         } catch (_: IllegalArgumentException) {
             emptyMap()
         }

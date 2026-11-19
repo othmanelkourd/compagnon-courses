@@ -61,7 +61,7 @@
                     HomeContent(
                         listState: DemoData.homeList,
                         household: DemoData.householdSummary,
-                        catalogSync: DemoData.catalogSync,
+                        catalogStatus: DemoData.catalogStatus,
                         onStartSession: {},
                         onOpenList: {},
                         onOpenHousehold: {}
@@ -256,7 +256,7 @@
         // MARK: Onboarding (mockups `Onboarding-*` and `Household-Edit`)
 
         static let householdSummary = HouseholdSummaryUi(
-            adults: 2, babies: 1, children: 1, teens: 0, pets: [.cat], diet: .halal, avoid: [.lactose],
+            adults: 2, babies: 1, children: 1, teens: 0, pets: [.cat], diet: .vegetarian, avoid: [.lactose],
             essentials: 14, recurring: 4, horizonDays: 7, onboarded: true
         )
 
@@ -295,13 +295,13 @@
                 canSkip: number != nil && step != .household,
                 closeInsteadOfBack: false,
                 household: HouseholdStepUi(adults: 2, babies: 1, children: 1, teens: 0, pets: [.cat], maxMembers: 12),
-                diet: .halal,
+                diet: .vegetarian,
                 avoid: [
                     AvoidOptionUi(choice: .gluten, checked: false, locked: false),
                     AvoidOptionUi(choice: .lactose, checked: true, locked: false),
                     AvoidOptionUi(choice: .nuts, checked: false, locked: false),
                     AvoidOptionUi(choice: .eggs, checked: false, locked: false),
-                    AvoidOptionUi(choice: .alcohol, checked: true, locked: true)
+                    AvoidOptionUi(choice: .alcohol, checked: false, locked: false)
                 ],
                 essentials: EssentialsStepUi(
                     query: "", aisles: essentialsAisles, results: [], checkedCount: 14, catalogLoading: false, catalogMissing: false
@@ -322,9 +322,8 @@
             )
         }
 
-        static let catalogSync = CatalogSyncUiState(
-            syncing: false, localVersion: KotlinLong(value: 3), lastSyncedAt: "2026-10-24T08:30:00Z",
-            productCount: 312, categoryCount: 18, lastOutcome: nil, canCheck: false
+        static let catalogStatus = CatalogStatusUiState(
+            ready: true, version: KotlinLong(value: 3), productCount: 312, categoryCount: 18
         )
     }
 

@@ -139,12 +139,12 @@ private struct MemberStepper: View {
     }
 }
 
-/// Step 2 « Comment mangez-vous ? » (mockup `Onboarding-Diet`): six exclusive diets.
+/// Step 2 « Comment mangez-vous ? » (mockup `Onboarding-Diet`): four exclusive diets.
 struct DietStepView: View {
     let state: OnboardingUiStateReady
     let send: (any OnboardingEvent) -> Void
 
-    private static let diets: [DietChoice] = [.omnivore, .noPork, .halal, .pescatarian, .vegetarian, .vegan]
+    private static let diets: [DietChoice] = [.omnivore, .pescatarian, .vegetarian, .vegan]
 
     var body: some View {
         OnboardingStepLayout {

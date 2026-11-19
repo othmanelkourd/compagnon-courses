@@ -23,7 +23,7 @@ ij_kotlin_name_count_to_use_star_import_for_members = 2147483647
 [*.{java,swift}]
 max_line_length = 120
 
-# Web (backoffice), data and configuration files.
+# Web, data and configuration files.
 [*.{js,jsx,mjs,cjs,ts,tsx,css,scss,html}]
 indent_size = 2
 

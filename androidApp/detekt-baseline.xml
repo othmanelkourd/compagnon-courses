@@ -87,18 +87,15 @@
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$assertEquals(listOf(OnboardingEvent.ToggleEssential("tomate"), OnboardingEvent.ExpandAisle("fruits-legumes")), events)</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNode(hasText(composeRule.string(R.string.avoid_alcohol)) and isToggleable()).assertIsOn().assertIsNotEnabled()</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNode(hasText(composeRule.string(R.string.avoid_gluten)) and isToggleable()).assertIsOff().performClick()</ID>
-    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNode(hasText(composeRule.string(R.string.diet_halal_hint)), useUnmergedTree = true).assertIsDisplayed()</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNode(hasText(composeRule.string(R.string.onboarding_pet_cat)) and isToggleable(), useUnmergedTree = false)</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNodeWithContentDescription(composeRule.string(R.string.onboarding_member_less, teens)).assertIsNotEnabled()</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNodeWithContentDescription(composeRule.string(R.string.onboarding_member_more, babies)).performClick()</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNodeWithContentDescription(composeRule.string(R.string.onboarding_recurring_remove, "Baguette")).performClick()</ID>
-    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.onNodeWithText(composeRule.string(R.string.onboarding_avoid_locked, halal), substring = true).assertIsDisplayed()</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$composeRule.runOnIdle { assertEquals(listOf(OnboardingEvent.SetCadence("baguette", CadenceChoice.MONTH)), events) }</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$listOf(OnboardingEvent.SelectRhythm(RhythmChoice.MONTH), OnboardingEvent.StepRhythm(increment = true), OnboardingEvent.Next)</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$setState(ready(OnboardingStep.ESSENTIALS, essentials = essentialsStep.copy(aisles = emptyList(), checkedCount = 0, catalogMissing = true)))</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$setState(ready(OnboardingStep.RECURRING, recurring = OnboardingFixtures.recurringStep.copy(rows = OnboardingFixtures.recurringStep.rows.take(1))))</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$val babies = composeRule.string(R.string.onboarding_babies).lowercase(composeRule.activity.resources.configuration.locales[0])</ID>
-    <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$val halal = composeRule.string(R.string.diet_halal).lowercase(composeRule.activity.resources.configuration.locales[0])</ID>
     <ID>MaxLineLength:OnboardingStepsTest.kt:OnboardingStepsTest$val teens = composeRule.string(R.string.onboarding_teens).lowercase(composeRule.activity.resources.configuration.locales[0])</ID>
     <ID>MaxLineLength:OnboardingTexts.kt:OnboardingTexts$/** « Continuer · 1 à éviter » when the person checked a box themselves (not the ones of the diet), else « Continuer ». */</ID>
     <ID>MaxLineLength:OnboardingTexts.kt:OnboardingTexts$return if (chosen &gt; 0) UiText.Res(R.string.onboarding_avoid_continue, listOf(chosen)) else UiText.Res(R.string.onboarding_continue)</ID>

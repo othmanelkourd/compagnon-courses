@@ -14,8 +14,8 @@ class SchemaTest {
     private val database = createDatabase(driver)
 
     @Test
-    fun theSchemaIsVersionTwoWithEveryTable() {
-        assertEquals(2L, CompagnonDatabase.Schema.version)
+    fun theSchemaIsVersionThreeWithEveryTable() {
+        assertEquals(3L, CompagnonDatabase.Schema.version)
         val tables = driver.executeQuery(
             identifier = null,
             sql = "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name",
@@ -30,7 +30,7 @@ class SchemaTest {
             listOf(
                 "catalog_category", "catalog_product", "catalog_product_tag", "catalog_state", "catalog_storage_zone",
                 "catalog_unit", "household_product_pref", "household_product_stats", "household_profile", "list_item",
-                "outbox", "purchase_event", "question_answer", "question_session", "question_session_event",
+                "purchase_event", "question_answer", "question_session", "question_session_event",
                 "shopping_list",
             ),
             tables,
@@ -65,12 +65,11 @@ class SchemaTest {
     fun theProfileHasASingleRow() {
         val queries = database.householdQueries
         queries.upsertProfile(2, "[]", "FR", "METRIC", 7, "[]", "[]", 0, "[]", "OMNIVORE", "[]", 0, null)
-        queries.upsertProfile(3, "[]", "FR", "METRIC", 7, "[]", "[]", 1, "[\"CAT\"]", "HALAL", "[]", 1, 1)
+        queries.upsertProfile(3, "[]", "FR", "METRIC", 7, "[]", "[]", 1, "[\"CAT\"]", "VEGETARIAN", "[]", 1, 1)
         val row = queries.selectProfile().executeAsOne()
         assertEquals(3L, row.adults)
-        assertEquals("HALAL", row.diet)
+        assertEquals("VEGETARIAN", row.diet)
         assertEquals(1L, row.onboarded_at)
-        assertTrue(database.outboxQueries.countPending().executeAsOne() == 0L)
     }
 
     @Test

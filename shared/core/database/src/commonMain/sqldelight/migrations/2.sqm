@@ -1,0 +1,18 @@
+-- Version 2 -> 3: the app has no server. The outbox of operations to push is gone, and the catalog state no
+-- longer keeps an HTTP ETag (SQLite before 3.35 cannot drop a column: the table is rebuilt).
+DROP TABLE outbox;
+
+CREATE TABLE catalog_state_new (
+    country TEXT NOT NULL,
+    locale TEXT NOT NULL,
+    version INTEGER NOT NULL,
+    synced_at INTEGER NOT NULL,
+    PRIMARY KEY (country, locale)
+);
+
+INSERT INTO catalog_state_new (country, locale, version, synced_at)
+SELECT country, locale, version, synced_at FROM catalog_state;
+
+DROP TABLE catalog_state;
+
+ALTER TABLE catalog_state_new RENAME TO catalog_state;

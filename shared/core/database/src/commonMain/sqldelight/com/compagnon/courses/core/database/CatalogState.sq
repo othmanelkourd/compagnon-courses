@@ -1,11 +1,10 @@
--- Which projection of the published catalog the local catalog tables hold. The catalog tables hold one
--- (country, locale) projection at a time: syncing another pair replaces them with a snapshot.
+-- Which projection of the catalog the local catalog tables hold: the one bundled in the app for the device's
+-- (country, locale). Installing another pair replaces the tables. synced_at is when it was installed.
 -- Times are epoch milliseconds (UTC).
 CREATE TABLE catalog_state (
     country TEXT NOT NULL,
     locale TEXT NOT NULL,
     version INTEGER NOT NULL,
-    etag TEXT,
     synced_at INTEGER NOT NULL,
     PRIMARY KEY (country, locale)
 );
@@ -17,11 +16,8 @@ selectFor:
 SELECT * FROM catalog_state WHERE country = :country AND locale = :locale;
 
 upsert:
-INSERT OR REPLACE INTO catalog_state (country, locale, version, etag, synced_at)
-VALUES (:country, :locale, :version, :etag, :syncedAt);
-
-touch:
-UPDATE catalog_state SET synced_at = :syncedAt WHERE country = :country AND locale = :locale;
+INSERT OR REPLACE INTO catalog_state (country, locale, version, synced_at)
+VALUES (:country, :locale, :version, :syncedAt);
 
 deleteAll:
 DELETE FROM catalog_state;

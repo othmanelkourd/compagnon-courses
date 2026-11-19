@@ -1,35 +1,29 @@
 package com.compagnon.courses.feature.catalog
 
 import app.cash.sqldelight.db.SqlDriver
-import app.cash.turbine.test
 import com.compagnon.courses.core.data.dataModule
-import com.compagnon.courses.core.network.NetworkConfig
-import com.compagnon.courses.core.network.createHttpClient
-import com.compagnon.courses.core.network.networkModule
 import com.compagnon.courses.core.testing.createInMemoryDriver
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.mock.MockEngine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.koin.core.parameter.parametersOf
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertNotSame
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CatalogFeatureModuleTest {
 
     @BeforeTest
     fun setUp() {
-        Dispatchers.setMain(StandardTestDispatcher())
+        Dispatchers.setMain(UnconfinedTestDispatcher())
     }
 
     @AfterTest
@@ -38,34 +32,16 @@ class CatalogFeatureModuleTest {
     }
 
     @Test
-    fun viewModelIsCreatedForTheRequestedCountry() = runTest {
-        val config = NetworkConfig(baseUrl = "http://api.test", platform = "android", appVersion = "0.1.0")
-        val engine = MockEngine { respondJson(VERSION_JSON) }
+    fun theViewModelShowsTheBundledCatalog() = runTest {
         val app = koinApplication {
-            modules(
-                networkModule(config),
-                dataModule(),
-                catalogFeatureModule,
-                module {
-                    single<HttpClient> { createHttpClient(config.platform, config.appVersion, engine) }
-                    single<SqlDriver> { createInMemoryDriver() }
-                },
-            )
+            modules(dataModule(), catalogFeatureModule, module { single<SqlDriver> { createInMemoryDriver() } })
         }
 
-        val viewModel = app.koin.get<CatalogStatusViewModel> { parametersOf("FR") }
+        val viewModel = app.koin.get<CatalogStatusViewModel>()
 
-        viewModel.state.test {
-            assertEquals(loadedVersion1, awaitSettled())
-        }
-        assertEquals(
-            "FR",
-            engine.requestHistory.first {
-                it.url.encodedPath == "/v1/catalog/version"
-            }.url.parameters["country"],
-        )
+        assertTrue(viewModel.state.first { it.ready }.productCount > 0)
         // ViewModel definitions are not singletons: each screen gets its own instance.
-        assertNotSame(viewModel, app.koin.get<CatalogStatusViewModel> { parametersOf("FR") })
+        assertNotSame(viewModel, app.koin.get<CatalogStatusViewModel>())
         app.close()
     }
 }

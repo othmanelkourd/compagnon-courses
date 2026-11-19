@@ -32,7 +32,7 @@ class QuestionRepositoryTest {
     @Test
     fun planningUsesTheCatalogTheHouseholdAndTheStats() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
 
         val setup = assertNotNull(data.questions.planningSetup(SessionMode.QUICK, data.clock.now, seed = 42))
 
@@ -47,7 +47,7 @@ class QuestionRepositoryTest {
     @Test
     fun startedSessionsAreOpenWithTheirEvents() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val setup = assertNotNull(data.questions.planningSetup(SessionMode.QUICK, data.clock.now, seed = 7))
         val listId = data.lists.activeListId()
 
@@ -67,7 +67,7 @@ class QuestionRepositoryTest {
     @Test
     fun commitWritesTheListTheAnswersAndTheStatsTogether() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val setup = assertNotNull(data.questions.planningSetup(SessionMode.QUICK, data.clock.now, seed = 7))
         val listId = data.lists.activeListId()
         val sessionId = data.questions.startSession(setup, listId)
@@ -159,7 +159,7 @@ class QuestionRepositoryTest {
     @Test
     fun abandonKeepsTheAnswersButAddsNothing() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val setup = assertNotNull(data.questions.planningSetup(SessionMode.QUICK, data.clock.now, seed = 7))
         val sessionId = data.questions.startSession(setup, listId = null)
         var transition = reducer.reduce(SessionState.Idle, SessionEvent.Start(sessionId, setup.input))

@@ -18,7 +18,7 @@ kotlin {
             baseName = "Shared"
             isStatic = true
             binaryOption("bundleId", "com.compagnon.courses.Shared")
-            // Swift sees the feature API without module prefixes. Network/contract types stay internal to
+            // Swift sees the feature API without module prefixes. Data and catalog-format types stay internal to
             // the framework's Kotlin side: Swift only talks to ViewModels and UI state.
             export(projects.shared.feature.catalog)
             export(projects.shared.feature.questionFlow)
@@ -35,15 +35,12 @@ kotlin {
             api(projects.shared.feature.lists)
             api(projects.shared.feature.onboarding)
             api(projects.shared.feature.about)
-            // `sharedModules(config: NetworkConfig, scope: CatalogScope)` is public API.
-            api(projects.shared.core.network)
             api(projects.shared.core.data)
             implementation(projects.shared.core.database)
             api(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(projects.shared.core.testing)
-            implementation(libs.ktor.client.mock)
             implementation(libs.turbine)
         }
     }

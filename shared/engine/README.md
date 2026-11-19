@@ -1,6 +1,6 @@
 # :shared:engine
 
-Question engine v0 (`docs/question-engine.md`): pure Kotlin, no I/O, no coroutines. Same input (including
+Question engine v0: pure Kotlin, no I/O, no coroutines. Same input (including
 `now` and `seed`) → same output, on every platform.
 
 | Piece | Role |

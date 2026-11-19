@@ -51,7 +51,7 @@ class QuestionSessionViewModelTest {
 
     @Test
     fun startsWithTheMetaQuestionsPrefilledFromTheHousehold() = test { device ->
-        device.sync()
+        device.installSeed()
         val viewModel = device.newViewModel()
 
         viewModel.state.test {
@@ -74,12 +74,10 @@ class QuestionSessionViewModelTest {
     }
 
     @Test
-    fun theFirstSessionStartsOfflineFromTheBundledCatalog() = test { device ->
-        device.server.offline = true
+    fun theFirstSessionStartsFromTheBundledCatalog() = test { device ->
         val viewModel = device.newViewModel()
 
         assertIs<QuestionUiState.Meta>(viewModel.awaitSettled())
-        assertEquals(emptyList(), device.server.requests)
     }
 
     @Test
@@ -88,14 +86,14 @@ class QuestionSessionViewModelTest {
 
         assertEquals(QuestionUiState.Error(QuestionErrorKind.NO_CATALOG, retryable = true), viewModel.awaitSettled())
 
-        device.sync()
+        device.installSeed()
         viewModel.onEvent(QuestionEvent.Retry)
         assertIs<QuestionUiState.Meta>(viewModel.awaitSettled())
     }
 
     @Test
     fun theSuggestedScreenTogglesAndStepsItsLines() = test { device ->
-        device.sync()
+        device.installSeed()
         val viewModel = device.newViewModel()
         advanceUntilIdle()
         viewModel.answerMetas()
@@ -124,7 +122,7 @@ class QuestionSessionViewModelTest {
 
     @Test
     fun aCardOffersPresetsAStepperAndOtherUnits() = test { device ->
-        device.sync()
+        device.installSeed()
         device.watch("pommes", "lait-demi-ecreme")
         val viewModel = device.newViewModel()
         advanceUntilIdle()
@@ -171,7 +169,7 @@ class QuestionSessionViewModelTest {
 
     @Test
     fun linesAndCardsCarryTheirIllustrationAndTheNextOne() = test { device ->
-        device.sync()
+        device.installSeed()
         device.watch("pommes", "lait-demi-ecreme")
         val viewModel = device.newViewModel()
         advanceUntilIdle()
@@ -212,7 +210,7 @@ class QuestionSessionViewModelTest {
 
     @Test
     fun undoGoesBackToThePreviousQuestion() = test { device ->
-        device.sync()
+        device.installSeed()
         device.watch("pommes", "lait-demi-ecreme")
         val viewModel = device.newViewModel()
         advanceUntilIdle()
@@ -234,7 +232,7 @@ class QuestionSessionViewModelTest {
 
     @Test
     fun aSessionIsResumedAfterProcessDeath() = test { device ->
-        device.sync()
+        device.installSeed()
         device.watch("pommes", "lait-demi-ecreme", "yaourts-nature")
         val first = device.newViewModel()
         advanceUntilIdle()
@@ -255,7 +253,7 @@ class QuestionSessionViewModelTest {
 
     @Test
     fun aLanguageChangeKeepsTheSessionAndShowsTheNewLanguage() = test { device ->
-        device.sync()
+        device.installSeed()
         device.watch("pommes", "lait-demi-ecreme", "yaourts-nature")
         val viewModel = device.newViewModel()
         advanceUntilIdle()
@@ -279,7 +277,7 @@ class QuestionSessionViewModelTest {
 
     @Test
     fun abandoningAddsNothingAndTheNextSessionStartsAfresh() = test { device ->
-        device.sync()
+        device.installSeed()
         val viewModel = device.newViewModel()
         advanceUntilIdle()
         viewModel.answerMetas()
@@ -296,7 +294,7 @@ class QuestionSessionViewModelTest {
 
     @Test
     fun savingMonFoyerStartsTheNextSessionAfreshForTheNewHousehold() = test { device ->
-        device.sync()
+        device.installSeed()
         val first = device.newViewModel()
         advanceUntilIdle()
         first.answerMetas(values = listOf(10, 3, 1))
@@ -317,7 +315,7 @@ class QuestionSessionViewModelTest {
 
     @Test
     fun startOverAbandonsTheCurrentSession() = test { device ->
-        device.sync()
+        device.installSeed()
         val viewModel = device.newViewModel()
         advanceUntilIdle()
         viewModel.onEvent(QuestionEvent.AnswerMeta(7))
@@ -336,7 +334,7 @@ class QuestionSessionViewModelTest {
 
     @Test
     fun theReviewSearchesAndAddsOtherProducts() = test { device ->
-        device.sync()
+        device.installSeed()
         val viewModel = device.newViewModel()
         advanceUntilIdle()
         viewModel.answerMetas()

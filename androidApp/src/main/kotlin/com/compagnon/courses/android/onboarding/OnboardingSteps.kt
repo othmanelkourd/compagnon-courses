@@ -407,7 +407,7 @@ private fun DietOption(diet: DietChoice, selected: Boolean, onClick: () -> Unit)
 
 /**
  * `Onboarding-Avoid`: five boxes, each with its image at the end; the ones the diet already excludes are checked in
- * grey and disabled (« Déjà exclu par le régime halal »). « Continuer · 1 à éviter », « Rien à éviter ».
+ * grey and disabled (« Déjà exclu par le régime végan »). « Continuer · 1 à éviter », « Rien à éviter ».
  */
 @Composable
 internal fun AvoidStep(state: OnboardingUiState.Ready, onEvent: (OnboardingEvent) -> Unit) {

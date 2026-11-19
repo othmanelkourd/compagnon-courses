@@ -18,7 +18,7 @@ import com.compagnon.courses.feature.onboarding.RecurringStepUi
 import com.compagnon.courses.feature.onboarding.RhythmChoice
 import com.compagnon.courses.feature.onboarding.RhythmStepUi
 
-/** Fake onboarding states: the household of the mockups (2 adults, a baby, a child, a cat; halal, no lactose). */
+/** Fake onboarding states: the household of the mockups (2 adults, a baby, a child, a cat; vegetarian, no lactose). */
 internal object OnboardingFixtures {
 
     val summary = HouseholdSummaryUi(
@@ -27,7 +27,7 @@ internal object OnboardingFixtures {
         children = 1,
         teens = 0,
         pets = listOf(PetChoice.CAT),
-        diet = DietChoice.HALAL,
+        diet = DietChoice.VEGETARIAN,
         avoid = listOf(AvoidChoice.LACTOSE),
         essentials = 14,
         recurring = 3,
@@ -57,13 +57,13 @@ internal object OnboardingFixtures {
         canSkip = mode == OnboardingMode.FIRST_RUN && step != OnboardingStep.HOUSEHOLD && step in stepNumbers,
         closeInsteadOfBack = mode == OnboardingMode.EDIT && step in stepNumbers,
         household = HouseholdStepUi(adults = 2, babies = 1, children = 1, teens = 0, pets = listOf(PetChoice.CAT), maxMembers = 12),
-        diet = DietChoice.HALAL,
+        diet = DietChoice.VEGETARIAN,
         avoid = listOf(
             AvoidOptionUi(AvoidChoice.GLUTEN, checked = false, locked = false),
             AvoidOptionUi(AvoidChoice.LACTOSE, checked = true, locked = false),
             AvoidOptionUi(AvoidChoice.NUTS, checked = false, locked = false),
             AvoidOptionUi(AvoidChoice.EGGS, checked = false, locked = false),
-            AvoidOptionUi(AvoidChoice.ALCOHOL, checked = true, locked = true),
+            AvoidOptionUi(AvoidChoice.ALCOHOL, checked = false, locked = false),
         ),
         essentials = essentials,
         recurring = recurring,

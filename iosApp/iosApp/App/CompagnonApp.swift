@@ -4,14 +4,9 @@ import SwiftUI
 @main
 struct CompagnonApp: App {
     init() {
-        let configuration = AppConfiguration.load()
-        // Starts the shared Koin graph (database, HTTP client in Debug, repositories, ViewModels) before any view exists.
-        // The device language picks the catalog locale (French, otherwise English).
-        doInitKoin(
-            baseUrl: configuration.apiBaseURL,
-            appVersion: configuration.appVersion,
-            deviceLanguage: Locale.current.identifier
-        )
+        // Starts the shared Koin graph (database, repositories, ViewModels) before any view exists, and installs the
+        // catalog bundled in the app. The device language picks the catalog locale (French, otherwise English).
+        doInitKoin(deviceLanguage: Locale.current.identifier)
         FontName.verifyRegistered()
     }
 

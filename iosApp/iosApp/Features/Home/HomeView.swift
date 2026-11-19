@@ -16,29 +16,12 @@ struct HomeView: View {
         HomeContent(
             listState: list.state,
             household: household,
-            catalogSync: catalog.sync,
-            catalogBusy: catalog.isBusy,
+            catalogStatus: catalog.state,
             onStartSession: onStartSession,
             onOpenList: onOpenList,
             onOpenHousehold: onOpenHousehold,
-            onRefreshCatalog: catalog.refresh,
             onOpenAbout: onOpenAbout
         )
-        .refreshable(enabled: catalog.canRefresh) {
-            await catalog.refreshAndWait()
-        }
-    }
-}
-
-private extension View {
-    /// `.refreshable(action:)` only when `enabled`: a build without server has nothing to refresh.
-    @ViewBuilder
-    func refreshable(enabled: Bool, action: @escaping @Sendable () async -> Void) -> some View {
-        if enabled {
-            refreshable(action: action)
-        } else {
-            self
-        }
     }
 }
 
@@ -46,12 +29,10 @@ private extension View {
 struct HomeContent: View {
     let listState: any ShoppingListUiState
     let household: HouseholdSummaryUi
-    let catalogSync: CatalogSyncUiState
-    var catalogBusy = false
+    let catalogStatus: CatalogStatusUiState
     let onStartSession: () -> Void
     let onOpenList: () -> Void
     let onOpenHousehold: () -> Void
-    var onRefreshCatalog: () -> Void = {}
     var onOpenAbout: () -> Void = {}
 
     var body: some View {
@@ -68,7 +49,7 @@ struct HomeContent: View {
                     HouseholdCard(summary: household, action: onOpenHousehold)
                         .cascade(3)
                     Spacer(minLength: 12)
-                    CatalogStatusFooter(sync: catalogSync, busy: catalogBusy, onRefresh: onRefreshCatalog)
+                    CatalogStatusFooter(catalog: catalogStatus)
                         .cascade(4)
                 }
                 .padding(.horizontal, Spacing.screen)
@@ -271,7 +252,7 @@ private struct MyListCard: View {
     }
 }
 
-/// « Mon foyer »: its house, the household in a few words (« 4 personnes · Halal · 14 essentiels »), opens « Mon foyer ».
+/// « Mon foyer »: its house, the household in a few words (« 4 personnes · Végétarien · 14 essentiels »), opens « Mon foyer ».
 private struct HouseholdCard: View {
     let summary: HouseholdSummaryUi
     let action: () -> Void

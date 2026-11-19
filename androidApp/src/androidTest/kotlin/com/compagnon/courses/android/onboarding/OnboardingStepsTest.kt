@@ -9,6 +9,8 @@ import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -21,6 +23,7 @@ import com.compagnon.courses.android.testing.plural
 import com.compagnon.courses.android.testing.string
 import com.compagnon.courses.android.ui.theme.CompagnonTheme
 import com.compagnon.courses.feature.onboarding.AvoidChoice
+import com.compagnon.courses.feature.onboarding.AvoidOptionUi
 import com.compagnon.courses.feature.onboarding.CadenceChoice
 import com.compagnon.courses.feature.onboarding.DietChoice
 import com.compagnon.courses.feature.onboarding.HouseholdSection
@@ -100,8 +103,9 @@ class OnboardingStepsTest {
     fun theDietIsOneChoiceAndCanBeSkipped() {
         setState(ready(OnboardingStep.DIET))
 
-        composeRule.onNodeWithText(composeRule.string(R.string.diet_halal)).assertIsDisplayed()
-        composeRule.onNode(hasText(composeRule.string(R.string.diet_halal_hint)), useUnmergedTree = true).assertIsDisplayed()
+        composeRule.onNodeWithText(composeRule.string(R.string.diet_vegetarian)).assertIsDisplayed()
+        composeRule.onNode(hasText(composeRule.string(R.string.diet_vegetarian_hint)), useUnmergedTree = true)
+            .assertIsDisplayed()
         composeRule.onNodeWithText(composeRule.string(R.string.diet_vegan)).performClick()
         composeRule.onNodeWithText(composeRule.string(R.string.onboarding_skip)).performClick()
 
@@ -115,11 +119,27 @@ class OnboardingStepsTest {
 
     @Test
     fun aBoxExcludedByTheDietIsCheckedAndDisabled() {
-        setState(ready(OnboardingStep.AVOID))
+        // A vegan diet already excludes lactose and eggs; the person checked nuts.
+        val vegan = ready(OnboardingStep.AVOID).copy(
+            diet = DietChoice.VEGAN,
+            avoid = listOf(
+                AvoidOptionUi(AvoidChoice.GLUTEN, checked = false, locked = false),
+                AvoidOptionUi(AvoidChoice.LACTOSE, checked = true, locked = true),
+                AvoidOptionUi(AvoidChoice.NUTS, checked = true, locked = false),
+                AvoidOptionUi(AvoidChoice.EGGS, checked = true, locked = true),
+                AvoidOptionUi(AvoidChoice.ALCOHOL, checked = false, locked = false),
+            ),
+        )
+        setState(vegan)
 
-        val halal = composeRule.string(R.string.diet_halal).lowercase(composeRule.activity.resources.configuration.locales[0])
-        composeRule.onNodeWithText(composeRule.string(R.string.onboarding_avoid_locked, halal), substring = true).assertIsDisplayed()
-        composeRule.onNode(hasText(composeRule.string(R.string.avoid_alcohol)) and isToggleable()).assertIsOn().assertIsNotEnabled()
+        val locale = composeRule.activity.resources.configuration.locales[0]
+        val diet = composeRule.string(R.string.diet_vegan).lowercase(locale)
+        composeRule.onAllNodesWithText(composeRule.string(R.string.onboarding_avoid_locked, diet), substring = true)
+            .onFirst()
+            .assertIsDisplayed()
+        composeRule.onNode(hasText(composeRule.string(R.string.avoid_lactose)) and isToggleable())
+            .assertIsOn()
+            .assertIsNotEnabled()
         composeRule.onNode(hasText(composeRule.string(R.string.avoid_gluten)) and isToggleable()).assertIsOff().performClick()
         // Only the box the person checked counts: « Continuer · 1 à éviter ».
         composeRule.onNodeWithText(composeRule.string(R.string.onboarding_avoid_continue, 1)).assertIsDisplayed()
@@ -212,7 +232,7 @@ class OnboardingStepsTest {
         ).joinToString(" · ")
         composeRule.onNodeWithText(household, substring = true).assertIsDisplayed().performClick()
         composeRule.onNodeWithText(
-            composeRule.string(R.string.diet_halal) + " · " + composeRule.string(R.string.household_avoid_lactose),
+            composeRule.string(R.string.diet_vegetarian) + " · " + composeRule.string(R.string.household_avoid_lactose),
             substring = true,
         ).assertIsDisplayed()
         composeRule.onNodeWithText(composeRule.string(R.string.onboarding_start_session)).performClick()

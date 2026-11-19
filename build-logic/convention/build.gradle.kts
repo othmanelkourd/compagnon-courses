@@ -36,9 +36,5 @@ gradlePlugin {
             id = "compagnon.android.application"
             implementationClass = "com.compagnon.courses.buildlogic.AndroidApplicationConventionPlugin"
         }
-        register("jvmServer") {
-            id = "compagnon.jvm.server"
-            implementationClass = "com.compagnon.courses.buildlogic.JvmServerConventionPlugin"
-        }
     }
 }

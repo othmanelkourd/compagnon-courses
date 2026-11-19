@@ -3,8 +3,8 @@ import Shared
 
 /// The texts of the household (`design/TEXTES.md`, « Bienvenue et Mon foyer »): the choices of the steps and the
 /// summaries of the recap, « Mon foyer » and the home card. Values are joined with « · »: « 2 adultes · 1 bébé ·
-/// 1 enfant · 1 chat », « Halal · sans lactose », « Courses chaque semaine · 4 récurrents », « 4 personnes · Halal ·
-/// 14 essentiels ». Same rules as Android's `HouseholdTexts`.
+/// 1 enfant · 1 chat », « Végétarien · sans lactose », « Courses chaque semaine · 4 récurrents », « 4 personnes ·
+/// Végétarien · 14 essentiels ». Same rules as Android's `HouseholdTexts`.
 enum HouseholdTexts {
     static let separator = " · "
 
@@ -13,8 +13,6 @@ enum HouseholdTexts {
     static func dietLabel(_ diet: DietChoice) -> String {
         switch diet {
         case .omnivore: String(localized: "Je mange de tout")
-        case .noPork: String(localized: "Sans porc")
-        case .halal: String(localized: "Halal")
         case .pescatarian: String(localized: "Pescétarien")
         case .vegetarian: String(localized: "Végétarien")
         case .vegan: String(localized: "Végan")
@@ -24,8 +22,6 @@ enum HouseholdTexts {
     static func dietHint(_ diet: DietChoice) -> String {
         switch diet {
         case .omnivore: String(localized: "Aucune restriction")
-        case .noPork: String(localized: "Ni porc, ni charcuterie de porc")
-        case .halal: String(localized: "Sans porc ni alcool")
         case .pescatarian: String(localized: "Du poisson, pas de viande")
         case .vegetarian: String(localized: "Ni viande, ni poisson")
         case .vegan: String(localized: "Aucun produit d'origine animale")
@@ -52,7 +48,7 @@ enum HouseholdTexts {
         }
     }
 
-    /// « Déjà exclu par le régime halal ».
+    /// « Déjà exclu par le régime végan ».
     static func avoidLocked(by diet: DietChoice) -> String {
         let name = dietLabel(diet).lowercased(with: .current)
         return String(localized: "Déjà exclu par le régime \(name)")
@@ -125,7 +121,7 @@ enum HouseholdTexts {
         return parts.joined(separator: separator)
     }
 
-    /// « Halal · sans lactose »: the diet, then the products avoided; « Je mange de tout » alone when nothing is.
+    /// « Végétarien · sans lactose »: the diet, then the products avoided; « Je mange de tout » alone when nothing is.
     static func food(_ summary: HouseholdSummaryUi) -> String {
         var parts = [dietLabel(summary.diet)]
         for avoid in summary.avoid {
@@ -158,7 +154,7 @@ enum HouseholdTexts {
         return shopping + separator + String(localized: "\(Int(summary.recurring)) récurrents")
     }
 
-    /// The home card: « 4 personnes · Halal · 14 essentiels ».
+    /// The home card: « 4 personnes · Végétarien · 14 essentiels ».
     static func card(_ summary: HouseholdSummaryUi) -> String {
         [
             String(localized: "\(Int(summary.persons)) personnes"),

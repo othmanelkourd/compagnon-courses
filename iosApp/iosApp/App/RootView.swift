@@ -23,7 +23,7 @@ enum AppRoute: Hashable {
 struct RootView: View {
     @State private var gate = AppGateModel()
     @State private var path: [AppRoute] = []
-    @State private var catalog = CatalogStatusModel(country: "FR")
+    @State private var catalog = CatalogStatusModel()
     @State private var list = ShoppingListModel()
 
     var body: some View {
@@ -89,7 +89,7 @@ struct RootView: View {
                         }
                     }
                 case .about:
-                    AboutView(catalogSync: catalog.sync, onOpenLicenses: { path.append(.licenses) })
+                    AboutView(catalogStatus: catalog.state, onOpenLicenses: { path.append(.licenses) })
                 case .licenses:
                     LicensesView()
                 }

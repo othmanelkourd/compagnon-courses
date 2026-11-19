@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 # Compagnon de courses — monorepo .gitignore
-# Gradle/Kotlin · Android · Xcode · Node (backoffice) · server · infra
+# Gradle/Kotlin · Android · Xcode
 # ---------------------------------------------------------------------------
 
 # --- OS ---------------------------------------------------------------------
@@ -96,45 +96,9 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output/
 
-# --- Node / backoffice ------------------------------------------------------
-node_modules/
-dist/
-dist-ssr/
-*.tsbuildinfo
-.vite/
-.eslintcache
-.stylelintcache
-coverage/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-# Vite local env overrides (.env.local, .env.development.local, ...).
-*.local
-.env.local
-.env.*.local
-
-# --- Server -----------------------------------------------------------------
-# Embedded PostgreSQL data directory used in dev mode (no DATABASE_URL).
-server/app/build/dev-pg/
+# --- Logs -------------------------------------------------------------------
 *.log
 logs/
-
-# --- Infra (OpenTofu) -------------------------------------------------------
-.terraform/
-*.tfstate
-*.tfstate.*
-*.tfplan
-crash.log
-crash.*.log
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
-*.auto.tfvars
-*.tfvars
-!*.tfvars.example
-# .terraform.lock.hcl IS versioned.
 
 # --- Local tooling ----------------------------------------------------------
 .vscode/*

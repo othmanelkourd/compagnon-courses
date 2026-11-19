@@ -1,13 +1,7 @@
 package com.compagnon.courses.android.home
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.semantics.SemanticsActions
-import androidx.compose.ui.semantics.getOrNull
-import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -18,8 +12,7 @@ import com.compagnon.courses.android.onboarding.OnboardingFixtures
 import com.compagnon.courses.android.testing.plural
 import com.compagnon.courses.android.testing.string
 import com.compagnon.courses.android.ui.theme.CompagnonTheme
-import com.compagnon.courses.feature.catalog.CatalogSyncOutcome
-import com.compagnon.courses.feature.catalog.CatalogSyncUiState
+import com.compagnon.courses.feature.catalog.CatalogStatusUiState
 import com.compagnon.courses.feature.lists.ShoppingListUiState
 import com.compagnon.courses.feature.onboarding.HouseholdSummaryUi
 import org.junit.Assert.assertEquals
@@ -36,16 +29,8 @@ class HomeContentTest {
 
     private var sessions = 0
     private var listOpened = 0
-    private var refreshes = 0
 
-    private val synced = CatalogSyncUiState(
-        syncing = false,
-        localVersion = 3,
-        lastSyncedAt = "2026-10-24T09:00:00Z",
-        productCount = 312,
-        categoryCount = 18,
-        lastOutcome = CatalogSyncOutcome.UP_TO_DATE,
-    )
+    private val installed = CatalogStatusUiState(ready = true, version = 3, productCount = 312, categoryCount = 18)
     private val list = ShoppingListUiState.Loaded(
         sections = emptyList(),
         itemCount = 5,
@@ -59,20 +44,19 @@ class HomeContentTest {
     private var householdOpened = 0
 
     private fun setContent(
-        sync: CatalogSyncUiState = synced,
+        catalog: CatalogStatusUiState = installed,
         shoppingList: ShoppingListUiState = list,
         household: HouseholdSummaryUi? = OnboardingFixtures.summary,
     ) {
         composeRule.setContent {
             CompagnonTheme {
                 HomeContent(
-                    sync = sync,
+                    catalog = catalog,
                     list = shoppingList,
                     household = household,
                     onStartSession = { sessions++ },
                     onOpenList = { listOpened++ },
                     onOpenHousehold = { householdOpened++ },
-                    onRefresh = { refreshes++ },
                 )
             }
         }
@@ -113,10 +97,10 @@ class HomeContentTest {
     fun myHouseholdSummarisesTheHouseholdAndOpensIt() {
         setContent()
 
-        // « 4 personnes · Halal · 14 essentiels » (mockup `Main`).
+        // « 4 personnes · Végétarien · 14 essentiels » (mockup `Main`).
         val summary = listOf(
             composeRule.plural(R.plurals.home_household_persons, 4),
-            composeRule.string(R.string.diet_halal),
+            composeRule.string(R.string.diet_vegetarian),
             composeRule.plural(R.plurals.home_household_essentials, 14),
         ).joinToString(" · ")
         composeRule.onNodeWithText(summary).assertIsDisplayed()
@@ -147,33 +131,10 @@ class HomeContentTest {
     }
 
     @Test
-    fun tappingTheFooterSyncsTheCatalogUnlessASyncIsRunning() {
-        setContent()
-        composeRule.onNode(hasText(footerReady(), substring = true) and hasClickLabel(composeRule.string(R.string.catalog_sync_now)))
-            .assertIsEnabled()
-            .performClick()
-        composeRule.runOnIdle { assertEquals(1, refreshes) }
-    }
-
-    @Test
-    fun theRefreshIsDisabledWhileSyncing() {
-        setContent(sync = synced.copy(syncing = true))
-
-        composeRule.onNodeWithText(composeRule.string(R.string.catalog_syncing), substring = true).assertIsNotEnabled()
-    }
-
-    @Test
     fun theFirstLaunchPreparesTheBundledCatalog() {
-        setContent(sync = CatalogSyncUiState())
+        setContent(catalog = CatalogStatusUiState())
 
         composeRule.onNodeWithText(composeRule.string(R.string.catalog_local_none), substring = true).assertExists()
-    }
-
-    @Test
-    fun anUnreachableServerSaysTheDeviceCatalogIsUsed() {
-        setContent(sync = synced.copy(lastOutcome = CatalogSyncOutcome.FAILED_NETWORK))
-
-        composeRule.onNodeWithText(composeRule.string(R.string.catalog_footer_offline, products()), substring = true).assertExists()
     }
 
     private fun products(): String {
@@ -181,9 +142,5 @@ class HomeContentTest {
         return composeRule.activity.resources.getQuantityString(R.plurals.catalog_product_count, 312, formatCount(312, locale))
     }
 
-    private fun footerReady(): String = composeRule.string(R.string.catalog_footer_ready, products())
-
-    private fun hasClickLabel(label: String) = SemanticsMatcher("has click label $label") { node ->
-        node.config.getOrNull(SemanticsActions.OnClick)?.label == label
-    }
+    private fun footerReady(): String = composeRule.string(R.string.catalog_footer_offline, products())
 }

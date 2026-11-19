@@ -8,12 +8,6 @@ enum class Diet {
     /** « Je mange de tout ». */
     OMNIVORE,
 
-    /** « Sans porc ». */
-    NO_PORK,
-
-    /** « Halal »: no pork and no alcohol (the catalog has no « halal meat » tag). */
-    HALAL,
-
     /** « Pescétarien »: fish, no meat. */
     PESCATARIAN,
 
@@ -29,7 +23,6 @@ enum class Avoidance { GLUTEN, LACTOSE, NUTS, EGGS, ALCOHOL }
 
 /** The single mapping between diets, avoidances and the catalog tags (`catalog-content/README.md` § Tags). */
 object DietaryTags {
-    val PORK: TagId = TagId("contains-pork")
     val ALCOHOL: TagId = TagId("contains-alcohol")
     val GLUTEN: TagId = TagId("contains-gluten")
     val LACTOSE: TagId = TagId("contains-lactose")
@@ -45,12 +38,10 @@ object DietaryTags {
     val PET: TagId = TagId("pet")
 
     /** Every tag this object refers to (they must all exist in the catalog). */
-    val ALL: Set<TagId> = setOf(PORK, ALCOHOL, GLUTEN, LACTOSE, MEAT, FISH, NUTS, EGGS, BABY, PET)
+    val ALL: Set<TagId> = setOf(ALCOHOL, GLUTEN, LACTOSE, MEAT, FISH, NUTS, EGGS, BABY, PET)
 
     fun excludedBy(diet: Diet): Set<TagId> = when (diet) {
         Diet.OMNIVORE -> emptySet()
-        Diet.NO_PORK -> setOf(PORK)
-        Diet.HALAL -> setOf(PORK, ALCOHOL)
         Diet.PESCATARIAN -> setOf(MEAT)
         Diet.VEGETARIAN -> setOf(MEAT, FISH)
         Diet.VEGAN -> setOf(MEAT, FISH, LACTOSE, EGGS)
@@ -67,7 +58,7 @@ object DietaryTags {
     /** The tags never asked about for [diet] and [avoid]. */
     fun excludedBy(diet: Diet, avoid: Set<Avoidance>): Set<TagId> = excludedBy(diet) + avoid.map(::excludedBy)
 
-    /** Avoidances already implied by [diet] (shown checked and locked: « Déjà exclu par le régime halal »). */
+    /** Avoidances already implied by [diet] (shown checked and locked: « Déjà exclu par le régime végan »). */
     fun impliedBy(diet: Diet): Set<Avoidance> {
         val tags = excludedBy(diet)
         return Avoidance.entries.filterTo(LinkedHashSet()) { excludedBy(it) in tags }

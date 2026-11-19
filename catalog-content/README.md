@@ -3,7 +3,7 @@
 > **Statut : brouillon éditorial v0, à relire par l'éditeur catalogue.**
 > Les cadences (`typicalRepurchaseDays`), taux de pénétration (`householdPenetration`), formats et politiques d'unités sont des **estimations éditoriales**, à calibrer avec les données de la bêta. Ce ne sont pas des statistiques sourcées.
 
-Ce dossier contient le catalogue de départ lu par l'importeur du serveur (`server/app`, voir `SPEC` §5 et §6). Au premier démarrage, si `catalog_release` est vide, le serveur importe ces fichiers en une transaction, vérifie leur intégrité et publie la release 1.
+Ce dossier contient les données sources du catalogue de l'app. Elles sont projetées sur chaque langue livrée et embarquées dans les apps (`shared/core/catalog-bundle`).
 
 ## Contenu
 
@@ -14,7 +14,7 @@ Ce dossier contient le catalogue de départ lu par l'importeur du serveur (`serv
 | `units.json` | 33 unités : masse, volume, comptage et conditionnements |
 | `storage-zones.json` | 9 zones de rangement (ordre de la « tournée de la maison ») |
 | `categories.json` | 19 rayons de premier niveau, avec leur question porte |
-| `release.json` | Numéro de la release du catalogue, embarquée dans les apps et publiée par le serveur |
+| `release.json` | Numéro de la release du catalogue embarquée dans les apps |
 | `products.json` | 313 produits génériques (alimentaire et non alimentaire), marché FR, avec leurs tags de régime et d'allergènes |
 
 Répartition des produits par rayon : fruits et légumes 44 · boulangerie 12 · crèmerie 20 · fromages 13 · boucherie et volaille 14 · charcuterie et traiteur 15 · poissonnerie 8 · surgelés 13 · épicerie salée 48 · petit-déjeuner 18 · épicerie sucrée 17 · apéritif 8 · eaux, jus et sodas 9 · vins, bières et alcools 10 · hygiène et beauté 19 · entretien 19 · papier et emballages 9 · bébé 9 · animaux 8.
@@ -23,16 +23,9 @@ V0 a ajouté 117 produits aux 196 du Sprint 0 : herbes fraîches et épices, sur
 
 ## Catalogue embarqué dans les apps
 
-Les apps embarquent ce dossier, projeté sur (FR, fr-FR) et (FR, en) comme `/v1/catalog/snapshot` ([ADR-012](../docs/adr/012-catalogue-embarque.md)), sous le numéro de release de `release.json`.
+Les apps embarquent ce dossier, projeté sur (FR, fr-FR) et (FR, en) sous le numéro de release de `release.json`.
 
-**Après toute modification de ce dossier livrée dans une version de l'app**, incrémentez `release.json`. Sinon les appareils qui ont déjà cette release gardent leur ancienne copie : la version publiée n'a pas de serveur pour la mettre à jour ([ADR-013](../docs/adr/013-version-sans-connexion.md)). Régénérez ensuite le catalogue embarqué :
-
-```
-python3 catalog-content/tools/bundle.py          # écrit shared/core/catalog-bundle/.../BundledSnapshots.kt
-python3 catalog-content/tools/bundle.py --check  # échoue si le fichier n'est plus à jour (CI)
-```
-
-Le serveur publie ce dossier sous le même numéro. `CatalogBundleParityTest` (server/app) vérifie que le résultat est identique à ce qu'il publie.
+**Après toute modification de ce dossier livrée dans une version de l'app**, incrémentez `release.json`. Sinon les appareils qui ont déjà cette release gardent leur ancienne copie : l'app n'a pas de serveur pour la mettre à jour. Le catalogue embarqué (`BundledSnapshots.kt`) doit ensuite être régénéré.
 
 ## Format
 
@@ -40,7 +33,7 @@ Règles communes :
 
 - Tous les fichiers sont des **tableaux JSON en UTF-8**.
 - Les entités se référencent par **slug** (ASCII, kebab-case, par exemple `lait-demi-ecreme`). Les unités se référencent par leur `code`.
-- Le serveur dérive des UUID stables avec `UUID.nameUUIDFromBytes("<entité>:<slug>")`, où l'entité vaut `category`, `zone`, `product` ou `unit`. **Ne jamais renommer un slug publié** : cela crée une nouvelle entité.
+- La projection dérive des UUID stables avec `UUID.nameUUIDFromBytes("<entité>:<slug>")`, où l'entité vaut `category`, `zone`, `product` ou `unit`. **Ne jamais renommer un slug publié** : cela crée une nouvelle entité.
 - Les **décimaux sont des chaînes** sous forme canonique (`"0.5"`, `"1"`, jamais `"1.0"` ni `0.5`). Les quantités (pas, choix rapides, bornes, contenus) ont **au plus 3 décimales**, car le client les stocke en millièmes (`Quantity.milli`).
 - Les textes traduits sont des objets indexés par locale. `fr` et `en` sont obligatoires. Une locale régionale (`fr-FR`) ne contient que ses écarts : sinon, la chaîne de repli s'applique (`fr-FR → fr → en`).
 
@@ -52,7 +45,7 @@ Règles communes :
 
 `{ "code", "defaultLocale", "measurementSystem" (metric | us_customary | uk_mixed), "currency", "launchStatus" (planned | beta | live) }`.
 
-Un pays `planned` n'a pas encore de marché dans `products.json`. L'API répond donc 404 `COUNTRY_NOT_AVAILABLE` pour BE et CH.
+Un pays `planned` n'a pas encore de marché dans `products.json` : BE et CH ne sont pas embarqués.
 
 ### `units.json`
 
@@ -97,7 +90,7 @@ Un pays `planned` n'a pas encore de marché dans `products.json`. L'API répond 
 
 `{ "slug", "parent", "position", "names", "gateQuestion" }`.
 
-- Le Sprint 0 ne contient que des rayons de premier niveau (`parent: null`). Les sous-catégories viendront en V0.
+- Le catalogue ne contient que des rayons de premier niveau (`parent: null`).
 - `position` donne l'ordre par défaut des rayons. L'ordre appris par magasin le remplacera.
 - `gateQuestion` est la question porte du palier T3 (« Besoin de fromage ? »).
 
@@ -184,7 +177,7 @@ Habitudes d'achat françaises retenues :
   - apostrophe typographique `’` (U+2019), jamais `'` ;
   - espace insécable (U+00A0) avant `?`, `!`, `;` et `:`. Toutes les questions portes françaises se terminent par une espace insécable suivie de « ? ».
 - **Anglais** : `en` suit l'orthographe et le vocabulaire britanniques (aubergine, courgette, washing-up liquid, nappies, crisps). Une future locale `en-US` ne portera que les écarts (zucchini, eggplant, chips…).
-- **Pas de données sensibles** : les tags décrivent des **produits**, pas des personnes. Les exclusions d'un foyer (sans porc, sans alcool, végétarien…) peuvent révéler une conviction religieuse ou une donnée de santé (art. 9 du RGPD) : elles restent sur l'appareil par défaut (F14, `member_diet_profile`). Le seed ne contient pas de label `halal` : c'est une certification de marque, pas un attribut d'un produit générique.
+- **Pas de données sensibles** : les tags décrivent des **produits**, pas des personnes. Les exclusions d'un foyer (sans alcool, végétarien, sans gluten…) peuvent révéler une conviction religieuse ou une donnée de santé (art. 9 du RGPD) : elles restent sur l'appareil par défaut (F14, `member_diet_profile`). Le seed ne contient pas de label `halal` : c'est une certification de marque, pas un attribut d'un produit générique.
 
 ## Tags
 

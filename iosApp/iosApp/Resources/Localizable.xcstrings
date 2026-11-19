@@ -1322,46 +1322,6 @@
         }
       }
     },
-    "Catalogue à jour · %lld produits" : {
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Catalog up to date · %lld product"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Catalog up to date · %lld products"
-                }
-              }
-            }
-          }
-        },
-        "fr" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Catalogue à jour · %lld produit"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Catalogue à jour · %lld produits"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "Ce que vous changez ici s'applique dès le prochain « faire le point »." : {
       "localizations" : {
         "en" : {
@@ -2052,16 +2012,6 @@
         }
       }
     },
-    "Halal" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Halal"
-          }
-        }
-      }
-    },
     "Il en restait un peu la dernière fois" : {
       "localizations" : {
         "en" : {
@@ -2202,16 +2152,6 @@
         }
       }
     },
-    "Le catalogue n'a pas pu être enregistré sur l'appareil" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The catalog could not be saved on this device"
-          }
-        }
-      }
-    },
     "Le catalogue n'a pas pu être enregistré sur l'appareil. Libérez de l'espace, puis réessayez." : {
       "localizations" : {
         "en" : {
@@ -2324,26 +2264,6 @@
         }
       }
     },
-    "Mettre à jour le catalogue" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Update the catalog"
-          }
-        }
-      }
-    },
-    "Mise à jour du catalogue…" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Updating the catalog…"
-          }
-        }
-      }
-    },
     "Modifier" : {
       "localizations" : {
         "en" : {
@@ -2420,16 +2340,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Never ask again"
-          }
-        }
-      }
-    },
-    "Ni porc, ni charcuterie de porc" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No pork, no pork cold cuts"
           }
         }
       }
@@ -3193,26 +3103,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Without changing your habits"
-          }
-        }
-      }
-    },
-    "Sans porc" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No pork"
-          }
-        }
-      }
-    },
-    "Sans porc ni alcool" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No pork or alcohol"
           }
         }
       }

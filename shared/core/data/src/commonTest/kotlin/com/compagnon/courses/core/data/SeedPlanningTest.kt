@@ -28,7 +28,7 @@ class SeedPlanningTest {
     @Test
     fun aColdQuickSessionOnTheSeedAsksProductCards() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val setup = assertNotNull(data.questions.planningSetup(SessionMode.QUICK, data.clock.now, seed = 42))
         val input = setup.input
 
@@ -64,17 +64,17 @@ class SeedPlanningTest {
     }
 
     @Test
-    fun seedTagsReachTheEngineAndExcludePorkForAHalalHousehold() = runTest {
+    fun seedTagsReachTheEngineAndExcludeTheTaggedProducts() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val setup = assertNotNull(data.questions.planningSetup(SessionMode.QUICK, data.clock.now, seed = 42))
         val pork = TagId("contains-pork")
         val porkProducts = setup.input.products.filter { pork in it.tags }
         assertTrue(porkProducts.size >= 5, "the seed tags pork products: ${porkProducts.map { it.slug }}")
         assertTrue(setup.input.products.first { it.slug == "jambon-blanc" }.tags.contains(pork))
 
-        val halal = setup.input.household.copy(excludedTags = setOf(pork, TagId("contains-alcohol")))
-        val plan = planner.plan(setup.input.copy(household = halal))
+        val excluding = setup.input.household.copy(excludedTags = setOf(pork, TagId("contains-alcohol")))
+        val plan = planner.plan(setup.input.copy(household = excluding))
         val proposed = plan.askedProducts + plan.gates.flatMap { it.items }
         assertTrue(proposed.none { pork in it.product.tags || TagId("contains-alcohol") in it.product.tags })
     }
@@ -82,7 +82,7 @@ class SeedPlanningTest {
     @Test
     fun aColdQuickSessionNeverAsksAboutExcludedProducts() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val setup = assertNotNull(data.questions.planningSetup(SessionMode.QUICK, data.clock.now, seed = 42))
         val tags = setup.input.products.flatMap { it.tags }.toSet()
         tags.forEach { tag ->
@@ -103,26 +103,27 @@ class SeedPlanningTest {
     private fun QuestionPlan.everyProposed() = askedProducts + gates.flatMap { it.items }
 
     @Test
-    fun aHalalFamilyWithABabyIsNeverAskedAboutPorkAlcoholOrPetProducts() = runTest {
+    fun aVegetarianFamilyWithABabyIsNeverAskedAboutMeatFishOrPetProducts() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
 
         val (plan, scored) = data.planFor(
-            HouseholdSetup(adults = 2, children = listOf(AgeBand.BABY, AgeBand.CHILD), diet = Diet.HALAL),
+            HouseholdSetup(adults = 2, children = listOf(AgeBand.BABY, AgeBand.CHILD), diet = Diet.VEGETARIAN),
         )
-        println("halal family with a baby: ${plan.describe()}")
+        println("vegetarian family with a baby: ${plan.describe()}")
 
         val tags = scored.flatMap { it.product.tags }.toSet()
-        assertTrue(DietaryTags.PORK !in tags && DietaryTags.ALCOHOL !in tags, "pork or alcohol scored")
+        assertTrue(DietaryTags.MEAT !in tags && DietaryTags.FISH !in tags, "meat or fish scored")
         assertTrue(DietaryTags.PET !in tags, "a pet product without a pet")
         // Baby products are not editorial candidates: they come from the essentials the onboarding pre-checks.
-        assertTrue(plan.everyProposed().none { DietaryTags.PORK in it.product.tags || DietaryTags.ALCOHOL in it.product.tags })
+        val animal = setOf(DietaryTags.MEAT, DietaryTags.FISH)
+        assertTrue(plan.everyProposed().none { product -> product.product.tags.any { it in animal } })
     }
 
     @Test
     fun aVeganLivingAloneIsNeverAskedAboutAnimalBabyOrPetProducts() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
 
         val (plan, scored) = data.planFor(HouseholdSetup(adults = 1, diet = Diet.VEGAN))
         println("vegan alone: ${plan.describe()}")
@@ -136,7 +137,7 @@ class SeedPlanningTest {
     @Test
     fun theHouseholdsEssentialsAndCadencesShapeTheFirstSession() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val baguette = seedProductId("baguette")
         val couches = seedProductId("couches")
         val painDeMie = seedProductId("pain-de-mie")
@@ -162,7 +163,7 @@ class SeedPlanningTest {
     @Test
     fun twoSeedsAskDifferentCardsWithTheSameTiers() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         data.households.saveSetup(HouseholdSetup(adults = 2))
 
         val (first, firstScores) = data.planFor(null, seed = 1)
@@ -185,7 +186,7 @@ class SeedPlanningTest {
     @Test
     fun everyDietaryTagExistsInTheSeed() = runTest {
         val data = TestData(StandardTestDispatcher(testScheduler))
-        data.syncSeed()
+        data.installSeed()
         val tags = assertNotNull(data.catalog.catalog()).products.flatMap { it.tags }.toSet()
         assertEquals(emptySet(), DietaryTags.ALL - tags)
     }

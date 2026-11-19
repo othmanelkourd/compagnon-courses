@@ -13,7 +13,6 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api(projects.shared.core.network)
             api(projects.shared.core.data)
             // ViewModel and StateFlow are part of the public (and exported Swift) API.
             api(libs.androidx.lifecycle.viewmodel)
@@ -25,7 +24,6 @@ kotlin {
         commonTest.dependencies {
             implementation(projects.shared.core.testing)
             implementation(libs.turbine)
-            implementation(libs.ktor.client.mock)
         }
     }
 }

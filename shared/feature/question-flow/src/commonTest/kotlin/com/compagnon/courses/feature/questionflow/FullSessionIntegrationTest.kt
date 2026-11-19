@@ -36,7 +36,7 @@ class FullSessionIntegrationTest {
     @Test
     fun aQuickSessionOnTheSeedFillsTheList() = runTest(main) {
         val device = TestDevice(StandardTestDispatcher(testScheduler))
-        device.sync()
+        device.installSeed()
         // « Il en reste un peu » last time: these are always cards, asked before the T2 cards.
         device.watch("lait-demi-ecreme", "pommes", "cafe-moulu")
         val viewModel = device.newViewModel(seed = 2026)

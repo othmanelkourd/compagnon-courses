@@ -76,8 +76,6 @@ internal object OnboardingTexts {
     @StringRes
     fun dietLabel(diet: DietChoice): Int = when (diet) {
         DietChoice.OMNIVORE -> R.string.diet_omnivore
-        DietChoice.NO_PORK -> R.string.diet_no_pork
-        DietChoice.HALAL -> R.string.diet_halal
         DietChoice.PESCATARIAN -> R.string.diet_pescatarian
         DietChoice.VEGETARIAN -> R.string.diet_vegetarian
         DietChoice.VEGAN -> R.string.diet_vegan
@@ -86,8 +84,6 @@ internal object OnboardingTexts {
     @StringRes
     fun dietHint(diet: DietChoice): Int = when (diet) {
         DietChoice.OMNIVORE -> R.string.diet_omnivore_hint
-        DietChoice.NO_PORK -> R.string.diet_no_pork_hint
-        DietChoice.HALAL -> R.string.diet_halal_hint
         DietChoice.PESCATARIAN -> R.string.diet_pescatarian_hint
         DietChoice.VEGETARIAN -> R.string.diet_vegetarian_hint
         DietChoice.VEGAN -> R.string.diet_vegan_hint
@@ -194,7 +190,7 @@ internal object OnboardingTexts {
         },
     )
 
-    /** « Halal · sans lactose »: the diet, then the products avoided (« Je mange de tout » alone if nothing). */
+    /** « Végétarien · sans lactose »: the diet, then the products avoided (« Je mange de tout » alone if nothing). */
     fun foodSummary(summary: HouseholdSummaryUi): UiText = UiText.Joined(
         listOf(UiText.Res(dietLabel(summary.diet))) + summary.avoid.map { avoid ->
             UiText.Res(
@@ -236,7 +232,7 @@ internal object OnboardingTexts {
         HouseholdSection.RHYTHM -> rhythmSummary(summary)
     }
 
-    /** The « Mon foyer » card of the home screen: « 4 personnes · Halal · 14 essentiels ». */
+    /** The « Mon foyer » card of the home screen: « 4 personnes · Végétarien · 14 essentiels ». */
     fun homeSummary(summary: HouseholdSummaryUi): UiText = UiText.Joined(
         listOf(
             UiText.Plural(R.plurals.home_household_persons, summary.persons),

@@ -2,6 +2,5 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>MaxLineLength:MockCatalogServer.kt:MockCatalogServer$ContractJson.encodeToString(ProblemDto.serializer(), ProblemDto(title = status.description, status = status.value, code = code))</ID>
   </CurrentIssues>
 </SmellBaseline>

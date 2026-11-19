@@ -1,5 +1,5 @@
--- The published catalog projected onto (country, locale), as served by /v1/catalog/snapshot and kept up to
--- date by /v1/catalog/changes. Ids are the server UUIDs. Enumerations use the contract wire names.
+-- The catalog bundled in the app, projected onto (country, locale) (ADR-012). Ids are the UUIDs derived from the slugs.
+-- Enumerations use the catalog format names (`:shared:core:catalog-format`).
 
 CREATE TABLE catalog_category (
     id TEXT NOT NULL PRIMARY KEY,
@@ -63,9 +63,6 @@ upsertCategory:
 INSERT OR REPLACE INTO catalog_category (id, slug, parent_id, position, name, gate_question)
 VALUES (:id, :slug, :parentId, :position, :name, :gateQuestion);
 
-deleteCategory:
-DELETE FROM catalog_category WHERE id = :id;
-
 deleteAllCategories:
 DELETE FROM catalog_category;
 
@@ -81,9 +78,6 @@ upsertStorageZone:
 INSERT OR REPLACE INTO catalog_storage_zone (id, slug, position, name)
 VALUES (:id, :slug, :position, :name);
 
-deleteStorageZone:
-DELETE FROM catalog_storage_zone WHERE id = :id;
-
 deleteAllStorageZones:
 DELETE FROM catalog_storage_zone;
 
@@ -95,9 +89,6 @@ SELECT * FROM catalog_storage_zone ORDER BY position, id;
 upsertUnit:
 INSERT OR REPLACE INTO catalog_unit (code, dimension, system, to_base, symbol, forms)
 VALUES (:code, :dimension, :system, :toBase, :symbol, :forms);
-
-deleteUnit:
-DELETE FROM catalog_unit WHERE code = :code;
 
 deleteAllUnits:
 DELETE FROM catalog_unit;
@@ -115,9 +106,6 @@ INSERT OR REPLACE INTO catalog_product (
     :id, :slug, :categoryId, :storageZoneId, :dimension, :name, :forms, :needPhrase, :cycleClass, :isStaple,
     :typicalRepurchaseDays, :householdPenetration, :isQuestionCandidate, :unitPolicies, :packages, :searchText
 );
-
-deleteProduct:
-DELETE FROM catalog_product WHERE id = :id;
 
 deleteAllProducts:
 DELETE FROM catalog_product;

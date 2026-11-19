@@ -4,20 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-// Dev only: the local server as seen from the Android emulator (10.0.2.2 is the host's loopback).
-// Override with -Pcompagnon.apiBaseUrl=..., e.g. http://localhost:8080 on a physical device after
-// `adb reverse tcp:8080 tcp:8080`. Cleartext HTTP is only allowed for 10.0.2.2 and localhost, in debug builds
-// (src/debug/res/xml/network_security_config.xml).
-val debugApiBaseUrl: String = providers.gradleProperty("compagnon.apiBaseUrl")
-    .getOrElse("http://10.0.2.2:8080")
-
-// Release builds have no server (ADR-013): API_BASE_URL is null, the app never goes online and has no INTERNET
-// permission (declared in src/debug only, removed from the release by src/release/AndroidManifest.xml).
-fun buildConfigString(value: String): String {
-    require(value.matches(Regex("""https?://[^\s"\\]+"""))) { "API base URL must be an http(s) URL, got '$value'" }
-    return "\"$value\""
-}
-
 // The upload key of Google Play (Play App Signing signs the published app with its own key), from
 // ~/.gradle/gradle.properties, never from the repository: ocimio.upload.storeFile, ocimio.upload.storePassword,
 // ocimio.upload.keyAlias, ocimio.upload.keyPassword (docs/PUBLICATION.md). Without them, the release is signed with
@@ -50,11 +36,7 @@ android {
     }
 
     buildTypes {
-        debug {
-            buildConfigField("String", "API_BASE_URL", buildConfigString(debugApiBaseUrl))
-        }
         release {
-            buildConfigField("String", "API_BASE_URL", "null")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

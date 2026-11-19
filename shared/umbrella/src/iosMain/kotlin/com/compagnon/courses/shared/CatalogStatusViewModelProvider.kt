@@ -1,7 +1,6 @@
 package com.compagnon.courses.shared
 
 import com.compagnon.courses.feature.catalog.CatalogStatusViewModel
-import org.koin.core.parameter.parametersOf
 import org.koin.mp.KoinPlatform
 
 /**
@@ -13,10 +12,8 @@ import org.koin.mp.KoinPlatform
 class CatalogStatusViewModelProvider {
 
     /** A new ViewModel (it starts loading immediately). Give it to a [ViewModelOwner] so that it gets cleared. */
-    fun create(country: String): CatalogStatusViewModel =
-        KoinPlatform.getKoin().get { parametersOf(country) }
+    fun create(): CatalogStatusViewModel = KoinPlatform.getKoin().get()
 
     /** A new ViewModel already owned by [owner]: `owner.clear()` clears it. */
-    fun create(country: String, owner: ViewModelOwner): CatalogStatusViewModel =
-        create(country).also(owner::own)
+    fun create(owner: ViewModelOwner): CatalogStatusViewModel = create().also(owner::own)
 }

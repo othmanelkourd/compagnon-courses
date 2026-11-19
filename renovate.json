@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Renovate for the Compagnon de courses monorepo: Gradle version catalog, npm (backoffice), GitHub Actions, Docker Compose and the Gradle wrapper. Weekly; Kotlin toolchain updates stay manual.",
+  "description": "Renovate for Ocimio: Gradle version catalog, Swift packages, GitHub Actions and the Gradle wrapper. Weekly; Kotlin toolchain updates stay manual.",
   "extends": [
     "config:recommended",
     "schedule:weekly",
@@ -9,25 +9,25 @@
   ],
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Tableau de bord des dépendances (Renovate)",
-  "labels": ["dependencies"],
+  "labels": [
+    "dependencies"
+  ],
   "osvVulnerabilityAlerts": true,
   "configMigration": true,
   "prConcurrentLimit": 5,
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["* 0-5 1 * *"]
+    "schedule": [
+      "* 0-5 1 * *"
+    ]
   },
   "packageRules": [
     {
       "description": "Major updates are opened only after approval from the Dependency Dashboard.",
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "dependencyDashboardApproval": true
-    },
-    {
-      "description": "npm supply-chain safety: wait a few days before proposing a new release.",
-      "matchDatasources": ["npm"],
-      "minimumReleaseAge": "3 days",
-      "internalChecksFilter": "strict"
     },
     {
       "description": "Kotlin (compiler, Gradle plugins, Compose compiler, serialization plugin, kotlin-test), SKIE, KSP and Mokkery are tied to one exact Kotlin version: one grouped PR, never automatic. Approve it from the Dependency Dashboard once SKIE supports the new Kotlin version.",
@@ -54,65 +54,24 @@
       "groupName": "Android Gradle Plugin"
     },
     {
-      "description": "Ktor client and server.",
-      "matchPackageNames": ["/^io\\.ktor:/"],
-      "groupName": "Ktor"
-    },
-    {
       "description": "Koin.",
-      "matchPackageNames": ["/^io\\.insert-koin:/"],
+      "matchPackageNames": [
+        "/^io\\.insert-koin:/"
+      ],
       "groupName": "Koin"
     },
     {
-      "description": "Exposed.",
-      "matchPackageNames": ["/^org\\.jetbrains\\.exposed:/"],
-      "groupName": "Exposed"
-    },
-    {
-      "description": "Flyway.",
-      "matchPackageNames": ["/^org\\.flywaydb:/"],
-      "groupName": "Flyway"
-    },
-    {
-      "description": "smiley4 ktor-openapi and schema-kenerator are bumped together, manually: ktor-openapi 5.7.0 pulls schema-kenerator 2.7.x, compiled for JDK 21 (NoSuchMethodError on our JDK 17).",
-      "matchPackageNames": ["/^io\\.github\\.smiley4:/"],
-      "groupName": "smiley4 OpenAPI",
-      "dependencyDashboardApproval": true
-    },
-    {
-      "description": "PostgreSQL: the Docker image (infra/docker/compose.yml) and the embedded binaries used in dev and tests stay on the same version.",
-      "matchPackageNames": ["postgres", "/^io\\.zonky\\.test\\.postgres:/"],
-      "groupName": "PostgreSQL"
-    },
-    {
-      "description": "react-admin packages are released together.",
-      "matchPackageNames": ["react-admin", "/^ra-/"],
-      "groupName": "react-admin"
-    },
-    {
-      "description": "MUI.",
-      "matchPackageNames": ["/^@mui\\//"],
-      "groupName": "MUI"
-    },
-    {
-      "description": "React and its types.",
-      "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"],
-      "groupName": "React"
-    },
-    {
-      "description": "Vite toolchain.",
-      "matchPackageNames": ["vite", "vitest", "/^@vitejs\\//"],
-      "groupName": "Vite"
-    },
-    {
-      "description": "openapi-typescript 7 requires TypeScript ^5: stay on 5.x.",
-      "matchPackageNames": ["typescript"],
-      "allowedVersions": "<6.0.0"
-    },
-    {
       "description": "GitHub Actions: one grouped PR for non-major updates.",
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["minor", "patch", "digest", "pin", "pinDigest"],
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest",
+        "pin",
+        "pinDigest"
+      ],
       "groupName": "GitHub Actions"
     }
   ]

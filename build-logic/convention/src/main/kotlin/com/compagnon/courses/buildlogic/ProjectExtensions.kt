@@ -29,7 +29,7 @@ internal val Project.jvmToolchainVersion: Int
 /**
  * Android namespace derived from the Gradle path:
  * `:shared:core:model` -> `com.compagnon.courses.shared.core.model`,
- * `:contract:api-contract` -> `com.compagnon.courses.contract.apicontract`.
+ * `:shared:core:catalog-format` -> `com.compagnon.courses.shared.core.catalogformat`.
  */
 internal fun Project.defaultAndroidNamespace(): String =
     path.split(':')

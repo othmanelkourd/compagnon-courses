@@ -1,8 +1,6 @@
-# CI of the monorepo (Sprint 0).
-#   jvm        : bundled catalog up to date, JVM tests of the contract, the shared modules and the server + debug APK
-#   ios        : Kotlin/Native tests on the iOS simulator + Xcode build (only when shared or iOS code changes)
-#   backoffice : npm ci, typecheck, unit tests (Vitest), build
-#   openapi    : contract/openapi/openapi.json (and the generated TS types, once versioned) must be up to date
+# CI of the apps.
+#   jvm : JVM tests of the shared modules, lint + Android unit tests and debug APK
+#   ios : Kotlin/Native tests on the iOS simulator + Xcode build (only when shared or iOS code changes)
 name: CI
 
 on:
@@ -27,7 +25,6 @@ defaults:
 env:
   JAVA_VERSION: "17"
   JAVA_DISTRIBUTION: temurin
-  NODE_VERSION: "22"
 
 jobs:
   changes:
@@ -51,7 +48,6 @@ jobs:
             ios:
               - 'shared/**'
               - 'iosApp/**'
-              - 'contract/api-contract/**'
               - 'build-logic/**'
               - 'gradle/**'
               - '*.gradle.kts'
@@ -66,11 +62,6 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      # The catalog bundled in the apps (ADR-012) must follow catalog-content/.
-      - name: Catalogue embarqué à jour
-        run: python3 catalog-content/tools/bundle.py --check
-      - name: Licences open source à jour
-        run: python3 design/licenses/notices.py --check
       - uses: actions/setup-java@v6
         with:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
@@ -82,14 +73,10 @@ jobs:
       - name: Tests JVM et assemblage Android
         run: >-
           ./gradlew --console=plain
-          :contract:api-contract:jvmTest
-          :shared:core:model:jvmTest
-          :shared:engine:jvmTest
+          jvmTest
           :shared:engine:koverVerify
           detekt
-          :shared:core:network:jvmTest
-          :shared:feature:catalog:jvmTest
-          :server:app:test
+          :androidApp:testDebugUnitTest
           :androidApp:assembleDebug
           :androidApp:lintDebug
       - name: Rapports de tests
@@ -204,75 +191,3 @@ jobs:
             build/ios-derived/Logs/
           if-no-files-found: ignore
           retention-days: 7
-
-  backoffice:
-    name: Backoffice (typecheck + build)
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: backoffice
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v7
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: backoffice/package-lock.json
-      - run: npm ci
-      - run: npm run typecheck
-      - run: npm run test --if-present
-      - run: npm run build
-
-  openapi:
-    name: Contrat OpenAPI à jour
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-      - uses: actions/setup-java@v6
-        with:
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-          java-version: ${{ env.JAVA_VERSION }}
-      - uses: gradle/actions/setup-gradle@v6
-        with:
-          cache-provider: basic
-      - name: Régénération de contract/openapi/openapi.json
-        run: ./gradlew --console=plain :server:app:exportOpenApi
-      - name: Le contrat versionné doit être identique
-        run: |
-          untracked="$(git ls-files --others --exclude-standard -- contract/openapi/)"
-          if ! git diff --exit-code -- contract/openapi/ || [ -n "$untracked" ]; then
-            echo "::error file=contract/openapi/openapi.json::Contrat OpenAPI obsolète : lancez ./gradlew :server:app:exportOpenApi et committez le résultat."
-            git status --short -- contract/openapi/
-            exit 1
-          fi
-      # Generated TypeScript types: checked as soon as backoffice/src/api/schema.d.ts is versioned.
-      - name: Types TypeScript générés versionnés ?
-        id: ts
-        run: |
-          if git ls-files --error-unmatch backoffice/src/api/schema.d.ts >/dev/null 2>&1; then
-            echo "tracked=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "tracked=false" >> "$GITHUB_OUTPUT"
-          fi
-      - uses: actions/setup-node@v7
-        if: steps.ts.outputs.tracked == 'true'
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: backoffice/package-lock.json
-      - name: Les types TypeScript doivent être identiques
-        if: steps.ts.outputs.tracked == 'true'
-        working-directory: backoffice
-        run: |
-          npm ci
-          npm run gen:api
-          if ! git diff --exit-code -- src/api/schema.d.ts; then
-            echo "::error file=backoffice/src/api/schema.d.ts::Types obsolètes : lancez npm run gen:api dans backoffice/ et committez le résultat."
-            exit 1
-          fi

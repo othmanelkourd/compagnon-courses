@@ -22,10 +22,8 @@ class OpenSourceNoticesTest {
         val androidNames = android.flatMap { group -> group.components.map { it.name } }
         val iosNames = ios.flatMap { group -> group.components.map { it.name } }
         assertTrue("Fluent Emoji" in androidNames && "Fluent Emoji" in iosNames)
-        assertTrue("OkHttp, Okio" in androidNames && "OkHttp, Okio" !in iosNames)
+        assertTrue("JSpecify" in androidNames && "JSpecify" !in iosNames)
         assertTrue("SKIE" in iosNames && "SKIE" !in androidNames)
-        // The MIT license of SLF4J only ships with Android.
-        assertTrue(ios.none { it.license.id == "mit-slf4j" })
         assertEquals(listOf("mit-fluent", "ofl-figtree", "ofl-bricolage", "apache-2.0"), ios.map { it.license.id })
         assertTrue(android.all { it.components.isNotEmpty() })
     }
