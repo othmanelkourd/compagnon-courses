@@ -44,8 +44,9 @@ fun OpenSourceNotices.groupsFor(platform: NoticePlatform): List<LicenseGroup> {
  */
 object AboutLinks {
     /** Public page of the privacy policy (store/privacy-policy.md, published). */
-    const val PRIVACY_POLICY_URL: String = ""
+    const val PRIVACY_POLICY_URL: String =
+        "https://zesty-count-5f1.notion.site/Ocimio-politique-de-confidentialit-420e59ed0d9f813ea28cdc4f52e0c4f5"
 
     /** Contact address, opened with `mailto:`. */
-    const val SUPPORT_EMAIL: String = ""
+    const val SUPPORT_EMAIL: String = "applismile@gmail.com"
 }
